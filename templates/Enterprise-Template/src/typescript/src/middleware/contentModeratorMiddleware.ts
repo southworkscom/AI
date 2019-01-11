@@ -21,6 +21,10 @@ export class ContentModeratorMiddleware implements Middleware {
      */
     public static readonly TextModeratorResultKey: string = "TextModeratorResult";
 
+    public static readonly subscriptionKey: string;
+
+    private static readonly region: string;
+
     private readonly _cmClient: ContentModeratorClient;
 
     /**

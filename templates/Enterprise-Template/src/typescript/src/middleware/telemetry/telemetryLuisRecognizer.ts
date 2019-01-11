@@ -13,10 +13,13 @@ import { TelemetryLoggerMiddleware } from "./telemetryLoggerMiddleware";
  * and ActivityID.
  * The Custom Event name this logs is MyLuisConstants.IntentPrefix + "." + 'found intent name'
  * For example, if intent name was "add_calender": LuisIntent.add_calendar
+ * See <seealso cref="LuisRecognizer"/> for additional information.
+ * </summary>
  */
 export class TelemetryLuisRecognizer extends LuisRecognizer {
     private readonly _logOriginalMessage: boolean;
     private readonly _logUsername: boolean;
+    private readonly _luisApplication: LuisApplication;
 
     /**
      * Initializes a new instance of the TelemetryLuisRecognizer class.
@@ -28,26 +31,83 @@ export class TelemetryLuisRecognizer extends LuisRecognizer {
      */
     constructor(application: LuisApplication, predictionOptions?: LuisPredictionOptions, includeApiResults: boolean = false, logOriginalMessage: boolean = false, logUserName: boolean = false) {
         super(application, predictionOptions, includeApiResults);
+       
+        this._luisApplication = application;
         this._logOriginalMessage = logOriginalMessage;
         this._logUsername = logUserName;
     }
+
+     /**
+     * Gets a value indicating whether determines whether to log the User name.
+     */
+    public get logUsername(): boolean { return this._logUsername; }
 
     /**
      * Gets a value indicating whether determines whether to log the Activity message text that came from the user.
      */
     public get logOriginalMessage(): boolean { return this._logOriginalMessage; }
 
-    /**
-     * Gets a value indicating whether determines whether to log the User name.
+     /**
+     * Analyze the current message text and return results of the analysis (Suggested actions and intents).
+     * @param {TurnContext} context Context object containing information for a single turn of conversation with a user.
+     * @param {boolean} logOriginalMessage Determines if the original message is logged into Application Insights. This is a privacy consideration.
      */
-    public get logUsername(): boolean { return this._logUsername; }
+    public async RecognizeAsync(context: TurnContext, logOriginalMessage: boolean = false): Promise<RecognizerResult>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Analyze the current message text and return results of the analysis (Suggested actions and intents).
      * @param {TurnContext} context Context object containing information for a single turn of conversation with a user.
      * @param {boolean} logOriginalMessage Determines if the original message is logged into Application Insights. This is a privacy consideration.
      */
-    public async recognize(context: TurnContext, logOriginalMessage: boolean = false): Promise<RecognizerResult> {
+    public async RecognizeAsync(context: TurnContext, logOriginalMessage: boolean = false): Promise<RecognizerResult> {
         if (context === null) {
             throw new Error("context is null");
         }
@@ -55,7 +115,6 @@ export class TelemetryLuisRecognizer extends LuisRecognizer {
         // Call Luis Recognizer
         const recognizerResult: RecognizerResult = await super.recognize(context);
 
-        const conversationId: string = context.activity.conversation.id;
 
         // Find the Telemetry Client
         if (recognizerResult && context.turnState.has(TelemetryLoggerMiddleware.AppInsightsServiceKey)) {
@@ -80,9 +139,17 @@ export class TelemetryLuisRecognizer extends LuisRecognizer {
                 }
             }
 
-            if (conversationId) {
-                properties[LuisTelemetryConstants.ConversationIdProperty] = conversationId;
-            }
+           // Add Luis Entitites
+           /*
+           var entities = new List<string>();
+           foreach (var entity in recognizerResult.Entities)
+           {
+               if (!entity.Key.ToString().Equals("$instance"))
+               {
+                   entities.Add($"{entity.Key}: {entity.Value.First}");
+               }
+           }
+            */
 
             // For some customers, logging user name within Application Insights might be an issue so have provided a config setting to disable this feature
             if (logOriginalMessage && context.activity.text) {

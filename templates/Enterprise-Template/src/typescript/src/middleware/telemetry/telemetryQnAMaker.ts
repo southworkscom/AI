@@ -18,7 +18,7 @@ export class TelemetryQnAMaker extends QnAMaker {
     private readonly _logOriginalMessage: boolean;
     private readonly _logUserName: boolean;
     private _qnaOptions: { top: number, scoreThreshold: number } = { top: 1, scoreThreshold: 0.3 };
-
+    private _endpoint: QnAMakerEndpoint;
     /**
      * Initializes a new instance of the TelemetryQnAMaker class.
      * @param {QnAMakerEndpoint} endpoint The endpoint of the knowledge base to query.
@@ -28,9 +28,11 @@ export class TelemetryQnAMaker extends QnAMaker {
      */
     constructor(endpoint: QnAMakerEndpoint, qnaOptions?: QnAMakerOptions, logUserName: boolean = false, logOriginalMessage: boolean = false) {
         super(endpoint, qnaOptions);
-        this._logOriginalMessage = logOriginalMessage;
+
         this._logUserName = logUserName;
-        Object.assign(this._qnaOptions, qnaOptions);
+        this._logOriginalMessage = logOriginalMessage;
+        this._endpoint = endpoint;
+        Object.assign(this._options, qnaOptions);
     }
 
     /**
@@ -54,6 +56,7 @@ export class TelemetryQnAMaker extends QnAMaker {
             const properties: { [key: string]: string } = {};
             const metrics: { [key: string]: number } = {};
 
+            properties[QnATelemetryConstants.KnowledgeBaseIdProperty] = this._endpoint.knowledgeBaseId;
             // Make it so we can correlate our reports with Activity or Conversation
             properties[QnATelemetryConstants.ActivityIdProperty] = context.activity.id || "";
             const conversationId: string = context.activity.conversation.id;
