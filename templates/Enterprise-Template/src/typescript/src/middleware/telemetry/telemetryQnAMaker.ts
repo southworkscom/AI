@@ -13,8 +13,8 @@ import { TelemetryLoggerMiddleware } from "./telemetryLoggerMiddleware";
  * The Custom Event name this logs is "QnaMessage"
  */
 export class TelemetryQnAMaker extends QnAMaker {
+    
     public static readonly QnAMessageEvent: string = "QnaMessage";
-
     private readonly _logOriginalMessage: boolean;
     private readonly _logUserName: boolean;
     private _qnaOptions: { top: number, scoreThreshold: number } = { top: 1, scoreThreshold: 0.3 };
@@ -35,15 +35,16 @@ export class TelemetryQnAMaker extends QnAMaker {
         Object.assign(this._options, qnaOptions);
     }
 
-    /**
-     * Gets a value indicating whether determines whether to log the Activity message text that came from the user.
-     */
-    public get logOriginalMessage(): boolean { return this._logOriginalMessage; }
-
+       
     /**
      * Gets a value indicating whether determines whether to log the User name.
      */
     public get logUserName(): boolean { return this._logUserName; }
+
+    /**
+     * Gets a value indicating whether determines whether to log the Activity message text that came from the user.
+     */
+    public get logOriginalMessage(): boolean { return this._logOriginalMessage; }
 
     public async getAnswersAsync(context: TurnContext): Promise<QnAMakerResult[]> {
         // Call Qna Maker
@@ -79,12 +80,15 @@ export class TelemetryQnAMaker extends QnAMaker {
             // Fill in Qna Results (found or not)
             if (queryResults.length > 0) {
                 const queryResult: QnAMakerResult = queryResults[0];
+
                 properties[QnATelemetryConstants.QuestionProperty] = Array.of(queryResult.questions).join(",");
                 properties[QnATelemetryConstants.AnswerProperty] = queryResult.answer;
                 metrics[QnATelemetryConstants.ScoreProperty] = queryResult.score;
+                properties[QnATelemetryConstants.ArticleFoundProperty, "true"];
             } else {
                 properties[QnATelemetryConstants.QuestionProperty] = "No Qna Question matched";
                 properties[QnATelemetryConstants.AnswerProperty] = "No Qna Question matched";
+                properties[QnATelemetryConstants.ArticleFoundProperty, "true"];
             }
 
             // Track the event
