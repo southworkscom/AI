@@ -6,6 +6,7 @@ import { RecognizerResult, TurnContext } from "botbuilder";
 import { LuisApplication, LuisPredictionOptions, LuisRecognizer } from "botbuilder-ai";
 import { LuisTelemetryConstants } from "./luisTelemetryConstants";
 import { TelemetryLoggerMiddleware } from "./telemetryLoggerMiddleware";
+import { DialogContext } from "botbuilder-dialogs";
 
 /**
  * TelemetryLuisRecognizer invokes the Luis Recognizer and logs some results into Application Insights.
@@ -17,10 +18,9 @@ import { TelemetryLoggerMiddleware } from "./telemetryLoggerMiddleware";
  * </summary>
  */
 export class TelemetryLuisRecognizer extends LuisRecognizer {
+    private readonly _luisApplication: LuisApplication;
     private readonly _logOriginalMessage: boolean;
     private readonly _logUsername: boolean;
-    private readonly _luisApplication: LuisApplication;
-
     /**
      * Initializes a new instance of the TelemetryLuisRecognizer class.
      * @param {LuisApplication} application The LUIS application to use to recognize text.
@@ -36,78 +36,38 @@ export class TelemetryLuisRecognizer extends LuisRecognizer {
         this._logOriginalMessage = logOriginalMessage;
         this._logUsername = logUserName;
     }
-
+    
+    /**
+     * Gets a value indicating whether determines whether to log the Activity message text that came from the user.
+     */
+    public get logOriginalMessage(): boolean { return this._logOriginalMessage; }
      /**
      * Gets a value indicating whether determines whether to log the User name.
      */
     public get logUsername(): boolean { return this._logUsername; }
 
-    /**
-     * Gets a value indicating whether determines whether to log the Activity message text that came from the user.
-     */
-    public get logOriginalMessage(): boolean { return this._logOriginalMessage; }
-
-     /**
-     * Analyze the current message text and return results of the analysis (Suggested actions and intents).
-     * @param {TurnContext} context Context object containing information for a single turn of conversation with a user.
-     * @param {boolean} logOriginalMessage Determines if the original message is logged into Application Insights. This is a privacy consideration.
-     */
-    public async RecognizeAsync(context: TurnContext, logOriginalMessage: boolean = false): Promise<RecognizerResult>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   /** 
+   *@param dialogContext Dialog context object containing information for the dialog being executed.
+   *@param logOriginalMessage Determines if the original message is logged into Application Insights.  This is a privacy consideration.
+   **/
+   public async recognizeDialogAsync(dialogContext: DialogContext, logOriginalMessage: boolean): Promise<RecognizerResult> {
+    
+        if (dialogContext === null) {
+            throw new Error("context is null");
+        }
+        return await this.recognizeInternalAsync(dialogContext.context, logOriginalMessage, dialogContext.activeDialog ? dialogContext.activeDialog.id : '');
+    }
 
     /**
      * Analyze the current message text and return results of the analysis (Suggested actions and intents).
      * @param {TurnContext} context Context object containing information for a single turn of conversation with a user.
      * @param {boolean} logOriginalMessage Determines if the original message is logged into Application Insights. This is a privacy consideration.
      */
-    public async RecognizeAsync(context: TurnContext, logOriginalMessage: boolean = false): Promise<RecognizerResult> {
+    public async recognizeAsync(context: TurnContext, logOriginalMessage: boolean): Promise<RecognizerResult> {
+        return await this.recognizeInternalAsync(context, logOriginalMessage);
+    }
+
+     public async recognizeInternalAsync(context: TurnContext, logOriginalMessage: boolean = false, dialogId: string = "" ): Promise<RecognizerResult> {
         if (context === null) {
             throw new Error("context is null");
         }
@@ -125,9 +85,14 @@ export class TelemetryLuisRecognizer extends LuisRecognizer {
 
             // Add the intent score and conversation id properties
             const properties: { [key: string]: string } = {};
-            properties[LuisTelemetryConstants.ActivityIdProperty] = context.activity.id || "";
+            properties[LuisTelemetryConstants.ApplicationId] = this._luisApplication.applicationId;
             properties[LuisTelemetryConstants.IntentProperty] = topLuisIntent;
             properties[LuisTelemetryConstants.IntentScoreProperty] = intentScore.toString();
+
+            if(dialogId !== null){
+                
+                properties[LuisTelemetryConstants.DialogId, dialogId];
+            }
 
             if (recognizerResult.sentiment) {
                 if (recognizerResult.sentiment.label) {
@@ -138,19 +103,7 @@ export class TelemetryLuisRecognizer extends LuisRecognizer {
                     properties[LuisTelemetryConstants.SentimentScoreProperty] = recognizerResult.sentiment.score.toString();
                 }
             }
-
-           // Add Luis Entitites
-           /*
-           var entities = new List<string>();
-           foreach (var entity in recognizerResult.Entities)
-           {
-               if (!entity.Key.ToString().Equals("$instance"))
-               {
-                   entities.Add($"{entity.Key}: {entity.Value.First}");
-               }
-           }
-            */
-
+            
             // For some customers, logging user name within Application Insights might be an issue so have provided a config setting to disable this feature
             if (logOriginalMessage && context.activity.text) {
                 properties[LuisTelemetryConstants.QuestionProperty] = context.activity.text;
