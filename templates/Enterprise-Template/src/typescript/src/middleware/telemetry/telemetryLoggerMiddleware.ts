@@ -55,12 +55,12 @@ export class TelemetryLoggerMiddleware implements Middleware {
     }
     
     /**
-     * Gets a value indicating whether indicates whether to log the original message into the BotMessageReceived event.
+     * Gets a value indicating whether indicates whether to log the user name into the BotMessageReceived event.
      */
     public get logUserName(): boolean { return this._logUserName; }
 
     /**
-     * Gets a value indicating whether indicates whether to log the user name into the BotMessageReceived event.
+     * Gets a value indicating whether indicates whether to log the original message into the BotMessageReceived event.
      */
     public get logOriginalMessage(): boolean { return this._logOriginalMessage; }
 
@@ -167,7 +167,13 @@ export class TelemetryLoggerMiddleware implements Middleware {
         properties[TelemetryConstants.LocaleProperty] = activity.locale || "";
 
         // For some customers, logging the utterances within Application Insights might be an so have provided a config setting to disable this feature
-        if (this.logOriginalMessage && activity.text) {
+        
+        if (this._logUserName && activity.recipient.name && activity.recipient.name.trim())
+        {
+            properties[TelemetryConstants.RecipientNameProperty] = activity.recipient.name;
+        }
+        
+        if (this.logOriginalMessage && activity.text && activity.text.trim()) {
             properties[TelemetryConstants.TextProperty] = activity.text;
         }
 
