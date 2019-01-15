@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CANCEL_PROMPT" xml:space="preserve">
-    <value>Sei sicuro di voler cancellare?</value>
+  <data name="CANCEL_CONFIRMED" xml:space="preserve">
+    <value>Bene, ricominciamo.</value>
   </data>
   <data name="CANCEL_DENIED" xml:space="preserve">
-    <value>Ok, andiamo avanti.</value>
+    <value>Bene, andiamo avanti.</value>
   </data>
-  <data name="CANCEL_CONFIRMED" xml:space="preserve">
-    <value>Ok, ricominciamo da qui.</value>
+  <data name="CANCEL_PROMPT" xml:space="preserve">
+    <value>Sei sicuro di voler cancellare?</value>
   </data>
 </root>
