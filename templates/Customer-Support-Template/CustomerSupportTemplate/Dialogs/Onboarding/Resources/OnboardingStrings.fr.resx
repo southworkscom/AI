@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EMAIL_PROMPT" xml:space="preserve">
-    <value>Quel est votre email?</value>
-  </data>
-  <data name="NAME_PROMPT" xml:space="preserve">
-    <value>Comment vous appelez-vous?</value>
-  </data>
-  <data name="LOCATION_PROMPT" xml:space="preserve">
-    <value>Enfin, où vous situes-tu?</value>
-  </data>
-  <data name="HAVE_LOCATION" xml:space="preserve">
-    <value>Merci, {0}. J'ai ajouté {1} comme emplacement principal. Vous êtes tous mis en place!</value>
+    <value>Quel est votre courriel?</value>
   </data>
   <data name="HAVE_EMAIL" xml:space="preserve">
     <value>Je l'ai. J'ai ajouté {0} comme adresse de contact principale.</value>
   </data>
+  <data name="HAVE_LOCATION" xml:space="preserve">
+    <value>Merci, {0}. J'ai ajouté {1} comme emplacement principal. Vous êtes tous mis en place!</value>
+  </data>
   <data name="HAVE_NAME" xml:space="preserve">
-    <value>Il y en a, {0}!</value>
+    <value>Bonjour, {0}!</value>
+  </data>
+  <data name="LOCATION_PROMPT" xml:space="preserve">
+    <value>Enfin, où êtes-vous situé?</value>
+  </data>
+  <data name="NAME_PROMPT" xml:space="preserve">
+    <value>Comment vous appelez-vous?</value>
   </data>
 </root>

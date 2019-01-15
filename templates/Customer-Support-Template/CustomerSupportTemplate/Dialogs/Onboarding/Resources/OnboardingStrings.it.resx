@@ -120,19 +120,19 @@
   <data name="EMAIL_PROMPT" xml:space="preserve">
     <value>Qual è la tua email?</value>
   </data>
-  <data name="NAME_PROMPT" xml:space="preserve">
-    <value>Come ti chiami?</value>
-  </data>
-  <data name="LOCATION_PROMPT" xml:space="preserve">
-    <value>Infine, dove si trova?</value>
+  <data name="HAVE_EMAIL" xml:space="preserve">
+    <value>Capito. Ho aggiunto {0} come indirizzo di contatto principale.</value>
   </data>
   <data name="HAVE_LOCATION" xml:space="preserve">
     <value>Grazie, {0}. Ho aggiunto {1} come posizione primaria. Sei tutto a posto!</value>
   </data>
-  <data name="HAVE_EMAIL" xml:space="preserve">
-    <value>Capito. Ho aggiunto {0} come indirizzo di contatto principale.</value>
-  </data>
   <data name="HAVE_NAME" xml:space="preserve">
-    <value>Ci sono, {0}!</value>
+    <value>Ciao, {0}!</value>
+  </data>
+  <data name="LOCATION_PROMPT" xml:space="preserve">
+    <value>Infine, dove si trova?</value>
+  </data>
+  <data name="NAME_PROMPT" xml:space="preserve">
+    <value>Come ti chiami?</value>
   </data>
 </root>
