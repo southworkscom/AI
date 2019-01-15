@@ -117,19 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+<<<<<<< HEAD:templates/Customer-Support-Template/CustomerSupportTemplate/Dialogs/Main/Resources/MainStrings.it.resx
   <data name="Confused" xml:space="preserve">
     <value>Mi dispiace, non sono in grado di aiutarti.</value>
   </data>
   <data name="Cancelled" xml:space="preserve">
+=======
+  <data name="CANCELLED" xml:space="preserve">
+>>>>>>> Update Main Dialog Resources:templates/Enterprise-Template/src/typescript/src/dialogs/main/resources/MainStrings.it.resx
     <value>Ok, ricominciamo da qui.</value>
   </data>
   <data name="GreetingWithName" xml:space="preserve">
     <value>Ehi, {0}!</value>
   </data>
+<<<<<<< HEAD:templates/Customer-Support-Template/CustomerSupportTemplate/Dialogs/Main/Resources/MainStrings.it.resx
   <data name="Greeting" xml:space="preserve">
     <value>Ehilà!</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>Che altro posso aiutarvi?</value>
+=======
+  <data name="CONFUSED" xml:space="preserve">
+    <value>Mi dispiace, non sono in grado di aiutarti.</value>
+  </data>
+  <data name="ERROR" xml:space="preserve">
+    <value>Mi dispiace, sembra che qualcosa sia andato storto.</value>
+  </data>
+  <data name="GREETING" xml:space="preserve">
+    <value>Ehilà!</value>
+  </data>
+  <data name="GREETING_WITH_NAME" xml:space="preserve">
+    <value>Ehilà! {0}!</value>
+  </data>
+  <data name="HELP_BTN_TEXT_1" xml:space="preserve">
+    <value>Prova LUIS</value>
+  </data>
+  <data name="HELP_BTN_TEXT_2" xml:space="preserve">
+    <value>Prova QnA Maker</value>
+  </data>
+  <data name="HELP_BTN_TEXT_3" xml:space="preserve">
+    <value>Ulteriori informazioni</value>
+  </data>
+  <data name="HELP_BTN_VALUE_1" xml:space="preserve">
+    <value>Posso parlare con una persona</value>
+  </data>
+  <data name="HELP_BTN_VALUE_2" xml:space="preserve">
+    <value>Che cos'è il modello Enterprise bot?</value>
+  </data>
+  <data name="HELP_BTN_VALUE_3" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/azure/bot-service/?view=azure-bot-service-4.0</value>
+  </data>
+  <data name="HELP_TEXT" xml:space="preserve">
+    <value>Sono il tuo assistente virtuale! Posso effettuare un certo numero di mansioni con le mie abilità collegate. In questo momento posso aiutarvi con calendario, e-mail, compito e punto di domande di interesse. Oppure puoi aiutarmi a fare di più creando il tuo!</value>
+  </data>
+  <data name="HELP_TITLE" xml:space="preserve">
+    <value>Aiuto per assistente virtuale</value>
+  </data>
+  <data name="INTRO_PATH" xml:space="preserve">
+    <value>./resources/Intro.it.json</value>
+>>>>>>> Update Main Dialog Resources:templates/Enterprise-Template/src/typescript/src/dialogs/main/resources/MainStrings.it.resx
   </data>
 </root>

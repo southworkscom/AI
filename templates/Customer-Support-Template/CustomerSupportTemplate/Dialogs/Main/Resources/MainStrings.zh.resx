@@ -117,6 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+<<<<<<< HEAD:templates/Customer-Support-Template/CustomerSupportTemplate/Dialogs/Main/Resources/MainStrings.zh.resx
   <data name="Confused" xml:space="preserve">
     <value>对不起, 我帮不上忙。</value>
   </data>
@@ -131,5 +132,51 @@
   </data>
   <data name="Completed" xml:space="preserve">
     <value>我还能帮你什么忙？</value>
+=======
+  <data name="CANCELLED" xml:space="preserve">
+    <value>好的，我们从头再来。</value>
+  </data>
+  <data name="COMPLETED" xml:space="preserve">
+    <value>我还能帮你什么？</value>
+  </data>
+  <data name="CONFUSED" xml:space="preserve">
+    <value>对不起，我帮不了。</value>
+  </data>
+  <data name="ERROR" xml:space="preserve">
+    <value>对不起, 看起来出了问题。</value>
+  </data>
+  <data name="GREETING" xml:space="preserve">
+    <value>您好!</value>
+  </data>
+  <data name="GREETING_WITH_NAME" xml:space="preserve">
+    <value>您好!, {0}</value>
+  </data>
+  <data name="HELP_BTN_TEXT_1" xml:space="preserve">
+    <value>测试 LUIS</value>
+  </data>
+  <data name="HELP_BTN_TEXT_2" xml:space="preserve">
+    <value>测试 QnA Maker</value>
+  </data>
+  <data name="HELP_BTN_TEXT_3" xml:space="preserve">
+    <value>了解更多信息</value>
+  </data>
+  <data name="HELP_BTN_VALUE_1" xml:space="preserve">
+    <value>我能和一个人交谈吗？</value>
+  </data>
+  <data name="HELP_BTN_VALUE_2" xml:space="preserve">
+    <value>这个模板是什么？</value>
+  </data>
+  <data name="HELP_BTN_VALUE_3" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/azure/bot-service/?view=azure-bot-service-4.0</value>
+  </data>
+  <data name="HELP_TEXT" xml:space="preserve">
+    <value>我是您的智能助理!我有不少技能，可以帮您完成很多任务。现在我可以帮您管理您的日历, 电子邮件, 任务和查找地图兴趣点。或者, 您可以教我更多的技能！</value>
+  </data>
+  <data name="HELP_TITLE" xml:space="preserve">
+    <value>智能助手的帮助</value>
+  </data>
+  <data name="INTRO_PATH" xml:space="preserve">
+    <value>./resources/Intro.zh.json</value>
+>>>>>>> Update Main Dialog Resources:templates/Enterprise-Template/src/typescript/src/dialogs/main/resources/MainStrings.zh.resx
   </data>
 </root>
