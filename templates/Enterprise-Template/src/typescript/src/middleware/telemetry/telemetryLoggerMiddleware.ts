@@ -44,12 +44,12 @@ export class TelemetryLoggerMiddleware implements Middleware {
      * @param {boolean} logUserName (Optional) Enable/Disable logging user name within Application Insights.
      * @param {boolean} logOriginalMessage (Optional) Enable/Disable logging original message name within Application Insights.
      */
-    constructor(instrumentationKey: string, logUserName: boolean = false, logOriginalMessage: boolean = false) {
-        if (!instrumentationKey) {
-            throw new Error("instrumentationKey not found");
+    constructor(telemetryClient: TelemetryClient, logUserName: boolean = false, logOriginalMessage: boolean = false) {
+        if (!telemetryClient) {
+            throw new Error("Error not found");
         }
 
-        this._telemetryClient = new TelemetryClient(instrumentationKey);
+        this._telemetryClient = telemetryClient;
         this._logUserName = logUserName;
         this._logOriginalMessage = logOriginalMessage;
     }
