@@ -44,7 +44,7 @@ export class MainDialog extends RouterDialog {
 
     protected async route(dc: DialogContext): Promise<void> {
         // Check dispatch result
-        const dispatchResult = await this._services.dispatchRecognizer.recognize(dc.context);
+        const dispatchResult = await this._services.dispatchRecognizer.recognizeTurn(dc.context, true);
         const topIntent = LuisRecognizer.topIntent(dispatchResult);
 
         if (topIntent === "l_general") {
@@ -52,7 +52,7 @@ export class MainDialog extends RouterDialog {
             const luisService = this._services.luisServices.get(process.env.LUIS_GENERAL || "");
             if (!luisService) { return Promise.reject(new Error("The specified LUIS Model could not be found in your Bot Services configuration.")); }
             else{
-                const luisResult = await luisService.recognize(dc.context);
+                const luisResult = await luisService.recognizeTurn(dc.context, true);
                 const generalIntent = LuisRecognizer.topIntent(luisResult);
     
                 // switch on general intents

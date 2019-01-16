@@ -15,6 +15,7 @@ i18n.configure({
 
 import { EnterpriseBot } from "./enterpriseBot";
 
+
 // Read variables from .env file.
 import { config } from "dotenv";
 import { BotServices } from "./botServices";
@@ -50,6 +51,7 @@ const adapter = new BotFrameworkAdapter({
 // For production bots use AppInsights, or a production-grade telemetry service to
 // log errors and other bot telemetry.
 import { TelemetryClient } from "applicationinsights";
+import { TelemetryLoggerMiddleware } from "./middleware/telemetry/telemetryLoggerMiddleware";
 // Get AppInsights configuration by service name
 const APPINSIGHTS_CONFIGURATION = process.env.APPINSIGHTS_NAME || "";
 const appInsightsConfig: IAppInsightsService = botConfig.findServiceByNameOrId(APPINSIGHTS_CONFIGURATION) as IAppInsightsService;
@@ -58,6 +60,9 @@ if (!appInsightsConfig) {
     process.exit(BOT_CONFIGURATION_ERROR);
 }
 const telemetryClient = new TelemetryClient(appInsightsConfig.instrumentationKey);
+
+let appInsightsLogger = new TelemetryLoggerMiddleware( telemetryClient, true,  true);
+adapter.use(appInsightsLogger);
 
 adapter.onTurnError = async (turnContext, error) => {
     // CAUTION:  The sample simply logs the error to the console.
