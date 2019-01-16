@@ -32,7 +32,7 @@ export class TelemetryQnAMaker extends QnAMaker {
         this._logUserName = logUserName;
         this._logOriginalMessage = logOriginalMessage;
         this._endpoint = endpoint;
-        Object.assign(this._options, qnaOptions);
+        Object.assign(this._qnaOptions, qnaOptions);
     }
 
        
