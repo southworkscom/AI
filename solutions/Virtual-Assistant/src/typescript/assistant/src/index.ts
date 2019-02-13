@@ -136,8 +136,10 @@ const CM_CONFIG: IGenericService = <IGenericService> BOT_CONFIG.findServiceByNam
 
 let bot: VirtualAssistant;
 try {
-    const SERVICES: BotServices = new BotServices('');
-    bot = new VirtualAssistant(SERVICES, CONVERSATION_STATE, USER_STATE);
+    // tslint:disable-next-line:no-any
+    const placeholder: any = {};
+    const SERVICES: BotServices = new BotServices(placeholder, placeholder, placeholder);
+    bot = new VirtualAssistant(placeholder, placeholder, placeholder, placeholder, placeholder);
 } catch (err) {
     process.exit(BOT_CONFIGURATION_ERROR);
     throw new Error(err);
