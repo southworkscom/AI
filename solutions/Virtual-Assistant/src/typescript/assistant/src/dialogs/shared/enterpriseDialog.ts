@@ -8,25 +8,29 @@ import {
     WaterfallDialog,
     WaterfallStepContext } from 'botbuilder-dialogs';
 import { BotServices } from '../../botServices';
+import { EscalateResponses } from '../escalate/escalateResponses';
 
 export class EnterpriseDialog extends ComponentDialog {
+    // Fields
+    private static readonly responder: EscalateResponses = new EscalateResponses();
 
-    // Initialize the dialog class properties
+    // Constructor
     constructor(botServices: BotServices, dialogId: string, telemetryClient: BotTelemetryClient) {
         super(EnterpriseDialog.name);
         this.initialDialogId = EnterpriseDialog.name;
-
         // tslint:disable-next-line:no-any
-        const value: ((sc: WaterfallStepContext<{}>) => Promise<DialogTurnResult<any>>)[] = [
-            this.end.bind(this)
+        const escalate: ((sc: WaterfallStepContext<{}>) => Promise<DialogTurnResult<any>>)[] = [
+            this.sendEscalationMessage.bind(this)
         ];
-
-   // Add here the waterfall dialog
-        this.addDialog(new WaterfallDialog(this.initialDialogId, value));
+        this.addDialog(new WaterfallDialog(this.initialDialogId, escalate));
     }
 
-    // Add here end dialog waterfall.
-    private async end(sc: WaterfallStepContext): Promise<DialogTurnResult> {
+    private async sendEscalationMessage(sc: WaterfallStepContext): Promise<DialogTurnResult> {
+        await EnterpriseDialog.responder.replyWith
+        (
+            sc.context,
+            EscalateResponses.responseIds.SendEscalationMessage
+        );
 
         return sc.endDialog(<boolean> sc.result);
     }
