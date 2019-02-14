@@ -1,15 +1,18 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License
 
-import { ComponentDialog,
-        DialogTurnResult,
-        WaterfallDialog,
-        WaterfallStepContext} from 'botbuilder-dialogs';
+import { BotTelemetryClient } from 'botbuilder';
+import {
+    ComponentDialog,
+    DialogTurnResult,
+    WaterfallDialog,
+    WaterfallStepContext } from 'botbuilder-dialogs';
+import { BotServices } from '../../botServices';
 
 export class EnterpriseDialog extends ComponentDialog {
 
     // Initialize the dialog class properties
-    constructor() {
+    constructor(botServices: BotServices, dialogId: string, telemetryClient: BotTelemetryClient) {
         super(EnterpriseDialog.name);
         this.initialDialogId = EnterpriseDialog.name;
 
