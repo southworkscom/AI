@@ -20,7 +20,6 @@ export class OnboardingDialog extends EnterpriseDialog {
     private static readonly responder: OnboardingResponses = new OnboardingResponses();
     private accessor: StatePropertyAccessor<IOnboardingState>;
     private state!: IOnboardingState;
-    private dialogIds: DialogIds = new DialogIds();
 
     // Constructor
     constructor(botServices: BotServices, accessor: StatePropertyAccessor<IOnboardingState>, telemetryClient: BotTelemetryClient) {
@@ -34,16 +33,16 @@ export class OnboardingDialog extends EnterpriseDialog {
             this.finishOnboardingDialog.bind(this)
         ];
         this.addDialog(new WaterfallDialog(this.initialDialogId, onboarding));
-        this.addDialog(new TextPrompt(this.dialogIds.namePrompt));
-        this.addDialog(new TextPrompt(this.dialogIds.locationPrompt));
+        this.addDialog(new TextPrompt(DialogIds.namePrompt));
+        this.addDialog(new TextPrompt(DialogIds.locationPrompt));
     }
 
     private async askForName(sc: WaterfallStepContext): Promise<DialogTurnResult> {
-        return sc.prompt(this.dialogIds.namePrompt, {
+        return sc.prompt(DialogIds.namePrompt, {
             prompt: await OnboardingDialog.responder.renderTemplate
             (
                 sc.context,
-                OnboardingResponses.responseIds.NamePrompt,
+                OnboardingResponses.responseIds.namePrompt,
                 'en'
             )
         });
@@ -51,13 +50,13 @@ export class OnboardingDialog extends EnterpriseDialog {
 
     private async askForLocation(sc: WaterfallStepContext): Promise<DialogTurnResult> {
         this.state = await this.getStateFromAccessor(sc.context);
-        this.state.name = <string> sc.result;
+        this.state.name = <string>sc.result;
 
-        return sc.prompt(this.dialogIds.locationPrompt, {
+        return sc.prompt(DialogIds.locationPrompt, {
             prompt: await OnboardingDialog.responder.renderTemplate
             (
                 sc.context,
-                OnboardingResponses.responseIds.LocationPrompt,
+                OnboardingResponses.responseIds.locationPrompt,
                 'en',
                 this.state.name
             )
@@ -66,16 +65,15 @@ export class OnboardingDialog extends EnterpriseDialog {
 
     private async finishOnboardingDialog(sc: WaterfallStepContext): Promise<DialogTurnResult> {
         this.state = await this.getStateFromAccessor(sc.context);
-        this.state.location = <string>  sc.result;
-
+        this.state.location = <string>sc.result;
         await OnboardingDialog.responder.replyWith(
             sc.context,
-            OnboardingResponses.responseIds.HaveLocation,
+            OnboardingResponses.responseIds.haveLocation,
             this.state.location
         );
         await OnboardingDialog.responder.replyWith(
             sc.context,
-            OnboardingResponses.responseIds.AddLinkedAccountsMessage
+            OnboardingResponses.responseIds.addLinkedAccountsMessage
         );
 
         return sc.endDialog();
@@ -98,8 +96,7 @@ export class OnboardingDialog extends EnterpriseDialog {
     }
 }
 
-class DialogIds {
-    // Constants
-    public readonly namePrompt: string = 'namePrompt';
-    public readonly locationPrompt: string = 'locationPrompt';
+enum DialogIds {
+    namePrompt = 'namePrompt',
+    locationPrompt = 'locationPrompt'
 }

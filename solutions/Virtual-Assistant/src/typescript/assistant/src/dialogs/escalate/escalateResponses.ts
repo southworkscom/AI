@@ -12,15 +12,15 @@ import { TemplateManager } from '../templateManager/templateManager';
 export class EscalateResponses extends TemplateManager {
     // Declare here the type of properties and the prompts
     public static responseIds: {
-        SendEscalationMessage: string;
+        sendEscalationMessage: string;
     } = {
-        SendEscalationMessage: 'sendPhone'
+        sendEscalationMessage: 'sendPhone'
     };
 
     // Declare the responses map prompts
     private static readonly responseTemplates: LanguageTemplateDictionary = new Map([
         ['default', <TemplateIdMap> new Map([
-            [EscalateResponses.responseIds.SendEscalationMessage, EscalateResponses.fromResources('escalate.phoneInfo')]
+            [EscalateResponses.responseIds.sendEscalationMessage, EscalateResponses.fromResources('escalate.phoneInfo')]
         ])]
    ]);
 

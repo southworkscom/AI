@@ -10,7 +10,7 @@ import { MainResponses } from './mainResponses';
 export class MainDialog extends ComponentDialog {
 
     // Declare here the type of properties
-    private static readonly RESPONDER: MainResponses = new MainResponses();
+    private static readonly responder: MainResponses = new MainResponses();
 
     // Initialize the dialog class properties
     constructor() {

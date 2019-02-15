@@ -2,7 +2,6 @@
 // Licensed under the MIT License
 
 import {
-    ActionTypes,
     Activity,
     Attachment,
     CardFactory,
@@ -20,25 +19,25 @@ import { TemplateManager } from '../templateManager/templateManager';
 
 export class OnboardingResponses extends TemplateManager {
     public static responseIds: {
-        NamePrompt: string;
-        LocationPrompt: string;
-        HaveLocation: string;
-        AddLinkedAccountsMessage: string;
+        namePrompt: string;
+        locationPrompt: string;
+        haveLocation: string;
+        addLinkedAccountsMessage: string;
     } = {
-        NamePrompt: 'namePrompt',
-        LocationPrompt: 'locationPrompt',
-        HaveLocation: 'haveLocation',
-        AddLinkedAccountsMessage: 'linkedAccountsInfo'
+        namePrompt: 'namePrompt',
+        locationPrompt: 'locationPrompt',
+        haveLocation: 'haveLocation',
+        addLinkedAccountsMessage: 'linkedAccountsInfo'
     };
 
     private static readonly responseTemplates: LanguageTemplateDictionary = new Map([
         ['default', <TemplateIdMap> new Map([
-            [OnboardingResponses.responseIds.NamePrompt, OnboardingResponses.fromResources('onBoarding.namePrompt')],
-            [OnboardingResponses.responseIds.LocationPrompt, OnboardingResponses.fromResources('onBoarding.locationPrompt')],
-            [OnboardingResponses.responseIds.HaveLocation, OnboardingResponses.fromResources('onBoarding.haveLocation')],
-            [OnboardingResponses.responseIds.AddLinkedAccountsMessage,
+            [OnboardingResponses.responseIds.namePrompt, OnboardingResponses.fromResources('onboarding.namePrompt')],
+            [OnboardingResponses.responseIds.locationPrompt, OnboardingResponses.fromResources('onboarding.locationPrompt')],
+            [OnboardingResponses.responseIds.haveLocation, OnboardingResponses.fromResources('onboarding.haveLocation')],
+            [OnboardingResponses.responseIds.addLinkedAccountsMessage,
                 // tslint:disable-next-line:no-any
-                (context: TurnContext, data: any): Promise<Activity> => OnboardingResponses.BUILD_LINKED_ACCOUNTS_CARD(context, data)]
+                (context: TurnContext, data: any): Promise<Activity> => OnboardingResponses.buildLinkedAccountsCard(context, data)]
         ])]
    ]);
 
@@ -49,38 +48,17 @@ export class OnboardingResponses extends TemplateManager {
     }
 
     // tslint:disable-next-line:no-any
-    public static async BUILD_LINKED_ACCOUNTS_CARD(turnContext: TurnContext, data: any): Promise<Activity> {
-        const title: string = i18n.__('onBoarding.linkedAccountsInfoTitle');
-        const text: string = i18n.__('onBoarding.linkedAccountsInfoBody');
+    public static async buildLinkedAccountsCard(turnContext: TurnContext, data: any): Promise<Activity> {
+        const title: string = i18n.__('onboarding.linkedAccountsInfoTitle');
+        const text: string = i18n.__('onboarding.linkedAccountsInfoBody');
         const images: (CardImage | string)[] = [
             {
-                url: i18n.__('onBoarding.linkedAccountsInfoUrl'),
-                alt: i18n.__('onBoarding.linkedAccountsInfoAlt')
+                url: i18n.__('onboarding.linkedAccountsInfoUrl'),
+                alt: i18n.__('onboarding.linkedAccountsInfoAlt')
             }
         ];
         const attachment: Attachment = CardFactory.heroCard(title, text, images);
         const response: Partial<Activity> = MessageFactory.attachment(attachment, title, InputHints.AcceptingInput);
-
-        response.suggestedActions = {
-            actions: [
-            {
-                title: i18n.__('main.helpBtnText1'),
-                type: ActionTypes.ImBack,
-                value: i18n.__('main.helpBtnValue1')
-            },
-            {
-                title: i18n.__('main.helpBtnText2'),
-                type: ActionTypes.ImBack,
-                value: i18n.__('main.helpBtnValue2')
-            },
-            {
-                title: i18n.__('main.helpBtnText3'),
-                type: ActionTypes.OpenUrl,
-                value: i18n.__('main.helpBtnValue3')
-            }
-            ],
-            to: []
-        };
 
         return Promise.resolve(<Activity> response);
     }

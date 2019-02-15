@@ -26,7 +26,7 @@ export class EscalateDialog extends EnterpriseDialog {
     }
 
     private static async sendEscalationMessage(sc: WaterfallStepContext): Promise<DialogTurnResult> {
-        await EscalateDialog.responder.replyWith(sc.context, EscalateResponses.responseIds.SendEscalationMessage);
+        await EscalateDialog.responder.replyWith(sc.context, EscalateResponses.responseIds.sendEscalationMessage);
 
         return sc.endDialog();
     }
