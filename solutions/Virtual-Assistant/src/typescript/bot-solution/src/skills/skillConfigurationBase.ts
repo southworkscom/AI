@@ -1,5 +1,5 @@
 import { CosmosDbStorageSettings } from 'botbuilder-azure';
-import { LocaleConfiguration } from '.';
+import { LocaleConfiguration } from './localeConfiguration';
 
 export abstract class SkillConfigurationBase {
 
@@ -9,7 +9,7 @@ export abstract class SkillConfigurationBase {
 
     public abstract cosmosDbOptions: CosmosDbStorageSettings;
 
-    public localeConfigurations: Map<string, LocaleConfiguration> = new Map();
+    public abstract localeConfigurations: Map<string, LocaleConfiguration>;
 
-    public abstract properties: { [key: string]: object };
+    public abstract properties: { [key: string]: Object };
 }
