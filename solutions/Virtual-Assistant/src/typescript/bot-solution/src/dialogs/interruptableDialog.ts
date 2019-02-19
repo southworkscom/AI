@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { BotTelemetryClient } from 'botbuilder-core';
+import { BotTelemetryClient, Activity } from 'botbuilder-core';
 import {
     ComponentDialog,
+    Dialog,
     DialogContext,
     DialogTurnResult } from 'botbuilder-dialogs';
+import { InterruptionAction } from './interruptionAction';
 
 export abstract class InterruptableDialog extends ComponentDialog {
     // Fields
@@ -26,4 +28,25 @@ export abstract class InterruptableDialog extends ComponentDialog {
             return dc.beginDialog(this.initialDialogId, options);
         }
     }
+
+    protected async onContinueDialogAsync(dc: DialogContext): Promise<DialogTurnResult> {
+        
+        const status = await this.onInterruptDialog(dc);
+        
+        if(status == InterruptionAction.MessageSentToUser){
+
+            // Resume the waiting dialog after interruption
+            await dc.repromptDialog()
+            return Dialog.EndOfTurn;
+        }
+        else if(status == InterruptionAction.StartedDialog){
+
+            // Stack is already waiting for a response, shelve inner stack
+            return Dialog.EndOfTurn;
+        }
+        
+        return await super.onContinueDialog(dc);
+    }
+
+    protected abstract onInterruptDialog(dc: DialogContext): Promise<InterruptionAction>;
 }
