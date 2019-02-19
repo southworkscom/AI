@@ -56,13 +56,13 @@ export class MainResponses extends TemplateManager {
             [MainResponses.responseIds.error, MainResponses.fromResources('main.error')],
             [MainResponses.responseIds.help,
                 // tslint:disable-next-line:no-any
-                (context: TurnContext, data: any): Promise<Activity>  => MainResponses.BuildHelpCard(context, data)],
+                (context: TurnContext, data: any): Promise<Activity>  => MainResponses.buildHelpCard(context, data)],
                 [MainResponses.responseIds.intro,
                     // tslint:disable-next-line:no-any
-                    (context: TurnContext, data: any): Promise<Activity>  => MainResponses.BuildIntroCard(context, data)],
+                    (context: TurnContext, data: any): Promise<Activity>  => MainResponses.buildIntroCard(context, data)],
                     [MainResponses.responseIds.qna,
                         // tslint:disable-next-line:no-any
-                        (context: TurnContext, data: any): Promise<Activity>  => MainResponses.BuildQnACard(context, data)]
+                        (context: TurnContext, data: any): Promise<Activity>  => MainResponses.buildQnACard(context, data)]
                     ])]
                 ]);
 
@@ -73,7 +73,7 @@ export class MainResponses extends TemplateManager {
     }
 
     // tslint:disable-next-line:no-any
-    public static BuildHelpCard(context: TurnContext, data: any): Promise<Activity> {
+    public static buildHelpCard(context: TurnContext, data: any): Promise<Activity> {
         const title: string = i18n.__('main.helpTitle');
         const text: string = i18n.__('main.helpText');
         const attachment: Attachment = CardFactory.heroCard(title, text);
@@ -109,7 +109,7 @@ export class MainResponses extends TemplateManager {
     }
 
     // tslint:disable-next-line:no-any
-    public static BuildIntroCard(context: TurnContext, data: any): Promise<Activity> {
+    public static buildIntroCard(context: TurnContext, data: any): Promise<Activity> {
         const introPath: string = i18n.__('main.introPath');
         // tslint:disable-next-line:no-any non-literal-require
         const introCard: any = require(introPath);
@@ -119,7 +119,7 @@ export class MainResponses extends TemplateManager {
     }
 
     // tslint:disable-next-line:no-any
-    public static BuildQnACard(context: TurnContext, answer: any): Promise<Activity> {
+    public static buildQnACard(context: TurnContext, answer: any): Promise<Activity> {
         const response: Partial<Activity> = ActivityExtensions.createReply(context.activity);
 
         try {
