@@ -6,6 +6,7 @@
  * Licensed under the MIT License.
  */
 export * from './dialogs';
+export * from './extensions';
 export * from './resources';
 export * from './skills';
 export * from './middleware';
