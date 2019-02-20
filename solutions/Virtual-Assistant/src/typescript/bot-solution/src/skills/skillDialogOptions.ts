@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { SkillDefinition } from "./skillDefinition";
+import { SkillDefinition } from './skillDefinition';
 
-export interface SkillDialogOptions{
-   
+export interface ISkillDialogOptions {
+
     skillDefinition: SkillDefinition;
 
-    parameters: Map<string, object>;
+    parameters: Map<string, Object>;
 }
