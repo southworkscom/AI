@@ -76,9 +76,7 @@ export class BotServices {
 
                     break;
                 }
-                default: {
-                    throw new Error('Configuration not expected in your \'.bot\' file.');
-                }
+                default:
             }
         });
 
@@ -195,9 +193,7 @@ export class BotServices {
 
                     break;
                 }
-                default: {
-                    throw new Error('Configuration not expected in your \'.bot\' file.');
-                }
+                default:
             }
         });
 

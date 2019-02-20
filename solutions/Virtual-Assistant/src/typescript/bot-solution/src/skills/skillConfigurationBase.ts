@@ -11,5 +11,5 @@ export abstract class SkillConfigurationBase {
 
     public abstract localeConfigurations: Map<string, LocaleConfiguration>;
 
-    public abstract properties: { [key: string]: Object };
+    public abstract properties: { [key: string]: Object|undefined };
 }
