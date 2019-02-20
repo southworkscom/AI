@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { BotTelemetryClient, ConversationState, EndOfConversationCodes,
-    TurnContext, UserState } from 'botbuilder';
+import { BotTelemetryClient, ConversationState, EndOfConversationCodes, TurnContext, UserState } from 'botbuilder';
 import { DialogContext, DialogSet, DialogState, DialogTurnResult } from 'botbuilder-dialogs';
 import { EndpointService } from 'botframework-config';
 import { BotServices } from './botServices';
@@ -22,17 +21,14 @@ export class VirtualAssistant {
     /**
      * Constructs the three pieces necessary for this bot to operate.
      */
-    constructor(
-        botServices: BotServices,
-        conversationState: ConversationState,
-        userState: UserState,
-        endpointService:
-        EndpointService,
-        telemetryClient: BotTelemetryClient
-        ) {
-        if (!botServices) { throw new Error(('Missing parameter.  botServices is required')); }
+    constructor(botServices: BotServices,
+                conversationState: ConversationState,
+                userState: UserState,
+                endpointService: EndpointService,
+                telemetryClient: BotTelemetryClient) {
         if (!conversationState) { throw new Error(('Missing parameter.  conversationState is required')); }
         if (!userState) { throw new Error(('Missing parameter.  userState is required')); }
+        if (!botServices) { throw new Error(('Missing parameter.  botServices is required')); }
         if (!endpointService) { throw new Error(('Missing parameter.  endpointService is required')); }
         if (!telemetryClient) { throw new Error(('Missing parameter.  telemetryClient is required')); }
 
@@ -52,9 +48,8 @@ export class VirtualAssistant {
     public async onTurn(turnContext: TurnContext): Promise<void> {
         // Client notifying this bot took to long to respond (timed out)
         if (turnContext.activity.code === EndOfConversationCodes.BotTimedOut) {
-            this.services.telemetryClient.trackTrace({
-                message: `Timeout in ${turnContext.activity.channelId} channel: Bot took too long to respond.`
-            });
+            const message: string = `Timeout in ${turnContext.activity.channelId} channel: Bot took too long to respond.`;
+            this.services.telemetryClient.trackTrace({ message: message });
 
             return;
         }
