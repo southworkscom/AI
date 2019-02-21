@@ -4,3 +4,4 @@
  */
 
 export { MultiProviderAuthDialog } from './multiProviderAuthDialog';
+export { isProviderTokenResponse, OAuthProvider, IProviderTokenResponse } from './providerTokenResponse';
