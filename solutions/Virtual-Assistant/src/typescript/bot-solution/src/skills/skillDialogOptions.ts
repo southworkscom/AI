@@ -5,7 +5,7 @@ import { SkillDefinition } from './skillDefinition';
 
 export interface ISkillDialogOptions {
 
-    skillDefinition: SkillDefinition;
+    skillDefinition: SkillDefinition | undefined;
 
     parameters: Map<string, Object>;
 }
