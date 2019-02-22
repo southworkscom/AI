@@ -6,26 +6,25 @@ import { Reply } from './Reply';
 
 export class ResponseTemplate {
 
-    constructor (text: string, speak: string, inputHint: string = InputHints.AcceptingInput){
-        
-        this.replies = new Reply[1];
-        this.replies[0] = new Reply; {
+    constructor(text: string, speak: string, inputHint: string = InputHints.AcceptingInput) {
 
-            text = text,
-            speak = speak
-        }
+        this.replies[0] = {
+            text: text,
+            speak: speak,
+            cardText: ''
+        };
         this.inputHint = inputHint;
     }
-
     public replies: Reply[] = [];
 
-    public SuggestedActions: string[] = [];
+    public suggestedActions: string[] = [];
 
-    public inputHint: string = InputHints.AcceptingInput;    
+    public inputHint: string = InputHints.AcceptingInput;
 
-    public reply : Reply = this.replies.length > 0 ? this.replies[this.GetRandom(this.replies.length)] : undefined;
+    public reply?: Reply = this.replies.length > 0 ? this.replies [ this.getRandom (this.replies.length) ] : undefined;
 
-    private GetRandom ( upper: any) {
-        return Math.random();
+    private getRandom (upper: number): number {
+
+       return crypto.randomBytes(upper);
     }
 }
