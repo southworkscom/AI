@@ -18,7 +18,6 @@ export class SkillDialog extends ComponentDialog {
     private readonly skillConfiguration: SkillConfigurationBase;
     private readonly responseManager: any; // ResponseManager;
     private readonly endpointService: EndpointService;
-    // private readonly telemetryClient: BotTelemetryClient;
     private readonly useCachedTokens: boolean;
     private inProcAdapter: any; // InProcAdapter;
     private activatedSkill: any; // IBot;
