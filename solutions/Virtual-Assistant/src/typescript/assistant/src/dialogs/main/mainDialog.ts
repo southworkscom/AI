@@ -29,6 +29,7 @@ import { EndpointService } from 'botframework-config';
 import {
     Activity,
     ActivityTypes } from 'botframework-schema';
+import * as i18n from 'i18n';
 import { BotServices } from '../../botServices';
 import { IVirtualAssistantState } from '../../virtualAssistantState';
 import { EscalateDialog } from '../escalate/escalateDialog';
@@ -93,7 +94,7 @@ export class MainDialog extends RouterDialog {
         const parameters: Map<string, object> = await this.parametersAccessor.get(dc.context, new Map<string, object>());
         const virtualAssistantState: IVirtualAssistantState = await this.virtualAssistantState.get(dc.context, {});
         // get current activity locale
-        const locale: string = ''; // PENDING CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        const locale: string = i18n.getLocale();
         const localeConfig: LocaleConfiguration = (this.services.localeConfigurations.get(locale) || new LocaleConfiguration());
 
         // No dialog is currently on the stack and we haven't responded to the user
