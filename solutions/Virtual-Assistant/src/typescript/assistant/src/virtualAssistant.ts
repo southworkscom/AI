@@ -39,7 +39,7 @@ export class VirtualAssistant {
         this.telemetryClient = telemetryClient;
 
         this.dialogs = new DialogSet(this.conversationState.createProperty<DialogState>(VirtualAssistant.name));
-        this.dialogs.add(new MainDialog());
+        this.dialogs.add(new MainDialog(this.services, this.conversationState, this.userState, this.endpointService, this.telemetryClient));
     }
 
     /**
