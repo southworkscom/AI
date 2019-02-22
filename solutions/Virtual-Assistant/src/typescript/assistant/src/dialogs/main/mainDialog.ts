@@ -7,7 +7,6 @@ import {
     ITelemetryLuisRecognizer,
     ITelemetryQnAMaker,
     LocaleConfiguration,
-    LuisTelemetryConstants,
     RouterDialog,
     SkillConfiguration,
     SkillDefinition,
@@ -23,12 +22,9 @@ import {
     UserState} from 'botbuilder';
 import { LuisRecognizer, QnAMakerResult } from 'botbuilder-ai';
 import {
-    ComponentDialog,
     DialogContext,
     DialogTurnResult,
-    DialogTurnStatus,
-    WaterfallDialog,
-    WaterfallStepContext} from 'botbuilder-dialogs';
+    DialogTurnStatus } from 'botbuilder-dialogs';
 import { EndpointService } from 'botframework-config';
 import {
     Activity,
@@ -244,9 +240,9 @@ export class MainDialog extends RouterDialog {
                 }
                 case Events.activeLocationUpdate:
                 case Events.activeRouteUpdate: {
-                    // PENDING nextline: = this.skillRouter.identifyRegisteredSkill(Dispatch.Intent.l_PointOfInterest.ToString());
                     const skillDialogOption: ISkillDialogOptions = {
-                        skillDefinition: this.skillRouter.identifyRegisteredSkill('PointOfInterest'),
+                        // Intent from skill needed, LUISGen not generating things right, an issue should be opened
+                        skillDefinition: this.skillRouter.identifyRegisteredSkill('l_PointOfInterest'),
                         parameters: new Map<string, Object>()
                     };
                     await this.routeToSkill(dc, skillDialogOption);
