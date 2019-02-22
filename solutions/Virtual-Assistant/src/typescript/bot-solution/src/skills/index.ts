@@ -7,4 +7,6 @@ export { LocaleConfiguration } from './localeConfiguration';
 export { SkillConfigurationBase } from './skillConfigurationBase';
 export { SkillConfiguration } from './skillConfiguration';
 export { SkillDefinition } from './skillDefinition';
+export { SkillDialog } from './skillDialog';
 export { ISkillDialogOptions } from './skillDialogOptions';
+export { SkillRouter } from './skillRouter';
