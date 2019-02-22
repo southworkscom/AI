@@ -69,10 +69,9 @@ export class MainDialog extends RouterDialog {
         this.conversationState = conversationState;
         this.userState = userState;
         this.endpointService = endpointService;
-        // this.TelemetryClient = telemetryClient; // ComponentDialog property, dependencies should be resolved for this to work
-        this.onboardingState = this.userState.createProperty<IOnboardingState>('IOnboardingState'); // nameof(OnboardingState)
+        this.telemetryClient = telemetryClient;
+        this.onboardingState = this.userState.createProperty<IOnboardingState>('IOnboardingState');
         this.parametersAccessor = this.userState.createProperty<Map<string, object>>('userInfo');
-        // nextline: nameof(VirtualAssistanState)
         this.virtualAssistantState = this.conversationState.createProperty<IVirtualAssistantState>('VirtualAssistantState');
 
         this.addDialog(new OnboardingDialog(this.services, this.onboardingState, telemetryClient));
@@ -89,6 +88,7 @@ export class MainDialog extends RouterDialog {
             this.conversationStarted = true;
         }
     }
+
     // tslint:disable-next-line:max-func-body-length
     protected async route(dc: DialogContext): Promise<void> {
         const parameters: Map<string, object> = await this.parametersAccessor.get(dc.context, new Map<string, object>());
