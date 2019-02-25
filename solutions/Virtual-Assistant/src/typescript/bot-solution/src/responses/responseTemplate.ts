@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { InputHints } from 'botframework-schema';
-import { Reply } from './Reply';
+import { Reply } from './reply';
 
 export class ResponseTemplate {
 
