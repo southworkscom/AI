@@ -1,4 +1,5 @@
 import { Middleware, TurnContext } from 'botbuilder';
+import { setLocale } from 'i18n';
 
 export class SetLocaleMiddleware implements Middleware {
     private readonly defaultLocale: string;
@@ -8,6 +9,10 @@ export class SetLocaleMiddleware implements Middleware {
     }
 
     public onTurn(context: TurnContext, next: () => Promise<void>): Promise<void> {
-        throw new Error('Method not implemented.');
+        const cultureInfo: string = context.activity.locale || this.defaultLocale;
+
+        setLocale(cultureInfo);
+
+        return next();
     }
 }
