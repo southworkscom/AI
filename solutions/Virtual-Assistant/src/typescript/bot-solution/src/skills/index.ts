@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+export { InProcAdapter } from './inProcAdapter';
 export { LocaleConfiguration } from './localeConfiguration';
 export { SkillConfigurationBase } from './skillConfigurationBase';
 export { SkillConfiguration } from './skillConfiguration';
