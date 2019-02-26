@@ -19,6 +19,7 @@
         "botbuilder-core": "^4.2.1",
         "botbuilder-dialogs": "^4.2.1",
         "botframework-config": "^4.2.1",
+        "botframework-connector": "^4.2.1",
         "botframework-schema": "^4.2.1",
         "i18n": "^0.8.3"
     },
