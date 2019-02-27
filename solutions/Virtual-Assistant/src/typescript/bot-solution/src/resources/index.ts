@@ -4,3 +4,4 @@
  */
 
 export { General, _Entities, _Instance, _Intents } from './General';
+export { CommonResponses } from './commonResponses';

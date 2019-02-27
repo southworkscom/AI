@@ -4,7 +4,8 @@
 import {
     Activity,
     ActivityTypes,
-    ChannelAccount } from 'botbuilder';
+    ChannelAccount,
+    ConversationReference } from 'botbuilder';
 
 export namespace ActivityExtensions {
     export function createReply(source: Activity, text?: string, local?: string): Activity {
@@ -26,6 +27,23 @@ export namespace ActivityExtensions {
             localTimezone: source.localTimezone,
             listenFor: source.listenFor,
             semanticAction: source.semanticAction
+        };
+    }
+
+    export function getContinuationActivity(source: Partial<ConversationReference>): Partial<Activity> {
+        if (!source) {
+            throw new Error('source needs to be defined');
+        }
+
+        return {
+            type: ActivityTypes.Event,
+            name: 'ContinueConversation',
+            channelId: source.channelId,
+            serviceUrl: source.serviceUrl,
+            conversation: source.conversation,
+            recipient: source.bot,
+            from: source.user,
+            relatesTo: <ConversationReference> source
         };
     }
 

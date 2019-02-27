@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License
 
+import { ActivityExtensions } from 'bot-solution';
 import {
     Activity,
     CardFactory,
@@ -12,7 +13,6 @@ import {
     Attachment,
     ThumbnailCard } from 'botframework-schema';
 import * as i18n from 'i18n';
-import { ActivityExtensions } from '../../extensions/activityExtensions';
 import {
     DictionaryRenderer,
     LanguageTemplateDictionary,

@@ -5,3 +5,4 @@
 
 export { InterruptableDialog } from './interruptableDialog';
 export { InterruptionAction } from './interruptionAction';
+export { RouterDialog } from './routerDialog';
