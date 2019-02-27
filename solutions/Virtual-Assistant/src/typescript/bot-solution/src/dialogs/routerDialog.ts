@@ -11,7 +11,7 @@ import {
     DialogTurnResult,
     DialogTurnStatus
 } from 'botbuilder-dialogs';
-import { ActivityExtensions } from './../extensions/activityExtensions';
+import { ActivityExtensions } from '../extensions/activityExtensions';
 import { InterruptableDialog } from './interruptableDialog';
 import { InterruptionAction } from './interruptionAction';
 
