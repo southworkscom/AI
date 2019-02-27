@@ -5,15 +5,11 @@ import { InputHints } from 'botframework-schema';
 import { Reply } from './reply';
 
 export class ResponseTemplate {
-    constructor() { }
-
     public replies: Reply[] = [];
-
     public suggestedActions: string[] = [];
-
     public inputHint: string = InputHints.AcceptingInput;
 
-    public get reply(): Reply|undefined {
+    public get reply(): Reply | undefined {
         if (this.replies.length > 0) {
             return this.replies[this.getRandom(this.replies.length)];
         }
@@ -21,7 +17,8 @@ export class ResponseTemplate {
         return undefined;
     }
 
-    private getRandom (upper: number): number {
-       return Math.floor(Math.random() * upper);
+    private getRandom(upper: number): number {
+        // tslint:disable-next-line:insecure-random
+        return Math.floor(Math.random() * upper);
     }
 }

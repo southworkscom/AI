@@ -2,21 +2,20 @@
 // Licensed under the MIT License.
 
 import { ActivityTypes } from 'botbuilder';
-import { Activity, AttachmentLayoutTypes, CardFactory, MessageFactory } from 'botbuilder-core';
-import { ActionTypes, Attachment, SuggestedActions } from 'botframework-schema';
-import * as fs from 'fs';
+import { Activity, CardFactory, MessageFactory } from 'botbuilder-core';
+import { ActionTypes, Attachment } from 'botframework-schema';
+import { readFileSync } from 'fs';
 import { getLocale } from 'i18n';
-import * as path from 'path';
+import { join } from 'path';
 import { Card } from './card';
-import { IcardData } from './cardDataBase';
-import { IResponseIdCollection} from './iResponseldCollection';
+import { ICardData } from './cardDataBase';
 import { Reply } from './reply';
+import { IResponseIdCollection } from './responseIdCollection';
 import { ResponseTemplate } from './responseTemplate';
-import { strictEqual } from 'assert';
 
 export class ResponseManager {
 
-    private readonly defaultLocaleKey: string  = 'default';
+    private readonly defaultLocaleKey: string = 'default';
     private static readonly simpleTokensRegex: RegExp = /\{(\w+)\}/g.compile();
     private static readonly complexTokensRegex: RegExp = /\{[^{\}]+(?=})\}/g.compile();
 
@@ -48,12 +47,12 @@ export class ResponseManager {
         return this.parseResponse(template, tokens);
     }
 
-    public getCardResponse(cards: Card|Card[]): Partial<Activity> {
+    public getCardResponse(cards: Card | Card[]): Partial<Activity> {
         const locale: string = getLocale();
         const resourcePath: string = '../resources/cards';
 
         if (cards instanceof Card) {
-            const json: string  = this.loadCardJson(cards.name, locale, resourcePath);
+            const json: string = this.loadCardJson(cards.name, locale, resourcePath);
             const attachment: Attachment = this.buildCardAttachment(json, cards.data);
 
             return MessageFactory.attachment(attachment);
@@ -69,7 +68,7 @@ export class ResponseManager {
         }
     }
 
-    public getCardResponseWithTemplateId(templateId: string, cards: Card|Card[], tokens?: Map<string, string>): Partial<Activity> {
+    public getCardResponseWithTemplateId(templateId: string, cards: Card | Card[], tokens?: Map<string, string>): Partial<Activity> {
         const response: Partial<Activity> = this.getResponse(templateId, tokens);
         const locale: string = getLocale();
         const resourcePath: string = '../resources/cards';
@@ -83,7 +82,7 @@ export class ResponseManager {
             const attachments: Attachment[] = [];
 
             cards.forEach((card: Card) => {
-                const json: string  = this.loadCardJson(card.name, locale, resourcePath);
+                const json: string = this.loadCardJson(card.name, locale, resourcePath);
                 attachments.push(this.buildCardAttachment(json, card.data));
             });
 
@@ -92,21 +91,22 @@ export class ResponseManager {
     }
 
     public getResponseTemplate(templateId: string, locale?: string): ResponseTemplate {
-        locale = locale !== undefined ? locale : getLocale();
+        let localeKey: string = locale !== undefined ? locale : getLocale();
 
         // warm up the JsonResponses loading to see if it actually exist.
         // If not, throw with the loading time exception that's actually helpful
-        let key: string|undefined = this.getJsonResponseKeyForLocale(templateId, locale);
+        let key: string | undefined = this.getJsonResponseKeyForLocale(templateId, localeKey);
 
         // if no matching json file found for locale, try parent language
         if (key === undefined) {
-            locale = locale.split('-')[0].toLowerCase();
-            key = this.getJsonResponseKeyForLocale(templateId, locale);
+            localeKey = localeKey.split('-')[0]
+                .toLowerCase();
+            key = this.getJsonResponseKeyForLocale(templateId, localeKey);
 
             // fall back to default
             if (key === undefined) {
-                locale = this.defaultLocaleKey;
-                key = this.getJsonResponseKeyForLocale(templateId, locale);
+                localeKey = this.defaultLocaleKey;
+                key = this.getJsonResponseKeyForLocale(templateId, localeKey);
             }
         }
 
@@ -115,12 +115,12 @@ export class ResponseManager {
         }
 
         // Get the bot response from the .json file
-        const responseLocale: Map<string, ResponseTemplate>|undefined = this.jsonResponses.get(locale);
+        const responseLocale: Map<string, ResponseTemplate> | undefined = this.jsonResponses.get(localeKey);
         if (!responseLocale || !responseLocale.has(key)) {
-            throw new Error('Unable to find response' + templateId);
+            throw new Error(`Unable to find response ${templateId}`);
         }
 
-        const response: ResponseTemplate|undefined = responseLocale.get(key);
+        const response: ResponseTemplate | undefined = responseLocale.get(key);
         if (response === undefined) {
             throw new Error();
         }
@@ -129,10 +129,10 @@ export class ResponseManager {
     }
 
     public format(messageTemplate: string, tokens?: Map<string, string>): string {
-        let result: string  = messageTemplate;
+        let result: string = messageTemplate;
 
         ResponseManager.complexTokensRegex.lastIndex = 0;
-        let match: RegExpExecArray|null = ResponseManager.complexTokensRegex.exec(result);
+        let match: RegExpExecArray | null = ResponseManager.complexTokensRegex.exec(result);
         while (match) {
             const bindingJson: string = match[0];
 
@@ -154,12 +154,12 @@ export class ResponseManager {
         // if locale is not set, add resources under the default key.
         const localeKey: string = (locale !== undefined) ? locale : this.defaultLocaleKey;
 
-        let jsonPath: string = path.join(resourcePath, `${resourceName}.${localeKey}.json`);
+        let jsonPath: string = join(resourcePath, `${resourceName}.${localeKey}.json`);
 
         try {
             require.resolve(jsonPath);
         } catch (errLocale) {
-            jsonPath = path.join(resourcePath, `${resourceName}.json`);
+            jsonPath = join(resourcePath, `${resourceName}.json`);
 
             // Search for the common resource
             try {
@@ -170,11 +170,11 @@ export class ResponseManager {
         }
 
         try {
-            const content: Map<string, { replies: Reply[], suggestedActions: string[], inputHint: string }> = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+            const content: Map<string, ITemplate> = JSON.parse(this.jsonFromFile(jsonPath));
 
             const localeResponses: Map<string, ResponseTemplate> = this.jsonResponses.get(localeKey) || new Map<string, ResponseTemplate>();
 
-            content.forEach((value: { replies: Reply[], suggestedActions: string[], inputHint: string }, key: string) => {
+            content.forEach((value: ITemplate, key: string) => {
                 const template: ResponseTemplate = Object.assign(new ResponseTemplate(), value);
                 localeResponses.set(key, template);
             });
@@ -185,9 +185,9 @@ export class ResponseManager {
         }
     }
 
-    private getJsonResponseKeyForLocale(responseId: string, locale: string): string|undefined {
+    private getJsonResponseKeyForLocale(responseId: string, locale: string): string | undefined {
         if (this.jsonResponses.has(locale)) {
-            const localeResponses: Map<string, ResponseTemplate>|undefined = this.jsonResponses.get(locale);
+            const localeResponses: Map<string, ResponseTemplate> | undefined = this.jsonResponses.get(locale);
             if (localeResponses) {
                 return localeResponses.has(responseId) ? responseId : undefined;
             }
@@ -197,7 +197,7 @@ export class ResponseManager {
     }
 
     private parseResponse(template: ResponseTemplate, data?: Map<string, string>): Partial<Activity> {
-        const reply: Reply|undefined = template.reply;
+        const reply: Reply | undefined = template.reply;
         if (!reply) {
             throw new Error('There is no reply in the ResponseTemplate');
         }
@@ -240,50 +240,62 @@ export class ResponseManager {
     }
 
     private loadCardJson(cardName: string, locale: string, resourcePath: string): string {
-        let jsonFile: string = path.join(resourcePath, `${cardName}.${locale}.json`);
+        let jsonFile: string = join(resourcePath, `${cardName}.${locale}.json`);
 
         try {
             require.resolve(jsonFile);
         } catch (errLocale) {
             try {
-                jsonFile = path.join(resourcePath, `${cardName}.json`);
+                jsonFile = join(resourcePath, `${cardName}.json`);
                 require.resolve(jsonFile);
             } catch (error) {
                 throw new Error(`Could not file Adaptive Card resource ${jsonFile}`);
             }
         }
 
-        return fs.readFileSync(jsonFile, 'utf8');
+        return this.jsonFromFile(jsonFile);
     }
 
-    private buildCardAttachment(json: string, data?: IcardData): Attachment {
+    private buildCardAttachment(json: string, data?: ICardData): Attachment {
+        let jsonOut: string = json;
         // If cardData was provided
         if (data !== undefined) {
             // add all properties to the list
             const tokens: Map<string, string> = new Map<string, string>();
             // get property names from cardData
-            Object.entries(data).forEach((entry: [string, string]) => {
-                if (!tokens.has(entry[0])) {
-                    tokens.set(entry[0], entry[1]);
-                }
-            });
+            Object.entries(data)
+                .forEach((entry: [string, string]) => {
+                    if (!tokens.has(entry[0])) {
+                        tokens.set(entry[0], entry[1]);
+                    }
+                });
 
             // replace tokens in json
             ResponseManager.simpleTokensRegex.lastIndex = 0;
-            let match: RegExpExecArray|null = ResponseManager.simpleTokensRegex.exec(json);
+            let match: RegExpExecArray | null = ResponseManager.simpleTokensRegex.exec(jsonOut);
             while (match) {
                 if (tokens.has(match[0])) {
-                    json = json.replace(match[0], tokens.get(match[0]) || '');
+                    jsonOut = jsonOut.replace(match[0], tokens.get(match[0]) || '');
                 }
 
-                match = ResponseManager.simpleTokensRegex.exec(json);
+                match = ResponseManager.simpleTokensRegex.exec(jsonOut);
             }
         }
 
         // Deserialize/Serialize logic is needed to prevent JSON exception in prompts
-        const cardObj: Object = JSON.parse(json);
-        const card: Attachment = CardFactory.adaptiveCard(cardObj);
+        const cardObj: Object = JSON.parse(jsonOut);
 
-        return card;
+        return CardFactory.adaptiveCard(cardObj);
     }
+
+    private jsonFromFile(filePath: string): string {
+        // tslint:disable-next-line:non-literal-fs-path
+        return readFileSync(filePath, 'utf8');
+    }
+}
+
+interface ITemplate {
+    replies: Reply[];
+    suggestedActions: string[];
+    inputHint: string;
 }

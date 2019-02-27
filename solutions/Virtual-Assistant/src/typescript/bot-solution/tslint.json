@@ -18,8 +18,7 @@
       "linebreak-style": false,
       "member-ordering": false,
       "no-relative-imports": false,
-      "export-name": false,
-      "no-empty-interface": false 
+      "export-name": false
     },
     "rulesDirectory": [
       "tslint-microsoft-contrib"
