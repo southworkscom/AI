@@ -5,26 +5,23 @@ import { InputHints } from 'botframework-schema';
 import { Reply } from './reply';
 
 export class ResponseTemplate {
+    constructor() { }
 
-    constructor(text: string, speak: string, inputHint: string = InputHints.AcceptingInput) {
-
-        this.replies[0] = {
-            text: text,
-            speak: speak,
-            cardText: ''
-        };
-        this.inputHint = inputHint;
-    }
     public replies: Reply[] = [];
 
     public suggestedActions: string[] = [];
 
     public inputHint: string = InputHints.AcceptingInput;
 
-    public reply?: Reply = this.replies.length > 0 ? this.replies [ this.getRandom (this.replies.length) ] : undefined;
+    public get reply(): Reply|undefined {
+        if (this.replies.length > 0) {
+            return this.replies[this.getRandom(this.replies.length)];
+        }
+
+        return undefined;
+    }
 
     private getRandom (upper: number): number {
-
-       return crypto.randomBytes(upper);
+       return Math.floor(Math.random() * upper);
     }
 }
