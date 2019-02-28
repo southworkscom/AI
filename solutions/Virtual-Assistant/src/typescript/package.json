@@ -18,6 +18,7 @@
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "build": "lerna bootstrap && lerna run build"
+    "build": "lerna bootstrap && lerna run build",
+    "start": "npm run build && lerna run start --scope assistant"
   }
 }

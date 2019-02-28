@@ -1,5 +1,5 @@
 {
-    "defaultSeverity": "error",
+    "defaultSeverity": "warning",
     "extends": [
         "tslint:recommended",
         "tslint-microsoft-contrib"
@@ -18,7 +18,8 @@
       "linebreak-style": false,
       "member-ordering": false,
       "no-relative-imports": false,
-      "export-name": false
+      "export-name": false,
+      "completed-docs": false
     },
     "rulesDirectory": [
       "tslint-microsoft-contrib"

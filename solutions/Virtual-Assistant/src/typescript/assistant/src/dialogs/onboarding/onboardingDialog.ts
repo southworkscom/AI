@@ -9,7 +9,8 @@ import {
     DialogTurnResult,
     TextPrompt,
     WaterfallDialog,
-    WaterfallStepContext } from 'botbuilder-dialogs';
+    WaterfallStep,
+    WaterfallStepContext} from 'botbuilder-dialogs';
 import { BotServices } from '../../botServices';
 import { EnterpriseDialog } from '../shared/enterpriseDialog';
 import { OnboardingResponses } from './onboardingResponses';
@@ -26,12 +27,13 @@ export class OnboardingDialog extends EnterpriseDialog {
         super(botServices, OnboardingDialog.name, telemetryClient);
         this.accessor = accessor;
         this.initialDialogId = OnboardingDialog.name;
-        // tslint:disable-next-line:no-any
-        const onboarding: ((sc: WaterfallStepContext<{}>) => Promise<DialogTurnResult<any>>)[] = [
+
+        const onboarding: WaterfallStep[] = [
             this.askForName.bind(this),
             this.askForLocation.bind(this),
             this.finishOnboardingDialog.bind(this)
         ];
+
         this.addDialog(new WaterfallDialog(this.initialDialogId, onboarding));
         this.addDialog(new TextPrompt(DialogIds.namePrompt));
         this.addDialog(new TextPrompt(DialogIds.locationPrompt));

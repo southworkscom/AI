@@ -3,7 +3,7 @@ import { Activity, ActivityTypes, AutoSaveStateMiddleware, BotTelemetryClient, C
     MemoryStorage, Storage, TurnContext, UserState } from 'botbuilder';
 import { CosmosDbStorage, CosmosDbStorageSettings } from 'botbuilder-azure';
 import { ComponentDialog, Dialog, DialogContext, DialogTurnResult, DialogTurnStatus } from 'botbuilder-dialogs';
-import { EndpointService } from 'botframework-config';
+import { IEndpointService } from 'botframework-config';
 import { IProviderTokenResponse, isProviderTokenResponse, MultiProviderAuthDialog } from '../authentication';
 import { ActivityExtensions } from '../extensions';
 import { EventDebuggerMiddleware, SetLocaleMiddleware, TelemetryExtensions } from '../middleware';
@@ -17,7 +17,7 @@ export class SkillDialog extends ComponentDialog {
     private readonly skillDefinition: SkillDefinition;
     private readonly skillConfiguration: SkillConfigurationBase;
     private readonly responseManager: any; // ResponseManager;
-    private readonly endpointService: EndpointService;
+    private readonly endpointService: IEndpointService;
     private readonly useCachedTokens: boolean;
     private inProcAdapter: any; // InProcAdapter;
     private activatedSkill: any; // IBot;
@@ -25,7 +25,7 @@ export class SkillDialog extends ComponentDialog {
 
     constructor(skillDefinition: SkillDefinition,
                 skillConfiguration: SkillConfigurationBase,
-                endpointService: EndpointService,
+                endpointService: IEndpointService,
                 telemetryClient: BotTelemetryClient,
                 useCachedTokens: boolean = true) {
         super(skillDefinition.id);

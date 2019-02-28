@@ -18,8 +18,7 @@ export class EscalateDialog extends EnterpriseDialog {
     constructor(botServices: BotServices, telemetryClient: BotTelemetryClient) {
         super(botServices, EscalateDialog.name, telemetryClient);
         this.initialDialogId = EscalateDialog.name;
-        // tslint:disable-next-line:no-any
-        const escalate: ((sc: WaterfallStepContext<{}>) => Promise<DialogTurnResult<any>>)[] = [
+        const escalate: ((sc: WaterfallStepContext<{}>) => Promise<DialogTurnResult>)[] = [
             EscalateDialog.sendEscalationMessage.bind(this)
         ];
         this.addDialog(new WaterfallDialog(this.initialDialogId, escalate));

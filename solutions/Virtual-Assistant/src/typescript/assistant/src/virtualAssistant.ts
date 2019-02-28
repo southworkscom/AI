@@ -2,10 +2,13 @@
 // Licensed under the MIT License.
 
 import { BotTelemetryClient, ConversationState, EndOfConversationCodes, TurnContext, UserState } from 'botbuilder';
-import { DialogContext, DialogSet, DialogState, DialogTurnResult } from 'botbuilder-dialogs';
-import { EndpointService } from 'botframework-config';
+import { Dialog, DialogContext, DialogSet, DialogState, DialogTurnResult, TextPrompt } from 'botbuilder-dialogs';
+import { IEndpointService } from 'botframework-config';
 import { BotServices } from './botServices';
 import { MainDialog } from './dialogs/main/mainDialog';
+import { FooDialog } from './fooDialog';
+import { BarDialog } from './barDialog';
+import { BazDialog } from 'bot-solution';
 
 /**
  * Main entry point and orchestration for bot.
@@ -14,7 +17,7 @@ export class VirtualAssistant {
     private readonly services: BotServices;
     private readonly conversationState: ConversationState;
     private readonly userState: UserState;
-    private readonly endpointService: EndpointService;
+    private readonly endpointService: IEndpointService;
     private readonly telemetryClient: BotTelemetryClient;
     private readonly dialogs: DialogSet;
 
@@ -24,7 +27,7 @@ export class VirtualAssistant {
     constructor(botServices: BotServices,
                 conversationState: ConversationState,
                 userState: UserState,
-                endpointService: EndpointService,
+                endpointService: IEndpointService,
                 telemetryClient: BotTelemetryClient) {
         if (!conversationState) { throw new Error(('Missing parameter.  conversationState is required')); }
         if (!userState) { throw new Error(('Missing parameter.  userState is required')); }
@@ -39,6 +42,10 @@ export class VirtualAssistant {
         this.telemetryClient = telemetryClient;
 
         this.dialogs = new DialogSet(this.conversationState.createProperty<DialogState>(VirtualAssistant.name));
+        const foo: Dialog = new FooDialog();
+        this.dialogs.add(foo);
+        const baz: Dialog = new BazDialog();
+        this.dialogs.add(baz);
         this.dialogs.add(new MainDialog(this.services, this.conversationState, this.userState, this.endpointService, this.telemetryClient));
     }
 
