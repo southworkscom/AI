@@ -1,4 +1,0 @@
-{
-  "files": {},
-  "arguments": "tsc --p tsconfig.json && npm run copy-templates "
-}
