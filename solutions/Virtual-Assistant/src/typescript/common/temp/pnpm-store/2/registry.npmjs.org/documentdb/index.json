@@ -1,0 +1,946 @@
+{
+	"versions": {
+		"0.9.1": {
+			"name": "documentdb",
+			"version": "0.9.1",
+			"dependencies": {
+				"q": "*"
+			},
+			"devDependencies": {
+				"mocha": "*",
+				"jsdoc": "*",
+				"eslint": "*"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "cbf0f1615d9e00b293eadee5a572bc0c4b74da64",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-0.9.1.tgz"
+			}
+		},
+		"0.9.2": {
+			"name": "documentdb",
+			"version": "0.9.2",
+			"devDependencies": {
+				"mocha": "*",
+				"jsdoc": "*",
+				"eslint": "*"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "40b110c701d4715379f9066761a30f93b1d69c45",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-0.9.2.tgz"
+			}
+		},
+		"0.9.3": {
+			"name": "documentdb",
+			"version": "0.9.3",
+			"devDependencies": {
+				"mocha": "*",
+				"jsdoc": "*",
+				"eslint": "*"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "b442f63ad4494b9f0549eed2e7429af3ef602ee0",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-0.9.3.tgz"
+			}
+		},
+		"0.9.4": {
+			"name": "documentdb",
+			"version": "0.9.4",
+			"devDependencies": {
+				"mocha": "*",
+				"jsdoc": "*",
+				"eslint": "*"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "f6225034146cfa57e46873fe405f0543beca2273",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-0.9.4.tgz"
+			}
+		},
+		"1.0.0": {
+			"name": "documentdb",
+			"version": "1.0.0",
+			"devDependencies": {
+				"mocha": "*",
+				"jsdoc": "*",
+				"eslint": "*"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "f2bef845cbbb8aa215ff6ef6309e7a73e32a7492",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.0.0.tgz"
+			}
+		},
+		"1.0.1": {
+			"name": "documentdb",
+			"version": "1.0.1",
+			"devDependencies": {
+				"mocha": "*",
+				"jsdoc": "*",
+				"eslint": "*"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "7e91d98c140c89cbb0ae74bb195d3ad219e8b2ee",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.0.1.tgz"
+			}
+		},
+		"1.0.2": {
+			"name": "documentdb",
+			"version": "1.0.2",
+			"devDependencies": {
+				"mocha": "*",
+				"jsdoc": "*",
+				"eslint": "*"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "18acb091a063b416f9f8eebbbe9d989f83705746",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.0.2.tgz"
+			}
+		},
+		"1.0.3": {
+			"name": "documentdb",
+			"version": "1.0.3",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "dfa4cd51565bba6acbddfd7ad9cebcf5dc073aa1",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.0.3.tgz"
+			}
+		},
+		"1.1.0": {
+			"name": "documentdb",
+			"version": "1.1.0",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "144e586976b9ff5851b60718e54e067de7639a79",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.1.0.tgz"
+			}
+		},
+		"1.2.0": {
+			"name": "documentdb",
+			"version": "1.2.0",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "9bd4ee99f8a7aee284019390498bdca81e400ee0",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.2.0.tgz"
+			}
+		},
+		"1.2.1": {
+			"name": "documentdb",
+			"version": "1.2.1",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "e206933d553af9b5b229acf7bfe3e17271fc33e9",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.2.1.tgz"
+			}
+		},
+		"1.2.2": {
+			"name": "documentdb",
+			"version": "1.2.2",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "2fd94c14290cf42ff61f8b12cacc8cc4393f5eff",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.2.2.tgz"
+			}
+		},
+		"1.4.0": {
+			"name": "documentdb",
+			"version": "1.4.0",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "41bc3122e611cf07c9719e04d579b00470de66f9",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.4.0.tgz"
+			}
+		},
+		"1.5.0": {
+			"name": "documentdb",
+			"version": "1.5.0",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "51c6d5e88be5a1d6d1829a1e34110fc8bdf5bdf4",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.5.0.tgz"
+			}
+		},
+		"1.5.1": {
+			"name": "documentdb",
+			"version": "1.5.1",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "e9fa8d8583ca2167ea86f2ee6318118c8aa789ec",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.5.1.tgz"
+			}
+		},
+		"1.5.2": {
+			"name": "documentdb",
+			"version": "1.5.2",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "fbb7fd1ba0006587adb71061423edb86022f98f8",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.5.2.tgz"
+			}
+		},
+		"1.5.3": {
+			"name": "documentdb",
+			"version": "1.5.3",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "11e3bb9cc201acfaa3fbf076364a5bdacba857f8",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.5.3.tgz"
+			}
+		},
+		"1.5.4": {
+			"name": "documentdb",
+			"version": "1.5.4",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "5054151e48e594d049900bd8ff404f9aeae76536",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.5.4.tgz"
+			}
+		},
+		"1.5.5": {
+			"name": "documentdb",
+			"version": "1.5.5",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "688050f4037094a04720383a8b411bf9936f2448",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.5.5.tgz"
+			}
+		},
+		"1.5.6": {
+			"name": "documentdb",
+			"version": "1.5.6",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "d606f09878115baf7c6b09f70f423fbf5e29e8d9",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.5.6.tgz"
+			}
+		},
+		"1.6.0": {
+			"name": "documentdb",
+			"version": "1.6.0",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "024747ca7a707ac282b392316d8b40fb649c1e43",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.6.0.tgz"
+			}
+		},
+		"1.7.0": {
+			"name": "documentdb",
+			"version": "1.7.0",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "92781cc56c0c7b1318211af277e600805a9fdd6a",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.7.0.tgz"
+			}
+		},
+		"1.8.0": {
+			"name": "documentdb",
+			"version": "1.8.0",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "40a7445dc1fd269dcf645e7a1b0bcf539e51fcb9",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.8.0.tgz"
+			}
+		},
+		"1.9.0": {
+			"name": "documentdb",
+			"version": "1.9.0",
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "f039b11e1070f684e7f89d57494d987ef81372c0",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.9.0.tgz"
+			}
+		},
+		"1.10.0": {
+			"name": "documentdb",
+			"version": "1.10.0",
+			"dependencies": {
+				"priorityqueuejs": "1.0.0",
+				"underscore": "1.8.3",
+				"binary-search-bounds": "2.0.3",
+				"semaphore": "1.0.5"
+			},
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "2a2772178bced6a3b5a9fb37587ae068e01e2dbb",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.10.0.tgz"
+			}
+		},
+		"1.10.1": {
+			"name": "documentdb",
+			"version": "1.10.1",
+			"dependencies": {
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "6da8fe7b92372f78f18c8d04ec9ab9618fbfeea9",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.10.1.tgz"
+			}
+		},
+		"1.10.2": {
+			"name": "documentdb",
+			"version": "1.10.2",
+			"dependencies": {
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "cac19fdacf6dd257f8b3621ba18ade1348e1c4eb",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.10.2.tgz"
+			}
+		},
+		"1.11.0": {
+			"name": "documentdb",
+			"version": "1.11.0",
+			"dependencies": {
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "d51f8af420901407afbb562cc5af0fb81b521b81",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.11.0.tgz"
+			}
+		},
+		"1.12.0": {
+			"name": "documentdb",
+			"version": "1.12.0",
+			"dependencies": {
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "3325a049ddf290d7e33f405a32ae82ccd797dc5a",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.12.0.tgz"
+			}
+		},
+		"1.12.1": {
+			"name": "documentdb",
+			"version": "1.12.1",
+			"dependencies": {
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-r5rxWYZlzgKucmtI8kU24AdBlIAXx5ciJTSx4Qe1i1DCbsDxuCMBNxBA/214LPkRYZc4MbRpHX+YGtWLlz8pbg==",
+				"shasum": "af8bf1580c8b816adba6a61af4e4d39f8653c4db",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.12.1.tgz"
+			}
+		},
+		"1.12.2": {
+			"name": "documentdb",
+			"version": "1.12.2",
+			"dependencies": {
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-X46fRu8n1JmvDtRru5I63ZzAytYKbs5/POV/aEvfA27LBBNJ4XyrkYGOsfQmIdFmEtLXeP0qN7gpHURdvTdsyg==",
+				"shasum": "adf41534a664a517756316c6cce59ac286700ef1",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.12.2.tgz"
+			}
+		},
+		"1.13.0": {
+			"name": "documentdb",
+			"version": "1.13.0",
+			"dependencies": {
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"time-grunt": "^1.2.0",
+				"child_process": "*"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "bba6f03150b2f42498cec4261bc439d834a33f8b",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.13.0.tgz"
+			}
+		},
+		"1.14.0": {
+			"name": "documentdb",
+			"version": "1.14.0",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"int64-buffer": "^0.1.9",
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"sinon": "^3.2.1",
+				"time-grunt": "^1.2.0",
+				"grunt-mocha-test": "^0.13.3",
+				"mocha-multi-reporters": "^1.1.6",
+				"mocha-junit-reporter": "^1.15.0",
+				"child_process": "*"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-8ec37xyFHcA/sVc62DNmLs4xflNnZbKiTr4L4Ik2/tIzArsQ/ZAR3pNEoTGYMoHjkjwi3tldpj9aNhJYa91imw==",
+				"shasum": "7226ed51b48c7d3f3fe8ae8a1916c014fed5fe12",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.14.0.tgz"
+			}
+		},
+		"1.14.1": {
+			"name": "documentdb",
+			"version": "1.14.1",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"int64-buffer": "^0.1.9",
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"sinon": "^3.2.1",
+				"time-grunt": "^1.2.0",
+				"grunt-mocha-test": "^0.13.3",
+				"mocha-multi-reporters": "^1.1.6",
+				"mocha-junit-reporter": "^1.15.0",
+				"child_process": "*"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-i5PR6/NqDBeYmv2EDEeL9nuw0/7uErFS1h6wRTYIuBMIVswJg2wYjdsGnMFH0bfCgpPk13p24NbPbmMHZNuzxw==",
+				"shasum": "1a4716c0b38a40daf375dc9a4b2a2beb4e26294a",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.14.1.tgz"
+			}
+		},
+		"1.14.2": {
+			"name": "documentdb",
+			"version": "1.14.2",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"int64-buffer": "^0.1.9",
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3",
+				"tunnel": "0.0.5"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"sinon": "^3.2.1",
+				"time-grunt": "^1.2.0",
+				"grunt-mocha-test": "^0.13.3",
+				"mocha-multi-reporters": "^1.1.6",
+				"mocha-junit-reporter": "^1.15.0",
+				"child_process": "*"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-VTytduwd3Sjk2vNA1GV0ZZ3BOCMtb2Qp+Qu+n3df320mTYtHDY15D6cjR2W/9o3j1eE3S8mLJ+qCTU3uhy2wFw==",
+				"shasum": "26928fd03cd695f3111f32fe8323aa27e10cf5c7",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.14.2.tgz"
+			}
+		},
+		"1.14.3": {
+			"name": "documentdb",
+			"version": "1.14.3",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"int64-buffer": "^0.1.9",
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3",
+				"tunnel": "0.0.5"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"sinon": "^3.2.1",
+				"time-grunt": "^1.2.0",
+				"grunt-mocha-test": "^0.13.3",
+				"mocha-multi-reporters": "^1.1.6",
+				"mocha-junit-reporter": "^1.15.0",
+				"child_process": "*"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-n8sGJMfM3FTY44Au8RbuL/G3nBf6Xz3CsAuOVjd18fv5IRjjVYeFZBglLDDIM+Uddjzu1kQm6ludOr+RG32BXg==",
+				"shasum": "8305c540c01651ccf41b8e9bb2ac70c718e6592f",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.14.3.tgz",
+				"fileCount": 59,
+				"unpackedSize": 942887,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa64aHCRA9TVsSAnZWagAA1x8P/ivepqpV61wypej14/ub\nIy8qeFMNVt5lXfyKDhNgLq8LC+XtPYmf6aWYHdaGRF/A+AyWnUkm2rbp3Z6P\nx2jrL4gnRyG2HOI1kCEJ8625HXboQL3NGR/jS2bmvRKKOt0KzxfSYq5Ki5BC\nl5uPJA8CJMoTkz6H4GQ9Qdju9RQXF/TishA0PA4FCywuTXarBPUfHe8CSkA7\nd4XE4/VMS8DagEb7TmotPBLkKCiqv3xAc/Dp3gM4YttwjStx37/JczI4rDLF\nnZTO7uizX1bNDNrScrsna6OTZrB+gbUFCG9OfyWmi56vThwj8sT5S/mihGlb\nC3+s4ZQMn539U9eDNxBYPTiiYGFBFMOc579sDARxwgipUpPEVNpKhbtwogMC\nkIP/WbbH8Irn8rIdQh4RPJDRyWqqPnh6INxVLYTarV7JFlbAmH95x3tF2X35\nKaufY0+q0q7uMSxMFvAJ8fPbJKGDFzlSesekLKtg2jFcXLPntYh5jDdtxGZA\nFkOlPf7qEPVsWqvw8SdAByPoo7dIEHZwl34Xa7+5aLAu/Zpz4W+X5vBCLZJi\nIv0AUX4J0UgGKH8eQem5dgO0DctKMPZIC4WFVqPZLX959B61khl0ICw6pYcx\n6DmfQk0Vu47k9Bf8RtSW3lni74DMO2sPJMaIrJwEt1wRtA/Xaul5B725p6qf\nKa+Q\r\n=e/qz\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"1.14.4": {
+			"name": "documentdb",
+			"version": "1.14.4",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"int64-buffer": "^0.1.9",
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3",
+				"tunnel": "0.0.5"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"sinon": "^3.2.1",
+				"time-grunt": "^1.2.0",
+				"grunt-mocha-test": "^0.13.3",
+				"mocha-multi-reporters": "^1.1.6",
+				"mocha-junit-reporter": "^1.15.0",
+				"child_process": "*"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-JkWa4FFXuGqMoQFeBTFv58kalKMJJ1ISSQpF/SdZlbY/f1C99ls/9GOPkPQrmm7Hv1SHQdLid4BDs6cj64iS5Q==",
+				"shasum": "c96650ef07738fc72d0b841cf572cda64ac4a4c8",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.14.4.tgz",
+				"fileCount": 60,
+				"unpackedSize": 948708,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa64fYCRA9TVsSAnZWagAAjW4QAId7P9CnLwdJPDnelpBH\nEdkFS7aUeQvt21DqFcQlYYO/SbVYIQuWBw5E0I6jlqTQwTUjngkpVTWGDetx\nILhwIolY0I09TfEY2Shxj8KMpU4OUTkedpWdGojA4CtWF+91Yi5KBGPACbrP\nQpwY9iFb5p8pXZmP33ccSomiRjOIr9ROB4Zn/doZjgQoRdc6/1ofMO3zWeEu\nPBkONWo7+oS89A5krq4WHG05YhaaHaklg8hQcEOTe4iUO0X9I4H9opPl8fod\nG9KSL8rEnCHjwxM75HbGHpKHunyM7a6adalrkUDFcbCrIY1g0hPUaKZ4gCqo\nJ7wFeLilObn/OTwO5TLVnaFmpIcERbahCHLNgSKS+1Gs3wsvEJK//H5lfDzs\np9KA2GbtuP/Eu43vq1SoNAQmXbwBuTTeXURFWKQfQEx6JDXeW+Eehe4Jn0uA\nW02IW3Z3ZdmUmRT02Mc6PdwdVhA1j5vk394OLWCYDRKSNj228Y3HDeg/iM1i\niJLRqYDOABSXs//WGmqaLxi9NfyjQPbc9SljKfs9YoKRje8qHmY5O7VCYLE4\nWyK7seml/GSYh/+ZPlLUJTCOTBMpWngwHQeJlEEMN/zGZd9r+8WErw0MsEQY\nZWV48ZPwZSVxAH94J05sy1R74vCQwStPMiOIBN8SfadDKEq+nffZ7bAWc3fS\no+0j\r\n=U3om\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"1.14.5": {
+			"name": "documentdb",
+			"version": "1.14.5",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"int64-buffer": "^0.1.9",
+				"binary-search-bounds": "2.0.3",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"underscore": "1.8.3",
+				"tunnel": "0.0.5"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"sinon": "^3.2.1",
+				"time-grunt": "^1.2.0",
+				"grunt-mocha-test": "^0.13.3",
+				"mocha-multi-reporters": "^1.1.6",
+				"mocha-junit-reporter": "^1.15.0",
+				"child_process": "*"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-0nDoQQiq5jzGIxOQF2y2bUOrFYehvk9pIrXy0dscXc3JsepNYhNVmjIsug5sgYPbt+XUYtMXpsfjzGCnYgNXgw==",
+				"shasum": "356851f0aa5e7f18ae0ed202de0dd13b05b3f762",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.14.5.tgz",
+				"fileCount": 59,
+				"unpackedSize": 947059,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbRAk5CRA9TVsSAnZWagAAp0kP/2lyWaGgRY9SaQquXSk7\ncI183I6S75+Q0e0IYEgNAxIDuOgWP23tOY/Kj2/k0ozau7qTVJeCrgF5nkZP\n4+mlg8LbBXIPT+3LP2cq2JQuAiZifqZI+ttq1fr6FxjOC4pJhLE9rB9qY9Gb\nx4YDKXSB9uqziPK3eXmdCy6VRwR5r8ihqzbHRPKopdJYZQxjNzsm4oZEqZ9y\nmnngwbpFStvf1UG5T1bja/Je/bMUN7rEJtr0LPhWxMvF/FVHmzUi910FuDS9\nfav7FdOsrpNoCou/WzleD6kZV/VXqo38qhKR44BgFdoAbo2EJERgoH4r8fOC\n/TnDz8DbQ2Vg11LgySrsxwcCIL3PBAIR7GMLXsPPuZ1kue76xwY7/58VhgWd\nw9f+tXMHaLl+FY5/Bi+ndN5OlhimTJALwYC60WI6SkwfO86X8WsgQRR3tUuk\nXIFNmWDM84S5jkEiZHWvFMSxeB+EdIWhstKt7csSL2P3SY7ivTkoYlKof8gp\nnY8AGyqJx9nLcfTOMJZZxSDPu8VvttJU/9RwIENrX7MQKMj1OQSKlVVy36Mc\nkxajKWXklHpo+mJYv4BwNm6+MR3deFq4ktpowIDwbcseXnRqNci1GbNchorq\n86iJoc7cst3ORiSAn97DIAcRClbywn8ZczHPkURMdC7WT1i46NiY29XRwmz3\nk0+/\r\n=3ou8\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"1.15.0": {
+			"name": "documentdb",
+			"version": "1.15.0",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"binary-search-bounds": "2.0.3",
+				"debug": "^4.1.0",
+				"int64-buffer": "^0.1.9",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"tunnel": "0.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"eslint": "*",
+				"grunt": "^0.4.5",
+				"grunt-eslint": "^13.0.0",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"sinon": "^3.2.1",
+				"time-grunt": "^1.2.0",
+				"grunt-mocha-test": "^0.13.3",
+				"mocha-multi-reporters": "^1.1.6",
+				"mocha-junit-reporter": "^1.15.0",
+				"child_process": "*"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-a9Ji9ST4xypzQSKmohxsURQRz+Hg4E3KgmaJmAJf3s4IcNt7I7Ln5TyAhXTwPtGo1UjjHxV6L0COosnlG7eVCA==",
+				"shasum": "8395c893750a5aa68abf0793ec3175652aa7993d",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.15.0.tgz",
+				"fileCount": 95,
+				"unpackedSize": 1592398,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcCvk5CRA9TVsSAnZWagAATWUP/3XKn1QBdo5dFW/o3HdL\ns6buc7FfmnJorgwgnyjqLePXPhf0DRM/yHqYtp7uhr8gW+ORH89FoUN6T37K\nnxjtxlJeF3q63HTUc29KiFkFJv1cn2PK5TPqdBdb7J0SXiZQ0/tWRL8oTB13\nVkdEG5CLik67BnIHfpumNLg6SqOPCkExwRNta3lLRgHjbMkiFrIYRwEAjjDD\nUNK9m/A81nMV9WJ+xevvZ/gyEWCCXOCr0ucIKm4LRjdDfQ+BVJ8egg/QnyBl\nQxqINGjFifjorxKcCNNGXw2sy2djNFXunGVHTm33qRPwarWwRDuc3e3ewEu0\nKqzah/9m4DCHL9c88LMTENEdIPoKYxWDwP04pZ/gQBcwjidyOSJkK1kHlhbD\nQ3Rv/eaI5avCnLBgJ1STiKkpDhjqd1/F0nkeHvAcPEaeg62D6dxhEa2Gan7G\n7XTlKSn05inMmTn/SAm81rFrnR+G26Q46OHKDjaCAh/hdKNSDRDOC0kQyUxB\nKXzwqH91SCXG6bmm6cnXyCtjLghCF30zjBWkjtEBy1/t6Amg74iK2bOT5wSH\n3QMPRHg2cNYghmRIp8wJ3Bpy79Q8/Qqa63ephm6EpX25SyPDPcoQLw42C3FQ\nj55vtFuzEi7J38406V30RKw4mMrRphKo3aaLh/7Ab655HEAvmvQMT9yS+8Zg\nGSR2\r\n=b0j8\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"1.15.1": {
+			"name": "documentdb",
+			"version": "1.15.1",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"binary-search-bounds": "2.0.3",
+				"debug": "^4.1.0",
+				"int64-buffer": "^0.1.9",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"tunnel": "0.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"child_process": "*",
+				"eslint": "*",
+				"grunt": "^1.0.3",
+				"grunt-eslint": "^21.0.0",
+				"grunt-mocha-test": "^0.13.3",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"mocha-junit-reporter": "^1.15.0",
+				"mocha-multi-reporters": "^1.1.6",
+				"sinon": "^7.2.2",
+				"time-grunt": "^1.2.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-6cqQorYaPFLEiyfylw93PE5WmnMXfiEWGW0pABx0t5BF2L8jdkHNFPcLKyOvXH1e8WDyqo/K3QTDQ+QcBrEoEg==",
+				"shasum": "899602fb7e8f1cdadcb5710667298350207ca578",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.15.1.tgz",
+				"fileCount": 96,
+				"unpackedSize": 1601605,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcPStLCRA9TVsSAnZWagAA5rAP+wYBOodxr1DkrOpDdPy6\nNkD5TdFFjjAA98cy6WoOcFbruBxElyCep4kjA1wqRUZni3XzurMUyznn0XYm\nl8HIKIxbWL6TmFm+h/UCI614VfUTlYhF/fyFgfzotbJ9Cl1HiIHqi4QJaeyO\npZ23cb+BheNyP/0flPswMpUcPJyWvAnXpTulVi2lm7RSahiRGW5OupBEHCaH\noWq+in9V85OduikOFGQU8vtuczzxAKhovEPaevK4iFHxv5VW8xrcp5rs7iG3\na9sGEM6esYL3eYUhrbNUtpqHUsDlTFK9IYkb3G5S16EWxlcIAohlS20KLjy1\npzAKp3Y0TdWvAwatJ1v6UB14GUcwzgOdFiTcg34zrDf85+hgCSCoyr8kpgel\nkX7+O7vvxvxt8ffRjSkktdGoINdUZ36SMd2HUiID33TxDB5VQmOIS7aRifpl\nXmjTeKv1U96BHF4x4PUaQDoBDPkuuC0TELgl2RH5GYUJlsJPQCyJ5A7s5O8o\nF3B7gbSwaIRPI1G4Q4Ty5JZ2HzKFToziBMQI8uwEIBxwnFdsK4PZGwnQce/3\nitjOp459Zem1j0U9WOLZ2qlFkXYZUHpI9+/W+lJActKsk280d2+QxeOhKYCM\nBhkCv97wMfOe14YTR210Z3Ex8PUeUlJyPu23oZOWZF2CJ6+5cW/Wax8qQJYG\nMcLn\r\n=47tz\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"1.15.2": {
+			"name": "documentdb",
+			"version": "1.15.2",
+			"dependencies": {
+				"big-integer": "^1.6.25",
+				"binary-search-bounds": "2.0.3",
+				"debug": "^4.1.0",
+				"int64-buffer": "^0.1.9",
+				"priorityqueuejs": "1.0.0",
+				"semaphore": "1.0.5",
+				"tunnel": "0.0.5",
+				"underscore": "1.8.3"
+			},
+			"devDependencies": {
+				"@types/node": "^8.0.7",
+				"child_process": "*",
+				"eslint": "*",
+				"grunt": "^1.0.3",
+				"grunt-eslint": "^21.0.0",
+				"grunt-mocha-test": "^0.13.3",
+				"jsdoc": "*",
+				"load-grunt-tasks": "^3.1.0",
+				"mocha": "*",
+				"mocha-junit-reporter": "^1.15.0",
+				"mocha-multi-reporters": "^1.1.6",
+				"sinon": "^7.2.2",
+				"time-grunt": "^1.2.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-b/cWnEw1Ycoj/SV58HVU+hG3PkCleiJ9inCIYoz/mavh+yl9LV87R3M9erWsNW+zaySnrPDlxt8swmXe7WMGow==",
+				"shasum": "ddff2e70b5a19d39782aefb54b19e4aff8825214",
+				"tarball": "https://registry.npmjs.org/documentdb/-/documentdb-1.15.2.tgz",
+				"fileCount": 96,
+				"unpackedSize": 1606864,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJceDHwCRA9TVsSAnZWagAAoygP/3+EMOUK2/pg11m83CI9\ntcyPr45CP7DVlMhu2XBdgMrxGHaVAc4Syac8mBPc2CoFnBndZyNXCNUiHewZ\nem+mup/D2eMh/EVl3LvRAdxONC5vHJIbXgURRR5s+EQFxB7c4YMki1wCIwHi\ndGSjSR6MvDVGUlAUY8hzoCcwUtyaILgKtZPzsMmlIZY50xdRN6Sp4UEdASGm\nq29RrevuItypaj1XKWN5DaRGHC8iDG7hXtVJRY7zAKQ7xq/uzkuAITna/zs3\nYca9HFBo6dMPyL78bGWT4i7ISKrThjNAMfgwPPBiFyTFzHCNBofiLNtYj55W\n47eIl5nfdi34cmTUI/Cl+rk14HeBv7cCtyzpU/1oCsEj7kxMjjqC+TCycejx\n57BoLmOwrDq5gNka/BV80serddUnUZl5zuCbyihvAYw6aHdml9kG+E0D2iwi\nZWkL2JvRlWIHeBvtL7EoTNhTBcNS836AqVJ6fPJthf1JAZgA80gnj4zx5MzE\nbGuka61e9ol7Q85bPJnX7CU8DX95ENowT0Cusgu/vGds3Vz16bkLCBXaHpA2\nmAuOqwRsTqYgyCpSxHxTAwcNB9caXI9awKZPZjUrfn15QqcEzjW7nafjB5KI\n1zkfNOIuZdqWMcazJhDBDRVkGi1jzuhPZSKlGQ0pf+YdiG9L1dr2cD/cLkLn\nLPGH\r\n=qKQ+\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		}
+	},
+	"name": "documentdb",
+	"dist-tags": {
+		"latest": "1.15.2"
+	},
+	"modified": "2019-02-28T19:09:39.686Z",
+	"cachedAt": 1551461901499
+}

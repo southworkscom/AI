@@ -1,0 +1,21 @@
+{
+    "name": "@types/filenamify",
+    "version": "2.0.1",
+    "description": "TypeScript definitions for filenamify",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Junyoung Choi",
+            "url": "https://github.com/rokt33r"
+        }
+    ],
+    "main": "",
+    "repository": {
+        "type": "git",
+        "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "223dc3d47a4061850fc3e02960e939e9d9469e87444fa99015d04ca947c34745",
+    "typeScriptVersion": "2.0"
+}

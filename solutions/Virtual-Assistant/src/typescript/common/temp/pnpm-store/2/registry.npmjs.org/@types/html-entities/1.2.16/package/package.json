@@ -1,0 +1,21 @@
+{
+    "name": "@types/html-entities",
+    "version": "1.2.16",
+    "description": "TypeScript definitions for html-entities",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Xavier Stouder",
+            "url": "https://github.com/xstoudi"
+        }
+    ],
+    "main": "",
+    "repository": {
+        "type": "git",
+        "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "473d996877861c851891576e78ba8db2bca12e892149be34a2d1c4c2e4d085b3",
+    "typeScriptVersion": "2.0"
+}

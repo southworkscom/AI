@@ -1,0 +1,345 @@
+{
+	"versions": {
+		"0.0.1": {
+			"name": "copyfiles",
+			"version": "0.0.1",
+			"dependencies": {
+				"mkdirp": "^0.3.5",
+				"glob": "^3.2.9",
+				"through2": "^0.4.1",
+				"stream-array": "^0.1.3",
+				"ltcdr": "^2.2.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^2.10.2",
+				"tap-spec": "^0.1.5"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "3d5845b07a2806c0d2c9089c29b72585323bc6a6",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-0.0.1.tgz"
+			}
+		},
+		"0.1.0": {
+			"name": "copyfiles",
+			"version": "0.1.0",
+			"dependencies": {
+				"mkdirp": "^0.3.5",
+				"glob": "^3.2.9",
+				"through2": "^0.4.1",
+				"stream-array": "^0.1.3",
+				"ltcdr": "^2.2.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^2.10.2",
+				"tap-spec": "^0.1.5"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "5eac9192b9a7cc005fb5f83446c4d84a78eb465f",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-0.1.0.tgz"
+			}
+		},
+		"0.1.1": {
+			"name": "copyfiles",
+			"version": "0.1.1",
+			"dependencies": {
+				"glob": "^3.2.9",
+				"ltcdr": "^2.2.1",
+				"mkdirp": "^0.3.5",
+				"noms": "0.0.0",
+				"through2": "^0.4.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^2.10.2",
+				"tap-spec": "^0.1.5"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "9555e8c7717a2c94a8a9274cbb47d7cb9fb5f811",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-0.1.1.tgz"
+			}
+		},
+		"0.1.2": {
+			"name": "copyfiles",
+			"version": "0.1.2",
+			"dependencies": {
+				"glob": "^3.2.9",
+				"ltcdr": "^2.2.1",
+				"mkdirp": "^0.3.5",
+				"noms": "0.0.0",
+				"through2": "^0.4.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^2.10.2",
+				"tap-spec": "^0.1.5"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "5ba2c3aeb5de40b78efddd473fa987b7c76452d0",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-0.1.2.tgz"
+			}
+		},
+		"0.2.0": {
+			"name": "copyfiles",
+			"version": "0.2.0",
+			"dependencies": {
+				"glob": "^3.2.9",
+				"ltcdr": "^2.2.1",
+				"mkdirp": "^0.3.5",
+				"noms": "0.0.0",
+				"through2": "^0.4.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^2.10.2",
+				"tap-spec": "^0.1.5"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyup"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "8cb4d10af924b8cf4689a6db1fb632dee33dd710",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-0.2.0.tgz"
+			}
+		},
+		"0.2.1": {
+			"name": "copyfiles",
+			"version": "0.2.1",
+			"dependencies": {
+				"glob": "^3.2.9",
+				"ltcdr": "^2.2.1",
+				"mkdirp": "^0.3.5",
+				"noms": "0.0.0",
+				"through2": "^0.4.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^2.10.2",
+				"tap-spec": "^0.1.5"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyup"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "71054dcc934db11c8cfb98a221b3963be7957fad",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-0.2.1.tgz"
+			}
+		},
+		"0.2.2": {
+			"name": "copyfiles",
+			"version": "0.2.2",
+			"dependencies": {
+				"glob": "^7.0.5",
+				"ltcdr": "^2.2.1",
+				"mkdirp": "^0.5.1",
+				"noms": "0.0.0",
+				"through2": "^2.0.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^4.6.0",
+				"tap-spec": "^4.1.1"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyup"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "79a8ff0b85837f9bfa27978d672260631655b673",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-0.2.2.tgz"
+			}
+		},
+		"1.0.0": {
+			"name": "copyfiles",
+			"version": "1.0.0",
+			"dependencies": {
+				"glob": "^7.0.5",
+				"ltcdr": "^2.2.1",
+				"mkdirp": "^0.5.1",
+				"noms": "0.0.0",
+				"through2": "^2.0.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^4.6.0",
+				"tap-spec": "^4.1.1"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyup"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "317026871d5390e32acd03ec458775267e94bc2a",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-1.0.0.tgz"
+			}
+		},
+		"1.1.0": {
+			"name": "copyfiles",
+			"version": "1.1.0",
+			"dependencies": {
+				"glob": "^7.0.5",
+				"ltcdr": "^2.2.1",
+				"minimatch": "^3.0.3",
+				"mkdirp": "^0.5.1",
+				"noms": "0.0.0",
+				"through2": "^2.0.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^4.6.0",
+				"tap-spec": "^4.1.1"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyup"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "c0ec201be05601c56d08904c39663fc8aab40060",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-1.1.0.tgz"
+			}
+		},
+		"1.1.1": {
+			"name": "copyfiles",
+			"version": "1.1.1",
+			"dependencies": {
+				"glob": "^7.0.5",
+				"ltcdr": "^2.2.1",
+				"minimatch": "^3.0.3",
+				"mkdirp": "^0.5.1",
+				"noms": "0.0.0",
+				"through2": "^2.0.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^4.6.0",
+				"tap-spec": "^4.1.1"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyup"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "a6a6cdc51b7378aab6e2c17782261cfe94d77019",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-1.1.1.tgz"
+			}
+		},
+		"1.2.0": {
+			"name": "copyfiles",
+			"version": "1.2.0",
+			"dependencies": {
+				"glob": "^7.0.5",
+				"ltcdr": "^2.2.1",
+				"minimatch": "^3.0.3",
+				"mkdirp": "^0.5.1",
+				"noms": "0.0.0",
+				"through2": "^2.0.1"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^4.6.0",
+				"tap-spec": "^4.1.1"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyup"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "a8da3ac41aa2220ae29bd3c58b6984294f2c593c",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-1.2.0.tgz"
+			}
+		},
+		"2.0.0": {
+			"name": "copyfiles",
+			"version": "2.0.0",
+			"dependencies": {
+				"glob": "^7.0.5",
+				"minimatch": "^3.0.3",
+				"mkdirp": "^0.5.1",
+				"noms": "0.0.0",
+				"through2": "^2.0.1",
+				"yargs": "^11.0.0"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^4.6.0",
+				"tap-spec": "^4.1.1"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyfiles"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-NSSJdwCH27/hEiBlhkXYWh3AaPo8IATxLX5XtJQgknOvOehrREtETsGd/BNr2vuj0URgKBC/50PNRM3yShQGJQ==",
+				"shasum": "bbd78bb78e8fd6db5c67adf54249317b24560f2a",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-2.0.0.tgz",
+				"fileCount": 8,
+				"unpackedSize": 18718
+			}
+		},
+		"2.1.0": {
+			"name": "copyfiles",
+			"version": "2.1.0",
+			"dependencies": {
+				"glob": "^7.0.5",
+				"minimatch": "^3.0.3",
+				"mkdirp": "^0.5.1",
+				"noms": "0.0.0",
+				"through2": "^2.0.1",
+				"yargs": "^11.0.0"
+			},
+			"devDependencies": {
+				"rimraf": "^2.2.6",
+				"tape": "^4.6.0",
+				"tap-spec": "^4.1.1"
+			},
+			"bin": {
+				"copyfiles": "./copyfiles",
+				"copyup": "./copyfiles"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-cAeDE0vL/koE9WSEGxqPpSyvU638Kgfu6wfrnj7kqp9FWa1CWsU54Coo6sdYZP4GstWa39tL/wIVJWfXcujgNA==",
+				"shasum": "0e2a4188162d6b2f3c5adfe34e9c0bd564d23164",
+				"tarball": "https://registry.npmjs.org/copyfiles/-/copyfiles-2.1.0.tgz",
+				"fileCount": 8,
+				"unpackedSize": 21430,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbjo6QCRA9TVsSAnZWagAAMWcP/RQAqgEtfR0okSh4naDN\nZmHRKcZAfnlmdFZ9lBu8QFeoXkwThTbRns9/4x5SRQP3DEy1HGKLmW0din8L\nR7Ysp9XLxO2W/LGH5KFkgPOJeJ8WPoy5I76DvD3zc5cS9Q669E+h0btjPzux\nJuekMN+1PYBVlnNPl3xf/314P168fPYgedj7ir0NlwDbhBqI/vt7YZHEWGYj\nf+8csfX9xpChm3ByDwd3aJIzCBkDOL0ELeSn8RGHQIz9w9monUQ3NG4bPmLL\nNrgdP9GmAbIkMVX4zxNA2l2W8RMc9J/J1ecA4wf3hws8PnLKdl9Cp4hBj8mH\nBO9yfiabhBCaWGx/bmkujGV2Zy/cQlVdkw9HoXFkd0JRrujFdyZQr0WEjb6V\n6U1p2spCTUYG/ziGm0gPy5T5YlfexvsoFff8NrVjFkQ6itHIKSDamU4iM47q\nBo9e/a57SWkAq7vtTPHXM7iUHJ9hl6CeYy9v6xQh5kVbwiEhnhyn8TWKSkXV\n/nmD+Jvc3Y8NSw0BKOovjUsBuqI764RHTS2424G9AxvbHMD2G/xATbkxZMsJ\nmQcpCyRbDvS7xwwPE01I2bSwXBdNG7YoUu+arnCLomXSOtkZWVQESIai950Z\nlWuzhAxxRvYr07oXUOlJr96eOz2JZTf9fAXe8q03PW8z9joAD0KLKcBtVD5f\nySC4\r\n=tJ8J\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		}
+	},
+	"name": "copyfiles",
+	"dist-tags": {
+		"latest": "2.1.0"
+	},
+	"modified": "2019-01-01T16:02:56.520Z",
+	"cachedAt": 1551462411608
+}

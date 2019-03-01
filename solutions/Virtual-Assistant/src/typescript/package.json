@@ -8,7 +8,7 @@
     "@types/node": "^10.10.1",
     "@types/restify": "^7.2.4",
     "copyfiles": "^2.1.0",
-    "lerna": "^3.11.1",
+    "@microsoft/rush": "^5.5.4",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.4",
     "replace": "^1.0.0",
@@ -18,7 +18,7 @@
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "build": "lerna bootstrap && lerna run build",
-    "start": "npm run build && lerna run start --scope assistant"
+    "build": "rush update && rush build",
+    "start": "npm run build"
   }
 }

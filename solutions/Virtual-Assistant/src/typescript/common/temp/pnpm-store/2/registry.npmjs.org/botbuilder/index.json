@@ -1,0 +1,2589 @@
+{
+	"versions": {
+		"0.6.0": {
+			"name": "botbuilder",
+			"version": "0.6.0",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "32eeb86512560d8c02be0503006759726f5ab6a6",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.6.0.tgz"
+			}
+		},
+		"0.6.1": {
+			"name": "botbuilder",
+			"version": "0.6.1",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "a7a40322ce1d5b22e5f95c515efa83aec5de5c41",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.6.1.tgz"
+			}
+		},
+		"0.6.2": {
+			"name": "botbuilder",
+			"version": "0.6.2",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "171c7b2e82fbd48f1cffa2a509e89845776e82e6",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.6.2.tgz"
+			}
+		},
+		"0.6.3": {
+			"name": "botbuilder",
+			"version": "0.6.3",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "665cee4d8d862d44498525749699f8008aa9cb93",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.6.3.tgz"
+			}
+		},
+		"0.6.4": {
+			"name": "botbuilder",
+			"version": "0.6.4",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "5dd8e84e5d1b9710667c43b705c693c4281dad08",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.6.4.tgz"
+			}
+		},
+		"0.6.5": {
+			"name": "botbuilder",
+			"version": "0.6.5",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "67af362b5d8035089514f4782eb205826ecbd3a9",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.6.5.tgz"
+			}
+		},
+		"0.7.0": {
+			"name": "botbuilder",
+			"version": "0.7.0",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "716958b244824f50208653225435c9ffae1816c2",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.7.0.tgz"
+			}
+		},
+		"0.7.1": {
+			"name": "botbuilder",
+			"version": "0.7.1",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "23fe570bf22ff83b04cd2d439c066ebeec197795",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.7.1.tgz"
+			}
+		},
+		"0.7.2": {
+			"name": "botbuilder",
+			"version": "0.7.2",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "444e99287dbff50de836d9fe96be1efd7cc68c18",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.7.2.tgz"
+			}
+		},
+		"0.8.0": {
+			"name": "botbuilder",
+			"version": "0.8.0",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "de19d7deea242f3a525a05b7ff6fdfed0610d4ed",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.8.0.tgz"
+			}
+		},
+		"0.9.0": {
+			"name": "botbuilder",
+			"version": "0.9.0",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "34ab194ef3bccd8c5cbb46eba375da7cca883f84",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.9.0.tgz"
+			}
+		},
+		"0.9.1": {
+			"name": "botbuilder",
+			"version": "0.9.1",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "ec86188ca23a4ee629a25f44eadda63c23258734",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.9.1.tgz"
+			}
+		},
+		"0.9.2": {
+			"name": "botbuilder",
+			"version": "0.9.2",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "e842fdcc6da023f898b0264495838f1358979b40",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.9.2.tgz"
+			}
+		},
+		"0.10.0": {
+			"name": "botbuilder",
+			"version": "0.10.0",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "30b27a87b147ff73b48fb0faa62388d9faa29a3a",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.10.0.tgz"
+			}
+		},
+		"0.10.1": {
+			"name": "botbuilder",
+			"version": "0.10.1",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "94142af531a6b32368ab8b4057cc17cf4ca3b207",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.10.1.tgz"
+			}
+		},
+		"0.10.2": {
+			"name": "botbuilder",
+			"version": "0.10.2",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "3bec4e02f5b3078a520fb4f7976d787db5ae6493",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.10.2.tgz"
+			}
+		},
+		"0.11.0": {
+			"name": "botbuilder",
+			"version": "0.11.0",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "d2fc69eda425b3c1f09f857ddadfe9dcdb5d1e29",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.11.0.tgz"
+			}
+		},
+		"0.11.1": {
+			"name": "botbuilder",
+			"version": "0.11.1",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "f49d604148c22add0ef0e65a0a564bb78228e33e",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-0.11.1.tgz"
+			}
+		},
+		"1.0.0": {
+			"name": "botbuilder",
+			"version": "1.0.0",
+			"dependencies": {
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "29f014ecbb1e7e117336fa5748a60a433fd808de",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-1.0.0.tgz"
+			}
+		},
+		"1.0.1": {
+			"name": "botbuilder",
+			"version": "1.0.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"chrono-node": "^1.1.3",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "394759e1ab456964844ccf31372073522d5c1468",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-1.0.1.tgz"
+			}
+		},
+		"3.0.0": {
+			"name": "botbuilder",
+			"version": "3.0.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "081c473d40807cb5fba7fb1825ee106686677c64",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.0.0.tgz"
+			}
+		},
+		"3.0.1": {
+			"name": "botbuilder",
+			"version": "3.0.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "7669b7ae13947a8c272179370aa72d5c96772093",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.0.1.tgz"
+			}
+		},
+		"3.1.0": {
+			"name": "botbuilder",
+			"version": "3.1.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "36fdf486ec55bf5a6d658b6741d78bbed3941de3",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.1.0.tgz"
+			}
+		},
+		"3.1.1": {
+			"name": "botbuilder",
+			"version": "3.1.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "78211f9a43ebf8cc2138c0b05e46e7dfccfc7ad4",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.1.1.tgz"
+			}
+		},
+		"3.2.0": {
+			"name": "botbuilder",
+			"version": "3.2.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "d596d59194b5a48840647556ccdfd14f7766b9e1",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.2.0.tgz"
+			}
+		},
+		"3.2.1": {
+			"name": "botbuilder",
+			"version": "3.2.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "e1bd5a16538f0fe206a298c14762074a2eaeeb48",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.2.1.tgz"
+			}
+		},
+		"3.2.2": {
+			"name": "botbuilder",
+			"version": "3.2.2",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "a4e918b6c901e3345c3989b0ff78507616ff51f1",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.2.2.tgz"
+			}
+		},
+		"3.2.3": {
+			"name": "botbuilder",
+			"version": "3.2.3",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "d2e5a0cce8261e86b48074c9dec431226a48563b",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.2.3.tgz"
+			}
+		},
+		"3.3.0": {
+			"name": "botbuilder",
+			"version": "3.3.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "9eb47c262ea171da4f58488fe682803a7ee76404",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.3.0.tgz"
+			}
+		},
+		"3.3.1": {
+			"name": "botbuilder",
+			"version": "3.3.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "22ada816e7b1cdae2d7f84f8da98b68ec653b232",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.3.1.tgz"
+			}
+		},
+		"3.3.2": {
+			"name": "botbuilder",
+			"version": "3.3.2",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "cab6ceda6f703643d82a67010a155cde1ee5c1e6",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.3.2.tgz"
+			}
+		},
+		"3.3.3": {
+			"name": "botbuilder",
+			"version": "3.3.3",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "96e88d5451d70681040a9a7a58c49ef1ad84dbff",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.3.3.tgz"
+			}
+		},
+		"3.4.0": {
+			"name": "botbuilder",
+			"version": "3.4.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "622c269708bfec8a6988c9569a7731b5815ed1d8",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.4.0.tgz"
+			}
+		},
+		"3.4.1": {
+			"name": "botbuilder",
+			"version": "3.4.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "0f070a5b96a4b0bd866c8c93d706a1ef31a375f6",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.4.1.tgz"
+			}
+		},
+		"3.4.2": {
+			"name": "botbuilder",
+			"version": "3.4.2",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "832199d44fc0ce1fe2006509f251027945ba21a5",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.4.2.tgz"
+			}
+		},
+		"3.4.3": {
+			"name": "botbuilder",
+			"version": "3.4.3",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "8420f423d4fc248a31d251440559040c4b8f9540",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.4.3.tgz"
+			}
+		},
+		"3.4.4": {
+			"name": "botbuilder",
+			"version": "3.4.4",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "6938d9ce44923bdba95010ac936c68d823d77011",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.4.4.tgz"
+			}
+		},
+		"3.5.0-rc1": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "31cedbbee78c2869f312049588714ceba0d0ea35",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc1.tgz"
+			}
+		},
+		"3.5.0-rc2": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc2",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "9af8c907dffa31b3166ec9241133b850581afdea",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc2.tgz"
+			}
+		},
+		"3.5.0-rc3": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc3",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "99815f4f1e43e9204777a280a2bae739e003afc9",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc3.tgz"
+			}
+		},
+		"3.5.0-rc4": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc4",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "f3022d9aeb9903746e31d63f000a78fb25380e46",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc4.tgz"
+			}
+		},
+		"3.5.0-rc5": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc5",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "78dc983d3b79496e977933896daa849511d05fc4",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc5.tgz"
+			}
+		},
+		"3.5.0-rc6": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc6",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "5c9c3c7d0b3eea807acd9d66c5596c3c1f6a6c2b",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc6.tgz"
+			}
+		},
+		"3.5.0-rc7": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc7",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "3e2e1f117939110da468788813aaab1acfaeaedc",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc7.tgz"
+			}
+		},
+		"3.5.0-rc8": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc8",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "6c1655dd5457ac83e45379ed374ba715a1b9478c",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc8.tgz"
+			}
+		},
+		"3.5.0-rc9": {
+			"name": "botbuilder",
+			"version": "3.5.0-rc9",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "80acea4cf7302b41c8411731da01a428439dd68f",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0-rc9.tgz"
+			}
+		},
+		"3.5.0": {
+			"name": "botbuilder",
+			"version": "3.5.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "84488eaa05c93503e4ea52e9b0621faf73e863d4",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.0.tgz"
+			}
+		},
+		"3.5.1": {
+			"name": "botbuilder",
+			"version": "3.5.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "66ead53ab03efc7e82fdd79b59e685be62c517ed",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.1.tgz"
+			}
+		},
+		"3.5.2": {
+			"name": "botbuilder",
+			"version": "3.5.2",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "da05644bffd8c4464029e082ec01655d426ff4e3",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.2.tgz"
+			}
+		},
+		"3.5.3": {
+			"name": "botbuilder",
+			"version": "3.5.3",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "07eec6c201902d99a2c8ce27b4b8b025f73b2e94",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.3.tgz"
+			}
+		},
+		"3.5.4": {
+			"name": "botbuilder",
+			"version": "3.5.4",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "4ec8f27b89da698e7868167185f165b207240772",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.5.4.tgz"
+			}
+		},
+		"3.6.0": {
+			"name": "botbuilder",
+			"version": "3.6.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"node-uuid": "^1.4.7",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "7a9c751b92ca42a4fec8aa9b6bbc48871cfae477",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.6.0.tgz"
+			}
+		},
+		"3.7.0": {
+			"name": "botbuilder",
+			"version": "3.7.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "6a9c0c9336dddcfc7034d08ea7e8671caf060e6b",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.7.0.tgz"
+			}
+		},
+		"3.8.0-beta1": {
+			"name": "botbuilder",
+			"version": "3.8.0-beta1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "1b95609a383b16e624e5cd5096ba54d26c26bf74",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0-beta1.tgz"
+			}
+		},
+		"3.8.0-beta2": {
+			"name": "botbuilder",
+			"version": "3.8.0-beta2",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "4a15e83d966da6a07145e74df6460f9b57e120da",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0-beta2.tgz"
+			}
+		},
+		"3.8.0-beta3": {
+			"name": "botbuilder",
+			"version": "3.8.0-beta3",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "cdbf533cbee1f46c173a07235d6ac6141570e732",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0-beta3.tgz"
+			}
+		},
+		"3.8.0-beta4": {
+			"name": "botbuilder",
+			"version": "3.8.0-beta4",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "e55b73e205c13259df7c26aba12138b69fc4001e",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0-beta4.tgz"
+			}
+		},
+		"3.8.0-beta5": {
+			"name": "botbuilder",
+			"version": "3.8.0-beta5",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "88a436b798b78917a1f51c689f8958de3c8ec7cf",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0-beta5.tgz"
+			}
+		},
+		"3.8.0-beta6": {
+			"name": "botbuilder",
+			"version": "3.8.0-beta6",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "eb66b37af14b32e95d579de1cf8838fcb6eb445d",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0-beta6.tgz"
+			}
+		},
+		"3.8.0-beta7": {
+			"name": "botbuilder",
+			"version": "3.8.0-beta7",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "66caa4e80de8ee04eb41cecf76df46899db34d96",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0-beta7.tgz"
+			}
+		},
+		"3.8.0-beta8": {
+			"name": "botbuilder",
+			"version": "3.8.0-beta8",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^1.0.6",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "095b44e5b8083490d39d582deeb4e16ce84f0a13",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0-beta8.tgz"
+			}
+		},
+		"3.8.0": {
+			"name": "botbuilder",
+			"version": "3.8.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "2bd0f9a51e1cfc74abb67b8eeca122f272cc412a",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.0.tgz"
+			}
+		},
+		"3.8.1": {
+			"name": "botbuilder",
+			"version": "3.8.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "12648ad3aba63888dcbc5e70fd809806bccbd0af",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.1.tgz"
+			}
+		},
+		"3.8.2": {
+			"name": "botbuilder",
+			"version": "3.8.2",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "6cbf1f868e6fe0edcc2f4c5e26c7943472e711f6",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.2.tgz"
+			}
+		},
+		"3.8.3": {
+			"name": "botbuilder",
+			"version": "3.8.3",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "c879a2c4dc976d62e249c8d3118423022eb8cbe3",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.3.tgz"
+			}
+		},
+		"3.8.4": {
+			"name": "botbuilder",
+			"version": "3.8.4",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "fcedc42b927ecf050c24be520c1280824437a708",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.8.4.tgz"
+			}
+		},
+		"3.9.0": {
+			"name": "botbuilder",
+			"version": "3.9.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "363ca6b965d603a87316fb15e52b1fc8a39f40cb",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.9.0.tgz"
+			}
+		},
+		"3.9.1": {
+			"name": "botbuilder",
+			"version": "3.9.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "104aede362185d0aa3222cdb545e39d388d09f06",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.9.1.tgz"
+			}
+		},
+		"3.10.0": {
+			"name": "botbuilder",
+			"version": "3.10.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "313a9953e330493c86c0bb150c2ed4dfd40144fe",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.10.0.tgz"
+			}
+		},
+		"3.10.1": {
+			"name": "botbuilder",
+			"version": "3.10.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "d9664a3f2cc3fde8668576fca8e237771a987129",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.10.1.tgz"
+			}
+		},
+		"3.10.2": {
+			"name": "botbuilder",
+			"version": "3.10.2",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "b2ecb1c8ba9836ffe6700b10d46c2129f87059e0",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.10.2.tgz"
+			}
+		},
+		"3.11.0": {
+			"name": "botbuilder",
+			"version": "3.11.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "6869cbd13394576badb5f7eb2ad58a3651c0ac1c",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.11.0.tgz"
+			}
+		},
+		"3.12.0": {
+			"name": "botbuilder",
+			"version": "3.12.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "1b605d51b37659d4c9b0a3dd8bf2105788c17d1d",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.12.0.tgz"
+			}
+		},
+		"3.13.0": {
+			"name": "botbuilder",
+			"version": "3.13.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "4204b6a063ca52d647db4868a008de6df2b5f921",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.13.0.tgz"
+			}
+		},
+		"3.13.1": {
+			"name": "botbuilder",
+			"version": "3.13.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "2b91c524486a1011fc88a4d0585d3039031868f1",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.13.1.tgz"
+			}
+		},
+		"3.14.0": {
+			"name": "botbuilder",
+			"version": "3.14.0",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-Hzect51OCaCtdnduBoquZcUpYVK+9lto0KWlUm1rSjsImx7ff/aa/K9wHpsKBmzEENs6/xslgHU2XqPhYg36lw==",
+				"shasum": "fc8a7e436e1f1ee3e4ff82ce183238f81dd570bd",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.14.0.tgz"
+			}
+		},
+		"4.0.0-alpha2": {
+			"name": "botbuilder",
+			"version": "4.0.0-alpha2",
+			"dependencies": {
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-UfME0Gl6FjbOghj/aIiiu4xWz5nExZMsOSWgLhVMk3LBWrG+j6F4EpcPzNaxMO/bjHq/QSM+/QmLmh7AetEg8g==",
+				"shasum": "32dc69c894bc906b8f6f543923ab48bd30bba795",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-alpha2.tgz"
+			}
+		},
+		"4.0.0-m1.0": {
+			"name": "botbuilder",
+			"version": "4.0.0-m1.0",
+			"dependencies": {
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-p1816+Shd4gIT06rVL8iBJCk7u+CDkN0tw6LyJtT2WKQDwlTg3SRwnmHWQyQAyz1V9TOmDAYgDFyMbiJfk/hTg==",
+				"shasum": "f54f4d2c2588a936eba819e660356c2161d05fd0",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m1.0.tgz"
+			}
+		},
+		"4.0.0-m1.2": {
+			"name": "botbuilder",
+			"version": "4.0.0-m1.2",
+			"dependencies": {
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-s4B7mUYDoiUhmJIemRgJAXf0QMyNG8MKEn35C2hxJVscCeh50JgFDHmRnGBW+4uDOOL+n5+dcF5mgj5JR3U59Q==",
+				"shasum": "72f1fbe07d9e02257366ed692ed926116b8659d8",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m1.2.tgz",
+				"fileCount": 115,
+				"unpackedSize": 428158
+			}
+		},
+		"4.0.0-m1.3": {
+			"name": "botbuilder",
+			"version": "4.0.0-m1.3",
+			"dependencies": {
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-0Lyfx0Yi52/hbpW7w5PzVlVlsDD7Cy0foSPR+t7ogU/DPxnTDB7p1qLyuhBlIVF5mt72DBmhdotbkgHtqqiyxg==",
+				"shasum": "3d7ed7152c3d4a0508054e4508e5beacb7dde195",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m1.3.tgz",
+				"fileCount": 115,
+				"unpackedSize": 428182
+			}
+		},
+		"4.0.0-m1.4": {
+			"name": "botbuilder",
+			"version": "4.0.0-m1.4",
+			"dependencies": {
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-CfP0b1DMqPGuxjLO2ke5OWTOVu4LXf1/aVHTLmn4Nfy0eD1U2+Q2XZYkeRJjBi2A4rYgdPnr1utIm/vnhw7aWw==",
+				"shasum": "fdbe647da12c3ed6063a229e45643d29c68e0ac9",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m1.4.tgz",
+				"fileCount": 115,
+				"unpackedSize": 429524
+			}
+		},
+		"4.0.0-m1.5": {
+			"name": "botbuilder",
+			"version": "4.0.0-m1.5",
+			"dependencies": {
+				"botframework-schema": "^4.0.0-m1.5",
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-Di4+h3O03P1UpRTzf3r6Gd8Cu6Aay2Q+Cjv0MqG0gBwm581BFpzaGgpnNdAVM9G8FaEkDB4cgHsGhDs6vW5dEA==",
+				"shasum": "ca000439cdb55deaa601bdca0808ad4b7f4d7e15",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m1.5.tgz",
+				"fileCount": 107,
+				"unpackedSize": 391708
+			}
+		},
+		"4.0.0-m1.7": {
+			"name": "botbuilder",
+			"version": "4.0.0-m1.7",
+			"dependencies": {
+				"botframework-schema": "^4.0.0-m1.7",
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-wY5ULH4GScoO6YC1e6r4OYOS3RbB3QBuprUn3Ob3oqM7FepADtr3oOAapAvH8YdViv1HVWiLgYSNFdu9/ZVDsg==",
+				"shasum": "38a36144ca85b4ee79728f9d873149efbdae5818",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m1.7.tgz",
+				"fileCount": 107,
+				"unpackedSize": 391836
+			}
+		},
+		"4.0.0-m1.9": {
+			"name": "botbuilder",
+			"version": "4.0.0-m1.9",
+			"dependencies": {
+				"botframework-schema": "4.0.0-m1.9",
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-QCED8sR478utMR8ZBwEtoygBOCax/0eWwUEWkIv1zhwas1e0t6SsGYNCOLXqhpbsTRsBkKjDLRKzREt+T150/A==",
+				"shasum": "4d5222806fb12443bdd8fc913234e35eed1d32f1",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m1.9.tgz",
+				"fileCount": 115,
+				"unpackedSize": 416935
+			}
+		},
+		"4.0.0-m1.10": {
+			"name": "botbuilder",
+			"version": "4.0.0-m1.10",
+			"dependencies": {
+				"botframework-schema": "4.0.0-m1.10",
+				"assert": "^1.4.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-9unbaSAIRVBMwozFSwWe8muymyUiuXK2vh3lj3+EZ6jaGmDTqi6aWvRKQvZMft74xnnXObp/rAGDqvHWWnBN+w==",
+				"shasum": "58069b476f361521ad36b00fed37b06ea5c7e4f6",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m1.10.tgz",
+				"fileCount": 115,
+				"unpackedSize": 415705
+			}
+		},
+		"4.0.0-m2.1": {
+			"name": "botbuilder",
+			"version": "4.0.0-m2.1",
+			"dependencies": {
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-m2.1",
+				"botbuilder-core-extensions": "4.0.0-m2.1",
+				"botframework-connector": "4.0.0-m2.1",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/filenamify": "^2.0.1",
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-LdpGbfpEEDw80kRfFsKRkNfZT5eXbUm9CshET6Hjq7sjYiDOoKTFg9E6+UywFqJHu3b7Ekc9LHPb9C4m0V3JYg==",
+				"shasum": "17b76911aaa7b0a0a2af4b0ef95212910528cdae",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m2.1.tgz",
+				"fileCount": 21,
+				"unpackedSize": 87302
+			}
+		},
+		"3.14.1": {
+			"name": "botbuilder",
+			"version": "3.14.1",
+			"dependencies": {
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"@types/url-join": "^0.8.1",
+				"mocha": "^2.4.5"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-LczOC6tPziwqUEvbm5svXn6pZ3818UMYdG/QkxGYXTfjUD7DJFgXfBNGRGJq2wVkh6UbReTv6aWasX2OYjUbNg==",
+				"shasum": "c623b444d28de6ab667875672baa84887ef0a966",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.14.1.tgz",
+				"fileCount": 74,
+				"unpackedSize": 623354
+			}
+		},
+		"4.0.0-m2.2": {
+			"name": "botbuilder",
+			"version": "4.0.0-m2.2",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-m2.2",
+				"botbuilder-core-extensions": "4.0.0-m2.2",
+				"botframework-connector": "4.0.0-m2.2",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-ptxbbVmuSzaP7TeCFlicarsTZ6nTR4rD8OJDBR2kedO0mSTkKVKyKqtz4SXGWXOQzeomUvpxJFY1u5wlvmXILA==",
+				"shasum": "e22cf08638d85d371e5124c6febe2b26b5130421",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m2.2.tgz",
+				"fileCount": 22,
+				"unpackedSize": 96249
+			}
+		},
+		"4.0.0-m3.0": {
+			"name": "botbuilder",
+			"version": "4.0.0-m3.0",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-m3.0",
+				"botbuilder-core-extensions": "4.0.0-m3.0",
+				"botframework-connector": "4.0.0-m3.0",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-OOW2/TOVBGpj95DOo09zl56HZDRMJoXd3IOjJGbKW7HKPFXn7P+7mAQu6nzCPuNrAuDxiY2rtpMd/8YFawXCoA==",
+				"shasum": "2417325d5f9a15f992954cda3cb9badcd1a2e946",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m3.0.tgz",
+				"fileCount": 23,
+				"unpackedSize": 103348
+			}
+		},
+		"4.0.0-m4.0": {
+			"name": "botbuilder",
+			"version": "4.0.0-m4.0",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-m4.0",
+				"botbuilder-core-extensions": "4.0.0-m4.0",
+				"botframework-connector": "4.0.0-m4.0",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-uZYY1awmQu2TrmcDxXof52LsrwkXpMVHek01n3r8j01RqQSdKfOzytmdU+Q8L64PpaEII5Y1GI6fhmZvuu6N0Q==",
+				"shasum": "6fef44d5b1c21f0b035c795f2a5c46dc7957a734",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m4.0.tgz",
+				"fileCount": 23,
+				"unpackedSize": 163159,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa4kKKCRA9TVsSAnZWagAAmjsQAIDlnAclYdaIGEfvVK7m\nIE7Ihq/qKUDYPD5qLMY/GJo9Gh1u/R+rx0UGZ8RwtPy+TDgBrkSAbViUI0bJ\nDYlGbb7rNq+SVz5L0zcpOkhMp6c7d1iupU5aJ6d7P5h01DidJpqocVn/AhFA\ne0nKbe9fQ407p+2E/HWr8Asmj9ZOswtLUwycJ2gpzxqnqwRq/SnzXCN1PhFw\nhA6YSk2S99/Na9gmCNP/Z8u2K50xv/9RYQftVMLx/PIg51adHbJTwb/pmbol\nb6o/aBtAYn4IcHQcSwplyEqnWvMZJE5mt47jpZ613zw1CQtHQRvRP7ALo/CY\nagxWuaQBqZSIV7meDgG/UOKqMXJ+xYgeRA2xH7pumntDz//xizoxm2Uw7SSb\nRqUre1dqUzwd9oR2GglCnRQNCVOuDUc1agqjmNMaLWol6TQF6TLEFKYNJ12f\nZfF/df5ypxRG3u4Dcf98+bSMBEqNN2HqxHDPYgQSgJi7eHIHbg6uC1HQa2SY\nb2DUE7bO6oit+XNYzfWUmfOlZFU85XsuEZFfzl101DQ8s3FN8pICiS5ryGds\niyYwhAojsI0hg5moF6GVguY0pJEGGDHl0Ag6AprKbWHE1rWz6tx944Qjx3SY\nQ2Qivps3muSMlb+OeVvDJSKBULpACeYtpyF0VPhtpRSddo5HrRHbDnQul7dg\nH86D\r\n=qW+j\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-m4.1": {
+			"name": "botbuilder",
+			"version": "4.0.0-m4.1",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-m4.1",
+				"botbuilder-core-extensions": "4.0.0-m4.1",
+				"botframework-connector": "4.0.0-m4.1",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-nfz8rD8I3LfEA22zOGOtSKbmrRnlq0PUP2U6+4L8vN3emW0wv3bQSo2qMiAn4nv8qHy2eTvbaaZP05MNMbThnw==",
+				"shasum": "65ddfefaa270609c5adf2bc72f7421046d76096a",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m4.1.tgz",
+				"fileCount": 23,
+				"unpackedSize": 163159,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa47c3CRA9TVsSAnZWagAAWrgP/AzeGR7kNGTMjIsakwMR\nbSwqrqZJLfbSR4JdEYZ0c2B0ekzDDz1zbAvURixrU7uOfIfvuAnJSVeSdJLU\njxDwnKlLBgmKJx/SHh1RduEamZDDZglz9xchRkXInz6FDLYIvfsJ7TaiH3Gt\nbHcuy8xtIer6hmMytjwQWi0o4UZl1UyhLCsyF3ruXK8sWuxkL4nZksqvWcSW\n5XUjcMELn8HGU2PEvj5+WQM/mEmU0SGGyjrrO4DH2p/cNyHQOWzazn4dG4hF\nDhBiSFOJ3fQeSdpm9h5/R8mL4PEGUjXCYE8ilbjPqqJVE5LTmtQ/wR95Ue9g\nyfWXdkvZ7K5hGLx+f/duRKJ5P7JvKoz9domcihcdVcUHEB4I6BTAxcA0Soo3\nulKSVyWEnhg2vNUmYaFgw8bKkDnMW3/XX657+2FVt2ngLQRf5ER+fHH/vu3h\nKmrtwz3j+o/iqCpQ2H/6VhpcDrREgQEKZfep6CegV2iTtWbeuAaDVWnkyWA1\nwyLRKLyJnnvLe+1LwsMo4UggQUWFHeEb7b309vE5vUGu0b2pLCqGCWObt/gl\nW5A4y6bDM/n3+KGSqfAvnLoL2VmVNra0PZex2Z2FfGDcxRu+469mpPXaGfIh\nugjiE9DpY8izAXk5YYwm7SRAsWaU9kWguhh/zPKQzdR8lnhfO08sRwSg0j+h\nonHa\r\n=qYfR\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-m4.2": {
+			"name": "botbuilder",
+			"version": "4.0.0-m4.2",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-m4.2",
+				"botbuilder-core-extensions": "4.0.0-m4.2",
+				"botframework-connector": "4.0.0-m4.2",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-09l73kUwBk+wjrMH+C7skrUhTt2unqJEEo6nkP3UJrZmEWei4f5xypVnqwmivf7Pr9vVaWvr3V1MFcwE1VXFww==",
+				"shasum": "b9382822c9bfe158ba7d8bdca815739fa26d2ed0",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m4.2.tgz",
+				"fileCount": 23,
+				"unpackedSize": 168119,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa6RyNCRA9TVsSAnZWagAAtlAQAJN4Y2k7GvEYd587cet0\n2LEedTDEAfFSHg2xdg7ySt/oiIVkBettJDPglhDJunLgqIY30KPh7hX+xxS0\nkK8wDNfz/UO8yRBREosY2e9uZAnYZzQpc6tuc1xD5TjqcLS/aMkGQJHGQ8j9\nFXN0GbY7P30AMZffG9MEe+C1q4ABhSBAMlCzEF6Ns17MdhY1wH60YLKSWy87\nfYIzZcmQpBOXl7hBZilkxlEaHN/IC9IQchiywSQ3HYqNZfWUTbK6aMThOhu+\nFCe1/pwnZ2AxJ378b66U17unufhs7Y/GZu+P2MmD6YkGg4p2Z/Zzx1vYpePk\ngWMedvBpO86sPh/F5+WFZH9w4WmoX1Tm5Cc1MjAPnEeYMW/yVAX2DIOx02eJ\n0ASExlxejaZbRduedhPxwcOXQSH060bharfs1QsrzZZdbBEJKS1AhW7zHRJP\nVuy2c2zzDT7C4FuXzBVqod8SrIt29PkUqC8dBQPIH3K6KtnUddoZCnp4zxV4\nANoB1t2AQq6uEVWPo0RgtSv1obAD3Jpc658ui7/yNntz4iUB7bp7/lVOkhd9\nz2YEV3qW+0vv5eOkhR9aiYbrTlKFy8an+x2QlFhbmyWM8s4KW3So0TAv6o0x\n7IHw+S5bHlL0Or9jSVBVaXMUd2p4ZBKTZrMytjzzYG+ufIhsZ60dS4Yndc7Z\nmwa1\r\n=T3e2\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-m4.2.1": {
+			"name": "botbuilder",
+			"version": "4.0.0-m4.2.1",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-m4.2",
+				"botbuilder-core-extensions": "4.0.0-m4.2",
+				"botframework-connector": "4.0.0-m4.2",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-iOQ3NHZnoHV+9ctkbTgXTc0Xuj7Xyy2WXv1EpXTejQ++0tOjZlwYQdK2COrwMJWWJHQOhBlhh14k1Vqq7AI6Lg==",
+				"shasum": "d449287e6ab7a5ef874fa852f32c2ae027766a23",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-m4.2.1.tgz",
+				"fileCount": 23,
+				"unpackedSize": 168047,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa6ru0CRA9TVsSAnZWagAAbiQQAJTbUinBHRneW23D7Ok9\nT6qmwqIJsD67bbxfjKQ+pWrJDG1K0c291jSlHuZaWvoV6n3DjyXf6wPtBUFf\nnNi+Q3N5htr6/bhqNM25XtbEeWEu9d6BhkSvNG+Qf7LbhzlMwM4seeaJzaHN\n8lxNNle6gTrvub6aJb/5vp/WnfqJWmuhZ4zFreNqCl8pmsp6dKT3JoHVDdnw\neQxWQW/GPDYWEYFQz/dIQp7I6HZPaL+bW37VXpuwPAQMj7ijRvQsokA61csU\nBSjbt2DbtsoZj1wk6H2FI13QeMrQbCdxqME3lbVlyxAUPU1PIj6MGsmBo33/\nSjB0li53fOzwAzsdcGYv0m/3UEfMYzftJK6ZsCDwNs7CMu2kZ9Q5S5tnGOSb\nnmd7RK9AvXFcJx6hwOVbYCTp0Xub/5/eipvumQlMEC3t+fehRZ2eyrleGvE1\nIzize+5mvTme0kO+2SeKbtIjTgdd8a1pkDCtK2GX/uRsZUPTE6yQGH2s4z9l\nGJL+jOXRVNsW9mg76jBXAF0m1i5BNKd4elDLcS+k6Dz70rSYIGZyvDFFf3IZ\nAuMS/x0Dzn1BGmbAhIFrWCVkrtGjPuNXREKzh0T4VDNXbuIKsrognhQfNwZS\n7NtaLAAKXMzv7YQwLfTjobzRshcxKT/qjYqE6l6UYBbyUb5o7dy4rPpKai56\nC2P1\r\n=0Duh\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-preview1.0": {
+			"name": "botbuilder",
+			"version": "4.0.0-preview1.0",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-preview1.0",
+				"botbuilder-core-extensions": "4.0.0-preview1.0",
+				"botframework-connector": "4.0.0-preview1.0",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-/TxHBhYnlBkB37nBQ1YGWqQhqHcuZ8u7oiVq4N2YXT+fgnOaNhZZOkhf6TOzRZr2WxCVMemRfZqUO9oa9sGJYQ==",
+				"shasum": "6900930cae5749dba988092a2bc29e3487ecc7fb",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-preview1.0.tgz",
+				"fileCount": 23,
+				"unpackedSize": 168979,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa68gOCRA9TVsSAnZWagAAutUQAIiuYswE1WgOGPPjRXDD\nvYcqPjSsCsaHv4EJ15RsfKwj6znCgZJ3NkqRrN6Ozi4VCflOR60cTuhLgIni\n4G5J3n7lv+BoeXECbyxODl8JOTwfimX2QbulFW7deynl9FnSxYe5lHzuE2Kp\nvBDSYyY3XAgWZADGY9JgBNks/0XKFWvJZXVihhflxgR7JnFxHzo5jLmKSAga\ncITBy+53qKJiBHpZoNawqO1uCJwpnRlutTnh7Ys3EbDP28Mqwkso69/+LsWT\nW5UnGkeBqlAEidCAJQqCJZTxu6lS0V61EQPpZ37tuDAI64Tb9FqmOwRVwP5Q\nZQeNGOU9w4ogP2+oDjb4bYVCOLg4djej1UGR0QG4YZnjeZLVlKYP+F24wV9P\nHEL8iT2LHzTSQJqKtEZac1I4HVnnDUK+dI719LG0NoaeuK/b4iVk5MwdLVQr\nK09XCBWFIjeuVbbvp/7SLjsn/phIbhH34NqxBGtbly4K2Va0wIKc9dvP6FKM\nIkgdRLrurrwb8pUm8jIBaF9e9sGvww2IQAksZsHD7x0dLzr9W7pdFkYdysmJ\nVdT4eq6rd30ETU4Mhj3vYTpnvtzQvbASw2pKwXFsmLGwcnwlwJKlRZdcLueh\nDNBZVkNwNAb0OCfu+tFy4Ek0OEc/t740MJ5AaMZFnRjjcGNx6BJqsBEq5qhS\n0Eiz\r\n=YU0m\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"3.15.0": {
+			"name": "botbuilder",
+			"version": "3.15.0",
+			"dependencies": {
+				"@types/async": "^2.0.48",
+				"@types/express": "^4.11.1",
+				"@types/form-data": "^2.2.1",
+				"@types/jsonwebtoken": "^7.2.6",
+				"@types/node": "^9.6.1",
+				"@types/request": "^2.47.0",
+				"@types/sprintf-js": "^1.1.0",
+				"@types/url-join": "^0.8.1",
+				"async": "^1.5.2",
+				"base64url": "^2.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^7.0.1",
+				"promise": "^7.1.1",
+				"request": "^2.69.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"mocha": "^2.4.5"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-KH5GTskHvTSozRPLdn8EQtg34zc71VUo+wXYzcoafRCkGVqqxB4AitUqow8y8ENiHgJW3oY2Pvhd8glcZiraOA==",
+				"shasum": "394e7abd35a0781c0365df62ee953fcedfa6d50c",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.15.0.tgz",
+				"fileCount": 75,
+				"unpackedSize": 637888,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa7QFQCRA9TVsSAnZWagAAd+IP/j8ugVhJwLXVjQzvt9/9\n7bSuVgTwh/qqsqhHWkm09Fh2jLRcN6rUJTR0NDJZ8XDmCE6oqrHWqRADpaAF\nL6ffbc/3OZeFT/6/y/aYUReJPwkgIS4dO7/7QUxzG+uEZfl6ESJzVOcxg/dQ\nUcmqfOiyPwHIbYr2BudcDKtYSd9nTuf0Ku87ZZHqUQ5Jmh2KXchQY9mpxGD0\nRmjm7sPnt+HNb7LC7WJ57edxx7+yL+tSW+FWLWymPXDVydFMDbglcnGnR0Sz\nITo4FHkVfrln003lMoj2GEP0gAaEaizg1fQLC+nqX/1XRKesDD1vdR05UJdZ\nz2fCSdphZcplpoNGvSCz4D6GgXZsBThUQ6DjK6NFmbjWRQ8kSXsXgjCuMCf4\ncix7E4VC2Oruu2S8fbzuLGOKwE4lDqK0pOPr+xkaGuMVJPBAv236IgaFBJbD\n3w0Hrg7GEYNrpblGTSDBs85Nzttii7MOfL5JUTQvqZWvJTYQsaXge7s/WigR\n3TuNay29M/sIJX/qGUaVpOf634GSxNaDG6ItSLzRTTAgnxZcBDZ+JviaO7M1\njfDjXroRAwOdxDAEByKjSivFPwMXqggYwTdzrUZJy6/HqGZJZfB+dn2ZBWOa\nxkF43ckAeOb3IyoQDQYy9cKpDjaSKjj2OIN8QbHA+5eW0VnNMe34gDkzska4\nPKSW\r\n=zRsk\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-preview1.1": {
+			"name": "botbuilder",
+			"version": "4.0.0-preview1.1",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-preview1.1",
+				"botbuilder-core-extensions": "4.0.0-preview1.1",
+				"botframework-connector": "4.0.0-preview1.1",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-ocbBnOJHm876RAkXF152ey78MfO19xqTni0HExHLSMVjj284d9Hq+iiA4z/pMnPu1QlR2xzfIsR643zvV4fYFg==",
+				"shasum": "0ccec7fafbd2fb58f102ba2b4975f90e05fb1543",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-preview1.1.tgz",
+				"fileCount": 23,
+				"unpackedSize": 167084,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa7QfvCRA9TVsSAnZWagAAqPkP/jv0Z7vCp2lsk/8rUxPJ\nbS/ykUuNH86gbnOdzp0derKcDyFgFUEIwCQQpU3nKihkgyX9g/HU/4E+QOYN\nmunU6Ruj0cw17WwJe+cH7wzsflH0fKuSyh0A7i+wXdZ221p9G26KOb3aLsDG\nP6L7NIyMc9LdvzWzzZimCNtvB17JTisRmXqHb/xHjNtfTB2j9BV9fTvQqG5V\nH1IX2xaLGU8eeriQPHDt7NDkMHAtiMYAFCKoD8lserL9+EmPcagXlzzsqiT2\ni58QgL6TOdYkGKQaW92BtKS1p+Lk3HV3nK0EQBYvvf0/gkZNQqa6MfPiqVb3\nr026MXvlp7EXf8/NI0UyUeXMfAkpJS4JHXhtZiPyIImLDxrRzYLmbrQFVLIx\nZ83qbbarp6Y6k9NDatr0JR53HVyM4iLgrEf01GPt/MCd0Hw8ZREH0lVZ+hbV\nlJ4selN+d7tc6M1faNcyVdfYt5GhdnfzrmVvp8v1ONsVi7TpEBYgISY4IS3x\nO4pEDuT4vE5qGtzmXW9aZgqxku//SuwUONDtEfQgrezPCK5hLoiwI70wnVlx\neOorYmzyi1lDWdldE7J7joMDXiC99NSp5WyQAJ3I7nWTILiZ+ffICLWBi0dJ\nH4tnix/8Vm4IbdnXZKrMFRfxQYFXV9E0KZSZYj6yWGdEfq9rVjtlXhjsq8wY\nFJ1b\r\n=LpVR\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-preview1.2": {
+			"name": "botbuilder",
+			"version": "4.0.0-preview1.2",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "4.0.0-preview1.2",
+				"botbuilder-core-extensions": "4.0.0-preview1.2",
+				"botframework-connector": "4.0.0-preview1.2",
+				"filenamify": "^2.0.0",
+				"readline": "^1.3.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-DDODRNzDXEnNpNSKDCVeKV5SnCTm9ZD6W3/2UaCDulQnFlXSWQd2M421ut4w9+qnzt+VIjJz/LyLkN4LxXqdvQ==",
+				"shasum": "94ae962b724454fdf4bb2aee2b93e813a03c9633",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.0-preview1.2.tgz",
+				"fileCount": 24,
+				"unpackedSize": 168013,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa78XaCRA9TVsSAnZWagAA2LAP/iQdLrPuwCy19Rlq5L13\nkHzJc7Mz+L7Voo6d6w5/4c+J5OpP0Cnnb+OECB50deiShhJupSERsjHvTfrt\nNAlel9SUsq2PUmBkgK2eCDZayxtW8/yGejt+Or7Zzrd4VfjBiQfgd28+ITpC\neBBIB2ITouSjoNc1WzAfbERu7B/QyKApGqq6vr7ylTnTxE+eAJsPGcJRdppm\ne1b75x7a2mGibO1BemEhHsFrLW2p+P2SetGfdA6O/aQPYsS4jADOcBwb0pfV\njtsXEsdIntDvGp0gWeHoD2ucYVQJphz1WIkosfyT+6xpIckiTeGN9byaFZUZ\nd9PB7zEwoxoCpeCTi9qFsuo7AKBsvT9Aq2D6kYxJDNXxPanWZ6lsYcCBDBn7\nN5CePKvLqufbU26C8A4F9vfHS8BRUPnMsXsAAvACbs9pgsyqCsWrUcvL7At7\nGgVBcroj3xPnmvRQJQeW5quWeSj/6QMAHCvqR6ur/XtLm+dCmsysI5S30SRs\nTPhqfMnsL1nP2tDKypDNE6pKrBOTarKaCgR65PJyWdMymdTgBPxJCiyOjND0\nZzLi8uCD1ScJRWp/q1wukJavS5WCfK9ZDn6P9/zYu1YZrFz+smxQ1OWnPZDm\nWwaes50c9V0/QH9WRwSZzDno1bXYT68fvFvsWK1AinlMQJrapnK6T7wPJfHc\nOtw1\r\n=j8Jw\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.6": {
+			"name": "botbuilder",
+			"version": "4.0.6",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "^4.0.6",
+				"botframework-connector": "^4.0.6",
+				"rimraf": "^2.6.2",
+				"filenamify": "^2.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"assert": "^1.4.1",
+				"chatdown": "^1.0.2",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"request": "2.83.0",
+				"request-promise-native": "1.0.5",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0",
+				"unzip": "^0.1.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "c71b23492a6b031a979d24a9d6d750b67db4018d",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.6.tgz",
+				"integrity": "sha512-QvtaoCCfUUsWkWtbVBOSdmblPy7g/SjSRBpkcR9i2us7dgJvhlM0alhta3OvnUSGyMPrpV7k5aBCErtubxzdng==",
+				"fileCount": 20,
+				"unpackedSize": 170148,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbpY/LCRA9TVsSAnZWagAAWRsP/R7KQw6AGb858S0ZJGsb\n/QlVi+/reFFneGv1altEbmPFIair4crn2PN3XyPIfvREy66jLBrHLLGH/6Eh\nWqOY0M3eY+TciZAVdNTmJ/ogJCRPrpSbfLYN8Detmc0hwP7yvinRUFQnbOwG\niQLvhiRK/+JoX7/LiV4+zvnQPkf542xfw/RN/gwbfbbVEI6rGyFPbKXSN26N\nE/UNBpVyITzYooQtpt496cxMuOJCcoQSsZq+Otz9RqY/hg77KgulqxHrSJII\nArkAlHLkA5wHxBX7sF1ylCsS/ja+J4M0jEbPnk1z3HSTF1ENE/LIOGl8SyhD\nx4HUym/ZEj6zQ0XfPCWwrfPFVYgm/XefSECDDQiZtBbC9pMsLHNtNXdcMxPK\n64eulOw6inmrQlpHM+LlKaeJdl2a7Q4+nzwRmk9il8ddPXQmLdg6BFCYLIkw\nuyKE7Zhn/U7zUwnSqXrWIBeIySXxMPRlx+Y7zCwlyQ2+Sbtow1mK0fbVHzOT\nWns05+SH9GgLjxauEUbALN8mevydIu4kkL37KhUy9402qcBxCQl3I7bgB/8E\n0rJweCNW1E4+eCrqyCTU1zve9EE0hd8X4/i+sthuO6bB1F3dq0HyH3PgpZez\nfWCmaxEkuVQNfMwi3rmvQnrRDxcWStVJYxEo/k54YZYpQxfmhZlf3vkiq83X\neGuZ\r\n=Llfi\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.8": {
+			"name": "botbuilder",
+			"version": "4.0.8",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"@types/filenamify": "^2.0.1",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "^4.0.8",
+				"botframework-connector": "^4.0.8",
+				"rimraf": "^2.6.2",
+				"filenamify": "^2.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"assert": "^1.4.1",
+				"chatdown": "^1.0.2",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"request": "2.83.0",
+				"request-promise-native": "1.0.5",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0",
+				"unzip": "^0.1.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "20b7acc4e8885018f1281b00f34923ab27aec3ff",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.0.8.tgz",
+				"integrity": "sha512-xwDRHxstFVEh2k32L1bgxd9FB35gxwXE/h/0htYE6IE6JmTuyPejCBtUrBat0wziqeqTBzyRYmjQJgWidbVIPQ==",
+				"fileCount": 20,
+				"unpackedSize": 170668,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbxjt3CRA9TVsSAnZWagAAjzgQAJaVZAufGz5wFexZ9q2h\ngD5vUCT30PFSJZljboZD4ez2ApAlBBWyn7n4gQcFFKgsjvoIF43RDK4fD0iI\ne2UON1W8q7/jXjRu4aFbEoULq3i0h2HF77U9owVxsg5PuRLOWAZbOXBQk1v8\nHHtxWE/YlPUSNwPESoJX69GcxRQdZQlOxwA8hBr9wp1Dyd50jZvgQ+jBae5t\nFgUDZcnhvCf08Zno61vL9MlbHuSvMXjooyjDy5EGSO47or91fCJ2096/qOV1\ncI7FzpRqrwgJAybBhTxah6HWEPIEAD13Z43GGP3REMWjFMMwVEAAIjhU4cOf\n8XaS7m0M9+bgmdgTKJ6M9dZAiw2tna5t7cEsJ17wOlwt3jMwBj798KB3BLlB\nM1ZvngcPJQzI/XQ7AyUerAym8dyLPM82cqMDy7juZsZRvLIjTVkPGMpWrTt7\nAEpHh63pyhRcoOTCfL34JKn1T5tFBZPRiZ85aVECv7i/DOXXwZiLusXXK7f/\nnWWq9GnxnD43OUJJtbYJvSwyxFpZMiscCggSCRPSlcBNFOxfBiWOc2rc47eY\n1kWS2iSv25m1ItZ2DDqsC1DH+2DVDjasclLL7J2RQvOn5+gek+AI46uXgY9n\nUHPgooFwbLdxE1jOyYm78x4ybJu76jLBZenkSuEK3VzAJ32BLQFgmnMGV0TX\n26pi\r\n=wroM\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.3": {
+			"name": "botbuilder",
+			"version": "4.1.3",
+			"dependencies": {
+				"@types/filenamify": "^2.0.1",
+				"@types/node": "^9.3.0",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "^4.1.3",
+				"botframework-connector": "^4.1.3",
+				"filenamify": "^2.0.0",
+				"rimraf": "^2.6.2"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"assert": "^1.4.1",
+				"chatdown": "^1.0.2",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0",
+				"unzip": "^0.1.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "05fedefa288aff26871e487de7073f4f086ce497",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.1.3.tgz",
+				"integrity": "sha512-o6ASOl3sbgVw3+zKCYFYqLh5UBbifw7EhuIMgPaw/7MMkL8WWT9y0EY63DX7AyDZZZ+sdG0qY6C9/5HvT3e6AA==",
+				"fileCount": 20,
+				"unpackedSize": 191435,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb2ezTCRA9TVsSAnZWagAA9UgP/jtWaT2EpZuohfElyBd7\nvHCSvr6EisTsSCeoUIPZIMEBOjzAR7pf5Foyfqb9rHj2g6lVk25WTg62pSYO\nDE5q3G4h3kOEM2XcLedI43/K7RTVjFmwZYeXP5J/TLNWvSZDN/hCvw51tzXP\n2ZZw3upwAPYYQhL6aMM+1I3oC687hCvw/HUpv4pU2RRCwG5Jjgxhq2kE/kgi\nVQTptwDGUtTW1ORUHplR9wJzJcRWhexYAk5bkHe07Fa5jT14GFDxEsuBgDRJ\nxoPjiheTOzWnqcW4kVBLa0we4cWllRw/qCNwmfYeHlBY5LdoPILmh5SSvKRE\nzBURK50aqYeTKHKqs6uDAapB10mbTkKdarUyQDB+9e5CMOpWjA8tw8TD34IS\nXBNM9NbdQFH/rffC6VwncmXXBzUGMIQyLRG8eW7vRGZRi5C53fXhq+zZqbTw\ncSZn+5tyUsa4J7JbQrGUovsHNtNgl/GdnG1rCdiQLowrzrgFsDPIZzQ7g+Gi\nFVsWkRDI7QNbgiYojvZqQpPVanhKuKLlAkHvuKAHQqduxkgrFCU9JUQ3uYLr\n1J36RbisCs87ICRppGl3lacjlTzHG+G6j5Yr183VZTNv0QXQePsPjdOi06Vi\n46G4joNW48LvPM6kW3JJW8vt0NVujwRova02kP2mnBVKDfOeNslhMoV2VAod\no4VC\r\n=ZIgs\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.5": {
+			"name": "botbuilder",
+			"version": "4.1.5",
+			"dependencies": {
+				"@types/filenamify": "^2.0.1",
+				"@types/node": "^9.3.0",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "^4.1.5",
+				"botframework-connector": "^4.1.5",
+				"filenamify": "^2.0.0",
+				"rimraf": "^2.6.2"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"assert": "^1.4.1",
+				"chatdown": "^1.0.2",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0",
+				"unzip": "^0.1.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "1cff6b3113ca8d1433ff20dda8dbc7a3051d390f",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.1.5.tgz",
+				"integrity": "sha512-7OZqUqS3jhse2xq9wdG4jaE1mpPcsgQid+wPE2gv17/KwChHAZ5ZyXEmjoc6LP3Twmsapj6h0R4ni36bcst/xg==",
+				"fileCount": 20,
+				"unpackedSize": 193093,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb4NedCRA9TVsSAnZWagAAkK0P/jT8wnM9/RroG9q4jmk+\nif/ugAnhr8fsmmoaamesa3E4LZSKnk9UTbA7uzHkbavwbvmrBt47jPtH9nCj\n5yjNlkUKHgEdooMz7EOuWXOLzOA0tEP+eTYC4DW+k+6sxsmrxkYQG78gvLgw\nJqfVfARKxOhoAq/ZFhBRgSHNc0DY6U05u5BlBeMnVUjdiYsszmiA1Xhe6b7h\nNH3v2PjVm/t4NFTZBVyURg+aKhaxTIGXyv3VkNo6VGgD92YCmDOP7/DCOjVS\nZbIIQHV2PhowK8T/rKKINcsfOuH3Qiz/zRYWnoIaG4tgOAkFfXcftDIoSnZu\nI0NvrTtkR1F0hyfIZ6T5r3Ij6tamRWM0XRBso6pgX51xCLoNQjs5A3P4096x\nYN2IjeaiiYV5idDD2YP+BH+4KrOiADWqleLKdbEXDN82/SCnYapW9i7MtEI+\nzNwfkozIqv22xXVPgHGPBwUTpfDoL78wvUdML+XqwoV+xCGvwYsqABnzjfnr\npVlOpuU8bBSSM8ksbwZzB1ax216vca0Y94C0xRQHdt+rDxNyagnV80Sn9dtV\nvnnkRhXOtcWkkzzVC5DbE5QgYiplZmbxYt6HATjclOIHVdPPil26EWJASIRr\nsRDgYl0jA5jmt2MB2Q8eo7ezzZxF88V1urLAfyR7zJrxB1lmxQtuiXurFyYG\nMJGc\r\n=gwJn\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.6": {
+			"name": "botbuilder",
+			"version": "4.1.6",
+			"dependencies": {
+				"@types/filenamify": "^2.0.1",
+				"@types/node": "^9.3.0",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "^4.1.6",
+				"botframework-connector": "^4.1.6",
+				"filenamify": "^2.0.0",
+				"rimraf": "^2.6.2"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"assert": "^1.4.1",
+				"chatdown": "^1.0.2",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0",
+				"unzip": "^0.1.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "a3b2d0b90d05979bff1ccb34d0d91485123c14a6",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.1.6.tgz",
+				"integrity": "sha512-boHkkNIm7fQPN7UyYI2q3HjaAR/N7yvvrz0BlqtL9rWlbfMxZeZxVzgfop3werzyEe8MKQVT2ihqumuHNgDl1Q==",
+				"fileCount": 20,
+				"unpackedSize": 193093,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb8JtmCRA9TVsSAnZWagAAe2gP/3QiF3W3ewPf328ea9xB\nOoZdOoO/WNtCU02fP8e9dSoLdHhjW6N2oOl2B0fSTbj4XU0cXGhMuHQNyJZh\n9UfvaKJMhv6mlAtPn0uaruydKl5mHXiirPOqOnxZWlOVlrOEzr638okWRlGL\nvnNDnkhjGd8pqn3rhPskTryrXtWUj5sy99gpjEj+qz8fM6nO2byvxNgDm5OE\n4txMuby2JBpsxojNL+Lk7ZX2+uLBIZBlEoj1XOcwZgiGw3Y3uuy2LXcyo2AK\nfNTduXT6R8Li57IJ9SxHojaH9kbTufhNP4NadtwnvvKIv+dU31o16CpKZA0m\n5dT5E86s7og7mxM2mv9K7u5zL+PHgDKbbkJ3QPkD+1ePg5DaWxDbFYLtu5qC\nWBqQgRCB/I2Nc8IyxSH9gB72Z52KGHQTRf1noQmNFe9EFAKQJVhTaPARIG67\nzkjU1WiSML1Jxo/ZxQmcbZC/Dj/LT9tLUyQioGtPq/QhG/ZDDqWvSvWxP4D/\nXYDTFziCPyQRQR5RJJiCs3FV7Wr1TqwuzspdbLstZ687W7RK4T33u9OvPO6w\n+4xo2qFKO/x1q/RW7xp5dlgBJlstpPWtEY9hQ9rnm/KeS7K4vyiOEECwn/xh\nf5qGHAtrDbYTqmEmd+koMKVOtgZRE4zo2GzIjaE8YHqKLBlmUMSkpiHsi6v+\n+Qim\r\n=zjQt\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.7": {
+			"name": "botbuilder",
+			"version": "4.1.7",
+			"dependencies": {
+				"@types/filenamify": "^2.0.1",
+				"@types/node": "^9.3.0",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "^4.1.7",
+				"botframework-connector": "^4.1.7",
+				"filenamify": "^2.0.0",
+				"rimraf": "^2.6.2"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"assert": "^1.4.1",
+				"chatdown": "^1.0.2",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0",
+				"unzip": "^0.1.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "da4bc3593d9cacd8db129b3c3d32992a48789dad",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.1.7.tgz",
+				"integrity": "sha512-AlZhvjeqiCpeWGN1TkqBi09l6f0spYIh0Xzc4rJYF8feCFi4k2FEYC1IpiiOAtYhEBeQ9SOGFcUUwPaLmsI3Xg==",
+				"fileCount": 20,
+				"unpackedSize": 193093,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb/H8ICRA9TVsSAnZWagAALIUP/27b+KU00Zx3EzlNO3Tv\ns/BPV2YHYkVJLmKLrD88OevaLypHoMX6YUpe4Uu4BFNo76/17czNXzP4QgxD\nuK7bANZrPxDAmxJuTrf5pTdHVcXxJfwuQCI+92A25V+z2HUAgkNi6Dy0QtSu\nsMzUVr+yn/KOPTXs7Db1KpQeOJBZdF25gDq6rSfHWHmnDhSSFfDeCH6lfMet\nU5OzQmXHJ2R05hTbEmkLaRwC76qDxqTEs8yj+CKyDypESNvieI0s9aUmL6Pb\nuFHN8HGU1I5Za6cjJ3H2Djl97vHCnwX/RowVZtq1RJI2FoQn4EdDRp8iAnwU\nxKnI3fT6/QGw81sb4weTVfJEZmRuRPfPnYGegUJmLwWSu+krw1xznwC43n6b\nFQCkhjtjF4DyZt+y0rrakjkrjki6gxDUxCFPI0aqAgAhz9OUPmwwV029bQXq\nP4gT2Jc8T1hW1uwjY3Vy0oRMV+GTGp1TzQs+3+kGWbtkHJ0XTOrC1X35GtU8\nrul+NOl+fgM4vYStI8MwXN+XReiU6I0Phmm8qnxZD0EEd2euWOOCEAjb4fQv\n+Zi9KJg/nzoWQV+yAGwSS10rWDaJHyuFtfonHpchrmiVPWqasMRyyTpqc7X6\n7Bw+eJHwr16zHWMb7EtMAiOuS/SXE6yKQyRdfJCq+anoh6s5LDHu1bYVlLup\nFgdc\r\n=XX9y\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.2.0": {
+			"name": "botbuilder",
+			"version": "4.2.0",
+			"dependencies": {
+				"@types/filenamify": "^2.0.1",
+				"@types/node": "^9.3.0",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "^4.2.0",
+				"botframework-connector": "^4.2.0",
+				"filenamify": "^2.0.0",
+				"rimraf": "^2.6.2"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"assert": "^1.4.1",
+				"chatdown": "^1.0.2",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0",
+				"unzip": "^0.1.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "4133e7ef8bda1505ce894d607cc9f438292d9bfd",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.2.0.tgz",
+				"integrity": "sha512-RqR9j/Dd1ljPFrnYOLt/8g61+5pec+yRFAU0nKSU5S+He+E7t62RzZDsXJuv3KExjDJelUXwTjZFp+vPDIOqQA==",
+				"fileCount": 20,
+				"unpackedSize": 193129,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcEBD+CRA9TVsSAnZWagAAZawP/jVgFV4ZdSBscDF7ZiKM\n3ADLLR5v+kt6DidGKQL+7XHrh75IryLlFnZNMfm9RpTW6bf3crESEwt4NaP2\nEbh8B3EhCi+b+rVN/Uoe65xpfJ2HFUW6tUzgySKloza3MTCnfB9agf4bAQDh\nL27YevHmsSbGamB+xx1HZHg6ejbea4oEeqfFztHGvIK+ai8Iqr0dNBmtjzBU\nBaujpJ3JcviuPBznIdUEymCJmiq9vzjfVPEJGNDeYITsujbfUO1y4BXZshh7\nLedkpUpyRu47V96/uhKfCmJDqejKNCOB7kgr7R+SLiIbAucQks8xarPNPmhT\nDMZ/f7QqBGA7j7SCYLL4K4WJIc1ItsC/Guq4liYfN8efBkEmxiCoJodNUDDL\nWNBgYmGxvLMKOw+CNpDc2lCPSEf04xwj9vHUYR73S69sMRr4nYai+Fj6Xi0y\nbA8+2DbxWkxto2osZfBzX+H4BMyvyJZimjOs7nKMt+C87E45+NeWQWeK/fuG\nT/WOOgg5ZDmXm1QFL68kPYcAwi3Vp7rLmRj/Tebh0YA9nqYHgXhgd8gJyVtC\nN5IMvaQ31uYS+e2Qis5Lehna5wqI/kPGw42rssrG0ZX3Yg6UP7ipAQPhr015\n0OV6G0HPZp/XR4+7BDd0fClQuB6ay62U5Ch2kXq6euB28bEcBUqSpbocluFI\nbEV2\r\n=6xuS\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"3.16.0": {
+			"name": "botbuilder",
+			"version": "3.16.0",
+			"dependencies": {
+				"@types/async": "^2.0.48",
+				"@types/express": "^4.11.1",
+				"@types/form-data": "^2.2.1",
+				"@types/jsonwebtoken": "^7.2.6",
+				"@types/node": "^9.6.1",
+				"@types/request": "^2.47.0",
+				"@types/sprintf-js": "^1.1.0",
+				"@types/url-join": "^0.8.1",
+				"async": "^1.5.2",
+				"base64url": "^3.0.0",
+				"chrono-node": "^1.1.3",
+				"jsonwebtoken": "^8.2.2",
+				"promise": "^7.1.1",
+				"request": "^2.88.0",
+				"rsa-pem-from-mod-exp": "^0.8.4",
+				"sprintf-js": "^1.0.3",
+				"url-join": "^1.1.0"
+			},
+			"devDependencies": {
+				"mocha": "^5.2.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-Gf51aNfvBuAxKSXQ+1SV/P1lzuRMyMyIqvjUUSqpjbtW6lFkPHhCmJIM0Dgxbflq78EXXisIYZQgAqsUNYeVQQ==",
+				"shasum": "700ea391892c626fa1f922688d2c742b0684f503",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-3.16.0.tgz",
+				"fileCount": 75,
+				"unpackedSize": 633004,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcSIO6CRA9TVsSAnZWagAARdcP/R8JCT4fNcNXTT7webaN\nDPflzgIQ5EPlvDjDfOANU5U1pAJz41QA9wV5go6CfeXo5uNMr8T+rIYU4qKe\nW5tOkUDYgQj6TYNcdi4fqPmN1UIx/8F+t/uu9mo7kfgopmYHTyuY4dxyPGD2\ndoDxyFi9WT0eng2PsGP7Fpg3rWJJS7v6rNLy5hJigoVDcygpv2xS7ke8GDsJ\nxhGoxNYFd+AppVwljJ5ogtWg7COpqa5fubF/4EhEQ+5LxoYAWodkyr7xaMuA\neMSeyKTYGf9DbUWNq+KcSxaP9sMYcfERAn/+WFwmCtyGsWPx88vBmi9nrl22\nUfgeY06sfCmats3+Uf8JsxnN4RzhLinY3ksLgt4j2H+yPLGx2NR68iUJN41g\n803UB3l2+E74sDc/LRaa86sc5C2tVz7NMUwW6MaJx/0AlpiW6Uo+rPGhb4ll\n9GJU2y+oUm5w48AsvLWCHXHLAkHQejP22y+mvNXpqyYfGEb86XpbT6OGhu5D\nNEcxJhaLyYtXqgf7hkst0m92uh3VLEpfj3JGOz9ZFLFKCUOH2rW4K8G63c7k\nmEskHsmRCY0XD/7L0qrAQOD83g5n8CoR+khgzUfUzTn16X9fbAhUeVvPBCRH\nVmqDQGa/kz+UKf68/xDtK9QCe7/qS4x2dcv8W28Om3DwASrtuREQvuSNAFJl\nPZzv\r\n=nwC0\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.2.1": {
+			"name": "botbuilder",
+			"version": "4.2.1",
+			"dependencies": {
+				"@types/filenamify": "^2.0.1",
+				"@types/node": "^9.3.0",
+				"async-file": "^2.0.2",
+				"botbuilder-core": "^4.2.1",
+				"botframework-connector": "^4.2.1",
+				"filenamify": "^2.0.0",
+				"rimraf": "^2.6.2"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"assert": "^1.4.1",
+				"chatdown": "^1.0.2",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0",
+				"unzip": "^0.1.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "ae4fe62de7c2640b66730efef6ca919c3fbceeeb",
+				"tarball": "https://registry.npmjs.org/botbuilder/-/botbuilder-4.2.1.tgz",
+				"integrity": "sha512-58664aLhN1WQwAxMBK7LZQhFh8DHwenvpgz6ADFgeZLZS28NACfX+Uta8k2+WF6RK3g+VKoGOhV/yI71c5ccVg==",
+				"fileCount": 20,
+				"unpackedSize": 193124,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcVNwDCRA9TVsSAnZWagAAWaYQAIt8ocpkwqdt+Ow+grDC\n+G+bbCpY0c0dM7QwdTemvu5+bzwt7/zGn9TR8iJCPA6LlcU/eCkwajjDI2Wl\nFI4Cog592uXnjy/Dod0l4ct4hM1g4U4ghVWXokjBF+uYHzoX3oPpP9t+/GER\n9fbbcOwsszx8ilnMbM/hzlC65mElRGTYTbHFcfFy5k/UG6OMKx1zS/HXPfn4\nERUWLlKci+4jn9Hr8WL+Z1wNVeCO9Bp8A9rPVAPY868x1jN+9U0legIX/uV3\noD+Suozm+WhtFGaRkFrXCQlQQk+5lbp4zA4artcExjH6fJ16V07OflFYJZDd\nvzCfi0BHdOnre5kFRTu8W68L0sRII6vT4VHQRl7hS71ryINi4+Wt5Zil4++G\nlDFL0dpKJW5GCEGcLVB4EJsg4oUYugNu9+jeopOnOLbEL265ZJx9SaJt4Wc1\n/sav76wMY+vWha9KYgRxMpMCKffkgTdO4Qzq1dYsSOYCZ06czsisokinVBI8\n/9C7Rn5Zv9Xyfmxr2BsG4Cq8OXghYpAHyvcQiHD/4VPYsYXuuj3SAv6gNMxj\n9a+MmFyEmcbO44NcBO1fPdPAg8LRKeanQK6duWOp8XBU3nSRVhmlgG6Ezvpa\nJnRmK2e0MpDzRMRGJWMGN62nj+QwD3WSVud5kop9NO/HWIcfuuK7ombFny3o\nwe9k\r\n=qaCy\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		}
+	},
+	"name": "botbuilder",
+	"dist-tags": {
+		"latest": "4.2.1",
+		"next": "3.8.0-beta8",
+		"preview": "4.0.0-preview1.2"
+	},
+	"modified": "2019-02-17T03:25:36.847Z",
+	"cachedAt": 1551462411619
+}

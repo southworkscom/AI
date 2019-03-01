@@ -1,0 +1,108 @@
+{
+	"versions": {
+		"1.0.0-preview": {
+			"name": "azure-cognitiveservices-contentmoderator",
+			"version": "1.0.0-preview",
+			"dependencies": {
+				"ms-rest": "^2.2.5",
+				"ms-rest-azure": "^2.5.0"
+			},
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-HRd5TuAs7BO222Hju/gFgsDTfvkgrqc0iIOnDd5E/TBGT3uDckrdhL1ZVGQ63YsNBfILyiBmOesQsBwTU6E+ZA==",
+				"shasum": "9dc945f83830bd8660d2efe366c99d122b16b6f9",
+				"tarball": "https://registry.npmjs.org/azure-cognitiveservices-contentmoderator/-/azure-cognitiveservices-contentmoderator-1.0.0-preview.tgz"
+			}
+		},
+		"2.0.0": {
+			"name": "azure-cognitiveservices-contentmoderator",
+			"version": "2.0.0",
+			"dependencies": {
+				"ms-rest": "^2.3.2"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-e1J8q0+aSQs/EvLAHYiiQp3ZSPltQcRaLN1t1Fa2eF+Fs5FHzY/Nj31kNFs+2EyV3KlU96TRMsQhn6XI+lLVAA==",
+				"shasum": "7d2b3fac8d79d4801271bfd2c04713eaa439f8e4",
+				"tarball": "https://registry.npmjs.org/azure-cognitiveservices-contentmoderator/-/azure-cognitiveservices-contentmoderator-2.0.0.tgz",
+				"fileCount": 76,
+				"unpackedSize": 803902
+			}
+		},
+		"3.0.0": {
+			"name": "azure-cognitiveservices-contentmoderator",
+			"version": "3.0.0",
+			"dependencies": {
+				"ms-rest": "^2.3.3"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-373x1kCyoX+Gm9fBymfmj31RFgrKA/4zc2+IpJ1wFwbIgGktzMzcuCPFtnM0dW+sne9ThHdzxSbsb622PSNYZA==",
+				"shasum": "e942ed578a11b7281a9c6829344bcedb55fc09cf",
+				"tarball": "https://registry.npmjs.org/azure-cognitiveservices-contentmoderator/-/azure-cognitiveservices-contentmoderator-3.0.0.tgz",
+				"fileCount": 77,
+				"unpackedSize": 788659,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbX4+LCRA9TVsSAnZWagAAYwAP+gKtwuOrMoZrE+0DyrfB\n7p8JzvTNUgecvWtBUyMQ1+wV8gGgZ/+pMSCH1Kmc+E/0vAtWg92C70y0+2Yq\nUkB4fheZZhEX7E8TG40GzezrVumfxgN+eZq0Sa81iTcekIqkrtNwRk1Ngjcg\nP7lNCn9QjNUt6maFckeqT3cR4ZxIKe+/peqfK/2T0++ekpsH/DfJtkbae5nr\nYPtRv5k4VcvSXP99hWEx6zCDDTYm1JOZgHozL0BEByGR2mCJxdh2AK16yNCQ\nZYYuaBTRajvV1TwJ7YJIFbl3g7mWNigjjvMRk/nr3yt8B7x8xzPKEBZUu7Z0\ncU9RxPjOGvnk0eJ+HI8KuwXLzNBFZttWi0WYg3ALchGXKeDlKXeyE8XAyjN1\nsoAb9dpFo28umak00ra/h8OdxxasblgoXgqHLXTcmeHmIi/EaJHiluIv55oy\nLcKOyxBjXltvu0Ied2OC2CI5t0P3rkAkkG0YqI/QBZl/rRc+nOC6qG7k4I/S\nrG4A3ij5ivZpGoh1hXgylBYHz1TfNEM5Z+tPbolCq0PqZqqV5rrFOwT/NtnY\nFQCsOT3bxUOfYPr5FBLEQJvJ7ZzHHrxZ5PtoWOCOgQjDnW4IAhufFp/hB3K2\nvoDOovPDTqacvcdkX08dEUFTcc4uIdyR5jBnvY1/Q7vHp+jPeglUNoZQg+oh\nOCLu\r\n=bi38\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0": {
+			"name": "azure-cognitiveservices-contentmoderator",
+			"version": "4.0.0",
+			"dependencies": {
+				"ms-rest": "^2.3.3"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-3DXQEESJKmnheAPvnU+2BOKpY6Jb4rT9CoH0MwxQcp8m+bWBIDnjxl6t45tqHAiiLjj4g7QCjMiVJCWY5ab6eg==",
+				"shasum": "17339f4c618b25ee818e8aee5b7fbde9804bd31a",
+				"tarball": "https://registry.npmjs.org/azure-cognitiveservices-contentmoderator/-/azure-cognitiveservices-contentmoderator-4.0.0.tgz",
+				"fileCount": 73,
+				"unpackedSize": 791324,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbiEfKCRA9TVsSAnZWagAAbVEP/0ti1H1VJhGx1F3Sz1Jy\n+AC+5vCDkkMbMOay0hVKmgfu+0HiZTbrySqfN1/8K5lltXeaHFWWMSmRkbDS\nKssVJ+2UstzrsIruCjOretQR+xY/YSEtgJaMulCC93djlOoPt1EVDF73nAh9\nXSlhY1O+dKakLEqifIF+nT1A+9y4+AvA4kFOAkfk8vDYaAZu3OFEd7i2w1bJ\nR0OHGP84+zOQapCk0iWbZaM+wO7/jJJNGwV6crXh2Bymx+fxQG5dqD4XEd6g\n+IqqCJXDongFEqKmWLPcXPney4cWdZA+wrlaR6cAvKThpsn1R374u5Ls9DYj\nOy+vHV6itNdANx95jCpd8mJ3nISVoLkWGkSyMLok5wImFjCwETPmgcMvtqYt\nnC6ziEz/dnlGFegQM1Urys+GrU7XX+I/MKmwlVo5nFoAFdHr8hwi7MnRVv4O\ng+26f9mYrY4ptFTZqta60cOEKDoyrwUnD+TqcFsdx4CCEtcwv2XHqepKP0SN\n1eHwoRbKsxNj9ifyJgsQ+6i9MvAJkPeTGnOYwsToGZNua/S0VgPQ4U1qtMAT\nGzy1r7z/+Pcs0vFUAhsNAutumKoNPqKkoi1XygLQ3oY2RNL8SF4zaUAUIQp1\nef8v2QzQczB5zASD3nllYET1yxEkU/LogsrVnE03UlPOoXtI+asavHL9uEO8\nPqo+\r\n=kJYE\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.0": {
+			"name": "azure-cognitiveservices-contentmoderator",
+			"version": "4.1.0",
+			"dependencies": {
+				"ms-rest": "^2.3.3"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-91S21gm1an6MoNEGOqd4JrMG0oagc0wBh2qw6aTVolJP6m8MK7SrK4dCYyzJxNHIF6ZQpqTu0zuM18+cEc6Nfg==",
+				"shasum": "b98b8344174cad4de1997e5018dd084a75d51888",
+				"tarball": "https://registry.npmjs.org/azure-cognitiveservices-contentmoderator/-/azure-cognitiveservices-contentmoderator-4.1.0.tgz",
+				"fileCount": 73,
+				"unpackedSize": 769591,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb4yIJCRA9TVsSAnZWagAAo8wP/38K+zgAA66QwPj0YE59\nvAMZdE3h36RLzB259/Uj22n/S264oYW2my0uQLfqigrLikDPJ5LHtbgwXALx\nVQAmd+ql5sztYi6WMWubX8Q9sot+URS05hZR7mT4al3ps814D8He1wR18MkQ\n6k1bKJ9ff33GW5srd8sgNFlRXEBomiiEKvX1EMcHhwhgW76pa4w+kLs4isHC\nZoztMYPKTefq42NHZ6rVui2bnlwwb0N4yNJSsQAi8IngBUOpxSrbmwIaJW/i\nuB8OhQ9x4rIEFbMTrKfLF+AcaQLTi2Fnx9JAVpoIDNFehrq7TblNv0fWrBRR\nnVrlqgNjylhQe+4V1ZNWcdZtoHa68nKvS/kGHNNApgU5TVTxX4nZQ+XiShTX\nJ0S710X6UBNeFkET6Upw9NKBvUqo/vlapiLhBbJ+3JxBLubuTWkuZLowf1kK\nPRQ8F82uAdEta3z2KM3VEaA3hubsC+EOA0qQzfq745mfimm8Co0SYHLHgyVY\nbX7cOKs6aOmx4vgiGeYj9H3+Lu8D+iVWB4tqvgKaCzDt3Fmmv9h/U+e2ZG/6\nbbvdaVjbR0EgwWJv7tOZhJlBI7d2pM7qhlAAqS6nze3dp4qeg4z7lHdyWLDK\nc9lmmSYUV20Ft0Kwv05tIPpD8AoqO7hkTA/m0nSXUrS+9LTZZwJHYIfmBHUz\nnrQW\r\n=L/zj\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.1": {
+			"name": "azure-cognitiveservices-contentmoderator",
+			"version": "4.1.1",
+			"dependencies": {
+				"ms-rest": "^2.3.3"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-Gat8dchr2pGm+oMbhPLMdUUsoSCuxL0lzbrewFNDcnw6Oe+bh57w+dABnFAqXhxLQ5Rtvi2Gs7mb5vif+khtuA==",
+				"shasum": "a23f810b975475829e869576a20e81f7c86111f1",
+				"tarball": "https://registry.npmjs.org/azure-cognitiveservices-contentmoderator/-/azure-cognitiveservices-contentmoderator-4.1.1.tgz",
+				"fileCount": 73,
+				"unpackedSize": 758234,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcCswJCRA9TVsSAnZWagAA2IMP/3vkLGnFDPgcptEDM9vW\ngRxHUPTAbrrDADQ33/5yYwbdgJ8BnjrL49YM08BRkWY45CxunP6SaSRgNuBh\njFiBr/fAX1n7Hc9BpHsMQ9oPZ3qHL5qxcmnLWakjqPw32mq56ePhbud2ny7n\nHZecGC8aiAwcau+nJZ65EnCBX2MQ35lQF875PloFZ+PcdYhY3BR9RiGOoB7W\n2cSvTMYOpQk0ZMhHM0RxckbQ3oITagA8aYaMSHQBfNwDB945zZTmxXaB8yvI\nwQDQYToMq5oQU5jZlFHZ87uEPnHqfXpw1w/406tB630xroRh6AQU7jjF2164\nn/sq54KM+BlPKumMvn/wiiIS6z2Me1s6P9G12mL2U2IxQRgUlSYC075Pq9EU\nkp+88u6KWaaYbVuM75YklmwCMHinXdCeY9m5rYX56LfEjwk1UyAaVhkk5KK3\nXob+nXF6b1SzIvIWdmT2m74xMym5Mzv6scFnFWio3YXgUB9fFwVk/ggJBAv8\nKTn7Eal1OTx91WBptDLkD8VU/pqqQzUtsfDNRNP9UWmXN/2D6Z2MiGsy296f\nV/PQStXLg4ZdvaynYg5WPjnkZIkZrf9igeKOpiaXbK8ynijm4tPa9SGU8rC3\nQRQJYUofJa6WIsw/I02d9thLK7l5jZhVyx7DvW53yAw1PQRfoJpvf94Cn0r9\npDGg\r\n=LALo\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		}
+	},
+	"name": "azure-cognitiveservices-contentmoderator",
+	"dist-tags": {
+		"latest": "4.1.1"
+	},
+	"modified": "2019-01-01T07:18:06.969Z",
+	"cachedAt": 1551462411613
+}

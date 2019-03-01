@@ -1,0 +1,608 @@
+{
+	"versions": {
+		"4.0.0-m1.5": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m1.5",
+			"dependencies": {
+				"botbuilder": "^4.0.0-m1.5",
+				"botbuilder-choices": "^4.0.0-m1.5",
+				"@microsoft/recognizers-text-suite": "^1.0.0-rc.32.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-RIKuvZiFPNiIJ8Om4/v0XGKWs6nXuwgrsw8mKxyKQJELgz2JBj/+iZYJBYsxWT0Z/aHaKaZzndkoiB5yrwlodQ==",
+				"shasum": "8b7218bdc1b864965c82ecdb96a8950b65c8ee51",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m1.5.tgz",
+				"fileCount": 53,
+				"unpackedSize": 159049
+			}
+		},
+		"4.0.0-m1.7": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m1.7",
+			"dependencies": {
+				"botbuilder": "^4.0.0-m1.7",
+				"botbuilder-choices": "^4.0.0-m1.7",
+				"@microsoft/recognizers-text-suite": "^1.0.0-rc.32.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-1T/h7+ARpkWanjmhxri0FAM2YrW034GaLHgQQYep2wlNNrM/ACmiXNzlQrbUhvNKsuAehWLmwkrZutrPUO/AWg==",
+				"shasum": "2e3d9bd0f23f4511a46963eb37b7bf706377ba8e",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m1.7.tgz",
+				"fileCount": 53,
+				"unpackedSize": 159049
+			}
+		},
+		"4.0.0-m1.10": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m1.10",
+			"dependencies": {
+				"botbuilder": "4.0.0-m1.10",
+				"botbuilder-choices": "4.0.0-m1.10",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-k6pqBgiFMQKZQIVq5g9qe/aoYgmZh/bop8sLA1C5PnY9eL23LJCw6Pe8qhO7h56wQPc3H38zGWiqUuzQbDFfrA==",
+				"shasum": "9317a16fd6aa74f5a857fd6f85dce146b8d4a2d6",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m1.10.tgz",
+				"fileCount": 53,
+				"unpackedSize": 158636
+			}
+		},
+		"4.0.0-m1.11": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m1.11",
+			"dependencies": {
+				"botbuilder": "4.0.0-m1.10",
+				"botbuilder-choices": "4.0.0-m1.10",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-cXPrE6CKY5nXg65uNdjOXnf58JwvOcrqg0N/ApWxUJhZ8bbAtPdebbVrhJDlQhjzs+7iA8GaiZgdJi98cdRuhg==",
+				"shasum": "7ee61b01a702e187a480baeb8dfd1bc28f58c346",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m1.11.tgz",
+				"fileCount": 53,
+				"unpackedSize": 158540
+			}
+		},
+		"4.0.0-m2.1": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m2.1",
+			"dependencies": {
+				"botbuilder": "4.0.0-m2.1",
+				"botbuilder-prompts": "4.0.0-m2.1",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"@types/node": "^9.3.0",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-hJzxBTyrSe/fX0vQwonRBkPy9SuYcDvK2iPtjwBbKsfxQhUigsoc8PuSXtT84UuLVQKhoVLx9GQhJI1q3YWYhA==",
+				"shasum": "c75928e1b5ab5610a59ff2dd16c0cc3027bf87b1",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m2.1.tgz",
+				"fileCount": 65,
+				"unpackedSize": 148476
+			}
+		},
+		"4.0.0-m2.2": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m2.2",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder": "4.0.0-m2.2",
+				"botbuilder-prompts": "4.0.0-m2.2",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-OXUsLwoby56aiCglr9FDb/YwJRoNr8pBU3GciNWUq4nZ5KxMOpt3Fwpdea7KnV7B9DuntfjHY4dizmT4iR///g==",
+				"shasum": "f838c033f6681b55a38c2b502ad653484823bf22",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m2.2.tgz",
+				"fileCount": 65,
+				"unpackedSize": 148476
+			}
+		},
+		"4.0.0-m3.0": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m3.0",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder": "4.0.0-m3.0",
+				"botbuilder-prompts": "4.0.0-m3.0",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-btd5q61EDvZkfRc9Ds5oCB3M609an1T6TUw9RjlHti8ztuD116H1F8NTUUk6a1PwROfzGIFOGUEMl9LR86Wy6w==",
+				"shasum": "5136b4b783d28d9fd62b52fae926f7a8d3e5f6d9",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m3.0.tgz",
+				"fileCount": 75,
+				"unpackedSize": 212800
+			}
+		},
+		"4.0.0-m4.0": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m4.0",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder": "4.0.0-m4.0",
+				"botbuilder-prompts": "4.0.0-m4.0",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-4lRH2e1YN4x4QKIzA8XmNsue/rBKYxUKU2P2Zi+6cjuOt3OsN/+US3AAdI9fNoAbr1cDfyACStTYe/tF/ZS9+Q==",
+				"shasum": "d02a2657fe61c3b5dc5c0b03048ab05218613fe6",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m4.0.tgz",
+				"fileCount": 73,
+				"unpackedSize": 327496,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa4kLpCRA9TVsSAnZWagAASwoP/085OHKPGKUfStGIuNZC\nqmm1oFztqLlcyP7pxlZIy5LL+IReU98JWABr5qxdfgEfaOJqd83jLkGOZB2/\nyl7uMH0ZVJbwss01snzDR4EKVAQQvX1OphqVWP0mWf6hpDZsVzHdfSqyvlaY\nEZnWeztgPM0WfP6m75DSPtLqRxgAd0GeFB0ylECMW27aSEJQz/xeGyvCaf7c\nrg+snBaXKnjnZ3SuSmvKG2iRlvlHL/b0hYEzmGqCfT/HRimbk6wEqSHMChUy\n+pbkt/8DlasFx+pXk+slCXfmcedCzA1RfdE9r9/qWRfvSeLjuR4wOPjc/YBJ\nzE+2cfdYpuerTEZ/KWg2gQRQPW+WWyQfYeehI5bGfIISH/b35/1NfSZRudGL\nViySLC3v7EwXESqQEoiI93BrguQP12MLoOuhjDPAdAeFJcpkzhfq78szIJ31\nYpZXHxLupBb7e9AzOZlhumAuwNKM5WJz4R1W7ZY+2u2sT9I3Ud+qCHI0J7DC\nmU/CBupmSJoEQr26vwX+OwvtNIMcwOcNqA3KgaETpgkCnh4iq5SZsFzg7QjK\nKlvxFkVFD+KGmVm9fPUa5nnKVV1YG3K8yRUo2votNdPFB5Apqpn8yyc/BZgW\nyPHxsgqUiV/JAjsq/a97rX5qzjnGAoAeyx8escm2VDms1j7pLzegYhiZ5ayt\n4fg5\r\n=BNNM\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-m4.1": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m4.1",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder": "4.0.0-m4.1",
+				"botbuilder-prompts": "4.0.0-m4.1",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-g0kV3yA5l4YKnev9UiQE6GrmZJTjqIrbljvf/BklehPsxWt0ki/n9ZO1uu3PuTV+uR1K4SVQYfcEQT84rrg5PQ==",
+				"shasum": "5b479bfffd08d6fc0114e00c259ae9e71418ca79",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m4.1.tgz",
+				"fileCount": 73,
+				"unpackedSize": 286105,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa47d/CRA9TVsSAnZWagAAeU8P/0f36a+sS6hcAMq4Atxy\n0mxbD/vj6Be/bN9kEdrDgs/YS9hNYup7cbUXtNmRQyXqgcxbWxY+Xpa8pmQY\n0B8hS3+hJ2s2PaMCzINTK9236ss0AY73B5EYr2+QqzQINErzjWQDdIeV482A\n3AXK5ytlYc70XiTeKTO83YaFgEMsssOisuspwTpd95i5/6ZPbgeZhnFs+1QW\nkDxPpiD1vPOcnhhRhXf38eZq9bb+xD33qgFupIs+MOz8FACOe/MaHsjKWaXY\nZE/CU6LJQ8IsGKMhADQHYxROwmDGwzSRTB/F/2sQgWYAMuKB2Qw/CG7n3iKz\n3EK43ANoNlDx3FPkLXC8aN2UyD9KhMDFyOTViSilhAkEqJN0gPeE/41/trUQ\nz6eigl2oxezfRceTXBEpKmF50lWsX14nW1ARSyDbexqHoY8keqyEKEHXF/Qf\nIyd60RQRt4TI5Y30yUk0xB0b3bmL6MLn7W173/QM4dS5Ir0BsSarb2+Ue/RU\nRHuNXqSSpnxIPnioDZNShBHEnsu27SDUwpsTAY1On0O0gCaEM+5/9eXaMsy1\nNn6qfzmd/U7OIhYDBVqbTsFqSBUHUlhSpHgy1mblyWxkUiWDpYiEu0j6yJfj\naqlODWFtUk0u6SazItyzEwe+yuHveYP2wX5SDxmX96QwQuoPuim6JgQ00ueD\nFYA/\r\n=sKdU\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-m4.2": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-m4.2",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder": "4.0.0-m4.2",
+				"botbuilder-prompts": "4.0.0-m4.2",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-xrdSoxEHqswkK2q+hiEV6F4d7G2dtA0IyxJphv3Jy2HLz7gKo+E7n5iVmgo8WN9/qRoOlQWv15p2xWSO4kIsYA==",
+				"shasum": "c132497622f291a4208a1b448db9d72f7d4edfb0",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-m4.2.tgz",
+				"fileCount": 73,
+				"unpackedSize": 286105,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa6RzWCRA9TVsSAnZWagAA09MQAItYGrV+WskKR06OOBEy\nedYuKIyomRC/oLadQZonvupySah1wlBfaYB2+4L2sMmfm0gu46Jg679ADu7X\nSnyQoEG7NLNWWVpYHTALm6Jr0fG7uXeH5pyeuv5XBE9e5wpYnfcDlbURgglC\nrUgcS5sRKRJd3SW8bnu4+7V5Cuod1BxeT+366pWUcmFW27xU1xiR67uo1UZh\nSqZSd5vNxMIJ06/N0F+CKgjLOyBIwZfelSh2wkDbNMexBos5qwPT/8x0GoSY\nlgpZLuINXpiBqqL2vv3d3UkbgnoTfUjqC3HalVhbjwnsGC7vZ/A3DzMNCdZg\nN6xkPLjOeGZBl3gnSAkl6ITaKrt5WaJ2tXiIQIgvqDTsOMVHicyHK9m1az+l\np8IsKPrDeklivA3sYeG3I7iP3n9NUlJtZTZWhYs3KkVPJgAD09ZOGYfl+igV\n/nZkGLU1dH1QJ8BxOT0G7blmEdLwe5bHDnBXeZSZeMh3aRrtlbE65zFBi5yy\n65E6Do918wbVz0i5wzAYE1nG1qRqq7Bk8DvYXzSVUgVkEOPi9LGkWVXLXxUR\ndHHmGUBn7WVna9v6BrdjaJ4RoT15FZjAfJThlZHXVhqNiige7SjidGWjosfZ\nFpKafA6+/Qz05WoMQIz1cuwB1zi/T6vA47Oi4TjkH+ZZ72pcoaWZDIfRzqbZ\nbuYY\r\n=BjXv\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-preview1.0": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-preview1.0",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder": "4.0.0-preview1.0",
+				"botbuilder-prompts": "4.0.0-preview1.0",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-XYhDSAw4opvsXA2M3a8jwZ1rPlWSJja5NZklOY/8eTi6sCPobIvtMB8jNkYhbAowHel0S2eGH8U4O4509rH5ig==",
+				"shasum": "0f56994a218b06ce18aab69b7302db37c5c1d0a1",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-preview1.0.tgz",
+				"fileCount": 73,
+				"unpackedSize": 303716,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa68hhCRA9TVsSAnZWagAAd60QAJ4/Li0zyFem02HCvNm6\nZLWzO0M9SYvPMhkaDUUDSjlji10gfiaHH9Cl6+QK4l8GwHGayVbaUZivPwLc\nl5vVDIf2qT5WtNv2HgjZRVGXuwmUCXVD/Ra1UPZU/7q0G7tZtcPEOAqq6LYD\n4e+W3JFXysPNiRXZBpXYuIsqhLwqR9MUQxHJJLWMKuX1UtAZ9hotbk0+7Blt\nyGnMaLbOLCcBL1TlVW8nT7Ol9wefARQBNSToc76Xhm9kLNUn9LZnaB9HjPwe\n+3UmREUPCwMzAT79da6fYzW0gbVkxsmuWThhYrOKzZl9Vd6x5yHjw1dOgtVV\n4YbfX5kFpM3oAQvpSPB+Y1eUTjeYK1gslQVgfua9ysnsx/SYTkjWT6QNmGtH\nKbg0tSwbX/9kYNYuMWs+3wgkSv69L+SzKmNmFs85J3lykZe/L1DpfeVWboA/\n/gZKNspjUJJ8CTQVGTc15gboARnSV9YPNiyAT1GNUjex1Xz3xYRu/aW621rx\nN188Gb130Mnzo39M44bTQIesLo24/Gg0TtW6syJgloKBSAfmR1m1WlBrs6Ku\nCuGcY/s4N5Q1l4H3iO4pE9xup1BcURci+8q8psBAmeY2mh138kErjQZymNxB\nDNhqd4GgwxugrRGdA/9Nx3CXIYLQl3UVT7vB1FYtaRHQ0VPTkapKUH8ka/Wl\npvIj\r\n=Wtnp\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-preview1.1": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-preview1.1",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder": "4.0.0-preview1.1",
+				"botbuilder-prompts": "4.0.0-preview1.1",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-TCG74piN5j3QOo+E82Ptmlk1JcuSuFUNiC06EN4dAPJ1EWF+BPtHVABaDVJb+gOM7MUdeMbb2xIN90/w4+xFUQ==",
+				"shasum": "ec44b6c418fa76d01a71bdfe035c67ea20cd855b",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-preview1.1.tgz",
+				"fileCount": 73,
+				"unpackedSize": 304214,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa7Qg7CRA9TVsSAnZWagAAxxcQAIMuCmwrHoGYfHHbrnFc\nFIjlYrwe/4TsTgXJPizpzG3NOhuNnO/g2OT+2kAGE4p6Hwkd4RpMFLgdonHi\nE+SA++3pK5gke7Ptpy5fGZCatQYupCOjlWEmEZWj/E98Cri+AKh/bdaIkQV0\nIioyhkneBD0PA+ajSy9o4ynbcRm4/hPhJLHot1pDVUl2HvzxXj2Efbiu8dAO\ngHKdN9ePbQJwimM6a9n2QRx85X+xbbsKG3v9jTqu/UpgSWNaEC9bAai1/Psc\nUddnCWal2h24Ppex8qprorX2DHKJ/wxt+IoCiTCKRi1s0t+qIRICiFCmepmM\nRpZKUJDDMS+KykcVAQaO27OECtpGp7V/2qZjwojVzIgyTmu8dLzApg5XApF2\nJFo09im6d2OT2PZb3UiLGrxf99aAHUAFxxkCSqmW8qLs6ovq26CQ30OR7a4l\nwpz2E4WLCk4YmQOgkg44znjlDRSOjTNcUAvkrGnSIO1vk8FmxJaPYaPyqRhe\nZ8xRV4T7HTYFXXwxpGKndJg0MVilOp+doJ2wnHfy8U22/m0Gnb7BaDXQcvCk\nWpHACCkO3JLjFWUVfIbGX3MXA9hjI/0SqY0/gWBMwB6nz5iabeW4SWdLpSOk\nn9jC57aKsPZYIa3mIEs6N5Wg651Fu4nKVgKQMo3zMCd3XYrNFqBigpQyT07e\nQCnB\r\n=BXSm\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.0-preview1.2": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.0-preview1.2",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder": "4.0.0-preview1.2",
+				"botbuilder-prompts": "4.0.0-preview1.2",
+				"@microsoft/recognizers-text-suite": "^1.0.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-siBWFtyvojX84qtg9JLT867efmENuZQeh/iJh8glMcAdHIcgTZXUse22mWHOTEDJHLc/N7eKXBAx68ezCR6Prw==",
+				"shasum": "36a5167c9c5759a55a16e5e980e939434b4502a2",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.0-preview1.2.tgz",
+				"fileCount": 74,
+				"unpackedSize": 305171,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa78c/CRA9TVsSAnZWagAAL68QAJ0IP7i3LuOfXIetJph/\nvnei2ZF/qjONreFt8jZfidrehwaC0Hos7yJWTWdG5PwsozCO+GzMwSFN4uJK\nL+jyBz04Zsv9ZHcobZQcVY+7GaBcnyZldCiCpks1miGOZ6z/kMs46hoLyiGn\nXGGjOEGbjkCAjJsNxDtv/4v8ukQx/mwg/MmfCcRuVdaZY6tjdR61EKdM3EdR\nE1bfLVc3nkIPfsghAvODqrBZL7PElWBVsND75iYy8wZxDulCUjWk4FFe7Ihr\niscd6RqvrY+twLW220WmBnAqOv+7SA8rIchYKRd97amXk6E+kGLsbaNrD+tF\n9GLhTj+4qYilbWi245W8HmvvUPto1y11wigxDLxEomlXL89JDhYCAkeMQwZH\n0K4golGTeJHpkRprtXvkmFhQLkmeoLrzCG7uyl9VIzriLXUCAPPL2q1RfUGE\nftNR+vFnaiGDIeZItCw854CbAR/mY+S7rLZQgb98zKpj6A2t0kKlrx644Sa5\nnvMX+ruqOeDOcCdHfIj8r6DXv2RyP0FBA0kyGeq/1yDuntloEO7PYCg90ts0\neJD582/GeRkMLVEBru/CRtNyeuegfULUXGHGMjlFsTfzuoTevhQUmbR6Yrtp\nv6ArCJA+wshvP68TVrAGQZ8KDg2ub0Z2Yn1by67sxINZnpQO8BtB7wrPIyoY\ntiH5\r\n=m1xR\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.6": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.6",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder-core": "^4.0.6",
+				"@microsoft/recognizers-text-suite": "1.0.1",
+				"@microsoft/recognizers-text-choice": "1.0.1",
+				"@microsoft/recognizers-text-number": "1.0.1",
+				"@microsoft/recognizers-text-date-time": "1.0.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "4ce08a9e74cb521c80546333a59a9f8165414c91",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.6.tgz",
+				"integrity": "sha512-eTK15Dw4jo4FBT1AACMkDfwUhKoWssLmYSfqMbMy1zJIOSFfrWKaoTr9JUpygho0naPZPXEZGo3ymAv/jQGw9g==",
+				"fileCount": 120,
+				"unpackedSize": 484209,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbpY/CCRA9TVsSAnZWagAA6FsP/RZB6eYbppYOa+HDtfQC\nELKlEhpBVed35phDCLAHPtsHEJSdU9/nnWRqVC++YtdAP4aG0x7KnKeVHNK8\nfcnkmdMV8B1WFszJ9ILcrABIAtV+Re2opPt7MmPqiCpVzfnZhPfb/jaJ0UJG\ntmKjLO4Uh3SQpIvf4d6WB5Lx4Ew5vqOX4B0MQ0uJ46jCX4pD6lfdQNbY7bg7\n8LToPHDKj3egJUMz8gL3jliirUyt4EJG3I5tVkSwr37D9JWBG/ZNECgSaezw\nSvPxitWYrymf8+k5liGa0/4coILap9sfDxl2bfDwojDXPS4Bemlsp7qBXSi0\noyzjZtG0BGUIHVQoLUZV6RA/jytbl9ylXJ1AEdqOVgvJdEJBWnrHdugHh3NP\n+TIR2jMbyZWZPo+bfS0uicYDIJVy0qsyATRd9KvqVFgM6yWCQZKCN0tOu9ie\nAqWDT/iArAWDNzBg53LhQz7Vey9Oopa2VDQBpXacFZO46mkEZKJM2cdozddK\nIowWFk6zv+mXYt8Rnz3n4mOdApcB8Sv7aGkMbfXpnNX/LioErkkjEWO6oZjm\nGCmcEUS1Wh4qVi3C6j5z3hmyX6x8phUU6jw6wYOLE+1ALBOSzaZ1Wp80xKxX\nhV5OrYmbL626ZruulsbL4w6fv7YEK2/a0IGt8nVdPT1NVRVuzPeTYan5ixwh\nRUqH\r\n=zg7z\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.0.8": {
+			"name": "botbuilder-dialogs",
+			"version": "4.0.8",
+			"dependencies": {
+				"@types/node": "^9.3.0",
+				"botbuilder-core": "^4.0.8",
+				"@microsoft/recognizers-text-suite": "1.0.1",
+				"@microsoft/recognizers-text-choice": "1.0.1",
+				"@microsoft/recognizers-text-number": "1.0.1",
+				"@microsoft/recognizers-text-date-time": "1.0.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.0.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "751b3cc687e1a4f1b54bb64d139320a2a99caf5e",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.0.8.tgz",
+				"integrity": "sha512-KipRujmBPW4RHnzR02XLx4D/nKNLaCa0/Dx3nc8OQxH3h2ZNEGpdEaXqeylr7kBnUoq98oU4MXsVdtOtzHAVUA==",
+				"fileCount": 120,
+				"unpackedSize": 484209,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbxjtyCRA9TVsSAnZWagAAxhIP/R3Fg/F84WdzzuGBbt7b\nThqz9cLJummqzrzrNgkBKnEmoIWsvVarRSsI/LBCGEp2yRjrzedIb1PpYVf8\nX0nD767BLWvpA9gZWuwihHNV2NXNtDeDEM/0tb5BNSuJJR8kTHhpG+aSgtv3\nYwJnppkpGLBDyKrA9BAwJRWsiXn6/Ju3w9czgtdjg/CTSlvorbVXBT6nzi+o\nnNzGEToyZJzC+4R0x0WXoVichUY+xeI5P7E+P7VNbHn5n6rfOQrvk0rcx+yE\ngFX6aQQCDEjbHmaay4sm7eL84Rm87FHfqi7o9u4pjC4YdLc8oOiALv4xH/eZ\n+H/jPR60Z2saKkv1HbbYwv//U2gO9j6guXiUFtVFytpzYClQYH7UBJZ28by0\n0hiOE/jnn3c16Lr2pnrxro5yq+Lo8ih1NTQkDZyII+PoQQXtpzMRZhgsgQQE\nrVdr9UlfuhyS+T5hfUQA+9DgHHH0dBoj/7SGryUCEg8kBKWnoaAuUDJb/YhP\nWJWAOL4AJ7THSJE8vSild3KLXOMypAWqceS9SAQ/DHpwlPqM52CVF0jL8l55\n5WT+COW5bDwnQw++PrhWjYxbxpdgeRQj8H+bz/UsDeumoSanQJR/dvKc/p2i\ntO4PFah5AxmDpkMxaWFaJ5xUOxqhuXN4u2z2qrtcZZcmujEe6FdCXdvg8PZ0\n9Js1\r\n=VhmC\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.3": {
+			"name": "botbuilder-dialogs",
+			"version": "4.1.3",
+			"dependencies": {
+				"@microsoft/recognizers-text-choice": "1.1.2",
+				"@microsoft/recognizers-text-date-time": "1.1.2",
+				"@microsoft/recognizers-text-number": "1.1.2",
+				"@microsoft/recognizers-text-suite": "1.1.2",
+				"@types/node": "^9.3.0",
+				"botbuilder-core": "^4.1.3"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "eacb870598b35ac3f016748e561e1f30f0ea92cc",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.1.3.tgz",
+				"integrity": "sha512-00WfJ3rYRsMj5plRNkloMgFKH7O78jCvK6AucuqyGkDS/R9irkQaZMNHBZBtyE5QGQD23f8p5ijeUR7z+J1TuA==",
+				"fileCount": 121,
+				"unpackedSize": 556380,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb2eyLCRA9TVsSAnZWagAAK74P/19f2nViZyUoAZUPRZDk\nQQeY8ByNw2NrFhAwiEaJlnenZEdsZvQ5z/AxuvL5/N0t9fDPDiZfRlwCOVBm\nO7T3mv83WTgFLqDV6lkQ32MR0G0W0fIOHcr6eo2+GgxE26wmXCdlAsRK0XKg\n4lyefPLUvKmo8lh3Vox7jcjo4ygPEwyWisnuDLFWkhn6gLhZkf8pf95GGBuP\n9JYDrVSzG+mrpLMciI+iWrVQCmeiLFfeGbmKHthJRftknrQam67Wor7qR+40\nFSVMHSLwwV+FA2GS8082TphZnmoBnx0BYFxiSaY9yTL7BO2WCjAf2lZPIEBn\nkDEhd80p3g5MweDa+tfWOuoh1lexwuMGq35LzLeUQohYWZU8/UaCtbnzIaWe\nrXHSO7GpEj0djq8LcJaqVyLY9r5brCgAS42d5sxwyo9h3vpPOsgdByMYzwTu\nyPjfXSa+cUt5hIzXgVEn1yLmSsjDl9ngPWImaWQDcszgz8EdgMCBp5bf8Ro2\nb4Q2Zvl87wt8OYe6+IAQD213SLtEIGosmwXUZTLpijgbQAtSVgeDW/E3Ihsq\niGLI/SDY3Orxzu1PrqK636qf4Wu3W0SLfaHEpiDMkGfiydjy2NaIX/aMiUEO\noyrEmP/bB5ORLJMILNK+XCvnGinplgYqheYzmrIexvBYXD/a4Djy9tFxhLr8\nVrtd\r\n=+MHq\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.5": {
+			"name": "botbuilder-dialogs",
+			"version": "4.1.5",
+			"dependencies": {
+				"@microsoft/recognizers-text-choice": "1.1.2",
+				"@microsoft/recognizers-text-date-time": "1.1.2",
+				"@microsoft/recognizers-text-number": "1.1.2",
+				"@microsoft/recognizers-text-suite": "1.1.2",
+				"@types/node": "^9.3.0",
+				"botbuilder-core": "^4.1.5"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "c4b90ced0504fb7183acd89b1838c49fdc879f52",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.1.5.tgz",
+				"integrity": "sha512-tLBe+clYg6VWsarR3a6NOzK8RqjJ3mXA4IBsQNSiqxIbEu/jjQTZ8OoZceye5rWfa67cbm2aihShqFB5WZX3nA==",
+				"fileCount": 121,
+				"unpackedSize": 556448,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb4NfdCRA9TVsSAnZWagAAcikP/2Kv7/xgJznzkTwCfGMC\n4HhB+ifqnH1knE0BgM5W/hp5s30yd+cqVR7uFZVpn0c+6v07F4lYcD7WxhuY\nyFW+ZjJ0YbAh2AOGzDOVAmxd+FCJ3goibw7JcZicb6nAov8ee8Gttv4OfU3d\nJPxPyHK6s+BE/YKxySNXIZX0IP2yPmaYDhs4sSu56s23FrVTOzl/yHjhCvl8\ncGaBuHWrVzoOebK8nYv2nk0X+Wqrtn+3onc1jb6ZtPvw2DST6LATqjmoKC6B\nZk9ypOwduaKmBHZrNU/57vgqOzrvPQKI5B9ql8zcy5QR2h/7nHGjgDv35Saj\nOJ5n+hZXDq3GI1MaeR2roYRNBy9tZvp5eeq8DSehS2XZbvMuj10M0irUNp2+\nc5k9F4vBhAfs/BxUnQWdUGTUZUqCvVIgALN9KQsOWOW3bt7anFhO4UBKCelx\ngSbo+N7IiNkVA/ytwEGI2c39ULDQlDwqAkQrxUL/3nkpthq5supfBpunWNVn\n44N91RDeGWJW09VgPRWIrUxvDGfseXaGZpzt3ERQCu5GODMpJJYGQ7IS6LnZ\nlQ3z1gqLy0dtdU+2DTZD0LTfqP6GvvuUEn6jSgTzp/6fG+e06KXCJsW1kdOK\nBpYEzVPOLp/D2u/D9IUid362Mnk8oVTQQZKMflrcXV4xkokIsq9iLoypXwIC\nBkvu\r\n=wdkC\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.6": {
+			"name": "botbuilder-dialogs",
+			"version": "4.1.6",
+			"dependencies": {
+				"@microsoft/recognizers-text-choice": "1.1.2",
+				"@microsoft/recognizers-text-date-time": "1.1.2",
+				"@microsoft/recognizers-text-number": "1.1.2",
+				"@microsoft/recognizers-text-suite": "1.1.2",
+				"@types/node": "^9.3.0",
+				"botbuilder-core": "^4.1.6"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "9475ec2208a52611510d8531670f1aa37830c2b5",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.1.6.tgz",
+				"integrity": "sha512-qgAZAKQ8jnxIF6Ny2Qb5QRjdskkvFFezotpbofQCQu24MF8d74vvehIFH1PU1poVHDTG7EYTu969ARwdf5qcaw==",
+				"fileCount": 121,
+				"unpackedSize": 556448,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb8Ju2CRA9TVsSAnZWagAA7dQP/AglXEt4sBUPGr9Wnq8R\nTqVTe+xjvCVybJbL6tBVyWfpI3VQGtsA1VSnRbg6TRjKe5AMiBjrsGjkcJvb\n6LpV8PXsfw58mmYHHvLbPIIF2n0bGOiorTdqubtQJ/Bf8rAVnJAtmUIwxIJf\nSYXBPxx2Y2ABu1L8v3MoQ1GkCze+DfxpPvG+O/lf20pJUgxDBxmaN7YC97bL\nJwF+e+d4BsHwrm2gcMprWhGL00XAKRgotQ0eZDGtpq3Ztq9jA9c1YItjCWLA\nRfs4e8tgugF8KiaGoVz8+wDkexdoMo9v+KM2GSUiWCDKIOJT+AMxMzthSzyr\nA8ItywkguUBYW18x0bYTrMSw79SZ8A5i3b/zqVAZBVLg+N77ZpDlJt+xZJZl\nogOhJMCLrCa7qdXklP30VbvD49sfdIirfKC+ylDvmg6WlkYVZmnisY2s6oxI\n0QAIH7JU+7u4V2w/yiau907FCH9+Cxs/Q3N7wCquIa+Jw0jl+SiHoUBVNWmm\n6rfn6CTd1crA6vOSdZ/0yWXBLrmS+CteRSf/6fgTKiJ59dnz2Tan8q5NkKvW\n50NsqdJZUrIaKCa4sql1rq92AELB/Q2RZRVeEFCh76P55ebao8K6OFx99uh9\no8K1eKTfexgnUyC185me7ykN4QV1u6h1P00uhOhTDAIskzq7GJ0E+FqnAAts\nl81W\r\n=yB7G\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.1.7": {
+			"name": "botbuilder-dialogs",
+			"version": "4.1.7",
+			"dependencies": {
+				"@microsoft/recognizers-text-choice": "1.1.2",
+				"@microsoft/recognizers-text-date-time": "1.1.2",
+				"@microsoft/recognizers-text-number": "1.1.2",
+				"@microsoft/recognizers-text-suite": "1.1.2",
+				"@types/node": "^9.3.0",
+				"botbuilder-core": "^4.1.7"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "3a687c9cd29c347fd2fa5de5743988cb46b6997c",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.1.7.tgz",
+				"integrity": "sha512-XDR6HT5xJFMrepT5TOjuvDIz0/jpuemi4hGNjW7a0klucfXroSB3yFvg6aVinbjVE5uAejnEwoRAXevFZRg+RQ==",
+				"fileCount": 121,
+				"unpackedSize": 556448,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJb/H9gCRA9TVsSAnZWagAADE8P+gNUmNLHR6f5DMLljLKQ\nzDyhmbDZgPIQ7SB+SSYPCxiEbEPm+2twKk9SAwvF+HYwmu0TrIRUt/wMYf+P\nNSiB29fv4Np3WKRrOqzonKrK1yNLzTqtUDHtPWr3hUeiRqoTiVk9MG9sO5nx\nJN7cKGsCMmq3uq+45d49P/6SAvdRmqnh/Wtu5wBsGsNsEWSAMeO3HlSNU/OI\nWY6rvaNkQSwH8kSgjoV9EDoWmY/E1mQbphgW3gRAe2Bfl59xiYzRmnaMVETD\n1W4dA6VIHgxAS+TzjwSJhEUwGN+Tfk9h3PntQNYSPwPmHOvPWeomAM7j2wtl\n3jzf+8McYI1TUjXtjYVk+2JTYUqI9a+Qmm2bJwCFg6wB6RB5cC34yxTXjjcD\nLamspiTNrJx5Ih8sHttmf/GSPV7hFwo9iCPRgmqQLHJgAVmHQ0yiD0ht41Gy\n+kb4XJ4EDOjr35GbcSZzj5bzWcQmU5ac07b/RjFrkz6nJNqxdVly5QoENHxU\neWzBf7iqX3TUl2DMfiqDGqAgst8Yfr3e4wsQ36Jn7PEOefIKNXA/MKxtedva\nvKuIjfpxzOncP7pEgc1nW4a6LR4HifuDo/QU6PY1COj1gexK73Lod5jnfAxS\nwX7RpEmzTvhKZ1dkji9yrIKu1vj9n6zHivZB2MzIEKpGG+eJlwivz4wvTSJr\nCdpV\r\n=Wh8h\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.2.0": {
+			"name": "botbuilder-dialogs",
+			"version": "4.2.0",
+			"dependencies": {
+				"@microsoft/recognizers-text-choice": "1.1.2",
+				"@microsoft/recognizers-text-date-time": "1.1.2",
+				"@microsoft/recognizers-text-number": "1.1.2",
+				"@microsoft/recognizers-text-suite": "1.1.2",
+				"@types/node": "^9.3.0",
+				"botbuilder-core": "^4.2.0"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "4cf6f64250e8f76948059b1ce2df1d3d707d7bec",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.2.0.tgz",
+				"integrity": "sha512-wi7Vk/mRHqsjNVhCbXK6yoYsQ7uS7EySM+bcDRthw5uDQ9LyHHoRg3wzT+mqbfjzwgpKR/TXxPUDM4nDL8Hz+Q==",
+				"fileCount": 121,
+				"unpackedSize": 577440,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcEBD4CRA9TVsSAnZWagAALkUP/2hRRlpoTDdHw7Chuesp\nsBO/B5bEFBqlp2g+3hgKgaE2tFQUGn9JfBEKFNS+rVFFY7YpA/QQvqYtVDzr\nzazOP7UPIifAMvpqa+E6DQqG2jDxAGnU4ZagudwqMZCYSm397YqgYebIbYzW\n4ZlmRpGrkQCBEB7zLP30SzoWF+zfufB2kh3ydSveYuRAxYLyreGE1Cble5z8\nLSVkWtw02OiEo7Sqoy/YCEQI8SY8na1NJjBI3NM40WV7Id9rusOiA+LEN4sk\nnH5CyeSMBkWlAO2Z8w6MTpm8csiRNBtTx2x7WH3Uk27TX7+6Tl1io36rAnD4\niqv2BasLJnXgMPDBhiL635KdjIgwvk6BJT4D4hTeoFbK2wT9vV3UzkQhaVsh\nHUR0QhTVNauPtRBY/RDRHMOMcIMM1wC7BvbEmlVOLqwYGaEp29p/xlZmiXca\nPbBmvMV9fNgX3HYBQrxrFjwfLBirsonZIhQcfKMD0wh1mD+RnFYTWUTDYSxi\nSy1GB9EEZgDdH/LL3XTMI5Tn6SLZe7fEKtYI4cEFWOanAd0ZDszcj34h47Oh\nvtQgaNarX+jQa+7uLNcy1dqAH1IoprNrUl+aSoavKzgnBxZnfELV2ooB3r+Y\ncayjxrGXq5T1tHk3pWKkgzkRLkg6rjZ4Sl4XR07Jds/lsdWn66xaRTSbERV3\nMrpH\r\n=ZaWG\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"4.2.1": {
+			"name": "botbuilder-dialogs",
+			"version": "4.2.1",
+			"dependencies": {
+				"@microsoft/recognizers-text-choice": "1.1.2",
+				"@microsoft/recognizers-text-date-time": "1.1.2",
+				"@microsoft/recognizers-text-number": "1.1.2",
+				"@microsoft/recognizers-text-suite": "1.1.2",
+				"@types/node": "^9.3.0",
+				"botbuilder-core": "^4.2.1"
+			},
+			"devDependencies": {
+				"@types/mocha": "^2.2.47",
+				"codelyzer": "^4.1.0",
+				"mocha": "^5.2.0",
+				"nyc": "^11.4.1",
+				"source-map-support": "^0.5.3",
+				"ts-node": "^4.1.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "1adbeb277eda480aae948034d290c8f1ca140c22",
+				"tarball": "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.2.1.tgz",
+				"integrity": "sha512-QHD9WigzC7rOJT0hb9Xzs/yHs1g/MOabJey8qxlZPdnnQqK5X8KJaZEEDnRqcUmLj/ydbxnxqImLEsMD5zlGag==",
+				"fileCount": 121,
+				"unpackedSize": 577435,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcVNwvCRA9TVsSAnZWagAASzwQAJNPLF8fDAWbjMeCGg52\ny2qhp1/NkYbT8d4uuLDxx72g9zAc6HQemzjY9G3yrJa5+6J0NNy19KvN/O3I\nqgfESTCnH0dAOBx24+AuaaDTexW70Gr1DsycWJWUD9y+Kq9eJAW/UPpEhutO\nhSHEuz8LBvZ1O/2yhTeHNoq1EdKQn8xcmN2ywYxMtWC0PaDWdiagatHjiYlS\nTBdBJjq909j3yRDGShPodOTmZ7BVfMI/C0uQNTa9uDtUyTLSdK7qLKJ8aqU5\nBfuSlguRBq/6kKxBo2kjjVHmq/xzPeEbJvIehqOgI1C9pufE+crp5CWl9pRQ\ntlBwx53JtTKqGKCqzU14NWuw0TIN4pNcBO8hKdpS/RicYh5LCYeNbog/ndoV\nW8CIJnT0pltsdrENZy4HD5NdCtEirvOD+GfQG+DdX/dGTuH0kfgRC5f15Idj\nAfl8Zp+GaLRH+IQ1pZoMUpV+0HGbRORKAOcpwMxykdL/lvEP1TCJ1NRiyUtl\n1YhSnijD08YbdrZTKajGhrQovKoiZxkE8HNRyNH2ltdFuxok8eC6R9LzHvBj\noAis6NGSvOOcYE/Du2PfabtgwFb4WX6EgWZe8AB0gUksUGrtiorfyoCooKQG\n/4lZFukayeUWquTDefaN5K9OarrfHVloCqiGLdBeufI6VOFwzn8pxd2s13WD\nc//g\r\n=+yol\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		}
+	},
+	"name": "botbuilder-dialogs",
+	"dist-tags": {
+		"preview": "4.0.0-preview1.2",
+		"latest": "4.2.1"
+	},
+	"modified": "2019-02-01T23:54:25.048Z",
+	"cachedAt": 1551462411602
+}

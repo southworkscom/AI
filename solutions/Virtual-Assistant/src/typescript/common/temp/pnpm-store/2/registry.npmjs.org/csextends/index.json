@@ -1,0 +1,115 @@
+{
+	"versions": {
+		"1.0.2": {
+			"name": "csextends",
+			"version": "1.0.2",
+			"devDependencies": {
+				"coffee-script": "~1.7.1",
+				"joe": "~1.5.0",
+				"joe-reporter-console": "~1.2.1",
+				"chai": "~1.9.1",
+				"projectz": "~0.3.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "c6ab1144c76f76cdbb110f8febb93bf28942a4cf",
+				"tarball": "https://registry.npmjs.org/csextends/-/csextends-1.0.2.tgz"
+			}
+		},
+		"1.0.3": {
+			"name": "csextends",
+			"version": "1.0.3",
+			"devDependencies": {
+				"coffee-script": "~1.7.1",
+				"joe": "~1.5.0",
+				"joe-reporter-console": "~1.2.1",
+				"chai": "~1.9.1",
+				"projectz": "~0.3.11"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "df41407bfddb1837ecc2dd28587725d6af9550f8",
+				"tarball": "https://registry.npmjs.org/csextends/-/csextends-1.0.3.tgz"
+			}
+		},
+		"1.1.0": {
+			"name": "csextends",
+			"version": "1.1.0",
+			"dependencies": {},
+			"devDependencies": {
+				"assert-helpers": "^4.5.0",
+				"chai": "~1.9.1",
+				"coffee-script": "^1.12.5",
+				"coffeelint": "^1.16.0",
+				"joe": "^2.0.2",
+				"joe-reporter-console": "^2.0.1",
+				"projectz": "^1.4.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "a06ad8dac298325ab6794b958386d029d452e033",
+				"tarball": "https://registry.npmjs.org/csextends/-/csextends-1.1.0.tgz"
+			},
+			"engines": {
+				"node": ">=0.8"
+			}
+		},
+		"1.1.1": {
+			"name": "csextends",
+			"version": "1.1.1",
+			"dependencies": {
+				"coffee-script": "^1.12.5"
+			},
+			"devDependencies": {
+				"chai": "^3.5.0",
+				"coffeelint": "^1.16.0",
+				"joe": "^2.0.2",
+				"joe-reporter-console": "^2.0.1",
+				"projectz": "^1.4.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "cc53c1349faf7f0ae6cdf6f6c4a4d9156d3c4ec1",
+				"tarball": "https://registry.npmjs.org/csextends/-/csextends-1.1.1.tgz"
+			},
+			"engines": {
+				"node": ">=0.8"
+			}
+		},
+		"1.2.0": {
+			"name": "csextends",
+			"version": "1.2.0",
+			"dependencies": {},
+			"devDependencies": {
+				"assert-helpers": "^4.5.1",
+				"coffeescript": "^1.12.7",
+				"coffeelint": "^2.1.0",
+				"joe": "^2.0.2",
+				"joe-reporter-console": "^2.0.1",
+				"projectz": "^1.4.0"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-S/8k1bDTJIwuGgQYmsRoE+8P+ohV32WhQ0l4zqrc0XDdxOhjQQD7/wTZwCzoZX53jSX3V/qwjT+OkPTxWQcmjg==",
+				"shasum": "6374b210984b54d4495f29c99d3dd069b80543e5",
+				"tarball": "https://registry.npmjs.org/csextends/-/csextends-1.2.0.tgz",
+				"fileCount": 6,
+				"unpackedSize": 15340
+			},
+			"engines": {
+				"node": ">=0.8"
+			}
+		}
+	},
+	"name": "csextends",
+	"dist-tags": {
+		"latest": "1.2.0"
+	},
+	"modified": "2018-03-21T21:52:49.143Z",
+	"cachedAt": 1551462414369
+}

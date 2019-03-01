@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+import { BazDialog } from 'bot-solution';
 import { BotTelemetryClient, ConversationState, EndOfConversationCodes, TurnContext, UserState } from 'botbuilder';
 import { Dialog, DialogContext, DialogSet, DialogState, DialogTurnResult, TextPrompt } from 'botbuilder-dialogs';
 import { IEndpointService } from 'botframework-config';
+import { BarDialog } from './barDialog';
 import { BotServices } from './botServices';
 import { MainDialog } from './dialogs/main/mainDialog';
 import { FooDialog } from './fooDialog';
-import { BarDialog } from './barDialog';
-import { BazDialog } from 'bot-solution';
 
 /**
  * Main entry point and orchestration for bot.

@@ -1,0 +1,337 @@
+{
+	"versions": {
+		"4.0.1": {
+			"name": "cls-hooked",
+			"version": "4.0.1",
+			"dependencies": {
+				"async-hook": "^1.5.1",
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^3.5.0",
+				"mocha": "^2.5.3",
+				"sinon": "^1.17.4",
+				"sinon-chai": "^2.8.0",
+				"stack-chain": "^1.3.7",
+				"superagent": "^2.0.0",
+				"tap": "^6.2.0",
+				"tap-mocha-reporter": "0.0.25"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "7f21d93fd44e35c5d486272f605c30359cd05850",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.0.1.tgz"
+			},
+			"engines": {
+				"node": "^6.2.2"
+			}
+		},
+		"4.1.1": {
+			"name": "cls-hooked",
+			"version": "4.1.1",
+			"dependencies": {
+				"async-hook": "^1.5.1",
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^3.5.0",
+				"mocha": "^3.0.2",
+				"sinon": "^1.17.4",
+				"sinon-chai": "^2.8.0",
+				"stack-chain": "^1.3.7",
+				"superagent": "^2.0.0",
+				"tap": "^6.2.0",
+				"tap-mocha-reporter": "0.0.27"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "a98d6e48e6bac2506a0338e02a7e6e4e9f80d036",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.1.1.tgz"
+			},
+			"engines": {
+				"node": "^6.2.2"
+			}
+		},
+		"4.1.2": {
+			"name": "cls-hooked",
+			"version": "4.1.2",
+			"dependencies": {
+				"async-hook": "^1.5.1",
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^3.5.0",
+				"mocha": "^3.0.2",
+				"sinon": "^1.17.4",
+				"sinon-chai": "^2.8.0",
+				"stack-chain": "^1.3.7",
+				"superagent": "^2.0.0",
+				"tap": "^6.2.0",
+				"tap-mocha-reporter": "0.0.27"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "2b1fa29499371b2fa1c7fcb0c60f7743e60b8935",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.1.2.tgz"
+			},
+			"engines": {
+				"node": "^6.2.2"
+			}
+		},
+		"4.1.3": {
+			"name": "cls-hooked",
+			"version": "4.1.3",
+			"dependencies": {
+				"async-hook": "^1.5.2",
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^3.5.0",
+				"mocha": "^3.0.2",
+				"sinon": "^1.17.5",
+				"sinon-chai": "^2.8.0",
+				"stack-chain": "^1.3.7",
+				"superagent": "^2.2.0",
+				"tap": "^6.3.2",
+				"tap-mocha-reporter": "0.0.27"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "34a071552f7d1acb856d132af15d1bb7e393b4f5",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.1.3.tgz"
+			},
+			"engines": {
+				"node": "^6.2.2"
+			}
+		},
+		"4.1.4": {
+			"name": "cls-hooked",
+			"version": "4.1.4",
+			"dependencies": {
+				"async-hook": "^1.5.2",
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^3.5.0",
+				"mocha": "^3.0.2",
+				"sinon": "^1.17.5",
+				"sinon-chai": "^2.8.0",
+				"stack-chain": "^1.3.7",
+				"superagent": "^2.2.0",
+				"tap": "^6.3.2",
+				"tap-mocha-reporter": "0.0.27"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "b76c3cbed5cbb723894f6b70116902661cd9be48",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.1.4.tgz"
+			},
+			"engines": {
+				"node": ">=4.5.0"
+			}
+		},
+		"4.1.5": {
+			"name": "cls-hooked",
+			"version": "4.1.5",
+			"dependencies": {
+				"async-hook": "^1.7.1",
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^3.5.0",
+				"mocha": "^3.0.2",
+				"sinon": "^1.17.5",
+				"sinon-chai": "^2.8.0",
+				"stack-chain": "^1.3.7",
+				"superagent": "^2.2.0",
+				"tap": "^6.3.2",
+				"tap-mocha-reporter": "0.0.27"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "ff397a44e9e2fc727219de3c9de83be4ce96d955",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.1.5.tgz"
+			},
+			"engines": {
+				"node": "^4.7 || ^6.9.2 || ^7.3"
+			}
+		},
+		"4.1.6": {
+			"name": "cls-hooked",
+			"version": "4.1.6",
+			"dependencies": {
+				"async-hook": "^1.7.1",
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^3.5.0",
+				"mocha": "^3.0.2",
+				"sinon": "^1.17.5",
+				"sinon-chai": "^2.8.0",
+				"stack-chain": "^1.3.7",
+				"superagent": "^2.2.0",
+				"tap": "^6.3.2",
+				"tap-mocha-reporter": "0.0.27"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "508488671f631830cbf5c553724f3e4fb72dcc27",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.1.6.tgz"
+			},
+			"engines": {
+				"node": "^4.7 || ^6.9.2 || ^7.3"
+			}
+		},
+		"4.1.7": {
+			"name": "cls-hooked",
+			"version": "4.1.7",
+			"dependencies": {
+				"async-hook-jl": "^1.7.5",
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^4.0.2",
+				"mocha": "^3.0.2",
+				"sinon": "^2.3.5",
+				"sinon-chai": "^2.8.0",
+				"stack-chain": "^1.3.7",
+				"superagent": "^3.5.2",
+				"tap": "^10.6.0",
+				"tap-mocha-reporter": "^3.0.5"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "42f8efd7c0506e6abb53d10dc13a3373a1a6b249",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.1.7.tgz"
+			},
+			"engines": {
+				"node": "^4.7 || >=6.9 || >=7.3"
+			}
+		},
+		"5.0.0-alpha.1": {
+			"name": "cls-hooked",
+			"version": "5.0.0-alpha.1",
+			"dependencies": {
+				"emitter-listener": "^1.0.1"
+			},
+			"devDependencies": {
+				"chai": "^4.0.2",
+				"mocha": "^3.4.2",
+				"sinon": "^2.3.6",
+				"sinon-chai": "^2.11.0",
+				"superagent": "^3.5.2",
+				"tap": "^10.7.0",
+				"tap-mocha-reporter": "3.0.6"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-+W3b8S3O9PkR0nMO58xHENmjzlwIEqhGnccWR4ZH/JqJeVA6+FGEOJ6PzmCPzDwdVZCcU1IL+RVjVPMbIvji7Q==",
+				"shasum": "233efc4d3702b8eee6b879a339a0ae0475fe9850",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-5.0.0-alpha.1.tgz"
+			},
+			"engines": {
+				"node": "^8.1.3"
+			}
+		},
+		"4.2.0": {
+			"name": "cls-hooked",
+			"version": "4.2.0",
+			"dependencies": {
+				"async-hook-jl": "^1.7.5",
+				"emitter-listener": "^1.0.1",
+				"semver": "^5.3.0"
+			},
+			"devDependencies": {
+				"chai": "^4.1.0",
+				"mocha": "^3.4.2",
+				"sinon": "^2.3.8",
+				"sinon-chai": "^2.12.0",
+				"superagent": "^3.5.2",
+				"tap": "^10.7.0",
+				"tap-mocha-reporter": "3.0.6"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-oNPhNB2wISSSi2c+KHs/Ihlw0LM+xSb6pe64jt+vd6HqVByldfcuHbYPsflO5vlWZoasZjoAZcFW1kP7PMoUeg==",
+				"shasum": "74ef9d63a80925d60f4e6ffc715f2fd8c7fa52e8",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.2.0.tgz"
+			},
+			"engines": {
+				"node": "^4.7 || >=6.9 || >=7.3 || >=8.2.1"
+			}
+		},
+		"4.2.1": {
+			"name": "cls-hooked",
+			"version": "4.2.1",
+			"dependencies": {
+				"async-hook-jl": "^1.7.5",
+				"emitter-listener": "^1.0.1",
+				"semver": "^5.4.1"
+			},
+			"devDependencies": {
+				"chai": "^4.1.0",
+				"mocha": "^3.4.2",
+				"sinon": "^2.3.8",
+				"sinon-chai": "^2.12.0",
+				"superagent": "^3.5.2",
+				"tap": "^10.7.0",
+				"tap-mocha-reporter": "3.0.6"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-uSZ/iosP1BttSZ7ldHWUXIcYV+f/hljmG11ii3K0s2uvfno4naOS8Wvtr0L+3kji4H66YNLei/1T+q7+2EML7Q==",
+				"shasum": "02b3ade7dc9e0314f2a49d3ada4299e22f2afb1f",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.2.1.tgz"
+			},
+			"engines": {
+				"node": "^4.7 || >=6.9 || >=7.3 || >=8.2.1"
+			}
+		},
+		"4.2.2": {
+			"name": "cls-hooked",
+			"version": "4.2.2",
+			"dependencies": {
+				"async-hook-jl": "^1.7.6",
+				"emitter-listener": "^1.0.1",
+				"semver": "^5.4.1"
+			},
+			"devDependencies": {
+				"chai": "^4.1.0",
+				"mocha": "^3.4.2",
+				"sinon": "^2.3.8",
+				"sinon-chai": "^2.12.0",
+				"superagent": "^3.5.2",
+				"tap": "^10.7.0",
+				"tap-mocha-reporter": "3.0.6"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-J4Xj5f5wq/4jAvcdgoGsL3G103BtWpZrMo8NEinRltN+xpTZdI+M38pyQqhuFU/P792xkMFvnKSf+Lm81U1bxw==",
+				"shasum": "ad2e9a4092680cdaffeb2d3551da0e225eae1908",
+				"tarball": "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.2.2.tgz"
+			},
+			"engines": {
+				"node": "^4.7 || >=6.9 || >=7.3 || >=8.2.1"
+			}
+		}
+	},
+	"name": "cls-hooked",
+	"dist-tags": {
+		"latest": "4.2.2",
+		"alpha": "5.0.0-alpha.1"
+	},
+	"modified": "2017-11-26T14:33:29.717Z",
+	"cachedAt": 1551462411690
+}

@@ -1,0 +1,196 @@
+{
+	"versions": {
+		"0.3.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "0.3.0",
+			"directories": {},
+			"dist": {
+				"shasum": "f23af21d7905b0f8ef24b9ddeebe100f0b0a8edc",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-0.3.0.tgz"
+			}
+		},
+		"0.3.1": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "0.3.1",
+			"directories": {},
+			"dist": {
+				"shasum": "e64934891864c224af68632e8b449b897a6d9be2",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-0.3.1.tgz"
+			}
+		},
+		"0.4.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "0.4.0",
+			"directories": {},
+			"dist": {
+				"shasum": "1bae538c2a06129f642511238384365ba6b3b7e1",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-0.4.0.tgz"
+			}
+		},
+		"0.4.1": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "0.4.1",
+			"directories": {},
+			"dist": {
+				"shasum": "f661b62ac049ebb4fd18ddd17fb80ecb69c27770",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-0.4.1.tgz"
+			}
+		},
+		"1.0.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "1.0.0",
+			"devDependencies": {
+				"@types/chai": "^3.4.35",
+				"typescript": "^2.2.1",
+				"chai": "^3.5.0",
+				"mocha": "^3.2.0",
+				"@microsoft/microsoft-graph-client": "^0.3.2"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "c400fc49295d322520429b982986ee3ffa016704",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-1.0.0.tgz"
+			}
+		},
+		"1.0.1": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "1.0.1",
+			"devDependencies": {
+				"@types/chai": "^3.4.35",
+				"typescript": "^2.2.1",
+				"chai": "^3.5.0",
+				"mocha": "^3.2.0",
+				"@microsoft/microsoft-graph-client": "^0.3.2"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "3c48b37e84466d76b229f67bae25ce8d5a0cacda",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-1.0.1.tgz"
+			}
+		},
+		"1.1.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "1.1.0",
+			"devDependencies": {
+				"@types/chai": "^3.4.35",
+				"typescript": "^2.2.1",
+				"chai": "^3.5.0",
+				"mocha": "^3.2.0",
+				"@microsoft/microsoft-graph-client": "^0.3.2"
+			},
+			"directories": {},
+			"dist": {
+				"shasum": "08646e469247a4144c715161a1081387ade7cd3b",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-1.1.0.tgz"
+			}
+		},
+		"1.2.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "1.2.0",
+			"devDependencies": {
+				"@types/chai": "^3.4.35",
+				"typescript": "^2.2.1",
+				"chai": "^3.5.0",
+				"mocha": "^3.2.0",
+				"@microsoft/microsoft-graph-client": "^0.3.2"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "b21d125027b3d244ebb8317e682eb77cf0598075",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-1.2.0.tgz",
+				"fileCount": 15,
+				"unpackedSize": 1103479
+			}
+		},
+		"1.3.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "1.3.0",
+			"devDependencies": {
+				"@types/chai": "^3.4.35",
+				"typescript": "^2.2.1",
+				"chai": "^3.5.0",
+				"mocha": "^3.2.0",
+				"@microsoft/microsoft-graph-client": "^0.3.2"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"shasum": "b87198cc88b82df8a1c04491c3d0f4385c681ca2",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-1.3.0.tgz",
+				"fileCount": 15,
+				"unpackedSize": 1137009,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJa618JCRA9TVsSAnZWagAAiPwP/Rg9sd7FzjE6Y0WK+qU9\n9iBn5eyI3AlqtbLGhgN1HE8oWm/E2YIqyGr8CY2YcfPF+UuY/tUW5luaEqd3\npCT+W+KDH3ooRMswmkb/HHR0Y3flHjjW+zeeily/Ntl8tKi6q4jqYjv34wHZ\nosyg54dPfC3SY6hK0L3KoiaWtCmpl757B4K7SZR5yXmOd5yCxNuz+d6oyQeu\nQUoFA32zQly73jjHRGdWOBrAZw1fgcfYtlwpaP4TMcSx5IUXfAXQ+CKouTQz\n2pDTRcVvILomuJHH9m5JxmzqeqdLiO8J+NUe5CAGhnDyUkHs6ZeWP10rcnDI\nXX9bpPN9ktpm4MT404SgANj1GczawLiaGEI1gkVGYTR8DXSGxOco49geeKtp\nVN5ljKOnfNy4j16h8d/LI3qH5My5Aw0kDtlmNLMESCPkgyj2qykKPqMUVM2W\nFOdSOqftP+GYyYd5bCfSTmikUnKQcqQGDi3AufIm4ZYl92Kiqo1WlkMGAuZ3\nbvc3SLSGPJM2LTzQhTzkB7SqYu0N1tJ/bqdE1TdmL+CtIPzBL3zi7YibvHbg\nsM/DXOzTWFzV1EBfaZoGeKNXclY9RpyKKlcKIOvr4MkCt856+8A7MgIjA/mb\nV/Qs5i9qeDecbwxEQAgewAN+ZiPEF9jQHLaKKvSygsS/Qs+58p0sMrSlWdWr\n5fov\r\n=iuvl\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"1.4.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "1.4.0",
+			"devDependencies": {
+				"@types/chai": "^3.4.35",
+				"typescript": "^2.2.1",
+				"chai": "^3.5.0",
+				"mocha": "^3.2.0",
+				"@microsoft/microsoft-graph-client": "^0.3.2"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-ZCulEATaVWIMpQ3L3Z9u+5ev9IsbZVCWv8RjnwHrxARAEd8A/8HtHSMQQrcW2gHEIN/aF8hX7tKFQSGZHD/kJw==",
+				"shasum": "6112ae63b2a2577eb266a7e1085fe21cfa512855",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-1.4.0.tgz",
+				"fileCount": 14,
+				"unpackedSize": 1152822,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbdnP9CRA9TVsSAnZWagAA5IEQAI75VT8bqRu3qVtZW5Ls\nh0TVmWoAwJzGzFj5iagZ3BDwXFgSPYTO8lSRkg6yudH91FCIJEC+I6Bv4U/q\nVXoXTNbdqIorHO4vhWXTg2jhl2+YMNVjrhlN4Ql5E/x8yfLuGdeewb5V3M3O\nD3Ah8IlYfW0fVd+/Ln4JM6nAGmQ1C8O884PSt/JqklCHFtapuremwCrO2kS7\nlzpNufo580ipBSaX348n2OqzRu5bryuNAxuPmRlqh2wokDyzNMS+ciSlACTi\nrKH+7rDwyGQ3XBmZV8U4nMatVADGFBWhW1U/0nZZC8lcMmwiS0YAw6qjk02x\naYCsp5CQUZJ2y2nUVPEjwhpHx8Vgol7ssnZKAxtvqTs/1wzoiH/MXhcJ+blp\noWCHENoLpvWRZFq3fkiXBP57aKzh+N7wbv79K+mEL2GFWGHApcVkpFs+MA9i\n2tj4bpaNxpgDV3ghzGQfP4CSiDieP7Rkpmzmj2XNkjVZfov2y0aQ8stzRtqj\nvRuXPiPUqeran8/HpS/SQ/LvF97AvZneEsRnK0RCa/zmOJMZsBauwd1v4PQ6\nogIQpE1V8jM82YCPTLCtnwOACuH7mtMyD9qlg1vB5P8mg6BLyNJiYZ9MTPoT\nQAw4lcpjJQlVi/Sr8irF5HiEwHqV/+QVnoGxKGRQ7Fd11Jh5V5cOQO0MSVNT\nVXU3\r\n=ARNd\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"1.5.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "1.5.0",
+			"devDependencies": {
+				"@types/chai": "^3.4.35",
+				"typescript": "^2.2.1",
+				"chai": "^3.5.0",
+				"mocha": "^3.2.0",
+				"@microsoft/microsoft-graph-client": "^0.3.2"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-eit9LMlhHLyzCByATGL8d7izWNRVBlzrPMfXqy2a9qIVUUNIGxyqkGJNrpEh3EVDXW2r+/ASsBAqzHkm8zWJiQ==",
+				"shasum": "43f63ad217e871c418e8342bae2eff300b07f023",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-1.5.0.tgz",
+				"fileCount": 14,
+				"unpackedSize": 1141909,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJboeSkCRA9TVsSAnZWagAAWagP+wS/nuLTbsV4lf9gHaO5\nT0YMyK/GLfqeCaL8y+7H2fD1afoSnEmm+wSkZU5X/TZruy6wjbEyUuI1Ipt9\nepz09qZflBLdo9lWRX3yYVwGzPuC4ZFSKuB0wBDefChOkxR8cbV8/yop1nhq\nLLjYrA9TFS3M8+IFkGPb018WIW8Kz5yvCPNbkU2sodRtMnS5niTNMiDtLcoj\nRsE/2sLBLnjl4ccpQ7SPhIWSXEmdmpOVhZjFGA4Qe4yO8WvgWTSDM5lFqDXs\nyH564PE+QvACe+ft1TPdLEzEPqFmM/hndLh1AaAnK3vQgtt1WpksWaU0hXAj\nCqAqYo6l6YMOcL6i0qRB2RjD2bDpBGSR/lL2bUyoQjOyzIAnQTANIh/Xn//K\noQjgnHGSFi6Yajp2vdAGqnC0T4X7a19debsIdK9O6nEjYHVtiJLvivcZNDor\n9OWDZveP6XsgRg/tKespmU6Hq5f24nv8pGwDc4ppE3w2+u4OwTEloBCYU5yD\nsi9O9rOPZishpk71T7d4OGZeKE3upy142ffq55ZyAlwuBY0q9Sg0FMc5eHuV\nelegFX3hlfvUzraKxkb0I7XKdKIr2UU/vVt6d4X5aJ90Fj2vBVzqkomT7yur\nFCUo4qdFEkPZAUNDaAA+kctj5WqzOnm+L+kYVp/TFtwtV73AS9ka6uvJQd+V\nkZmo\r\n=vfKM\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		},
+		"1.6.0": {
+			"name": "@microsoft/microsoft-graph-types",
+			"version": "1.6.0",
+			"devDependencies": {
+				"@types/chai": "^3.4.35",
+				"typescript": "^2.2.1",
+				"chai": "^3.5.0",
+				"mocha": "^3.2.0",
+				"@microsoft/microsoft-graph-client": "^0.3.2"
+			},
+			"_hasShrinkwrap": false,
+			"directories": {},
+			"dist": {
+				"integrity": "sha512-NAkRxtKQWj+ju0Ra36ZQDjVAoJDYvP2eHq27Fn0yAkSa7CN7EaYy7YuuSdo73Wgu2p3XJp3CYze08ub31DXbEA==",
+				"shasum": "04b2b05d2d36013afc719dd3f109ad9d076bbe1a",
+				"tarball": "https://registry.npmjs.org/@microsoft/microsoft-graph-types/-/microsoft-graph-types-1.6.0.tgz",
+				"fileCount": 14,
+				"unpackedSize": 1217989,
+				"npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJcUV09CRA9TVsSAnZWagAA2FMP/0rd8niw7Qf5FRu+yNcp\nmIJUXTgtF79Pv24zihrkjogafRdHJ9MZ5VesEoXKuY+8NyNDxSQaKt35qv6N\nA7PxK9+rvmKI+koOKjTTNteOhJcUQ/9nwUuqknbmNMaHkO9nRLxjmtZc7NHi\nZkjNXbMICmswFlLjr2YqMh13fP0rYq8Vp5y0021LDzpuqzdd0tdnALwOEzVL\nOvBl2pfnzpkTskh/M6+UuM1XkEPR5igXQynpRqwgkLF0M1RsYhaF6A7L+KPc\n9q8Oq+QnrWE7guxKzPjnBx6KFR/LneD0bxTKwczJlEAOewuJmuybH4A5k264\ncLjzVUAz/i23nGOKC34dQgm+aqLBEQKVw02gFPmnBysG15QKMINRWNicyv/b\n+OEz81mTkrRGqpO/t42DGmTabBrntdVTVQFC26i5O4pxooqZYKeLhG7i4T+u\nAZdDoC1xRo0LyFaoKQ3sabPTaFQgnzN4Qy5+Ml5mwoyzFUKXh1yF3mRXgAMr\nkNAHJ0WpKRESGaLj7kur8HEOy20ZQq6MJa/drwPA0RS1KfoxlQwCWKI1sqpb\nQcbWJvyjaduLV0PDP6v2lX0Xv/dVjzBsic0bNv/GP4UwIvDefolVY0UEXOTA\nQOT7vdcdUm3AKYP4jhLuA8HfT3dT5/i+TqKI4IhIO9nA12G39ESyi82mWHg+\n91Bq\r\n=6dER\r\n-----END PGP SIGNATURE-----\r\n"
+			}
+		}
+	},
+	"name": "@microsoft/microsoft-graph-types",
+	"dist-tags": {
+		"latest": "1.6.0"
+	},
+	"modified": "2019-01-30T08:16:00.180Z",
+	"cachedAt": 1551462411721
+}
