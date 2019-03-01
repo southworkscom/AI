@@ -9,8 +9,7 @@ import {
     DialogInstance,
     DialogReason,
     DialogTurnResult,
-    DialogTurnStatus,
-    TextPrompt} from 'botbuilder-dialogs';
+    DialogTurnStatus } from 'botbuilder-dialogs';
 import { ActivityExtensions } from '../extensions/activityExtensions';
 import { InterruptableDialog } from './interruptableDialog';
 import { InterruptionAction } from './interruptionAction';
@@ -23,8 +22,6 @@ export abstract class RouterDialog extends InterruptableDialog {
     constructor(dialogId: string, telemetryClient: BotTelemetryClient) {
         super(dialogId, telemetryClient);
         this.telemetryClient = telemetryClient;
-        //const prompt: Dialog = new TextPrompt('foo'); // issue
-        //this.addDialog(prompt);
     }
 
     protected onBeginDialog(innerDc: DialogContext, options: object): Promise<DialogTurnResult> {

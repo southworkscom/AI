@@ -25,15 +25,13 @@ import {
     Dialog,
     DialogContext,
     DialogTurnResult,
-    DialogTurnStatus,
-    TextPrompt} from 'botbuilder-dialogs';
+    DialogTurnStatus } from 'botbuilder-dialogs';
 import { IEndpointService } from 'botframework-config';
 import {
     Activity,
     ActivityTypes } from 'botframework-schema';
 import * as i18n from 'i18n';
 import { BotServices } from '../../botServices';
-import { FooDialog } from '../../fooDialog';
 import { IVirtualAssistantState } from '../../virtualAssistantState';
 import { EscalateDialog } from '../escalate/escalateDialog';
 import { OnboardingDialog } from '../onboarding/onboardingDialog';
@@ -76,8 +74,6 @@ export class MainDialog extends RouterDialog {
         this.onboardingState = this.userState.createProperty<IOnboardingState>('IOnboardingState');
         this.parametersAccessor = this.userState.createProperty<Map<string, object>>('userInfo');
         this.virtualAssistantState = this.conversationState.createProperty<IVirtualAssistantState>('VirtualAssistantState');
-        const prompt: Dialog = new FooDialog();
-        this.addDialog(prompt);
         this.addDialog(new OnboardingDialog(this.services, this.onboardingState, telemetryClient));
         this.addDialog(new EscalateDialog(this.services, telemetryClient));
 

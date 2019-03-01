@@ -168,7 +168,7 @@ try {
 
 // Create server
 const SERVER: restify.Server = restify.createServer();
-SERVER.listen(process.env.port || process.env.PORT || 3978, (): void => {
+SERVER.listen(process.env.port || process.env.PORT || 3979, (): void => {
     // tslint:disable-next-line:no-console
     console.log(`${SERVER.name} listening to ${SERVER.url}`);
     // tslint:disable-next-line:no-console

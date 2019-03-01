@@ -1,14 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { BazDialog } from 'bot-solution';
 import { BotTelemetryClient, ConversationState, EndOfConversationCodes, TurnContext, UserState } from 'botbuilder';
-import { Dialog, DialogContext, DialogSet, DialogState, DialogTurnResult, TextPrompt } from 'botbuilder-dialogs';
+import { DialogContext, DialogSet, DialogState, DialogTurnResult } from 'botbuilder-dialogs';
 import { IEndpointService } from 'botframework-config';
-import { BarDialog } from './barDialog';
 import { BotServices } from './botServices';
 import { MainDialog } from './dialogs/main/mainDialog';
-import { FooDialog } from './fooDialog';
 
 /**
  * Main entry point and orchestration for bot.
@@ -42,10 +39,6 @@ export class VirtualAssistant {
         this.telemetryClient = telemetryClient;
 
         this.dialogs = new DialogSet(this.conversationState.createProperty<DialogState>(VirtualAssistant.name));
-        const foo: Dialog = new FooDialog();
-        this.dialogs.add(foo);
-        const baz: Dialog = new BazDialog();
-        this.dialogs.add(baz);
         this.dialogs.add(new MainDialog(this.services, this.conversationState, this.userState, this.endpointService, this.telemetryClient));
     }
 
