@@ -1,11 +1,8 @@
 {
   "name": "root",
   "private": true,
-  "devDependencies": {
-    "@microsoft/rush": "^5.5.4"
-  },
   "scripts": {
     "build": "rush update && rush rebuild",
-    "start": "npm run start --prefix ./assistant/"
+    "start": "rush start"
   }
 }
