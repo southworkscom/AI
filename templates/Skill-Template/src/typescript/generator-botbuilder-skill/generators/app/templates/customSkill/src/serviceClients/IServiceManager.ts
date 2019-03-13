@@ -1,1 +1,3 @@
-'use strict';
+export interface IServiceManager {
+    foo(): void;
+}
