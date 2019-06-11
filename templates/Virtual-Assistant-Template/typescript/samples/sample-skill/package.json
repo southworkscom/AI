@@ -40,8 +40,6 @@
         "restify": "^7.2.1"
     },
     "devDependencies": {
-        "@types/documentdb": "1.10.5",
-        "@types/dotenv": "^6.0.0",
         "@types/i18next-node-fs-backend": "^0.0.30",
         "@types/node": "^10.10.1",
         "@types/restify": "^7.2.4",
