@@ -248,15 +248,11 @@
     },
     "@rush-temp/botbuilder-skills": {
       "version": "file:projects/botbuilder-skills.tgz",
-      "integrity": "sha512-qr8RuVim+08ob6P36GnPzdq6nLzuXWk5m8BgxI4oco48Zq/k+jKmT+LrfI8G+c16ZoFnUpNc5LpkXNAmci0LcQ==",
+      "integrity": "sha512-WzDU3i8/Fqf9XSFHF+AlfGSQ6cvbxlHvhjjoHlLOoPzGyX28SQgYEyOAL7B7uWp5vz1GpxaMrYfN7kGITG+C2w==",
       "requires": {
         "@azure/cognitiveservices-luis-authoring": "^2.1.0",
         "@azure/ms-rest-js": "1.8.7",
-        "@types/documentdb": "1.10.5",
-        "@types/dotenv": "^6.0.0",
-        "@types/i18n": "^0.8.3",
         "@types/nock": "^10.0.3",
-        "@types/node": "^10.10.1",
         "@types/restify": "^7.2.4",
         "@types/uuid": "^3.4.4",
         "botbuilder": "^4.4.0",
@@ -275,10 +271,7 @@
         "microsoft-bot-protocol-websocket": "^0.0.1",
         "mocha": "^6.1.4",
         "mocha-junit-reporter": "^1.22.0",
-        "nock": "^10.0.6",
         "nyc": "^14.1.1",
-        "p-queue": "^4.0.0",
-        "replace": "^1.0.0",
         "request-promise-native": "^1.0.7",
         "restify": "^8.3.2",
         "rimraf": "^2.6.2",
@@ -427,11 +420,6 @@
       "version": "1.2.16",
       "resolved": "https://botbuilder.myget.org/F/aitemplates/npm/@types/html-entities/-/@types/html-entities-1.2.16.tgz",
       "integrity": "sha1-TR/iCMTDNyesRlfm9dkr/lJCcCM="
-    },
-    "@types/i18n": {
-      "version": "0.8.5",
-      "resolved": "https://botbuilder.myget.org/F/aitemplates/npm/@types/i18n/-/@types/i18n-0.8.5.tgz",
-      "integrity": "sha1-/VW3q7QIX6oBPwzifD/sheJ/98M="
     },
     "@types/jsonwebtoken": {
       "version": "7.2.8",
