@@ -61,3 +61,4 @@ steps:
     codeCoverageTool: Cobertura
     summaryFileLocation: '$(Build.SourcesDirectory)\lib\csharp\microsoft.bot.builder.skills\Microsoft.Bot.Builder.Skills.Tests\coverage.cobertura.xml'
     reportDirectory: '$(Build.SourcesDirectory)\lib\csharp\microsoft.bot.builder.skills\Microsoft.Bot.Builder.Skills.Tests'
+
