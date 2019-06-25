@@ -10,7 +10,8 @@ trigger:
     - lib/typescript/botskills/*
 
   # By default will disable PR builds
-  pr: none 
+  pr: 
+  - none  
 
 pool:
   name: Hosted VS2017
