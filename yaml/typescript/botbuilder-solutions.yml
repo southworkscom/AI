@@ -11,7 +11,8 @@ trigger:
 
   # By default will disable PR builds
   pr: 
-  - none   
+    exclude:
+    - master  
 
 pool:
   vmImage: 'vs2017-win2016'
