@@ -9,10 +9,8 @@ trigger:
     include:
     - 'lib/csharp/microsoft.bot.builder.solutions/*' 
 
-  # By default will disable PR builds
-  pr: 
-    exclude:
-    - master  
+# By default will disable PR builds
+pr: none  
 
 pool:
    name: Hosted VS2017
