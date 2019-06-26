@@ -43,7 +43,7 @@ export namespace SpeechUtility {
         } else {
             const activity: Activity = <Activity>toProcess;
             const attachments: Attachment[] = activity.attachments || [];
-            speakStrings = attachments.map((value: Attachment): string => <string> value.content);
+            speakStrings = attachments.map((value: Attachment): string => <string> value.content.speak);
             parent = activity.speak || '';
         }
 
