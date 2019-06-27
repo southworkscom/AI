@@ -25,7 +25,7 @@ export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
     private readonly httpClient: ServiceClient;
     private readonly appId: string;
 
-    constructor(appId: string) {
+    public constructor(appId: string) {
         this.httpClient = new ServiceClient();
         this.appId = appId;
     }
@@ -39,19 +39,19 @@ export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
                 url: this.openIdMetadataUrl
             });
 
-            const jwksUri: string = <string>jwksInfo.parsedBody.jwks_uri;
+            const jwksUri: string = <string>jwksInfo.parsedBody;
             const jwksClient: jwks.JwksClient = jwks({ jwksUri: jwksUri });
 
             const getKey: signingKeyResolver = (headers: jwks.Headers, cb: (err: Error, signingKey: string) => void): void => {
-                jwksClient.getSigningKey(headers.kid, (err: Error, key: jwks.Jwk) => {
+                jwksClient.getSigningKey(headers.kid, (err: Error, key: jwks.Jwk): void => {
                     cb(err, key.publicKey || key.rsaPublicKey || '');
                 });
             };
 
             // tslint:disable-next-line:typedef
-            const decoder: Promise<{[key: string]: Object}> = new Promise((resolve, reject) => {
-                verify(token, getKey, (err: Error, decodedObj: Object) => {
-                    if (err) { reject(err); }
+            const decoder: Promise<{[key: string]: Object}> = new Promise((resolve, reject): void => {
+                verify(token, getKey, (err: Error, decodedObj: Object): void => {
+                    if (err !== undefined) { reject(err); }
                     const result: {[key: string]: Object} = <{[key: string]: Object}>decodedObj;
                     resolve(result);
                 });
