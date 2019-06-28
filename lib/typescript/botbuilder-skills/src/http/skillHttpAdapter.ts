@@ -31,7 +31,7 @@ export class SkillHttpAdapter extends BotFrameworkAdapter {
     }
 
     // tslint:disable-next-line:no-any
-    public async processActivity(req: WebRequest, res: WebResponse, logic: (context: TurnContext) => Promise<undefined>): Promise<void> {
+    public async processActivity(req: WebRequest, res: WebResponse, logic: (context: TurnContext) => Promise<void>): Promise<void> {
         if (this.authenticationProvider) {
             // grab the auth header from the inbound http request
             // eslint-disable-next-line @typescript-eslint/tslint/config

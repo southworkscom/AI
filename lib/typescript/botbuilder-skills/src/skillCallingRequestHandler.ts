@@ -99,8 +99,8 @@ export class SkillCallingRequestHandler extends RequestHandler {
         this.router = new Router(routes);
     }
 
-    // tslint:disable-next-line:no-any
-    public async processRequestAsync(request: ReceiveRequest, logger?: undefined): Promise<Response> {
+    // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
+    public async processRequestAsync(request: ReceiveRequest, logger?: any): Promise<Response> {
         const routeContext: IRouteContext|undefined = this.router.route(request);
         if (routeContext) {
             try {

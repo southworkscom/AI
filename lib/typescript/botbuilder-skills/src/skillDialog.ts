@@ -160,7 +160,8 @@ export class SkillDialog extends ComponentDialog {
             const result: DialogTurnResult = await innerDC.continueDialog();
 
             // forward the token response to the skill
-            if (result.status === DialogTurnStatus.complete && isProviderTokenResponse(result)) {
+            // eslint-disable-next-line @typescript-eslint/tslint/config
+            if (result.status === DialogTurnStatus.complete && isProviderTokenResponse(result.result)) {
                 activity.type = ActivityTypes.Event;
                 activity.name = TokenEvents.tokenResponseEventName;
                 activity.value = result.result;

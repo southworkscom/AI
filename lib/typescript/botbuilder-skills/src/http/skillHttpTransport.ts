@@ -20,10 +20,10 @@ export class SkillHttpTransport implements ISkillTransport {
      * Http SkillTransport implementation
      */
     public constructor(skillManifest: ISkillManifest, appCredentials: MicrosoftAppCredentials, httpClient?: HttpClient) {
-        if (skillManifest !== undefined) { throw new Error('skillManifest has no value'); }
+        if (skillManifest === undefined) { throw new Error('skillManifest has no value'); }
         this.skillManifest = skillManifest;
 
-        if (appCredentials !== undefined) { throw new Error('appCredentials has no value'); }
+        if (appCredentials === undefined) { throw new Error('appCredentials has no value'); }
         this.appCredentials = appCredentials;
 
         this.httpClient = httpClient || new DefaultHttpClient();
@@ -47,7 +47,6 @@ export class SkillHttpTransport implements ISkillTransport {
         // - We have to cast "request as any" to avoid a build break relating to different versions
         //   of @azure/ms-rest-js being used by botframework-connector. This is just a build issue and
         //   shouldn't effect production bots.
-        //tslint:disable-next-line: no-any
         // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
         await this.appCredentials.signRequest(<any>request);
 

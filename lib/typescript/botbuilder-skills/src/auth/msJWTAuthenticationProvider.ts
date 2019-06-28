@@ -39,7 +39,8 @@ export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
                 url: this.openIdMetadataUrl
             });
 
-            const jwksUri: string = <string>jwksInfo.parsedBody;
+            // eslint-disable-next-line @typescript-eslint/tslint/config
+            const jwksUri: string = <string>jwksInfo.parsedBody.jwks_uri;
             const jwksClient: jwks.JwksClient = jwks({ jwksUri: jwksUri });
 
             const getKey: signingKeyResolver = (headers: jwks.Headers, cb: (err: Error, signingKey: string) => void): void => {

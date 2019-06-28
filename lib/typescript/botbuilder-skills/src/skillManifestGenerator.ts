@@ -25,7 +25,7 @@ export class SkillManifestGenerator {
     ): Promise<ISkillManifest> {
         if (!manifestFile) { throw new Error('manifestFile has no value'); }
         if (!appId) { throw new Error('appId has no value'); }
-        if (cognitiveModels !== undefined) { throw new Error('cognitiveModels has no value'); }
+        if (cognitiveModels === undefined) { throw new Error('cognitiveModels has no value'); }
         if (!uriBase) { throw new Error('uriBase has no value'); }
 
         // Each skill has a manifest template in the root directory and is used as foundation for the generated manifest
