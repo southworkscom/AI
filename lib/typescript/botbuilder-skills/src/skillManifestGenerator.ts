@@ -219,9 +219,9 @@ export function manifestGenerator(manifestFile: string, botSettings: Partial<IBo
 
         // eslint-disable-next-line @typescript-eslint/tslint/config
         const inline: boolean = (req.query.inlineTriggerUtterances || '').toLowerCase() === 'true';
-        const scheme: string = req ? 'https' : 'http';
+        const scheme: string = req.isSecure() ? 'https' : 'http';
         // eslint-disable-next-line @typescript-eslint/tslint/config
-        const host: string = req || '';
+        const host: string = req.headers.host || '';
         const skillUriBase: string = `${scheme}://${host}`;
         const appId: string = botSettings.microsoftAppId;
         const cognitiveModels: Map<string, ICognitiveModelConfiguration> = botSettings.cognitiveModels;

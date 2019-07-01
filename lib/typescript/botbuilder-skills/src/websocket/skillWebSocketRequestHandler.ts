@@ -21,7 +21,7 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
     // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
     public async processRequestAsync(request: ReceiveRequest, logger?: any): Promise<Response> {
         if (this.bot === undefined) { throw new Error(('Missing parameter.  "bot" is required')); }
-        if (this.activityHandler === undefined) { throw new Error(('Missing parameter.  "bot" is required')); }
+        if (this.activityHandler === undefined) { throw new Error(('Missing parameter.  "activityHandler" is required')); }
 
         const response: Response = new Response();
         // MISSING: await request.readBodyAsString();

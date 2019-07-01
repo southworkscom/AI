@@ -20,9 +20,9 @@ export class BackgroundTaskQueue implements IBackgroundTaskQueue {
         });
     }
 
-    public queueBackgroundWorkItem(workItem: WorkItemFunc): void {
+    public async queueBackgroundWorkItem(workItem: WorkItemFunc): Promise<void> {
         if (workItem === undefined) { throw new Error('Missing parameter.  workItem is required'); }
 
-        void this.queueExecutor.add(workItem);
+        await this.queueExecutor.add(workItem);
     }
 }

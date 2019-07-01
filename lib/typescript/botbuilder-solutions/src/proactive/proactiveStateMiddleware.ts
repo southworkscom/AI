@@ -32,7 +32,6 @@ export class ProactiveStateMiddleware implements Middleware {
 
             const hashedUserId: string = MD5Util.computeHash(activity.from.id);
             const conversationReference: Partial<ConversationReference> = TurnContext.getConversationReference(activity);
-            // const proactiveData: ProactiveData = { conversation: conversationReference };
 
             if (proactiveState[hashedUserId] !== undefined) {
                 data = { conversation: conversationReference };
