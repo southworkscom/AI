@@ -35,7 +35,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
         activity: Partial<Activity>,
         tokenRequestHandler?: TokenRequestHandler|undefined
     ): Promise<boolean> {
-        if (this.streamingTransportClient !== undefined) {
+        if (this.streamingTransportClient === undefined) {
             // acquire AAD token
             MicrosoftAppCredentials.trustServiceUrl(this.skillManifest.endpoint);
             // put AAD token in the header

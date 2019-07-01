@@ -163,10 +163,8 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             this.selectedAuthType = stepContext.result;
         } else {
             const choice: FoundChoice = <FoundChoice> stepContext.result;
-            if (choice !== undefined) {
-                if (choice.value !== undefined) {
-                    this.selectedAuthType = choice.value;
-                }
+            if (choice !== undefined && choice.value !== undefined) {
+                this.selectedAuthType = choice.value;
             }
         }
 

@@ -18,10 +18,10 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
         this.telemetryClient = telemetryClient;
     }
 
-    // tslint:disable-next-line:no-any
-    public async processRequestAsync(request: ReceiveRequest, logger?: boolean): Promise<Response> {
-        if (this.bot !== undefined) { throw new Error(('Missing parameter.  "instance" is required')); }
-        if (this.activityHandler === undefined) { throw new Error(('Missing parameter.  "instance" is required')); }
+    // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
+    public async processRequestAsync(request: ReceiveRequest, logger?: any): Promise<Response> {
+        if (this.bot === undefined) { throw new Error(('Missing parameter.  "bot" is required')); }
+        if (this.activityHandler === undefined) { throw new Error(('Missing parameter.  "bot" is required')); }
 
         const response: Response = new Response();
         // MISSING: await request.readBodyAsString();

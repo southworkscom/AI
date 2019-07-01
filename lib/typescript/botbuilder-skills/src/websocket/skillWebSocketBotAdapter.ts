@@ -187,7 +187,8 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
                 ((s: ContentStream): Promise<string> => s.readAsString()));
                 const body: string = bodyParts.join();
 
-                return <undefined> JSON.parse(body);
+                // eslint-disable-next-line @typescript-eslint/tslint/config
+                return JSON.parse(body);
             }
         } catch (error) {
             this.telemetryClient.trackException({
