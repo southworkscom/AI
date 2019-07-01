@@ -17,7 +17,7 @@ export namespace Locales {
             const language: string = basename(file, '.json');
             const languagePath: string = join(localesDir, file);
             // eslint-disable-next-line @typescript-eslint/tslint/config
-            const resource: Object =  JSON.parse(readFileSync(languagePath, 'utf8'));
+            const resource: Object = JSON.parse(readFileSync(languagePath, 'utf8'));
             instance.addResourceBundle(language, namespace, resource, true, false);
         });
     }
