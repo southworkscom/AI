@@ -96,11 +96,11 @@ const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
     appPassword: botSettings.microsoftAppPassword
 };
 
-let cosmosDbStorageSettings: CosmosDbStorageSettings;
 if (botSettings.cosmosDb === undefined) {
     throw new Error();
 }
-cosmosDbStorageSettings = {
+
+const cosmosDbStorageSettings: CosmosDbStorageSettings = {
     authKey: botSettings.cosmosDb.authKey,
     collectionId: botSettings.cosmosDb.collectionId,
     databaseId: botSettings.cosmosDb.databaseId,
