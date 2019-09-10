@@ -65,7 +65,7 @@ const cognitiveModels: Map<string, ICognitiveModelConfiguration> = new Map();
 const cognitiveModelDictionary: { [key: string]: Object } = cognitiveModelsRaw.cognitiveModels;
 const cognitiveModelMap: Map<string, Object>  = new Map(Object.entries(cognitiveModelDictionary));
 cognitiveModelMap.forEach((value: Object, key: string): void => {
-    cognitiveModels.set(key, <ICognitiveModelConfiguration> value);
+    cognitiveModels.set(key, value as ICognitiveModelConfiguration);
 });
 
 const botSettings: Partial<IBotSettings> = {
