@@ -54,7 +54,7 @@
     },
     {
       "type": "Action.OpenUrl",
-      "title": "Skills",
+      "title": "Kompetenzen",
       "url": "https://aka.ms/botframeworkskills"
     }
   ],
