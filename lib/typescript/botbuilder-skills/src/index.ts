@@ -15,6 +15,7 @@ export * from './websocket';
 export * from './activityHandler';
 export * from './skillCallingRequestHandler';
 export * from './skillContext';
+export * from './skillConstants';
 export * from './skillDialog';
 export * from './skillException';
 export * from './skillManifestGenerator';
