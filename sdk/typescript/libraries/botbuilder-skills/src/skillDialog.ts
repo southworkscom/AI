@@ -10,14 +10,25 @@ import {
     Entity,
     SemanticActionStateTypes,
     StatePropertyAccessor,
-    TurnContext } from 'botbuilder';
-import { ComponentDialog, DialogContext, DialogInstance, DialogReason, DialogTurnResult,
-    DialogTurnStatus } from 'botbuilder-dialogs';
-import { ActivityExtensions, isProviderTokenResponse, MultiProviderAuthDialog, TokenEvents } from 'botbuilder-solutions';
+    TurnContext,
+    UserState} from 'botbuilder';
+import { ComponentDialog, ConfirmPrompt, DialogContext, DialogInstance, DialogReason,
+    DialogTurnResult,
+    DialogTurnStatus,
+    WaterfallStepContext} from 'botbuilder-dialogs';
+import { ActivityExtensions,
+    isProviderTokenResponse,
+    MultiProviderAuthDialog,
+    TokenEvents } from 'botbuilder-solutions';
 import { IServiceClientCredentials } from './auth';
-import { IAction, ISkillManifest, ISlot } from './models';
+import { SkillHttpTransport } from './http';
+import { IAction, ISkillManifest, ISlot, SkillEvents } from './models';
 import { SkillContext } from './skillContext';
 import { ISkillTransport, TokenRequestHandler } from './skillTransport';
+import { SkillWebSocketTransport } from './websocket';
+import { ActivityAction } from './skillCallingRequestHandler';
+import { type } from 'os';
+import { text } from 'body-parser';
 
 /**
  * The SkillDialog class provides the ability for a Bot to send/receive messages to a remote Skill (itself a Bot).
@@ -26,35 +37,35 @@ import { ISkillTransport, TokenRequestHandler } from './skillTransport';
 export class SkillDialog extends ComponentDialog {
     private readonly authDialog?: MultiProviderAuthDialog;
     private readonly serviceClientCredentials: IServiceClientCredentials;
-    private readonly skillContextAccessor: StatePropertyAccessor<SkillContext>;
 
     private readonly skillManifest: ISkillManifest;
     private readonly skillTransport: ISkillTransport;
 
     private readonly queuedResponses: Partial<Activity>[];
+    private lockObject: Object = new Object();
+//  private skillIntentRecognizer: ISkillIntentRecognizer;
 
     public constructor(
         skillManifest: ISkillManifest,
         serviceClientCredentials: IServiceClientCredentials,
         telemetryClient: BotTelemetryClient,
-        skillContextAccessor: StatePropertyAccessor<SkillContext>,
+        userState: UserState,
         authDialog?: MultiProviderAuthDialog,
         skillTransport?: ISkillTransport
     ) {
         super(skillManifest.id);
         if (skillManifest === undefined) { throw new Error('skillManifest has no value'); }
         this.skillManifest = skillManifest;
-
+        // _userState = userState;
         if (serviceClientCredentials === undefined) { throw new Error('serviceClientCredentials has no value'); }
         this.serviceClientCredentials = serviceClientCredentials;
 
         if (telemetryClient === undefined) { throw new Error('telemetryClient has no value'); }
         this.telemetryClient = telemetryClient;
 
-        this.skillTransport = skillTransport || new SkillHttpTransport(skillManifest, this.serviceClientCredentials);
+        this.skillTransport = skillTransport || new SkillWebSocketTransport();
 
         this.queuedResponses = [];
-        this.skillContextAccessor = skillContextAccessor;
 
         if (authDialog !== undefined) {
             this.authDialog = authDialog;
@@ -62,12 +73,51 @@ export class SkillDialog extends ComponentDialog {
         }
     }
 
+    public async confirmIntentSwitch(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+        if (stepContext.options !== null && stepContext.options){
+            // const newIntentName = skillSwitchOption
+            // intentResponse =
+            return stepContext.prompt(this.confirmIntentSwitch, new promptOptions() {
+
+                // prompt: new Activity (type: ActivityTypes.Message, text: intentResponse, speak: intentResponse)
+            });
+        }
+
+        return stepContext.next();
+    }
+    public async finishIntentSwitch(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+        if (stepContext.options !== null && stepContext.options) {
+            // Do skill switching
+            if (stepContext.options) {
+                // 1) End remote skill dialog
+                await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, stepContext.options);
+
+                // 2) Reset user input
+                stepContext.context.activity.text = skillSwitchConfirmOption.UserInputActivity.text;
+                stepContext.context.activity.speak  = skillSwitchConfirmOption.UserInputActivity.speak;
+
+                // 3) End dialog
+                return stepContext.endDialog(true);
+            } else {
+
+                // Cancel skill switching
+                const dialogResult: DialogTurnResult  = await this.forwardToSkill(
+                    stepContext,
+                    skillSwitchConfirmOption.FallbackHandledEvent
+                );
+
+                return stepContext.endDialog(dialogResult);
+            }
+        }
+        // We should never go here
+        await stepContext.endDialog();
+    }
     public async endDialog(context: TurnContext, instance: DialogInstance, reason: DialogReason): Promise<void> {
         if (reason === DialogReason.cancelCalled) {
             // when dialog is being ended/cancelled, send an activity to skill
             // to cancel all dialogs on the skill side
             if (this.skillTransport !== undefined) {
-                await this.skillTransport.cancelRemoteDialogs(context);
+                await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, context);
             }
         }
 
@@ -88,11 +138,16 @@ export class SkillDialog extends ComponentDialog {
         const sc: SkillContext = await this.skillContextAccessor.get(innerDC.context, new SkillContext());
         const skillContext: SkillContext = Object.assign(new SkillContext(), sc);
 
+        // const dialogOptions = options !== null ? options as SkillDialog : null;
+
         // In instances where the caller is able to identify/specify the action we process the Action specific slots
         // In other scenarios (aggregated skill dispatch) we evaluate all possible slots against context and pass across
         // enabling the Skill to perform it's own action identification.
         // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
+        // const dialogOptions = options !== null ? options as SkillDialogOption : null;
         const actionName: string|undefined = <any> options;
+        const activity: Activity = innerDC.context.activity;
+
         if (actionName !== undefined) {
             // Find the specified within the selected Skill for slot filling evaluation
             const action: IAction|undefined = this.skillManifest.actions.find((item: IAction): boolean => item.id === actionName);
@@ -112,26 +167,26 @@ export class SkillDialog extends ComponentDialog {
                 throw new Error(message);
             }
         } else {
-            // The caller hasn't got the capability of identifying the action as well as the Skill so we enumerate
-            // actions and slot data to pass what we have
+                // The caller hasn't got the capability of identifying the action as well as the Skill so we enumerate
+                // actions and slot data to pass what we have
 
-            // Retrieve a distinct list of all slots,
-            // some actions may use the same slot so we use distinct to ensure we only get 1 instance.
-            const skillSlots: ISlot[] = this.skillManifest.actions.reduce(
-                (acc: ISlot[], curr: IAction): ISlot[] => {
-                    const currDistinct: ISlot[] = curr.definition.slots.filter(
-                        (slot: ISlot): boolean => !acc.find((item: ISlot): boolean => item.name === slot.name)
-                    );
+                // Retrieve a distinct list of all slots,
+                // some actions may use the same slot so we use distinct to ensure we only get 1 instance.
+                const skillSlots: ISlot[] = this.skillManifest.actions.reduce(
+                    (acc: ISlot[], curr: IAction): ISlot[] => {
+                        const currDistinct: ISlot[] = curr.definition.slots.filter(
+                            (slot: ISlot): boolean => !acc.find((item: ISlot): boolean => item.name === slot.name)
+                        );
 
-                    return acc.concat(currDistinct);
-                },
-                []);
+                        return acc.concat(currDistinct);
+                    },
+                    []);
 
-            if (skillSlots !== undefined) {
+                if (skillSlots !== undefined) {
                 // Match Slots to Skill Context
                 slots = await this.matchSkillContextToSlots(innerDC, skillSlots, skillContext);
+                }
             }
-        }
 
         const traceMessage: string = `-->Handing off to the ${this.skillManifest.name} skill.`;
         await innerDC.context.sendActivity({
@@ -139,7 +194,14 @@ export class SkillDialog extends ComponentDialog {
             text: traceMessage
         });
 
-        const activity: Activity = innerDC.context.activity;
+        /*
+        const dialogResult: DialogTurnResult = await this.forwardToSkill(innerDc, activity);
+
+        this.skillTransport.disconnect();
+
+        return dialogResult;
+
+        */
 
         const entities: { [key: string]: Entity } = {};
 
@@ -180,6 +242,24 @@ export class SkillDialog extends ComponentDialog {
                 activity.name = TokenEvents.tokenResponseEventName;
                 activity.value = result.result;
             } else {
+                return result;
+            }
+        }
+
+        if (innerDC.activeDialog ? this.id === DialogIds.confirmSkillSwitchPrompt) {
+            const result = await super.onContinueDialog(innerDC);
+
+            if (result.status !== DialogTurnStatus.complete) {
+                return result;
+            } else {
+                 // SkillDialog only truely end when confirm skill switch.
+                if (result.result) {
+                    // Restart and redispatch
+                    // result.result = new RouterDialogTurnStatus (RouterDialogTurnStatus.Restart);
+                } else {
+                    result.status = DialogTurnStatus.waiting;
+                }
+
                 return result;
             }
         }
@@ -290,4 +370,29 @@ export class SkillDialog extends ComponentDialog {
             }
         };
     }
+
+    /*
+    private getFallbackCallback(dialogContext: DialogContext) {
+        return (activity) => {
+            dialogContext.context.sendActivity(
+                new Activity (
+                    type: ActivityTypes.Trace,
+                    text: '<--Received a fallback request from a skill'));
+            let fallbackEvent = activity.createReply();
+            fallbackEvent.type = ActivityTypes.Event;
+            fallbackEvent.name = SkillEvents.fallbackEventName;
+
+            lock (lockObject)
+            {
+                queuedResponses.Enqueue(fallbackEvent);
+            }
+        }
+    }
+    */
+
+}
+
+export enum DialogIds {
+    confirmSkillSwitchPrompt = 'confirmSkillSwitchPrompt',
+    confirmSkillSwitchFlow = 'confirmSkillSwitchFlow'
 }
