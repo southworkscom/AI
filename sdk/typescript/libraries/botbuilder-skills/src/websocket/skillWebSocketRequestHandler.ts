@@ -5,25 +5,26 @@
 
 import { BotTelemetryClient, InvokeResponse } from 'botbuilder';
 import { Activity } from 'botframework-schema';
+import { StreamingResponse } from 'botframework-streaming-extensions';
 import { ContentStream, ReceiveRequest, RequestHandler, Response } from 'microsoft-bot-protocol';
 import { BotCallbackHandler, IActivityHandler } from '../activityHandler';
 
 export class SkillWebSocketRequestHandler extends RequestHandler {
-    private readonly telemetryClient: BotTelemetryClient;
+    private readonly botTelemetryClient: BotTelemetryClient;
     public bot!: BotCallbackHandler;
-    public activityHandler!: IActivityHandler;
+    public skillWebSocketBotAdapter!: IActivityHandler;
 
-    public constructor(telemetryClient: BotTelemetryClient) {
+    public constructor(botTelemetryClient: BotTelemetryClient) {
         super();
-        this.telemetryClient = telemetryClient;
+        this.botTelemetryClient = botTelemetryClient;
     }
 
     // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
-    public async processRequestAsync(request: ReceiveRequest, context?: object, logger?: any): Promise<Response> {
+    public async processRequestAsync(request: ReceiveRequest, logger?: any, context?: object): Promise<StreamingResponse> {
         if (this.bot === undefined) { throw new Error(('Missing parameter.  "bot" is required')); }
-        if (this.activityHandler === undefined) { throw new Error(('Missing parameter.  "activityHandler" is required')); }
+        if (this.skillWebSocketBotAdapter === undefined) { throw new Error(('Missing parameter.  "activityHandler" is required')); }
 
-        const response: Response = new Response();
+        const response: StreamingResponse = new StreamingResponse();
         // MISSING: await request.readBodyAsString();
         const bodyParts: string[] = await Promise.all(request.Streams.map((s: ContentStream): Promise<string> => s.readAsString()));
         const body: string = bodyParts.join();
@@ -48,7 +49,7 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
 
         } catch (error) {
             // tslint:disable-next-line:no-unsafe-any
-            this.telemetryClient.trackException({ exception: error });
+            this.botTelemetryClient.trackException({ exception: error });
             response.statusCode = 400;
             response.setBody('Request body is not an Activity instance.');
 
@@ -57,13 +58,13 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
 
         try {
             const begin: [number, number] = process.hrtime();
-            const invokeResponse: InvokeResponse = await this.activityHandler.processActivity(activity, this.bot);
+            const invokeResponse: InvokeResponse = await this.skillWebSocketBotAdapter.processActivity(activity, this.bot);
             const end: [number, number] = process.hrtime(begin);
 
             const latency: { latency: number } = { latency: toMilliseconds(end) };
 
             const event: string = 'SkillWebSocketProcessRequestLatency';
-            this.telemetryClient.trackEvent({
+            this.botTelemetryClient.trackEvent({
                 name: event,
                 metrics: latency
             });
@@ -78,7 +79,7 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
             }
         } catch (error) {
             // eslint-disable-next-line @typescript-eslint/tslint/config
-            this.telemetryClient.trackException({ exception: error });
+            this.botTelemetryClient.trackException({ exception: error });
             response.statusCode = 500;
             response.setBody('Error');
 
