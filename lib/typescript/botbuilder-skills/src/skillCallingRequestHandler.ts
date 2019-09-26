@@ -72,6 +72,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
                             throw new Error('Skill is asking for fallback but there is no handler on the calling side!');
                         }
                     } else if (activity.type === ActivityTypes.Handoff) {
+                        await this.turnContext.sendActivity(activity);
                         if (this.handoffActivityHandler !== undefined) {
                             await this.handoffActivityHandler(activity);
 
