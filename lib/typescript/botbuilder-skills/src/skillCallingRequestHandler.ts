@@ -9,7 +9,7 @@ import { Activity, ActivityTypes } from 'botframework-schema';
 import { ContentStream, ReceiveRequest, RequestHandler, Response } from 'microsoft-bot-protocol';
 import { IRouteContext, IRouteTemplate, Router } from './protocol';
 
-export declare type ActivityAction = (activity: Activity) => Promise<void>;
+export declare type ActivityAction = (activity: Activity) => void;
 
 export class SkillCallingRequestHandler extends RequestHandler {
     private readonly router: Router;
