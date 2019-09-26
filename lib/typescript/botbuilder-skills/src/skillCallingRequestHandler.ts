@@ -8,6 +8,8 @@ import { TokenEvents } from 'botbuilder-solutions';
 import { Activity, ActivityTypes } from 'botframework-schema';
 import { ContentStream, ReceiveRequest, RequestHandler, Response } from 'microsoft-bot-protocol';
 import { IRouteContext, IRouteTemplate, Router } from './protocol';
+import { SkillEvents } from './models';
+import { StreamingResponse } from 'botframework-streaming-extensions';
 
 export declare type ActivityAction = (activity: Activity) => void;
 
@@ -16,18 +18,26 @@ export class SkillCallingRequestHandler extends RequestHandler {
     private readonly turnContext: TurnContext;
     private readonly telemetryClient: BotTelemetryClient;
     private readonly tokenRequestHandler?: ActivityAction;
+    private readonly fallbackRequestHandler?: ActivityAction;
     private readonly handoffActivityHandler?: ActivityAction;
 
     public constructor(
         turnContext: TurnContext,
         telemetryClient: BotTelemetryClient,
         tokenRequestHandler?: ActivityAction,
-        handoffActivityHandler?: ActivityAction
+        handoffActivityHandler?: ActivityAction,
+        fallbackRequestHandler?: ActivityAction
     ) {
         super();
-        this.turnContext = turnContext;
+        if (turnContext !== undefined) {
+            this.turnContext = turnContext;
+        } else {
+            throw new Error('Value of \'turnContext\' is null');
+        }
+
         this.tokenRequestHandler = tokenRequestHandler;
         this.handoffActivityHandler = handoffActivityHandler;
+        this.fallbackRequestHandler = fallbackRequestHandler;
         this.telemetryClient = telemetryClient;
 
         const postRoute: IRouteTemplate = {
@@ -52,6 +62,14 @@ export class SkillCallingRequestHandler extends RequestHandler {
                             return { id: '' };
                         } else {
                             throw new Error('Skill is requesting for token but there\'s no handler on the calling side!');
+                        }
+                    } else if (activity.type === ActivityTypes.Event && activity.name === SkillEvents.fallbackEventName) {
+                        if (this.fallbackRequestHandler !== undefined) {
+                            await this.fallbackRequestHandler(activity);
+
+                            return { id: '' };
+                        } else {
+                            throw new Error('Skill is asking for fallback but there is no handler on the calling side!');
                         }
                     } else if (activity.type === ActivityTypes.Handoff) {
                         if (this.handoffActivityHandler !== undefined) {
@@ -109,24 +127,22 @@ export class SkillCallingRequestHandler extends RequestHandler {
     }
 
     // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
-    public async processRequestAsync(request: ReceiveRequest, context: Object, logger?: any): Promise<Response> {
+    public async processRequestAsync(request: ReceiveRequest, context: Object, logger?: any): Promise<StreamingResponse> {
         const routeContext: IRouteContext|undefined = this.router.route(request);
         if (routeContext !== undefined) {
             try {
                 const responseBody: Object|undefined = await routeContext.action.action(request, routeContext.routerData);
                 // MISSING Response.OK(new StringContent(JsonConvert.SerializeObject(responseBody...
-                const response: Response = Response.create(200);
-                response.setBody(responseBody);
 
-                return response;
+                return StreamingResponse.create(200, responseBody);
             } catch (error) {
                 // tslint:disable-next-line:no-unsafe-any
                 this.telemetryClient.trackException({ exception: error });
 
-                return Response.create(500);
+                return StreamingResponse.create(500);
             }
         } else {
-            return Response.create(404);
+            return StreamingResponse.create(404);
         }
     }
 }
