@@ -6,10 +6,10 @@
 import { BotTelemetryClient, TurnContext } from 'botbuilder';
 import { TokenEvents } from 'botbuilder-solutions';
 import { Activity, ActivityTypes } from 'botframework-schema';
-import { ContentStream, ReceiveRequest, RequestHandler, Response } from 'microsoft-bot-protocol';
+import { ContentStream, IReceiveRequest, RequestHandler } from 'botframework-streaming-extensions';
 import { IRouteContext, IRouteTemplate, Router } from './protocol';
 import { SkillEvents } from './models';
-import { StreamingResponse } from 'botframework-streaming-extensions';
+import { StreamingResponse, HttpContent } from 'botframework-streaming-extensions';
 
 export declare type ActivityAction = (activity: Activity) => void;
 
@@ -44,9 +44,9 @@ export class SkillCallingRequestHandler extends RequestHandler {
             method: 'POST',
             path: '/activities/{activityId}',
             action: {
-                action: async (request: ReceiveRequest, routeData: Object): Promise<Object|undefined> => {
+                action: async (request: IReceiveRequest, routeData: Object): Promise<Object|undefined> => {
                     // MISSING Check response converter
-                    const bodyParts: string[] = await Promise.all(request.Streams.map
+                    const bodyParts: string[] = await Promise.all(request.streams.map
                     ((s: ContentStream): Promise<string> => s.readAsJson()));
                     const body: string = bodyParts.join();
                     // eslint-disable-next-line @typescript-eslint/tslint/config
@@ -91,10 +91,10 @@ export class SkillCallingRequestHandler extends RequestHandler {
             method: 'PUT',
             path: '/activities/{activityId}',
             action: {
-                action: async (request: ReceiveRequest, routeData: Object): Promise<Object|undefined> => {
+                action: async (request: IReceiveRequest, routeData: Object): Promise<Object|undefined> => {
                     // MISSING Check response converter
                     const bodyParts: string[] = await Promise.all(
-                        request.Streams.map((s: ContentStream): Promise<string> => s.readAsJson()));
+                        request.streams.map((s: ContentStream): Promise<string> => s.readAsJson()));
                     const body: string = bodyParts.join();
                     // eslint-disable-next-line @typescript-eslint/tslint/config
                     const activity: Activity = JSON.parse(body);
@@ -110,7 +110,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
             method: 'DELETE',
             path: '/activities/{activityId}',
             action: {
-                action: async (request: ReceiveRequest, routeData: Object): Promise<Object|undefined> => {
+                action: async (request: IReceiveRequest, routeData: Object): Promise<Object|undefined> => {
                     // MISSING Check response converter
                     const activityIdProp: [string, string]|undefined = Object.entries(routeData)
                         .find((e: [string, string]): boolean => e[0] === 'activityId');
@@ -128,13 +128,12 @@ export class SkillCallingRequestHandler extends RequestHandler {
     }
 
     // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
-    public async processRequestAsync(request: ReceiveRequest, context: Object, logger?: any): Promise<StreamingResponse> {
+    public async processRequest(request: IReceiveRequest, context: Object, logger?: any): Promise<StreamingResponse> {
         const routeContext: IRouteContext|undefined = this.router.route(request);
         if (routeContext !== undefined) {
             try {
-                const responseBody: Object|undefined = await routeContext.action.action(request, routeContext.routerData);
+                const responseBody: HttpContent = <HttpContent> await routeContext.action.action(request, routeContext.routerData);
                 // MISSING Response.OK(new StringContent(JsonConvert.SerializeObject(responseBody...
-
                 return StreamingResponse.create(200, responseBody);
             } catch (error) {
                 // tslint:disable-next-line:no-unsafe-any

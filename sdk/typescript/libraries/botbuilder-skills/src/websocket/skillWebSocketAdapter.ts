@@ -1,6 +1,6 @@
 import { BotFrameworkAdapter, BotFrameworkAdapterSettings, BotTelemetryClient, NullTelemetryClient,
     TurnContext, WebRequest, WebResponse } from 'botbuilder';
-import { Server, Socket } from 'microsoft-bot-protocol-websocket';
+import { WebSocketServer, ISocket } from 'botframework-streaming-extensions';
 import { BotCallbackHandler } from '../activityHandler';
 import { IAuthenticationProvider } from '../auth';
 import { SkillWebSocketBotAdapter } from './skillWebSocketBotAdapter';
@@ -39,15 +39,15 @@ export class SkillWebSocketAdapter extends BotFrameworkAdapter {
     private async createWebSocketConnection(req: any, bot: BotCallbackHandler): Promise<void> {
         // MISSING found an equivalent to websocket in TypeScript
         // eslint-disable-next-line @typescript-eslint/tslint/config
-        const socket: Socket = req.socket;
+        const socket: ISocket = req.socket;
         const handler: SkillWebSocketRequestHandler = new SkillWebSocketRequestHandler(this.telemetryClient);
-        const server: Server = new Server(socket, handler);
+        const server: WebSocketServer = new WebSocketServer(socket, handler);
         // MISSING the Server class does not exposes Disconnected handler
         // in C# server.Disconnected += Server_Disconnected;
         this.botAdapter.server = server;
         handler.bot = bot;
-        handler.activityHandler = this.botAdapter;
+        handler.skillWebSocketBotAdapter = this.botAdapter;
 
-        await server.startAsync();
+        await server.start();
     }
 }
