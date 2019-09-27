@@ -7,7 +7,6 @@
  */
 
 export * from './auth';
-export * from './http';
 export * from './models';
 export * from './protocol';
 export * from './responses/skillResponses';
