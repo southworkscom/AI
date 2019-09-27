@@ -3,11 +3,11 @@
  * Licensed under the MIT License.
  */
 
-import { ReceiveRequest } from 'microsoft-bot-protocol';
+import { IReceiveRequest } from 'botframework-streaming-extensions';
 import { IRouteAction } from './routerAction';
 
 export interface IRouteContext {
-    request: ReceiveRequest;
+    request: IReceiveRequest;
     routerData: Object;
     action: IRouteAction;
 }

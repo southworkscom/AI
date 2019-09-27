@@ -3,8 +3,8 @@
  * Licensed under the MIT License.
  */
 
-import { ReceiveRequest } from 'microsoft-bot-protocol';
+import { IReceiveRequest } from 'botframework-streaming-extensions';
 
 export interface IRouteAction {
-    action(receiveRequest: ReceiveRequest, data: Object): Promise<Object|undefined>;
+    action(receiveRequest: IReceiveRequest, data: Object): Promise<Object|undefined>;
 }

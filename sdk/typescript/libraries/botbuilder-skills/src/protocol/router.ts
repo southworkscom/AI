@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { ReceiveRequest } from 'microsoft-bot-protocol';
+import { IReceiveRequest } from 'botframework-streaming-extensions';
 import { IRouteContext } from './routeContext';
 import { IRouteAction } from './routerAction';
 import { IRouteTemplate } from './routeTemplate';
@@ -18,16 +18,23 @@ export class Router {
         this.compile();
     }
 
-    public route(request: ReceiveRequest): IRouteContext|undefined {
+    public route(request: IReceiveRequest): IRouteContext|undefined {
         let found: boolean = true;
-        let path: string = request.Path;
+        let path: string | undefined = request.path;
+        if (path === undefined) {
+            throw new Error('Path is undefined');
+        }
         // MISSING: if (Uri.IsWellFormedUriString(path, UriKind.Absolute))
         if (path.startsWith('/')) {
             path = path.substr(1);
         }
 
         const parts: string[] = path.split('/');
-        const initial: TrieNode|undefined = this.root.tryGetNext(request.Verb);
+        const verb: string | undefined = request.verb;
+        if (verb === undefined) {
+            throw new Error('Verb is undefined');
+        }
+        const initial: TrieNode|undefined = this.root.tryGetNext(verb);
         if (initial) {
             let current: TrieNode = initial;
             const routeData: Map<string, Object> = new Map();

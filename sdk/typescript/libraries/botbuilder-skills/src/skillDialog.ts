@@ -15,7 +15,6 @@ import { ComponentDialog, DialogContext, DialogInstance, DialogReason, DialogTur
     DialogTurnStatus } from 'botbuilder-dialogs';
 import { ActivityExtensions, isProviderTokenResponse, MultiProviderAuthDialog, TokenEvents } from 'botbuilder-solutions';
 import { IServiceClientCredentials } from './auth';
-import { SkillHttpTransport } from './http';
 import { IAction, ISkillManifest, ISlot } from './models';
 import { SkillContext } from './skillContext';
 import { ISkillTransport, TokenRequestHandler } from './skillTransport';

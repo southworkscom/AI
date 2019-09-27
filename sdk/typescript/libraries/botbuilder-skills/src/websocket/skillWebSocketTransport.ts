@@ -2,15 +2,13 @@ import { BotTelemetryClient, TurnContext } from 'botbuilder';
 import { ActivityExtensions } from 'botbuilder-solutions';
 import { MicrosoftAppCredentials } from 'botframework-connector';
 import { Activity, ActivityTypes } from 'botframework-schema';
-import { CancellationToken, IStreamingTransportClient, Request, RequestHandler } from 'microsoft-bot-protocol';
 import { ISkillManifest, SkillEvents } from '../models';
 import { SkillCallingRequestHandler, ActivityAction } from '../skillCallingRequestHandler';
 import { ISkillTransport, TokenRequestHandler, FallbackHandler } from '../skillTransport';
 import { IServiceClientCredentials } from '../auth';
-import { WebSocketClient, StreamingRequest } from 'botframework-streaming-extensions';
+import { WebSocketClient, IStreamingTransportClient, RequestHandler, StreamingRequest } from 'botframework-streaming-extensions';
 
 export class SkillWebSocketTransport implements ISkillTransport {
-    private readonly cToken: CancellationToken;
     private readonly telemetryClient: BotTelemetryClient;
     private streamingTransportClient!: IStreamingTransportClient;
     private handoffActivity: Partial<Activity> | undefined;
@@ -24,8 +22,6 @@ export class SkillWebSocketTransport implements ISkillTransport {
         if (streamingTransportClient) {
             this.streamingTransportClient = streamingTransportClient;
         }
-
-        this.cToken = new CancellationToken();
     }
 
     public async forwardToSkill(
@@ -38,13 +34,16 @@ export class SkillWebSocketTransport implements ISkillTransport {
     ): Promise<Partial<Activity>> {
         if (this.streamingTransportClient === undefined) {
             const url: string = this.ensureWebSocketUrl(skillManifest.endpoint);
+            const tokenCallBack: ActivityAction = this.getTokenCallback(turnContext, tokenRequestHandler);
+            const fallbackCallback: ActivityAction = this.getFallbackCallback(turnContext, fallbackHandler);
+            const handoffActivityCallback: ActivityAction = this.getHandoffActivityCallback();
+
             const requestHandler: RequestHandler = new SkillCallingRequestHandler(
                 turnContext,
                 this.telemetryClient,
-                tokenRequestHandler,
-                this.getTokenCallback(turnContext, tokenRequestHandler),
-                this.getFallbackCallback(turnContext, fallbackHandler),
-                this.getHandoffActivityCallback()
+                tokenCallBack,
+                fallbackCallback,
+                handoffActivityCallback
             );
 
             // establish websocket connection
@@ -74,7 +73,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
             activity.recipient.id = recipientId;
             try {
                 const begin: [number, number] = process.hrtime();
-                await this.streamingTransportClient.sendAsync(request, this.cToken);
+                await this.streamingTransportClient.sendAsync(request);
                 const end: [number, number] = process.hrtime(begin);
                 latency = toMilliseconds(end);
             } catch (error) {
@@ -122,15 +121,19 @@ export class SkillWebSocketTransport implements ISkillTransport {
         };
     }
 
-    private getTokenCallback(turnContext: TurnContext, tokenRequestHandler: ActivityAction): ActivityAction {
+    private getTokenCallback(turnContext: TurnContext, tokenRequestHandler: ActivityAction | undefined): ActivityAction {
         return (activity: Activity) => {
-            tokenRequestHandler(activity);
+            if(tokenRequestHandler !== undefined) {
+                tokenRequestHandler(activity);
+            }
         };
     }
 
-    private getFallbackCallback(turnContext: TurnContext, fallbackEventHandler: ActivityAction): ActivityAction {
+    private getFallbackCallback(turnContext: TurnContext, fallbackEventHandler: ActivityAction | undefined): ActivityAction {
         return (activity: Activity) => {
-            fallbackEventHandler(activity);
+            if(fallbackEventHandler !== undefined) {
+                fallbackEventHandler(activity);
+            }
         };
     }
 

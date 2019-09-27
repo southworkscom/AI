@@ -5,8 +5,7 @@
 
 import { BotTelemetryClient, InvokeResponse } from 'botbuilder';
 import { Activity } from 'botframework-schema';
-import { StreamingResponse } from 'botframework-streaming-extensions';
-import { ContentStream, ReceiveRequest, RequestHandler, Response } from 'microsoft-bot-protocol';
+import { ContentStream, IReceiveRequest, RequestHandler, StreamingResponse } from 'botframework-streaming-extensions';
 import { BotCallbackHandler, IActivityHandler } from '../activityHandler';
 
 export class SkillWebSocketRequestHandler extends RequestHandler {
@@ -20,23 +19,23 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
     }
 
     // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
-    public async processRequestAsync(request: ReceiveRequest, logger?: any, context?: object): Promise<StreamingResponse> {
+    public async processRequest(request: IReceiveRequest, logger?: any, context?: object): Promise<StreamingResponse> {
         if (this.bot === undefined) { throw new Error(('Missing parameter.  "bot" is required')); }
         if (this.skillWebSocketBotAdapter === undefined) { throw new Error(('Missing parameter.  "activityHandler" is required')); }
 
         const response: StreamingResponse = new StreamingResponse();
         // MISSING: await request.readBodyAsString();
-        const bodyParts: string[] = await Promise.all(request.Streams.map((s: ContentStream): Promise<string> => s.readAsString()));
+        const bodyParts: string[] = await Promise.all(request.streams.map((s: ContentStream): Promise<string> => s.readAsString()));
         const body: string = bodyParts.join();
 
-        if (body === undefined || request.Streams.length === 0) {
+        if (body === undefined || request.streams.length === 0) {
             response.statusCode = 400;
             response.setBody('Empty request body.');
 
             return response;
         }
 
-        if (request.Streams.some((x: ContentStream): boolean => x.payloadType !== 'application/json; charset=utf-8')) {
+        if (request.streams.some((x: ContentStream): boolean => x.contentType !== 'application/json; charset=utf-8')) {
             response.statusCode = 406;
 
             return response;
