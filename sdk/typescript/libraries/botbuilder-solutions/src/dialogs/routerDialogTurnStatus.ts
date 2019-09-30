@@ -3,9 +3,9 @@
  * Licensed under the MIT License.
  */
 
-/// <summary>
-/// Define router dialog turn status.
-/// </summary>
+/*
+* Define router dialog turn status.
+*/
 
 export enum RouterDialogTurnStatus {
     Restart = 0

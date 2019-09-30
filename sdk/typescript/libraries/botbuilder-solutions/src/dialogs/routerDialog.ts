@@ -10,7 +10,6 @@ import { ActivityExtensions } from '../extensions';
 import { InterruptableDialog } from './interruptableDialog';
 import { InterruptionAction } from './interruptionAction';
 import { RouterDialogTurnResult } from './routerDialogTurnResult';
-import { RouterDialogTurnStatus } from './routerDialogTurnStatus';
 
 export abstract class RouterDialog extends InterruptableDialog {
     // Constructor
@@ -39,7 +38,6 @@ export abstract class RouterDialog extends InterruptableDialog {
             if (ActivityExtensions.isStartActivity(activity)) {
                 await this.onStart(innerDc);
             }
-            const result: DialogTurnResult = await innerDc.continueDialog();
             switch (activity.type) {
                 case ActivityTypes.Message: {
                     // Note: This check is a workaround for adaptive card buttons that should map to an event
@@ -47,6 +45,7 @@ export abstract class RouterDialog extends InterruptableDialog {
                     if (activity.value) {
                         await this.onEvent(innerDc);
                     } else {
+                        const result: DialogTurnResult = await innerDc.continueDialog();
                         switch (result.status) {
                             case DialogTurnStatus.empty: {
                                 await this.route(innerDc);
@@ -54,9 +53,8 @@ export abstract class RouterDialog extends InterruptableDialog {
                             }
                             case DialogTurnStatus.complete: {
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
-                                const dialogTurnResult: RouterDialogTurnResult = result.result;
-                                if (typeof dialogTurnResult === typeof RouterDialogTurnResult
-                                    && dialogTurnResult.status === RouterDialogTurnStatus.Restart) {
+                                const routerDialogTurnResult: RouterDialogTurnResult = <RouterDialogTurnResult> result.result;
+                                if (routerDialogTurnResult !== undefined) {
                                     await this.route(innerDc);
                                     break;
                                 }
@@ -64,9 +62,13 @@ export abstract class RouterDialog extends InterruptableDialog {
                             default:
                         }
                     }
+                    // If the active dialog was ended on this turn (either on single-turn dialog, or on continueDialogAsync)
+                    // run CompleteAsync method.
+                    if (innerDc.activeDialog === undefined) {
+                        await this.complete(innerDc);
+                    }
                     break;
                 }
-
                 case ActivityTypes.Event: {
                     await this.onEvent(innerDc);
                     break;
@@ -80,11 +82,6 @@ export abstract class RouterDialog extends InterruptableDialog {
                     await this.onSystemMessage(innerDc);
                 }
 
-            }
-            // If the active dialog was ended on this turn (either on single-turn dialog, or on continueDialogAsync)
-            // run CompleteAsync method.
-            if (innerDc.activeDialog === undefined) {
-                await this.complete(innerDc, result);
             }
 
             return Dialog.EndOfTurn;
@@ -104,7 +101,7 @@ export abstract class RouterDialog extends InterruptableDialog {
      * @param result - The dialog result when inner dialog completed.
      * @returns A Promise representing the asynchronous operation.
      */
-    protected async complete(innerDc: DialogContext, result: DialogTurnResult): Promise<void> {
+    protected async complete(innerDc: DialogContext, result?: DialogTurnResult): Promise<void> {
         await innerDc.endDialog(result);
 
         return Promise.resolve();
