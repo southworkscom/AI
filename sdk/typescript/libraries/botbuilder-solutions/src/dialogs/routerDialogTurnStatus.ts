@@ -6,7 +6,6 @@
 /*
 * Define router dialog turn status.
 */
-
 export enum RouterDialogTurnStatus {
     Restart = 0
 }

@@ -10,6 +10,7 @@ import { ActivityExtensions } from '../extensions';
 import { InterruptableDialog } from './interruptableDialog';
 import { InterruptionAction } from './interruptionAction';
 import { RouterDialogTurnResult } from './routerDialogTurnResult';
+import { RouterDialogTurnStatus } from './routerDialogTurnStatus';
 
 export abstract class RouterDialog extends InterruptableDialog {
     // Constructor
@@ -54,7 +55,7 @@ export abstract class RouterDialog extends InterruptableDialog {
                             case DialogTurnStatus.complete: {
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
                                 const routerDialogTurnResult: RouterDialogTurnResult = <RouterDialogTurnResult> result.result;
-                                if (routerDialogTurnResult !== undefined) {
+                                if (routerDialogTurnResult !== undefined && routerDialogTurnResult.status === RouterDialogTurnStatus.Restart) {
                                     await this.route(innerDc);
                                     break;
                                 }
@@ -81,7 +82,6 @@ export abstract class RouterDialog extends InterruptableDialog {
                 default: {
                     await this.onSystemMessage(innerDc);
                 }
-
             }
 
             return Dialog.EndOfTurn;
