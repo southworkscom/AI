@@ -25,7 +25,7 @@ import { ActivityExtensions,
     TokenEvents} from 'botbuilder-solutions';
 import { IServiceClientCredentials } from './auth';
 import { IAction, ISkillManifest, ISlot, SkillEvents } from './models';
-import { skillConstants } from './skillConstants';
+import { SkillConstants } from './skillConstants';
 import { SkillContext } from './skillContext';
 import { SkillDialogOption } from './SkillDialogOptions';
 import { ISkillIntentRecognizer } from './SkillIntentRecognizer';
@@ -163,7 +163,7 @@ export class SkillDialog extends ComponentDialog {
 
             if (actionName || actionName !== '') {
                 // only set the semantic state if action is not empty
-                semanticAction.state = skillConstants.skillStart;
+                semanticAction.state = SkillConstants.skillStart;
 
                 // Find the specified within the selected Skill for slot filling evaluation
                 const action: IAction|undefined = this.skillManifest.actions.find((item: IAction): boolean => item.id === actionName);

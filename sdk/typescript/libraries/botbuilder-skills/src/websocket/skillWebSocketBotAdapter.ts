@@ -248,9 +248,9 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
             }
 
             if (activity.type === ActivityTypes.Handoff) {
-                activity.semanticAction.state = SkillConstants.SkillDone;
+                activity.semanticAction.state = SkillConstants.skillDone;
             } else {
-                activity.semanticAction.state = SkillConstants.SkillContinue;
+                activity.semanticAction.state = SkillConstants.skillContinue;
             }
         }
     }
