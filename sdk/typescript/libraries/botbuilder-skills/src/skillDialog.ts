@@ -23,6 +23,7 @@ import { ActivityExtensions,
     RouterDialogTurnResult,
     RouterDialogTurnStatus,
     TokenEvents} from 'botbuilder-solutions';
+import i18next from 'i18next';
 import { IServiceClientCredentials } from './auth';
 import { IAction, ISkillManifest, ISlot, SkillEvents } from './models';
 import { SkillConstants } from './skillConstants';
@@ -87,7 +88,8 @@ export class SkillDialog extends ComponentDialog {
 
         if (stepContext.options !== null && confirmOptions !== undefined) {
             const newIntentName: string = confirmOptions.targetIntent;
-            const intentResponse: string = `Are you sure to switch to ${ newIntentName }?`;
+            const intentResponse: string = i18next.t('ConfirmSkillSwitch')
+                .replace('{0}', newIntentName);
 
             return stepContext.prompt(DialogIds.confirmSkillSwitchPrompt, { prompt: {
                     type: ActivityTypes.Message,
