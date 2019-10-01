@@ -10,3 +10,4 @@
     targetIntent: string;
     userInputActivity: Partial<Activity>;
  }
+ 
