@@ -10,7 +10,7 @@ import {
     SemanticAction,
     StatePropertyAccessor,
     TurnContext,
-    UserStater} from 'botbuilder';
+    UserState} from 'botbuilder';
 import { ComponentDialog, ConfirmPrompt, DialogContext, DialogInstance, DialogReason,
     DialogTurnResult,
     DialogTurnStatus,
@@ -47,7 +47,9 @@ export class SkillDialog extends ComponentDialog {
 
     private readonly queuedResponses: Partial<Activity>[];
 
-    private skillIntentRecognizer?: ISkillIntentRecognizer;
+    private readonly skillIntentRecognizer?: ISkillIntentRecognizer;
+
+    private authDialogCancelled: boolean = false;
 
     public constructor(
         skillManifest: ISkillManifest,
@@ -101,9 +103,9 @@ export class SkillDialog extends ComponentDialog {
     public async finishIntentSwitch(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const confirmOptions: ISkillSwitchConfirmOption = <ISkillSwitchConfirmOption> stepContext.options;
 
-        if (stepContext.options !== null && confirmOptions !== undefined) {
+        if (confirmOptions !== undefined) {
             // Do skill switching
-            if (confirmOptions !== undefined) {
+            if (stepContext.result === true) {
                 // 1) End remote skill dialog
                 await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, stepContext.context);
 
