@@ -5,6 +5,6 @@
 import { DialogContext } from 'botbuilder-dialogs';
 
 export interface ISkillIntentRecognizer {
-    recognizeSkillIntentAsync(dialogContext: DialogContext): Promise<string>;
+    recognizeSkillIntent(dialogContext: DialogContext): Promise<string>;
     readonly confirmIntentSwitch: boolean;
 }

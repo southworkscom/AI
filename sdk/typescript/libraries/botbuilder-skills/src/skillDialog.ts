@@ -29,8 +29,8 @@ import { IAction, ISkillManifest, ISlot, SkillEvents } from './models';
 import { SkillConstants } from './skillConstants';
 import { SkillContext } from './skillContext';
 import { SkillDialogOption } from './SkillDialogOptions';
-import { ISkillIntentRecognizer } from './SkillIntentRecognizer';
-import { ISkillSwitchConfirmOption } from './SkillSwitchConfirmOption';
+import { ISkillIntentRecognizer } from './skillIntentRecognizer';
+import { ISkillSwitchConfirmOption } from './skillSwitchConfirmOption';
 import { ISkillTransport, TokenRequestHandler } from './skillTransport';
 import { SkillWebSocketTransport } from './websocket';
 
