@@ -41,12 +41,12 @@ import { SkillWebSocketTransport } from './websocket';
 export class SkillDialog extends ComponentDialog {
     private readonly authDialog?: MultiProviderAuthDialog;
     private readonly serviceClientCredentials: IServiceClientCredentials;
-    private readonly userState: UserState;
+    private readonly skillContextAccessor: StatePropertyAccessor<SkillContext>;
 
     private readonly skillManifest: ISkillManifest;
     private readonly skillTransport: ISkillTransport;
 
-    private readonly queuedResponses: Partial<Activity>[];
+    private readonly queuedResponses: Partial<Activity>[] = [];
 
     private readonly skillIntentRecognizer?: ISkillIntentRecognizer;
 
@@ -56,7 +56,7 @@ export class SkillDialog extends ComponentDialog {
         skillManifest: ISkillManifest,
         serviceClientCredentials: IServiceClientCredentials,
         telemetryClient: BotTelemetryClient,
-        userState: UserState,
+        skillContextAccessor: StatePropertyAccessor<SkillContext>,
         authDialog?: MultiProviderAuthDialog,
         skillIntentRecognizer?: ISkillIntentRecognizer,
         skillTransport?: ISkillTransport
@@ -65,14 +65,15 @@ export class SkillDialog extends ComponentDialog {
         if (skillManifest === undefined) { throw new Error('skillManifest has no value'); }
         if (serviceClientCredentials === undefined) { throw new Error('serviceClientCredentials has no value'); }
         this.skillManifest = skillManifest;
-        this.userState = userState;
+        this.skillContextAccessor = skillContextAccessor;
         this.skillTransport = skillTransport || new SkillWebSocketTransport(telemetryClient);
         this.skillIntentRecognizer = skillIntentRecognizer;
         this.serviceClientCredentials = serviceClientCredentials;
 
-        const intentSwitching: WaterfallStep[] = [ this.confirmIntentSwitch, this.finishIntentSwitch ];
-
-        this.queuedResponses = [];
+        const intentSwitching: WaterfallStep[] = [
+            this.confirmIntentSwitch.bind(this),
+            this.finishIntentSwitch.bind(this)
+        ];
 
         if (authDialog !== undefined) {
             this.authDialog = authDialog;
@@ -84,10 +85,10 @@ export class SkillDialog extends ComponentDialog {
     }
 
     public async confirmIntentSwitch(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const confirmOptions: ISkillSwitchConfirmOption = <ISkillSwitchConfirmOption> stepContext.options;
+        const skillSwitchConfirmOptions: ISkillSwitchConfirmOption = <ISkillSwitchConfirmOption> stepContext.options;
 
-        if (stepContext.options !== null && confirmOptions !== undefined) {
-            const newIntentName: string = confirmOptions.targetIntent;
+        if (skillSwitchConfirmOptions !== undefined) {
+            const newIntentName: string = skillSwitchConfirmOptions.targetIntent;
             const intentResponse: string = i18next.t('ConfirmSkillSwitch')
                 .replace('{0}', newIntentName);
 
@@ -103,25 +104,26 @@ export class SkillDialog extends ComponentDialog {
     }
 
     public async finishIntentSwitch(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const confirmOptions: ISkillSwitchConfirmOption = <ISkillSwitchConfirmOption> stepContext.options;
+        const skillSwitchConfirmOptions: ISkillSwitchConfirmOption = <ISkillSwitchConfirmOption> stepContext.options;
 
-        if (confirmOptions !== undefined) {
+        if (skillSwitchConfirmOptions !== undefined) {
             // Do skill switching
             if (stepContext.result === true) {
                 // 1) End remote skill dialog
                 await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, stepContext.context);
 
                 // 2) Reset user input
-                const activityText: string|undefined = confirmOptions.userInputActivity.text;
+                const activityText: string|undefined = skillSwitchConfirmOptions.userInputActivity.text;
                 stepContext.context.activity.text = activityText !== undefined ? activityText : '';
-                stepContext.context.activity.speak  = confirmOptions.userInputActivity.speak;
+                stepContext.context.activity.speak  = skillSwitchConfirmOptions.userInputActivity.speak;
 
                 // 3) End dialog
                 return stepContext.endDialog(true);
             } else {
-
                 // Cancel skill switching
-                const dialogResult: DialogTurnResult  = await this.forwardToSkill(stepContext, confirmOptions.userInputActivity);
+                const dialogResult: DialogTurnResult  = await this.forwardToSkill(
+                    stepContext,
+                    skillSwitchConfirmOptions.fallbackHandledEvent);
 
                 return stepContext.endDialog(dialogResult);
             }
@@ -153,12 +155,9 @@ export class SkillDialog extends ComponentDialog {
     protected async onBeginDialog(innerDC: DialogContext, options?: object): Promise<DialogTurnResult> {
         let slots: SkillContext = new SkillContext();
 
-        const accesor: StatePropertyAccessor = this.userState.createProperty<SkillContext>(SkillContext.name);
-        const skillContext: SkillContext = await accesor.get(innerDC.context, () => new SkillContext());
-
+        const skillContext: SkillContext | undefined = await this.skillContextAccessor.get(innerDC.context);
         const dialogOptions: SkillDialogOption = options !== undefined ? <SkillDialogOption> options : { action: '' };
         const actionName: string = dialogOptions.action;
-
         const activity: Activity = innerDC.context.activity;
 
         // only set SemanticAction if it's not populated
@@ -170,10 +169,10 @@ export class SkillDialog extends ComponentDialog {
                 semanticAction.state = SkillConstants.skillStart;
 
                 // Find the specified within the selected Skill for slot filling evaluation
-                const action: IAction|undefined = this.skillManifest.actions.find((item: IAction): boolean => item.id === actionName);
-                if (action !== undefined) {
+                const action: IAction | undefined = this.skillManifest.actions.find((item: IAction): boolean => item.id === actionName);
+                if (action !== undefined && skillContext !== undefined) {
                     // If the action doesn't define any Slots or SkillContext is empty then we skip slot evaluation
-                    if (action.definition.slots !== undefined && action.definition.slots.length > 0) {
+                    if (action.definition.slots !== undefined && skillContext.count > 0) {
                         // Match Slots to Skill Context
                         slots = await this.matchSkillContextToSlots(innerDC, action.definition.slots, skillContext);
                     }
@@ -202,9 +201,9 @@ export class SkillDialog extends ComponentDialog {
                     },
                     []);
 
-                if (skillSlots !== undefined) {
-                // Match Slots to Skill Context
-                slots = await this.matchSkillContextToSlots(innerDC, skillSlots, skillContext);
+                if (skillSlots !== undefined && skillContext !== undefined) {
+                    // Match Slots to Skill Context
+                    slots = await this.matchSkillContextToSlots(innerDC, skillSlots, skillContext);
                 }
             }
 
@@ -306,7 +305,8 @@ export class SkillDialog extends ComponentDialog {
                 this.serviceClientCredentials,
                 innerDc.context,
                 activity,
-                this.getTokenRequestCallback(innerDc));
+                this.getTokenRequestCallback(innerDc),
+                this.getFallbackCallback(innerDc));
 
             if (handoffActivity !== undefined) {
                 await innerDc.context.sendActivity({
@@ -325,15 +325,15 @@ export class SkillDialog extends ComponentDialog {
                 // forward to skill and start a new turn
                 while (this.queuedResponses.length > 0) {
 
-                    const lastEvent: Partial<Activity> | undefined = this.queuedResponses.pop();
+                    const lastEvent: Partial<Activity> | undefined = this.queuedResponses.shift();
                     if (lastEvent === SkillEvents.fallbackEventName) {
                         // Set fallback event to fallback handled event
                         lastEvent.name = SkillEvents.fallbackHandledEventName;
 
                         // if skillIntentRecognizer specified, run the recognizer
                         if (this.skillIntentRecognizer !== undefined
-                            && this.skillIntentRecognizer.recognizeSkillIntentAsync !== undefined) {
-                            const recognizedSkillManifest: string = await this.skillIntentRecognizer.recognizeSkillIntentAsync(innerDc);
+                            && this.skillIntentRecognizer.recognizeSkillIntent !== undefined) {
+                            const recognizedSkillManifest: string = await this.skillIntentRecognizer.recognizeSkillIntent(innerDc);
 
                             // if the result is an actual intent other than the current skill, launch the confirm dialog (if configured)
                             // to eventually switch to a different skill.
@@ -387,13 +387,13 @@ export class SkillDialog extends ComponentDialog {
             const result: DialogTurnResult = await dialogContext.beginDialog(this.authDialog ? this.authDialog.id : '');
 
             if (result.status === DialogTurnStatus.complete) {
-                const resultObj: any = result.result;
+                const tokenResponse: any = result.result;
 
-                if (resultObj !== undefined && isProviderTokenResponse(result)) {
+                if (tokenResponse !== undefined && isProviderTokenResponse(result)) {
                     const tokenEvent: Activity = ActivityExtensions.createReply(activity);
                     tokenEvent.type = ActivityTypes.Event;
                     tokenEvent.name = TokenEvents.tokenResponseEventName;
-                    tokenEvent.value = resultObj;
+                    tokenEvent.value = tokenResponse;
 
                     this.queuedResponses.push(tokenEvent);
                 } else {
