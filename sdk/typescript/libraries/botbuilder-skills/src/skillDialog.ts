@@ -20,12 +20,13 @@ import { ComponentDialog, ConfirmPrompt, DialogContext, DialogInstance, DialogRe
 import { ActivityExtensions,
     isProviderTokenResponse,
     MultiProviderAuthDialog,
+    ResponseManager,
     RouterDialogTurnResult,
     RouterDialogTurnStatus,
     TokenEvents} from 'botbuilder-solutions';
-import i18next from 'i18next';
 import { IServiceClientCredentials } from './auth';
 import { IAction, ISkillManifest, ISlot, SkillEvents } from './models';
+import { Responses } from './responses';
 import { SkillConstants } from './skillConstants';
 import { SkillContext } from './skillContext';
 import { SkillDialogOption } from './SkillDialogOptions';
@@ -51,6 +52,7 @@ export class SkillDialog extends ComponentDialog {
     private readonly skillIntentRecognizer?: ISkillIntentRecognizer;
 
     private authDialogCancelled: boolean = false;
+    private readonly responseManager: ResponseManager;
 
     public constructor(
         skillManifest: ISkillManifest,
@@ -69,6 +71,11 @@ export class SkillDialog extends ComponentDialog {
         this.skillTransport = skillTransport || new SkillWebSocketTransport(telemetryClient);
         this.skillIntentRecognizer = skillIntentRecognizer;
         this.serviceClientCredentials = serviceClientCredentials;
+
+        this.responseManager = new ResponseManager(
+            ['en', 'de', 'es', 'fr', 'it', 'zh'],
+            [Responses]
+        );
 
         const intentSwitching: WaterfallStep[] = [
             this.confirmIntentSwitch.bind(this),
@@ -89,15 +96,13 @@ export class SkillDialog extends ComponentDialog {
 
         if (skillSwitchConfirmOptions !== undefined) {
             const newIntentName: string = skillSwitchConfirmOptions.targetIntent;
-            const intentResponse: string = i18next.t('ConfirmSkillSwitch')
-                .replace('{0}', newIntentName);
 
-            return stepContext.prompt(DialogIds.confirmSkillSwitchPrompt, { prompt: {
-                    type: ActivityTypes.Message,
-                    text: intentResponse,
-                    speak: intentResponse
-                }
-            });
+            const responseTokens: Map<string, string> = new Map([
+                ['{0}', newIntentName]
+            ]);
+            const intentResponse: Partial<Activity> = this.responseManager.getResponse(Responses.confirmSkillSwitch, responseTokens);
+
+            return stepContext.prompt(DialogIds.confirmSkillSwitchPrompt, intentResponse);
         }
 
         return stepContext.next();

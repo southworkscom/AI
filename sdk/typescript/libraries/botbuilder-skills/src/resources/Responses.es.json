@@ -1,0 +1,11 @@
+{
+  "confirmSkillSwitch": {
+    "replies": [
+      {
+        "text": "¿Estás seguro de cambiar a {0}?",
+        "speak": "¿Estás seguro de cambiar a {0}?"
+      }
+    ],
+    "inputHint": "expectingInput"
+  }
+}
