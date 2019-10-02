@@ -7,7 +7,6 @@ import {
     AutoSaveStateMiddleware,
     BotTelemetryClient,
     ConversationState,
-    ShowTypingMiddleware,
     StatePropertyAccessor,
     TelemetryLoggerMiddleware,
     TranscriptLoggerMiddleware,
@@ -16,23 +15,21 @@ import {
 import { AzureBlobTranscriptStore } from 'botbuilder-azure';
 import { DialogState } from 'botbuilder-dialogs';
 import {
-    SkillContext,
-    SkillHttpBotAdapter,
-    SkillMiddleware } from 'botbuilder-skills';
+    SkillMiddleware,
+    SkillWebSocketBotAdapter } from 'botbuilder-skills';
 import { EventDebuggerMiddleware, SetLocaleMiddleware } from 'botbuilder-solutions';
 import { IBotSettings } from '../services/botSettings';
 
-export class SampleSkillAdapter extends SkillHttpBotAdapter {
+export class CustomSkillAdapter extends SkillWebSocketBotAdapter {
 
     public constructor(
         settings: Partial<IBotSettings>,
         userState: UserState,
         conversationState: ConversationState,
         telemetryClient: BotTelemetryClient,
-        skillContextAccessor: StatePropertyAccessor<SkillContext>,
         dialogStateAccessor: StatePropertyAccessor<DialogState>
     ) {
-        super(telemetryClient);
+        super();
 
         if (settings.blobStorage === undefined) {
             throw new Error('There is no blobStorage value in appsettings file');
@@ -43,9 +40,10 @@ export class SampleSkillAdapter extends SkillHttpBotAdapter {
             storageAccountOrConnectionString: settings.blobStorage.connectionString
         });
 
+        // Uncomment the following line for local development without Azure Storage
+        // this.use(new TranscriptLoggerMiddleware(new MemoryTranscriptStore()));
         this.use(new TelemetryLoggerMiddleware(telemetryClient, true));
         this.use(new TranscriptLoggerMiddleware(transcriptStore));
-        this.use(new ShowTypingMiddleware());
         this.use(new SetLocaleMiddleware(settings.defaultLocale || 'en-us'));
         this.use(new EventDebuggerMiddleware());
         this.use(new AutoSaveStateMiddleware(conversationState, userState));
