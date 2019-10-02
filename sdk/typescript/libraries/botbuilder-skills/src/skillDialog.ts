@@ -164,7 +164,7 @@ export class SkillDialog extends ComponentDialog {
         if (activity.semanticAction !== undefined) {
             const semanticAction: SemanticAction = { id: actionName, entities: {}, state : '' };
 
-            if (actionName || actionName !== '') {
+            if (actionName !== undefined || actionName !== '') {
                 // only set the semantic state if action is not empty
                 semanticAction.state = SkillConstants.skillStart;
 
