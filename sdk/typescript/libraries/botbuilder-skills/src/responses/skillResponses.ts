@@ -11,4 +11,5 @@ export class CommonResponses implements IResponseIdCollection {
     public static readonly pathToResource: string = join(__dirname, 'resources');
     public static readonly errorMessageSkillError: string = 'ErrorMessageSkillError';
     public static readonly errorMessageSkillNotFound: string = 'ErrorMessageSkillNotFound';
+    public static readonly confirmSkillSwitch: string = 'ConfirmSkillSwitch';
 }

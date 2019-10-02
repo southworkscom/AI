@@ -9,8 +9,7 @@ import {
     BotTelemetryClient,
     SemanticAction,
     StatePropertyAccessor,
-    TurnContext,
-    UserState} from 'botbuilder';
+    TurnContext} from 'botbuilder';
 import { ComponentDialog, ConfirmPrompt, DialogContext, DialogInstance, DialogReason,
     DialogTurnResult,
     DialogTurnStatus,
@@ -26,7 +25,7 @@ import { ActivityExtensions,
     TokenEvents} from 'botbuilder-solutions';
 import { IServiceClientCredentials } from './auth';
 import { IAction, ISkillManifest, ISlot, SkillEvents } from './models';
-import { Responses } from './responses';
+import { CommonResponses } from './responses/skillResponses';
 import { SkillConstants } from './skillConstants';
 import { SkillContext } from './skillContext';
 import { SkillDialogOption } from './SkillDialogOptions';
@@ -74,7 +73,7 @@ export class SkillDialog extends ComponentDialog {
 
         this.responseManager = new ResponseManager(
             ['en', 'de', 'es', 'fr', 'it', 'zh'],
-            [Responses]
+            [CommonResponses]
         );
 
         const intentSwitching: WaterfallStep[] = [
@@ -100,7 +99,7 @@ export class SkillDialog extends ComponentDialog {
             const responseTokens: Map<string, string> = new Map([
                 ['{0}', newIntentName]
             ]);
-            const intentResponse: Partial<Activity> = this.responseManager.getResponse(Responses.confirmSkillSwitch, responseTokens);
+            const intentResponse: Partial<Activity> = this.responseManager.getResponse(CommonResponses.confirmSkillSwitch, responseTokens);
 
             return stepContext.prompt(DialogIds.confirmSkillSwitchPrompt, intentResponse);
         }
