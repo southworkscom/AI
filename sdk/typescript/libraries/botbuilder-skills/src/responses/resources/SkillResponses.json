@@ -17,7 +17,7 @@
     ],
     "inputHint": "expectingInput"
   },
-  "confirmSkillSwitch": {
+  "ConfirmSkillSwitch": {
     "replies": [
       {
         "text": "Are you sure to switch to {0}?",
