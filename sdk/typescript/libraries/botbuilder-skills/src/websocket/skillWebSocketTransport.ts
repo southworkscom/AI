@@ -57,7 +57,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
         const headers: Map<string, string> = new Map();
         // tslint:disable-next-line: no-backbone-get-set-outside-model
         headers.set('Authorization', `Bearer ${token}`);
-
+        // eslint-disable-next-line @typescript-eslint/tslint/config
         await this.streamingTransportClient.connectAsync(headers);
         let latency: number = 0;
 
@@ -74,6 +74,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
             activity.recipient.id = recipientId;
             try {
                 const begin: [number, number] = process.hrtime();
+                // eslint-disable-next-line @typescript-eslint/tslint/config
                 await this.streamingTransportClient.send(request);
                 const end: [number, number] = process.hrtime(begin);
                 latency = toMilliseconds(end);
@@ -112,6 +113,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
 
     public disconnect(): void {
         if (this.streamingTransportClient !== undefined) {
+            // eslint-disable-next-line @typescript-eslint/tslint/config
             this.streamingTransportClient.disconnect();
         }
     }
