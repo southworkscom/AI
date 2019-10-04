@@ -3,11 +3,10 @@
  * Licensed under the MIT License.
  */
 
- import { Activity } from 'botbuilder';
+import { Activity } from 'botbuilder';
 
- export interface ISkillSwitchConfirmOption {
+export interface ISkillSwitchConfirmOption {
     fallbackHandledEvent: Partial<Activity>;
     targetIntent: string;
     userInputActivity: Partial<Activity>;
- }
- 
+}
