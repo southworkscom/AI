@@ -1,6 +1,6 @@
 import { BotFrameworkAdapter, BotFrameworkAdapterSettings, BotTelemetryClient, NullTelemetryClient,
     TurnContext, WebRequest, WebResponse } from 'botbuilder';
-import { WebSocketServer, ISocket } from 'botframework-streaming-extensions';
+import { ISocket, WebSocketServer } from 'botframework-streaming-extensions';
 import { BotCallbackHandler } from '../activityHandler';
 import { IAuthenticationProvider } from '../auth';
 import { SkillWebSocketBotAdapter } from './skillWebSocketBotAdapter';
