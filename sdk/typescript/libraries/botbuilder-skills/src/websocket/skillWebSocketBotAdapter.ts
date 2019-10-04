@@ -6,8 +6,8 @@
 import { BotAdapter, BotTelemetryClient, InvokeResponse, Middleware, NullTelemetryClient,
     ResourceResponse, Severity, TurnContext } from 'botbuilder';
 import { ActivityExtensions, IFallbackRequestProvider, IRemoteUserTokenProvider, TokenEvents } from 'botbuilder-solutions';
-import { ContentStream, IReceiveResponse, StreamingRequest, WebSocketServer } from 'botframework-streaming-extensions';
 import { Activity, ActivityTypes, ConversationReference } from 'botframework-schema';
+import { ContentStream, IReceiveResponse, StreamingRequest, WebSocketServer } from 'botframework-streaming-extensions';
 import { v4 as uuid } from 'uuid';
 import { BotCallbackHandler, IActivityHandler, SkillConstants } from '../';
 import { SkillEvents } from '../models';
@@ -21,7 +21,6 @@ import { SkillEvents } from '../models';
 export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHandler, IRemoteUserTokenProvider, IFallbackRequestProvider {
     private readonly telemetryClient: BotTelemetryClient;
     public server!: WebSocketServer;
-    
     public constructor(middleware?: Middleware, telemetryClient?: BotTelemetryClient) {
         super();
         this.telemetryClient = telemetryClient || new NullTelemetryClient();
@@ -29,9 +28,9 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
             this.use(middleware);
         }
     }
-    
-    continueConversation(reference: Partial<ConversationReference>, logic: (revocableContext: TurnContext) => Promise<void>): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async continueConversation(reference: Partial<ConversationReference>, logic: (revocableContext: TurnContext) => Promise<void>):
+    Promise<void> {
+        throw new Error('Method not implemented.');
     }
 
     /**
@@ -258,9 +257,10 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
     private async sendRequest<T>(request: StreamingRequest): Promise<T|undefined> {
         try {
             const serverResponse: IReceiveResponse = await this.server.send(request);
-
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
             if (serverResponse.StatusCode === 200) {
                 // MISSING: await request.ReadBodyAsJson();
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
                 const bodyParts: string[] = await Promise.all(serverResponse.Streams.map
                 ((s: ContentStream): Promise<string> => s.readAsString()));
                 const body: string = bodyParts.join();
