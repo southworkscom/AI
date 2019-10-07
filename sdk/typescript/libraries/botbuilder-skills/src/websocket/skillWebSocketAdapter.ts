@@ -38,7 +38,7 @@ export class SkillWebSocketAdapter extends BotFrameworkAdapter {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
     private async createWebSocketConnection(req: any, bot: BotCallbackHandler): Promise<void> {
         // MISSING found an equivalent to websocket in TypeScript
-        // eslint-disable-next-line @typescript-eslint/tslint/config
+        // tslint:disable-next-line no-unsafe-any
         const socket: ISocket = req.socket;
         const handler: SkillWebSocketRequestHandler = new SkillWebSocketRequestHandler(this.telemetryClient);
         const server: WebSocketServer = new WebSocketServer(socket, handler);

@@ -48,8 +48,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
                     const bodyParts: string[] = await Promise.all(request.streams.map
                     ((s: ContentStream): Promise<string> => s.readAsJson()));
                     const body: string = bodyParts.join();
-                    // eslint-disable-next-line @typescript-eslint/tslint/config
-                    const activity: Activity = JSON.parse(body);
+                    const activity: Activity = <Activity> JSON.parse(body);
                     if (activity === undefined) {
                         throw new Error('Error deserializing activity response!');
                     }
@@ -95,8 +94,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
                     const bodyParts: string[] = await Promise.all(
                         request.streams.map((s: ContentStream): Promise<string> => s.readAsJson()));
                     const body: string = bodyParts.join();
-                    // eslint-disable-next-line @typescript-eslint/tslint/config
-                    const activity: Activity = JSON.parse(body);
+                    const activity: Activity = <Activity> JSON.parse(body);
                     await this.turnContext.updateActivity(activity);
 
                     // MISSING this method should return the result of updateActivity

@@ -29,8 +29,7 @@ export class SkillManifestGenerator {
         if (!uriBase) { throw new Error('uriBase has no value'); }
 
         // Each skill has a manifest template in the root directory and is used as foundation for the generated manifest
-        // eslint-disable-next-line @typescript-eslint/tslint/config
-        const skillManifest: ISkillManifest = JSON.parse(readFileSync(manifestFile, 'UTF8'));
+        const skillManifest: ISkillManifest = <ISkillManifest> JSON.parse(readFileSync(manifestFile, 'UTF8'));
         if (!skillManifest.id) { throw new Error('Skill manifest ID property was not present in the template manifest file.'); }
         if (!skillManifest.name) { throw new Error('Skill manifest Name property was not present in the template manifest file.'); }
 
@@ -221,22 +220,23 @@ export function manifestGenerator(manifestFile: string, botSettings: Partial<IBo
         if (botSettings.microsoftAppId === undefined) { throw new Error('botSettings.microsoftAppId has no value'); }
         if (botSettings.cognitiveModels === undefined) { throw new Error('botSettings.cognitiveModels has no value'); }
 
-        // eslint-disable-next-line @typescript-eslint/tslint/config
+        // tslint:disable-next-line no-unsafe-any
         const inline: boolean = (req.query.inlineTriggerUtterances || '').toLowerCase() === 'true';
         // tslint:disable-next-line:no-unsafe-any
         const scheme: string = req.isSecure() ? 'https' : 'http';
-        // eslint-disable-next-line @typescript-eslint/tslint/config
+        // tslint:disable-next-line:no-unsafe-any
         const host: string = req.headers.host || '';
         const skillUriBase: string = `${scheme}://${host}`;
         const appId: string = botSettings.microsoftAppId;
         const cognitiveModels: Map<string, ICognitiveModelConfiguration> = botSettings.cognitiveModels;
 
         const generator: SkillManifestGenerator = new SkillManifestGenerator();
+        // tslint:disable-next-line:no-unsafe-any
         const manifest: ISkillManifest = await generator.generateManifest(manifestFile, appId, cognitiveModels, skillUriBase, inline);
-        // eslint-disable-next-line @typescript-eslint/tslint/config
+        // tslint:disable-next-line:no-unsafe-any
         res.send(200, manifest);
 
-        // eslint-disable-next-line @typescript-eslint/tslint/config
+        // tslint:disable-next-line:no-unsafe-any
         return next();
     };
 }

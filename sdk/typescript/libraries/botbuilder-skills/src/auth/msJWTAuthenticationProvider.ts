@@ -38,8 +38,7 @@ export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
                 method: 'GET',
                 url: this.openIdMetadataUrl
             });
-
-            // eslint-disable-next-line @typescript-eslint/tslint/config
+            // tslint:disable-next-line no-unsafe-any
             const jwksUri: string = <string>jwksInfo.parsedBody.jwks_uri;
             const jwksClient: jwks.JwksClient = jwks({ jwksUri: jwksUri });
 

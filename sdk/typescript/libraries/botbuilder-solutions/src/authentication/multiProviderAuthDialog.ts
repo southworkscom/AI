@@ -166,7 +166,6 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
     private async sendRemoteEvent(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         if (isRemoteUserTokenProvider(stepContext.context.adapter)) {
-            // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
             const tokenProvider: IRemoteUserTokenProvider = <any>stepContext.context.adapter;
             await tokenProvider.sendRemoteTokenRequestEvent(stepContext.context);
 
@@ -179,8 +178,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
     private async receiveRemoteEvent(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         if (stepContext.context.activity !== undefined && stepContext.context.activity.value !== undefined) {
-            // eslint-disable-next-line @typescript-eslint/tslint/config
-            const tokenResponse: IProviderTokenResponse = JSON.parse(stepContext.context.activity.value);
+            const tokenResponse: IProviderTokenResponse = <IProviderTokenResponse> JSON.parse(stepContext.context.activity.value);
 
             return stepContext.endDialog(tokenResponse);
         }
