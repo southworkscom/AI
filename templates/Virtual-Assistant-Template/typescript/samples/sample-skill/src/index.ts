@@ -118,7 +118,7 @@ const botAdapter: DefaultAdapter = new DefaultAdapter(
     userState,
     conversationState,
     telemetryClient);
-// eslint-disable-next-line @typescript-eslint/tslint/config
+// tslint:disable-next-line:no-unsafe-any
 const sampleSkillAdapter: SampleSkillAdapter = new SampleSkillAdapter(
     botSettings,
     userState,
@@ -126,7 +126,7 @@ const sampleSkillAdapter: SampleSkillAdapter = new SampleSkillAdapter(
     telemetryClient,
     skillContextAccessor,
     dialogStateAccessor);
-// eslint-disable-next-line @typescript-eslint/tslint/config
+// tslint:disable-next-line:no-unsafe-any
 const adapter: SkillHttpAdapter = new SkillHttpAdapter(sampleSkillAdapter);
 
 let bot: DialogBot<Dialog>;
