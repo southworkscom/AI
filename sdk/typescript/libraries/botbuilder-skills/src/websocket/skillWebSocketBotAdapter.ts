@@ -257,10 +257,10 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
     private async sendRequest<T>(request: StreamingRequest): Promise<T|undefined> {
         try {
             const serverResponse: IReceiveResponse = await this.server.send(request);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
+            // eslint-disable-next-line @typescript-eslint/tslint/config
             if (serverResponse.StatusCode === 200) {
                 // MISSING: await request.ReadBodyAsJson();
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
+                // eslint-disable-next-line @typescript-eslint/tslint/config
                 const bodyParts: string[] = await Promise.all(serverResponse.Streams.map
                 ((s: ContentStream): Promise<string> => s.readAsString()));
                 const body: string = bodyParts.join();
