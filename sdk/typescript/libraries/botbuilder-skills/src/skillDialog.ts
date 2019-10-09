@@ -22,6 +22,7 @@ import {
     WaterfallStepContext } from 'botbuilder-dialogs';
 import {
     ActivityExtensions,
+    IProviderTokenResponse,
     isProviderTokenResponse,
     MultiProviderAuthDialog,
     ResponseManager,
@@ -426,10 +427,9 @@ export class SkillDialog extends ComponentDialog {
             const result: DialogTurnResult = await dialogContext.beginDialog(this.authDialog ? this.authDialog.id : '');
 
             if (result.status === DialogTurnStatus.complete) {
-                // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
-                const tokenResponse: any = result.result;
+                const tokenResponse: IProviderTokenResponse = <IProviderTokenResponse> result.result;
 
-                if (tokenResponse !== undefined && isProviderTokenResponse(result)) {
+                if (isProviderTokenResponse(tokenResponse)) {
                     const tokenEvent: Activity = ActivityExtensions.createReply(activity);
                     tokenEvent.type = ActivityTypes.Event;
                     tokenEvent.name = TokenEvents.tokenResponseEventName;

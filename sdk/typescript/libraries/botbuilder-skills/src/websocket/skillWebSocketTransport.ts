@@ -55,10 +55,10 @@ export class SkillWebSocketTransport implements ISkillTransport {
 
         // put AAD token in the header
         const headers: Map<string, string> = new Map();
-        // tslint:disable-next-line: no-backbone-get-set-outside-model
-        headers.set('Authorization', `Bearer ${token}`);
-        // tslint:disable-next-line no-unsafe-any
-        await this.streamingTransportClient.connectAsync(headers);
+        const keyHeader: string = 'Authorization';
+        const valHeader: string = `Bearer ${token}`;
+        headers.set(keyHeader, valHeader);
+        await this.streamingTransportClient.connect();
         let latency: number = 0;
 
         // set recipient to the skill
@@ -74,7 +74,6 @@ export class SkillWebSocketTransport implements ISkillTransport {
             activity.recipient.id = recipientId;
             try {
                 const begin: [number, number] = process.hrtime();
-                // tslint:disable-next-line no-unsafe-any
                 await this.streamingTransportClient.send(request);
                 const end: [number, number] = process.hrtime(begin);
                 latency = toMilliseconds(end);
@@ -113,7 +112,6 @@ export class SkillWebSocketTransport implements ISkillTransport {
 
     public disconnect(): void {
         if (this.streamingTransportClient !== undefined) {
-            // tslint:disable-next-line no-unsafe-any
             this.streamingTransportClient.disconnect();
         }
     }
@@ -144,17 +142,13 @@ export class SkillWebSocketTransport implements ISkillTransport {
         if (!url) {
             throw new Error('url is empty!');
         }
-
-        // tslint:disable-next-line:no-http-string
         const httpPrefix: string = 'http://';
         const httpsPrefix: string = 'https://';
         const wsPrefix: string = 'ws://';
         const wssPrefix: string = 'wss://';
-
         if (url.startsWith(httpPrefix)) {
             return url.replace(httpPrefix, wsPrefix);
         }
-
         if (url.startsWith(httpsPrefix)) {
             return url.replace(httpsPrefix, wssPrefix);
         }

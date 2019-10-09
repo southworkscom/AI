@@ -209,34 +209,22 @@ export class SkillManifestGenerator {
     }
 }
 
-//tslint:disable-next-line: no-any
 export function manifestGenerator(manifestFile: string, botSettings: Partial<IBotSettingsBase>):
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
 (req: any, res: any, next: any) => any {
-    //tslint:disable-next-line: no-any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
     return async (req: any, res: any, next: any): Promise<any> => {
         if (manifestFile === undefined) { throw new Error('manifestFile has no value'); }
         if (botSettings.microsoftAppId === undefined) { throw new Error('botSettings.microsoftAppId has no value'); }
         if (botSettings.cognitiveModels === undefined) { throw new Error('botSettings.cognitiveModels has no value'); }
-
-        // tslint:disable-next-line no-unsafe-any
         const inline: boolean = (req.query.inlineTriggerUtterances || '').toLowerCase() === 'true';
-        // tslint:disable-next-line:no-unsafe-any
         const scheme: string = req.isSecure() ? 'https' : 'http';
-        // tslint:disable-next-line:no-unsafe-any
         const host: string = req.headers.host || '';
         const skillUriBase: string = `${scheme}://${host}`;
         const appId: string = botSettings.microsoftAppId;
         const cognitiveModels: Map<string, ICognitiveModelConfiguration> = botSettings.cognitiveModels;
-
         const generator: SkillManifestGenerator = new SkillManifestGenerator();
-        // tslint:disable-next-line:no-unsafe-any
         const manifest: ISkillManifest = await generator.generateManifest(manifestFile, appId, cognitiveModels, skillUriBase, inline);
-        // tslint:disable-next-line:no-unsafe-any
         res.send(200, manifest);
 
-        // tslint:disable-next-line:no-unsafe-any
         return next();
     };
 }
