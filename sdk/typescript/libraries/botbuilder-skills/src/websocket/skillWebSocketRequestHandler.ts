@@ -77,7 +77,6 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
                 }
             }
         } catch (error) {
-            // eslint-disable-next-line @typescript-eslint/tslint/config
             this.botTelemetryClient.trackException({ exception: error });
             response.statusCode = 500;
             response.setBody('Error');

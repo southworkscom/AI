@@ -55,7 +55,8 @@ export abstract class RouterDialog extends InterruptableDialog {
                             case DialogTurnStatus.complete: {
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
                                 const routerDialogTurnResult: RouterDialogTurnResult = <RouterDialogTurnResult> result.result;
-                                if (routerDialogTurnResult !== undefined && routerDialogTurnResult.status === RouterDialogTurnStatus.Restart) {
+                                if (routerDialogTurnResult !== undefined
+                                    && routerDialogTurnResult.status === RouterDialogTurnStatus.Restart) {
                                     await this.route(innerDc);
                                     break;
                                 }

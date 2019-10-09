@@ -2,11 +2,11 @@ import { BotTelemetryClient, TurnContext } from 'botbuilder';
 import { ActivityExtensions } from 'botbuilder-solutions';
 import { MicrosoftAppCredentials } from 'botframework-connector';
 import { Activity, ActivityTypes } from 'botframework-schema';
-import { ISkillManifest, SkillEvents } from '../models';
-import { SkillCallingRequestHandler, ActivityAction } from '../skillCallingRequestHandler';
-import { ISkillTransport, TokenRequestHandler, FallbackHandler } from '../skillTransport';
+import { IStreamingTransportClient, RequestHandler, StreamingRequest, WebSocketClient } from 'botframework-streaming-extensions';
 import { IServiceClientCredentials } from '../auth';
-import { WebSocketClient, IStreamingTransportClient, RequestHandler, StreamingRequest } from 'botframework-streaming-extensions';
+import { ISkillManifest, SkillEvents } from '../models';
+import { ActivityAction, SkillCallingRequestHandler } from '../skillCallingRequestHandler';
+import { FallbackHandler, ISkillTransport, TokenRequestHandler } from '../skillTransport';
 
 export class SkillWebSocketTransport implements ISkillTransport {
     private readonly telemetryClient: BotTelemetryClient;
@@ -55,9 +55,10 @@ export class SkillWebSocketTransport implements ISkillTransport {
 
         // put AAD token in the header
         const headers: Map<string, string> = new Map();
-        headers.set('Authorization', `Bearer ${token}`);
-
-        await this.streamingTransportClient.connectAsync(headers);
+        const keyHeader: string = 'Authorization';
+        const valHeader: string = `Bearer ${token}`;
+        headers.set(keyHeader, valHeader);
+        await this.streamingTransportClient.connect();
         let latency: number = 0;
 
         // set recipient to the skill
@@ -73,7 +74,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
             activity.recipient.id = recipientId;
             try {
                 const begin: [number, number] = process.hrtime();
-                await this.streamingTransportClient.sendAsync(request);
+                await this.streamingTransportClient.send(request);
                 const end: [number, number] = process.hrtime(begin);
                 latency = toMilliseconds(end);
             } catch (error) {
@@ -84,8 +85,8 @@ export class SkillWebSocketTransport implements ISkillTransport {
         this.telemetryClient.trackEvent({
             name: 'SkillWebSocketTurnLatency',
             properties: {
-                'SkillName': skillManifest.name,
-                'SkillEndpoint': skillManifest.endpoint
+                SkillName: skillManifest.name,
+                SkillEndpoint: skillManifest.endpoint
             },
             metrics: { latency: latency }
         });
@@ -116,22 +117,22 @@ export class SkillWebSocketTransport implements ISkillTransport {
     }
 
     private getHandoffActivityCallback(): ActivityAction {
-        return (activity: Activity) => {
-            this.handoffActivity = activity
+        return (activity: Activity): void => {
+            this.handoffActivity = activity;
         };
     }
 
     private getTokenCallback(turnContext: TurnContext, tokenRequestHandler: ActivityAction | undefined): ActivityAction {
-        return (activity: Activity) => {
-            if(tokenRequestHandler !== undefined) {
+        return (activity: Activity): void => {
+            if (tokenRequestHandler !== undefined) {
                 tokenRequestHandler(activity);
             }
         };
     }
 
     private getFallbackCallback(turnContext: TurnContext, fallbackEventHandler: ActivityAction | undefined): ActivityAction {
-        return (activity: Activity) => {
-            if(fallbackEventHandler !== undefined) {
+        return (activity: Activity): void => {
+            if (fallbackEventHandler !== undefined) {
                 fallbackEventHandler(activity);
             }
         };
@@ -141,17 +142,13 @@ export class SkillWebSocketTransport implements ISkillTransport {
         if (!url) {
             throw new Error('url is empty!');
         }
-
-        // tslint:disable-next-line:no-http-string
         const httpPrefix: string = 'http://';
         const httpsPrefix: string = 'https://';
         const wsPrefix: string = 'ws://';
         const wssPrefix: string = 'wss://';
-
         if (url.startsWith(httpPrefix)) {
             return url.replace(httpPrefix, wsPrefix);
         }
-
         if (url.startsWith(httpsPrefix)) {
             return url.replace(httpsPrefix, wssPrefix);
         }

@@ -2,7 +2,6 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-
 import {
     Activity,
     ActivityTypes,
@@ -23,12 +22,22 @@ import {
     WaterfallStepContext } from 'botbuilder-dialogs';
 import {
     ActivityExtensions,
+    IProviderTokenResponse,
     isProviderTokenResponse,
     MultiProviderAuthDialog,
     ResponseManager,
     RouterDialogTurnResult,
     RouterDialogTurnStatus,
     TokenEvents } from 'botbuilder-solutions';
+import {
+    ISkillIntentRecognizer,
+    ISkillSwitchConfirmOption,
+    ISkillTransport,
+    SkillConstants,
+    SkillContext,
+    SkillDialogOption,
+    SkillWebSocketTransport,
+    TokenRequestHandler } from './';
 import { IServiceClientCredentials } from './auth';
 import {
     IAction,
@@ -36,15 +45,6 @@ import {
     ISlot,
     SkillEvents } from './models';
 import { CommonResponses } from './responses/skillResponses';
-import {
-    SkillConstants,
-    SkillContext,
-    SkillDialogOption,
-    ISkillIntentRecognizer,
-    ISkillSwitchConfirmOption,
-    ISkillTransport,
-    TokenRequestHandler,
-    SkillWebSocketTransport } from './'
 
 /**
  * The SkillDialog class provides the ability for a Bot to send/receive messages to a remote Skill (itself a Bot).
@@ -173,14 +173,15 @@ export class SkillDialog extends ComponentDialog {
      * @param options options
      * @returns dialog turn result.
      */
-    // tslint:disable-next-line: max-func-body-length
     protected async onBeginDialog(innerDC: DialogContext, options?: object): Promise<DialogTurnResult> {
         let slots: SkillContext = new SkillContext();
 
         // Retrieve the SkillContext state object to identify slots (parameters) that can be used to slot-fill when invoking the skill
         const sc: SkillContext = await this.skillContextAccessor.get(innerDC.context, new SkillContext());
         const skillContext: SkillContext = Object.assign(new SkillContext(), sc);
-        const dialogOptions: SkillDialogOption = <SkillDialogOption> options || new SkillDialogOption();
+        const dialogOptions: SkillDialogOption = <SkillDialogOption> options !== undefined
+            ? <SkillDialogOption> options
+            : new SkillDialogOption();
         const actionName: string = dialogOptions.action;
         const activity: Activity = innerDC.context.activity;
 
@@ -280,12 +281,13 @@ export class SkillDialog extends ComponentDialog {
             if (result.status !== DialogTurnStatus.complete) {
                 return result;
             } else {
-                 // SkillDialog only truely end when confirm skill switch.
+                // SkillDialog only truely end when confirm skill switch.
                 if (result.result) {
                     // Restart and redispatch
                     result.result = new RouterDialogTurnResult(RouterDialogTurnStatus.Restart);
                 } else {
-                    // If confirm dialog is ended without skill switch, means previous activity has been resent and SkillDialog can continue to work
+                    // If confirm dialog is ended without skill switch,
+                    // means previous activity has been resent and SkillDialog can continue to work
                     result.status = DialogTurnStatus.waiting;
                 }
 
@@ -383,7 +385,7 @@ export class SkillDialog extends ComponentDialog {
                                         fallbackHandledEvent: lastEvent,
                                         targetIntent: recognizedSkillManifest,
                                         userInputActivity: innerDc.context.activity
-                                    }
+                                    };
 
                                     return await innerDc.beginDialog(DialogIds.confirmSkillSwitchFlow, options);
                                 }
@@ -425,9 +427,9 @@ export class SkillDialog extends ComponentDialog {
             const result: DialogTurnResult = await dialogContext.beginDialog(this.authDialog ? this.authDialog.id : '');
 
             if (result.status === DialogTurnStatus.complete) {
-                const tokenResponse: any = result.result;
+                const tokenResponse: IProviderTokenResponse = <IProviderTokenResponse> result.result;
 
-                if (tokenResponse !== undefined && isProviderTokenResponse(result)) {
+                if (isProviderTokenResponse(tokenResponse)) {
                     const tokenEvent: Activity = ActivityExtensions.createReply(activity);
                     tokenEvent.type = ActivityTypes.Event;
                     tokenEvent.name = TokenEvents.tokenResponseEventName;
@@ -454,7 +456,7 @@ export class SkillDialog extends ComponentDialog {
             fallbackEvent.name = SkillEvents.fallbackEventName;
 
             this.queuedResponses.push(fallbackEvent);
-        }
+        };
     }
 
 }

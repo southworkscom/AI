@@ -4,6 +4,5 @@
  */
 
 export class SkillDialogOption {
-   public action: string = '';
+    public action: string = '';
 }
-
