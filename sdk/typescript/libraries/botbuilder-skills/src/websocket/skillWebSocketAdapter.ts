@@ -7,7 +7,7 @@ import { BotFrameworkAdapter, BotTelemetryClient, NullTelemetryClient,
     TurnContext, WebRequest, WebResponse } from 'botbuilder';
 import { WebSocketServer, ISocket, DisconnectedEventArgs } from 'botframework-streaming-extensions';
 import { BotCallbackHandler } from '../activityHandler';
-import { IAuthenticationProvider, IAuthenticator, MsJWTAuthenticationProvider, IWhiteListAuthenticationProvider } from '../auth';
+import { IAuthenticationProvider, MsJWTAuthenticationProvider } from '../auth';
 import { IBotSettingsBase} from 'botbuilder-solutions';
 import { SkillWebSocketBotAdapter } from './skillWebSocketBotAdapter';
 import { SkillWebSocketRequestHandler } from './skillWebSocketRequestHandler';
@@ -20,48 +20,38 @@ import { SkillWebSocketRequestHandler } from './skillWebSocketRequestHandler';
  * 3. Start listening on the websocket connection.
  */
 export class SkillWebSocketAdapter extends BotFrameworkAdapter {
-    private readonly authenticationProvider?: IAuthenticationProvider;
     private readonly telemetryClient: BotTelemetryClient;
-    // private readonly whiteListAuthenticationProvider: IWhiteListAuthenticationProvider;
-    private readonly botSettings: IBotSettingsBase;
     private readonly skillWebSocketBotAdapter: SkillWebSocketBotAdapter;
+    private readonly botSettingsBase: IBotSettingsBase;
+    private readonly authenticationProvider?: IAuthenticationProvider;
 
     public constructor(
         skillWebSocketBotAdapter: SkillWebSocketBotAdapter,
-        botSettings: IBotSettingsBase,
-        // whiteListAuthenticationProvider: IWhiteListAuthenticationProvider,
+        botSettingsBase: IBotSettingsBase,
         telemetryClient?: BotTelemetryClient,
     ) {
         super();
-        
         if (skillWebSocketBotAdapter === undefined) { throw new Error('skillWebSocketBotAdapter has no value'); }
+        if (botSettingsBase === undefined) { throw new Error('botSettingsBase has no value'); }
         this.skillWebSocketBotAdapter = skillWebSocketBotAdapter;
-
-        if (botSettings === undefined) { throw new Error('botSettings has no value'); }
-        this.botSettings = botSettings;
-        
-        /*
-        if (whiteListAuthenticationProvider === undefined) { throw new Error(d); }
-        this.whiteListAuthenticationProvider = whiteListAuthenticationProvider;
-        */
-
-        this.authenticationProvider = new MsJWTAuthenticationProvider(botSettings.microsoftAppId);
-        // this.authenticator = new IAuthenticator (this.authenticationProvider, whiteListAuthenticationProvider)
+        this.botSettingsBase = botSettingsBase;
+        this.authenticationProvider = new MsJWTAuthenticationProvider(botSettingsBase.microsoftAppId);
         this.telemetryClient = telemetryClient || new NullTelemetryClient();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
-    public async processActivity(req: WebRequest, res: WebResponse, logic: (context: TurnContext) => Promise<any>): Promise<void> {
-        
-            if (req.headers)
-            {
-                res.status(400);
-                await res.send("Upgrade to WebSocket required.");
-
-                return;
-            }
-        
-        await this.createWebSocketConnection(req, logic);
+    public async processActivity(req: WebRequest, res: WebResponse, bot: (context: TurnContext) => Promise<any>): Promise<void> {
+        if(req === undefined) { throw new Error('request has no value'); }
+        if(res === undefined) { throw new Error('response has no value'); }
+        if(bot === undefined) { throw new Error('bot has no value'); }
+        //PENDING
+        // if (!httpRequest.HttpContext.WebSockets.IsWebSocketRequest)
+        // {
+        //     httpResponse.StatusCode = (int)HttpStatusCode.BadRequest;
+        //     await httpResponse.WriteAsync("Upgrade to WebSocket required.").ConfigureAwait(false);
+        //     return;
+        // }
+        await this.createWebSocketConnection(req, bot);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
