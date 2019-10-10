@@ -5,10 +5,10 @@
 
 import { BotFrameworkAdapter, BotTelemetryClient, NullTelemetryClient,
     TurnContext, WebRequest, WebResponse } from 'botbuilder';
-import { WebSocketServer, ISocket, DisconnectedEventArgs } from 'botframework-streaming-extensions';
+import { IBotSettingsBase} from 'botbuilder-solutions';
+import { ISocket, WebSocketServer } from 'botframework-streaming-extensions';
 import { BotCallbackHandler } from '../activityHandler';
 import { IAuthenticationProvider, MsJWTAuthenticationProvider } from '../auth';
-import { IBotSettingsBase} from 'botbuilder-solutions';
 import { SkillWebSocketBotAdapter } from './skillWebSocketBotAdapter';
 import { SkillWebSocketRequestHandler } from './skillWebSocketRequestHandler';
 
@@ -28,22 +28,22 @@ export class SkillWebSocketAdapter extends BotFrameworkAdapter {
     public constructor(
         skillWebSocketBotAdapter: SkillWebSocketBotAdapter,
         botSettingsBase: IBotSettingsBase,
-        telemetryClient?: BotTelemetryClient,
+        telemetryClient?: BotTelemetryClient
     ) {
         super();
         if (skillWebSocketBotAdapter === undefined) { throw new Error('skillWebSocketBotAdapter has no value'); }
         if (botSettingsBase === undefined) { throw new Error('botSettingsBase has no value'); }
         this.skillWebSocketBotAdapter = skillWebSocketBotAdapter;
         this.botSettingsBase = botSettingsBase;
-        this.authenticationProvider = new MsJWTAuthenticationProvider(botSettingsBase.microsoftAppId);
+        this.authenticationProvider = new MsJWTAuthenticationProvider(this.botSettingsBase.microsoftAppId);
         this.telemetryClient = telemetryClient || new NullTelemetryClient();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
     public async processActivity(req: WebRequest, res: WebResponse, bot: (context: TurnContext) => Promise<any>): Promise<void> {
-        if(req === undefined) { throw new Error('request has no value'); }
-        if(res === undefined) { throw new Error('response has no value'); }
-        if(bot === undefined) { throw new Error('bot has no value'); }
+        if (req === undefined) { throw new Error('request has no value'); }
+        if (res === undefined) { throw new Error('response has no value'); }
+        if (bot === undefined) { throw new Error('bot has no value'); }
         //PENDING
         // if (!httpRequest.HttpContext.WebSockets.IsWebSocketRequest)
         // {
@@ -56,46 +56,28 @@ export class SkillWebSocketAdapter extends BotFrameworkAdapter {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
     private async createWebSocketConnection(req: any, bot: BotCallbackHandler): Promise<void> {
-        // MISSING found an equivalent to websocket in TypeScript
         const socket: ISocket = req.socket;
         const handler: SkillWebSocketRequestHandler = new SkillWebSocketRequestHandler(this.telemetryClient);
-        const server: WebSocketServer = new WebSocketServer(socket, handler); 
-        server.disconnect = this.serverDisconnected;
-        
-        // MISSING the Server class does not exposes Disconnected handler
-        // in C# server.Disconnected += Server_Disconnected;
+        const server: WebSocketServer = new WebSocketServer(socket, handler);
         this.skillWebSocketBotAdapter.server = server;
         handler.bot = bot;
         handler.skillWebSocketBotAdapter = this.skillWebSocketBotAdapter;
-
         let latency: number = 0;
-        const begin: [number, number] = process.hrtime();
-        const end: [number, number] = process.hrtime(begin);
-        latency = toMilliseconds(end);
+        try {
+            const begin: [number, number] = process.hrtime();
+            await server.start();
+            const end: [number, number] = process.hrtime(begin);
+            latency = toMilliseconds(end);
 
+        } catch (error) {
+            throw new Error('Callback failed');
+        }
         const latencyMetrics: { latency: number } = { latency: latency };
         const event: string = 'Starting listening on websocket';
         this.telemetryClient.trackEvent({
             name: event,
             metrics: latencyMetrics
         });
-
-        await server.start();
-    }
-
-    private serverDisconnected(sender: object, e: DisconnectedEventArgs ): void {
-        try {
-            const begin: [number, number] = process.hrtime();
-            const end: [number, number] = process.hrtime(begin);
-            const latency: { latency: number } = { latency: toMilliseconds(end) };
-            const event: string = 'SkillWebSocketProcessRequestLatency';
-            this.telemetryClient.trackEvent({
-                name: event,
-                metrics: latency
-            });
-        } catch (error) {
-            throw new Error('Callback failed');
-        }   
     }
 }
 
