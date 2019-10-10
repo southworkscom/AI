@@ -2,7 +2,9 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-import { CardAction, ActionTypes } from 'botframework-schema';
+import { ResponseManager } from '../responses/responseManager';
+import { FeedbackResponses } from './feedbackResponses';
+import { ActionTypes, CardAction } from 'botframework-schema';
 
 export class FeedbackOptions {
     // tslint:disable:variable-name
@@ -13,6 +15,14 @@ export class FeedbackOptions {
     private _commentPrompt: string = '';
     private _commentReceivedMessage: string = '';
     // tslint:enable:variable-name
+    private readonly responseManager: ResponseManager;
+
+    constructor() {
+        this.responseManager = new ResponseManager(
+            ['en', 'de', 'es', 'fr', 'it', 'zh'],
+            [FeedbackResponses]
+        );
+    }
 
     /**
      * Gets custom feedback choices for the user.
@@ -44,7 +54,10 @@ export class FeedbackOptions {
      */
     public get dismissAction(): CardAction {
         if (this.dismissAction === undefined) {
-            return { type: ActionTypes.PostBack, title: FeedbackResponses.DismissTitle, value: 'dismiss' };
+            return {
+                type: ActionTypes.PostBack,
+                title: this.responseManager.getResponseText(FeedbackResponses.dismissTitle),
+                value: 'dismiss' };
         }
 
         return this._dismissAction;
@@ -65,7 +78,7 @@ export class FeedbackOptions {
      */
     public get feedbackReceivedMessage(): string {
         if (this._feedbackReceivedMessage === '') {
-            return FeedbackResponses.FeedbackReceivedMessage;
+            return this.responseManager.getResponseText(FeedbackResponses.feedbackReceivedMessage);
         }
 
         return this._feedbackReceivedMessage;
@@ -105,7 +118,7 @@ export class FeedbackOptions {
      */
     public get commentPrompt(): string {
         if (this._commentPrompt === '') {
-            return FeedbackResponses.CommentPrompt;
+            return this.responseManager.getResponseText(FeedbackResponses.commentPrompt);
         }
 
         return this._commentPrompt;
@@ -126,7 +139,7 @@ export class FeedbackOptions {
      */
     public get commentReceivedMessage(): string {
         if (this._commentReceivedMessage === '') {
-            return FeedbackResponses.commentReceivedMessage;
+            return this.responseManager.getResponseText(FeedbackResponses.commentReceivedMessage);
         }
 
         return this._commentReceivedMessage;
