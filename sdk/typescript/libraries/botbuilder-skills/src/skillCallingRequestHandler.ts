@@ -6,10 +6,9 @@
 import { BotTelemetryClient, TurnContext } from 'botbuilder';
 import { TokenEvents } from 'botbuilder-solutions';
 import { Activity, ActivityTypes } from 'botframework-schema';
-import { ContentStream, IReceiveRequest, RequestHandler } from 'botframework-streaming-extensions';
-import { IRouteContext, IRouteTemplate, Router } from './protocol';
+import { ContentStream, HttpContent, IReceiveRequest, RequestHandler, StreamingResponse } from 'botframework-streaming-extensions';
 import { SkillEvents } from './models';
-import { StreamingResponse, HttpContent } from 'botframework-streaming-extensions';
+import { IRouteContext, IRouteTemplate, Router } from './protocol';
 
 export declare type ActivityAction = (activity: Activity) => void;
 
@@ -49,15 +48,14 @@ export class SkillCallingRequestHandler extends RequestHandler {
                     const bodyParts: string[] = await Promise.all(request.streams.map
                     ((s: ContentStream): Promise<string> => s.readAsJson()));
                     const body: string = bodyParts.join();
-                    // eslint-disable-next-line @typescript-eslint/tslint/config
-                    const activity: Activity = JSON.parse(body);
+                    const activity: Activity = <Activity> JSON.parse(body);
                     if (activity === undefined) {
                         throw new Error('Error deserializing activity response!');
                     }
 
                     if (activity.type === ActivityTypes.Event && activity.name === TokenEvents.tokenRequestEventName) {
                         if (this.tokenRequestHandler !== undefined) {
-                            await this.tokenRequestHandler(activity);
+                            this.tokenRequestHandler(activity);
 
                             return { id: '' };
                         } else {
@@ -65,7 +63,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
                         }
                     } else if (activity.type === ActivityTypes.Event && activity.name === SkillEvents.fallbackEventName) {
                         if (this.fallbackRequestHandler !== undefined) {
-                            await this.fallbackRequestHandler(activity);
+                            this.fallbackRequestHandler(activity);
 
                             return { id: '' };
                         } else {
@@ -74,7 +72,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
                     } else if (activity.type === ActivityTypes.Handoff) {
                         await this.turnContext.sendActivity(activity);
                         if (this.handoffActivityHandler !== undefined) {
-                            await this.handoffActivityHandler(activity);
+                            this.handoffActivityHandler(activity);
 
                             return { id: '' };
                         } else {
@@ -96,8 +94,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
                     const bodyParts: string[] = await Promise.all(
                         request.streams.map((s: ContentStream): Promise<string> => s.readAsJson()));
                     const body: string = bodyParts.join();
-                    // eslint-disable-next-line @typescript-eslint/tslint/config
-                    const activity: Activity = JSON.parse(body);
+                    const activity: Activity = <Activity> JSON.parse(body);
                     await this.turnContext.updateActivity(activity);
 
                     // MISSING this method should return the result of updateActivity
@@ -133,6 +130,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
         if (routeContext !== undefined) {
             try {
                 const responseBody: HttpContent = <HttpContent> await routeContext.action.action(request, routeContext.routerData);
+
                 // MISSING Response.OK(new StringContent(JsonConvert.SerializeObject(responseBody...
                 return StreamingResponse.create(200, responseBody);
             } catch (error) {
