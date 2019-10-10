@@ -19,7 +19,7 @@ import { SkillWebSocketRequestHandler } from './skillWebSocketRequestHandler';
  * 2. Create RequestHandler to handle follow-up websocket frames.
  * 3. Start listening on the websocket connection.
  */
-export class SkillWebSocketAdapter extends BotFrameworkAdapter {
+export class SkillWebSocketAdapter {
     private readonly telemetryClient: BotTelemetryClient;
     private readonly skillWebSocketBotAdapter: SkillWebSocketBotAdapter;
     private readonly botSettingsBase: IBotSettingsBase;
@@ -30,7 +30,6 @@ export class SkillWebSocketAdapter extends BotFrameworkAdapter {
         botSettingsBase: IBotSettingsBase,
         telemetryClient?: BotTelemetryClient
     ) {
-        super();
         if (skillWebSocketBotAdapter === undefined) { throw new Error('skillWebSocketBotAdapter has no value'); }
         if (botSettingsBase === undefined) { throw new Error('botSettingsBase has no value'); }
         this.skillWebSocketBotAdapter = skillWebSocketBotAdapter;
