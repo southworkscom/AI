@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { BotFrameworkAdapter, BotTelemetryClient, NullTelemetryClient,
+import { BotTelemetryClient, NullTelemetryClient,
     TurnContext, WebRequest, WebResponse } from 'botbuilder';
 import { IBotSettingsBase} from 'botbuilder-solutions';
 import { ISocket, WebSocketServer } from 'botframework-streaming-extensions';
