@@ -5,7 +5,7 @@
 
 import { BotTelemetryClient, TurnContext } from 'botbuilder';
 import { TokenEvents } from 'botbuilder-solutions';
-import { Activity, ActivityTypes } from 'botframework-schema';
+import { Activity, ActivityTypes, ResourceResponse } from 'botframework-schema';
 import { ContentStream, HttpContent, IReceiveRequest, RequestHandler, StreamingResponse } from 'botframework-streaming-extensions';
 import { SkillEvents } from './models';
 import { IRouteContext, IRouteTemplate, Router } from './protocol';
@@ -28,58 +28,56 @@ export class SkillCallingRequestHandler extends RequestHandler {
         fallbackRequestHandler?: ActivityAction
     ) {
         super();
-        if (turnContext !== undefined) {
-            this.turnContext = turnContext;
-        } else {
-            throw new Error('Value of \'turnContext\' is null');
-        }
+        if (turnContext !== undefined) { throw new Error('Value of \'turnContext\' is null'); }
 
-        this.tokenRequestHandler = tokenRequestHandler;
-        this.handoffActivityHandler = handoffActivityHandler;
-        this.fallbackRequestHandler = fallbackRequestHandler;
+        this.turnContext = turnContext;
         this.telemetryClient = telemetryClient;
+        this.tokenRequestHandler = tokenRequestHandler;
+        this.fallbackRequestHandler = fallbackRequestHandler;
+        this.handoffActivityHandler = handoffActivityHandler;
 
         const postRoute: IRouteTemplate = {
             method: 'POST',
             path: '/activities/{activityId}',
             action: {
-                action: async (request: IReceiveRequest, routeData: Object): Promise<Object|undefined> => {
+                action: async (request: IReceiveRequest, routeData: Object): Promise<ResourceResponse|undefined> => {
                     // MISSING Check response converter
                     const bodyParts: string[] = await Promise.all(request.streams.map
                     ((s: ContentStream): Promise<string> => s.readAsJson()));
                     const body: string = bodyParts.join();
                     const activity: Activity = <Activity> JSON.parse(body);
-                    if (activity === undefined) {
-                        throw new Error('Error deserializing activity response!');
-                    }
+                    if (activity !== undefined) {
+                        if (activity.type === ActivityTypes.Event && activity.name === TokenEvents.tokenRequestEventName) {
+                            if (this.tokenRequestHandler !== undefined) {
+                                this.tokenRequestHandler(activity);
 
-                    if (activity.type === ActivityTypes.Event && activity.name === TokenEvents.tokenRequestEventName) {
-                        if (this.tokenRequestHandler !== undefined) {
-                            this.tokenRequestHandler(activity);
+                                return { id: '' };
+                            } else {
+                                throw new Error('TokenRequestHandler: Skill is requesting for token but there\'s no handler on the calling side!');
+                            }
+                        } else if (activity.type === ActivityTypes.Event && activity.name === SkillEvents.fallbackEventName) {
+                            if (this.fallbackRequestHandler !== undefined) {
+                                this.fallbackRequestHandler(activity);
 
-                            return { id: '' };
+                                return { id: '' };
+                            } else {
+                                throw new Error('FallbackRequestHandler: Skill is asking for fallback but there is no handler on the calling side!');
+                            }
+                        } else if (activity.type === ActivityTypes.Handoff) {
+                            await this.turnContext.sendActivity(activity);
+                            if (this.handoffActivityHandler !== undefined) {
+                                this.handoffActivityHandler(activity);
+
+                                return { id: '' };
+                            } else {
+                                throw new Error('HandoffActivityHandler: Skill is sending handoff activity but there\'s no handler on the calling side!');
+                            }
                         } else {
-                            throw new Error('Skill is requesting for token but there\'s no handler on the calling side!');
-                        }
-                    } else if (activity.type === ActivityTypes.Event && activity.name === SkillEvents.fallbackEventName) {
-                        if (this.fallbackRequestHandler !== undefined) {
-                            this.fallbackRequestHandler(activity);
-
-                            return { id: '' };
-                        } else {
-                            throw new Error('Skill is asking for fallback but there is no handler on the calling side!');
-                        }
-                    } else if (activity.type === ActivityTypes.Handoff) {
-                        await this.turnContext.sendActivity(activity);
-                        if (this.handoffActivityHandler !== undefined) {
-                            this.handoffActivityHandler(activity);
-
-                            return { id: '' };
-                        } else {
-                            throw new Error('Skill is sending handoff activity but there\'s no handler on the calling side!');
+                            return this.turnContext.sendActivity(activity);
                         }
                     } else {
-                        return this.turnContext.sendActivity(activity);
+                        throw new Error('Error deserializing activity response!');
+
                     }
                 }
             }
@@ -89,7 +87,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
             method: 'PUT',
             path: '/activities/{activityId}',
             action: {
-                action: async (request: IReceiveRequest, routeData: Object): Promise<Object|undefined> => {
+                action: async (request: IReceiveRequest, routeData: Object): Promise<ResourceResponse|undefined> => {
                     // MISSING Check response converter
                     const bodyParts: string[] = await Promise.all(
                         request.streams.map((s: ContentStream): Promise<string> => s.readAsJson()));
@@ -107,7 +105,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
             method: 'DELETE',
             path: '/activities/{activityId}',
             action: {
-                action: async (request: IReceiveRequest, routeData: Object): Promise<Object|undefined> => {
+                action: async (request: IReceiveRequest, routeData: Object): Promise<ResourceResponse|undefined> => {
                     // MISSING Check response converter
                     const activityIdProp: [string, string]|undefined = Object.entries(routeData)
                         .find((e: [string, string]): boolean => e[0] === 'activityId');
@@ -120,7 +118,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
             }
         };
 
-        const routes: IRouteTemplate[] = [ postRoute, putRoute, deleteRoute ];
+        const routes: IRouteTemplate[] = [postRoute, putRoute, deleteRoute];
         this.router = new Router(routes);
     }
 

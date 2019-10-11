@@ -1,3 +1,8 @@
+/**
+ * Copyright(c) Microsoft Corporation.All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 import { BotTelemetryClient, TurnContext } from 'botbuilder';
 import { ActivityExtensions } from 'botbuilder-solutions';
 import { MicrosoftAppCredentials } from 'botframework-connector';
@@ -9,17 +14,14 @@ import { ActivityAction, SkillCallingRequestHandler } from '../skillCallingReque
 import { FallbackHandler, ISkillTransport, TokenRequestHandler } from '../skillTransport';
 
 export class SkillWebSocketTransport implements ISkillTransport {
-    private readonly telemetryClient: BotTelemetryClient;
     private streamingTransportClient!: IStreamingTransportClient;
+    private readonly telemetryClient: BotTelemetryClient;
     private handoffActivity: Partial<Activity> | undefined;
 
-    public constructor(
-        telemetryClient: BotTelemetryClient,
-        streamingTransportClient?: IStreamingTransportClient
-    ) {
+    public constructor(telemetryClient: BotTelemetryClient, streamingTransportClient?: IStreamingTransportClient) {
         this.telemetryClient = telemetryClient;
 
-        if (streamingTransportClient) {
+        if (streamingTransportClient !== undefined) {
             this.streamingTransportClient = streamingTransportClient;
         }
     }
@@ -49,6 +51,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
             // establish websocket connection
             this.streamingTransportClient = new WebSocketClient({ url, requestHandler });
         }
+
         // acquire AAD token
         MicrosoftAppCredentials.trustServiceUrl(skillManifest.endpoint);
         const token: string = await serviceClientCredentials.getToken();
@@ -58,6 +61,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
         const keyHeader: string = 'Authorization';
         const valHeader: string = `Bearer ${token}`;
         headers.set(keyHeader, valHeader);
+        // PENDING connect methods needs a header parameter?
         await this.streamingTransportClient.connect();
         let latency: number = 0;
 
@@ -67,7 +71,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
             activity.recipient.id = skillManifest.msaAppId;
 
             // Serialize the activity and POST to the Skill endpoint
-            const request: StreamingRequest = StreamingRequest.create('POST', '');
+            const request: StreamingRequest = StreamingRequest.create('POST');
             request.setBody(JSON.stringify(activity));
 
             // set back recipient id to make things consistent
@@ -104,6 +108,7 @@ export class SkillWebSocketTransport implements ISkillTransport {
         turnContext: TurnContext
     ): Promise<void> {
         const cancelRemoteDialogEvent: Activity = ActivityExtensions.createReply(turnContext.activity);
+
         cancelRemoteDialogEvent.type = ActivityTypes.Event;
         cancelRemoteDialogEvent.name = SkillEvents.cancelAllSkillDialogsEventName;
 
@@ -114,12 +119,6 @@ export class SkillWebSocketTransport implements ISkillTransport {
         if (this.streamingTransportClient !== undefined) {
             this.streamingTransportClient.disconnect();
         }
-    }
-
-    private getHandoffActivityCallback(): ActivityAction {
-        return (activity: Activity): void => {
-            this.handoffActivity = activity;
-        };
     }
 
     private getTokenCallback(turnContext: TurnContext, tokenRequestHandler: ActivityAction | undefined): ActivityAction {
@@ -135,6 +134,12 @@ export class SkillWebSocketTransport implements ISkillTransport {
             if (fallbackEventHandler !== undefined) {
                 fallbackEventHandler(activity);
             }
+        };
+    }
+
+    private getHandoffActivityCallback(): ActivityAction {
+        return (activity: Activity): void => {
+            this.handoffActivity = activity;
         };
     }
 

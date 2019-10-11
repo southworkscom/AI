@@ -60,6 +60,10 @@ export abstract class RouterDialog extends InterruptableDialog {
                                     await this.route(innerDc);
                                     break;
                                 }
+
+                                // End active dialog
+                                await innerDc.endDialog();
+                                break;
                             }
                             default:
                         }

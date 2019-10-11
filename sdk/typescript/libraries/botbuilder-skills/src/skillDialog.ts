@@ -45,6 +45,7 @@ import {
     ISlot,
     SkillEvents } from './models';
 import { CommonResponses } from './responses/skillResponses';
+import { FallbackHandler } from './skillTransport';
 
 /**
  * The SkillDialog class provides the ability for a Bot to send/receive messages to a remote Skill (itself a Bot).
@@ -85,10 +86,10 @@ export class SkillDialog extends ComponentDialog {
         if (skillManifest === undefined) { throw new Error('skillManifest has no value'); }
         if (serviceClientCredentials === undefined) { throw new Error('serviceClientCredentials has no value'); }
         this.skillManifest = skillManifest;
+        this.serviceClientCredentials = serviceClientCredentials;
         this.skillContextAccessor = skillContextAccessor;
         this.skillTransport = skillTransport || new SkillWebSocketTransport(telemetryClient);
         this.skillIntentRecognizer = skillIntentRecognizer;
-        this.serviceClientCredentials = serviceClientCredentials;
 
         this.responseManager = new ResponseManager(
             ['en', 'de', 'es', 'fr', 'it', 'zh'],
@@ -154,6 +155,7 @@ export class SkillDialog extends ComponentDialog {
         // We should never go here
         return stepContext.endDialog();
     }
+
     public async endDialog(context: TurnContext, instance: DialogInstance, reason: DialogReason): Promise<void> {
         if (reason === DialogReason.cancelCalled) {
             // when dialog is being ended/cancelled, send an activity to skill
@@ -194,7 +196,9 @@ export class SkillDialog extends ComponentDialog {
                 semanticAction.state = SkillConstants.skillStart;
 
                 // Find the specified within the selected Skill for slot filling evaluation
-                const action: IAction | undefined = this.skillManifest.actions.find((item: IAction): boolean => item.id === actionName);
+                const action: IAction | undefined = this.skillManifest.actions.find((item: IAction): boolean => {
+                    return item.id === actionName;
+                });
                 if (action !== undefined) {
                     // If the action doesn't define any Slots or SkillContext is empty then we skip slot evaluation
                     if (action.definition.slots !== undefined && skillContext.count > 0) {
@@ -260,7 +264,7 @@ export class SkillDialog extends ComponentDialog {
      */
     protected async onContinueDialog(innerDC: DialogContext): Promise<DialogTurnResult> {
         const activity: Activity = innerDC.context.activity;
-        if (this.authDialog && innerDC.activeDialog && innerDC.activeDialog.id === this.authDialog.id) {
+        if (this.authDialog !== undefined && innerDC.activeDialog !== undefined && innerDC.activeDialog.id === this.authDialog.id) {
             // Handle magic code auth
             const result: DialogTurnResult<Object> = await innerDC.continueDialog();
 
@@ -274,8 +278,7 @@ export class SkillDialog extends ComponentDialog {
             }
         }
 
-        const dialogId: string = innerDC.activeDialog ? innerDC.activeDialog.id : '';
-        if (dialogId === DialogIds.confirmSkillSwitchPrompt) {
+        if (innerDC.activeDialog !== undefined && innerDC.activeDialog.id === DialogIds.confirmSkillSwitchPrompt) {
             const result: DialogTurnResult = await super.onContinueDialog(innerDC);
 
             if (result.status !== DialogTurnStatus.complete) {
@@ -312,7 +315,7 @@ export class SkillDialog extends ComponentDialog {
     public async matchSkillContextToSlots(innerDc: DialogContext, actionSlots: ISlot[], skillContext: SkillContext): Promise<SkillContext> {
         const slots: SkillContext = new SkillContext();
 
-        if (actionSlots !== undefined && actionSlots.length > 0) {
+        if (actionSlots !== undefined) {
             actionSlots.forEach(async (slot: ISlot): Promise<void> => {
                 // For each slot we check to see if there is an exact match, if so we pass this slot across to the skill
                 const value: Object|undefined = skillContext.getObj(slot.name);
@@ -355,6 +358,16 @@ export class SkillDialog extends ComponentDialog {
                 });
 
                 return await innerDc.endDialog(handoffActivity.semanticAction ? handoffActivity.semanticAction.entities : undefined);
+            } else if (this.authDialogCancelled) {
+                // cancel remote skill dialog if AuthDialog is cancelled
+                await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, innerDc.context);
+
+                await innerDc.context.sendActivity({
+                    type: ActivityTypes.Trace,
+                    text: `<--Ending the skill conversation with the ${ this.skillManifest.name } Skill and handing off to Parent Bot due to unable to obtain token for user.`
+                });
+
+                return await innerDc.endDialog();
             } else {
 
                 let dialogResult: DialogTurnResult = {
@@ -443,7 +456,7 @@ export class SkillDialog extends ComponentDialog {
         };
     }
 
-    private getFallbackCallback(dialogContext: DialogContext): TokenRequestHandler {
+    private getFallbackCallback(dialogContext: DialogContext): FallbackHandler {
         return async (activity: Activity): Promise<void> => {
             // Send trace to emulator
             await dialogContext.context.sendActivity({

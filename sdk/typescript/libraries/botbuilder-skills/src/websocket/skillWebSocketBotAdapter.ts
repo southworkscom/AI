@@ -21,13 +21,16 @@ import { SkillEvents } from '../models';
 export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHandler, IRemoteUserTokenProvider, IFallbackRequestProvider {
     private readonly telemetryClient: BotTelemetryClient;
     public server!: WebSocketServer;
+
     public constructor(middleware?: Middleware, telemetryClient?: BotTelemetryClient) {
         super();
         this.telemetryClient = telemetryClient || new NullTelemetryClient();
+
         if (middleware !== undefined) {
             this.use(middleware);
         }
     }
+
     public async continueConversation(reference: Partial<ConversationReference>, logic: (revocableContext: TurnContext) => Promise<void>):
     Promise<void> {
         throw new Error('Method not implemented.');
@@ -68,20 +71,24 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
      * @returns A task that represents the work queued to execute.
      */
     public async sendActivities(turnContext: TurnContext, activities: Partial<Activity>[]): Promise<ResourceResponse[]> {
-        const responses: ResourceResponse[] = [];
+        if (turnContext === undefined) { throw new Error('request has no value'); }
+        if (activities === undefined) { throw new Error('activities has no value'); }
+        if (activities.length === 0) { throw new Error('Expecting one or more activities, but the array activities was empty.'); }
 
+        const responses: ResourceResponse[] = [];
         activities.forEach(async (activity: Partial<Activity>, index: number): Promise<void> => {
             if (!activity.id) {
                 activity.id = uuid();
             }
 
-            let response: ResourceResponse|undefined = { id: '' };
+            let response: ResourceResponse | undefined = { id: '' };
 
             if (activity.type === 'delay') {
                 // The Activity Schema doesn't have a delay type build in, so it's simulated
                 // here in the Bot. This matches the behavior in the Node connector.
                 const delayMs: number = <number> activity.value;
                 await sleep(delayMs);
+
                 // No need to create a response. One will be created below.
             }
 
@@ -110,7 +117,7 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
                     const end: [number, number] = process.hrtime(begin);
                     latency = toMilliseconds(end);
                 } catch (error) {
-                    throw new Error('Callback failed');
+                    throw new Error(`Callback failed. Verb: POST, Path: ${requestPath}`);
                 }
 
                 const latencyMetrics: { latency: number } = { latency: latency };
@@ -125,6 +132,11 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
                 // above, as there are cases where the ReplyTo/SendTo methods will also return null
                 // (See below) so the check has to happen here.
 
+                // Note: In addition to the Invoke / Delay / Activity cases, this code also applies
+                // with Skype and Teams with regards to typing events.  When sending a typing event in
+                // these _channels they do not return a RequestResponse which causes the bot to blow up.
+                // https://github.com/Microsoft/botbuilder-dotnet/issues/460
+                // bug report : https://github.com/Microsoft/botbuilder-dotnet/issues/465
                 if (response === undefined) {
                     response = { id: activity.id || '' };
                 }
@@ -136,6 +148,7 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
         return responses;
     }
 
+    //PENDING the output of the method should be Promise<ResourceResponse>
     public async updateActivity(turnContext: TurnContext, activity: Partial<Activity>): Promise<void> {
         const requestPath: string = `/activities/${activity.id}`;
         const request: StreamingRequest = StreamingRequest.create('PUT', requestPath);
@@ -159,7 +172,7 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
             const end: [number, number] = process.hrtime(begin);
             latency = toMilliseconds(end);
         } catch (error) {
-            throw new Error('Callback failed');
+            throw new Error(`Callback failed. Verb: PUT, Path: ${requestPath}`);
         }
 
         const latencyMetrics: { latency: number } = { latency: latency };
@@ -192,7 +205,7 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
             const end: [number, number] = process.hrtime(begin);
             latency = toMilliseconds(end);
         } catch (error) {
-            throw new Error('Callback failed');
+            throw new Error(`Callback failed. Verb: DELETE, Path: ${requestPath}`);
         }
 
         const latencyMetrics: { latency: number } = { latency: latency };
@@ -258,7 +271,6 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
         try {
             const serverResponse: IReceiveResponse = await this.server.send(request);
             if (serverResponse.statusCode === 200) {
-                // MISSING: await request.ReadBodyAsJson();
                 const bodyParts: string[] = await Promise.all(serverResponse.streams.map
                 ((s: ContentStream): Promise<string> => s.readAsString()));
                 const body: string = bodyParts.join();
@@ -267,7 +279,7 @@ export class SkillWebSocketBotAdapter extends BotAdapter implements IActivityHan
             }
         } catch (error) {
             this.telemetryClient.trackException({
-                // tslint:disable-next-line no-unsafe-any
+                // tslint:disable-next-line:no-unsafe-any
                 exception: error,
                 handledAt: SkillWebSocketBotAdapter.name
             });

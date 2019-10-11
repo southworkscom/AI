@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { BotTelemetryClient, NullTelemetryClient,
+import { BotFrameworkAdapter, BotTelemetryClient, NullTelemetryClient,
     TurnContext, WebRequest, WebResponse } from 'botbuilder';
 import { IBotSettingsBase} from 'botbuilder-solutions';
 import { ISocket, WebSocketServer } from 'botframework-streaming-extensions';
@@ -19,7 +19,7 @@ import { SkillWebSocketRequestHandler } from './skillWebSocketRequestHandler';
  * 2. Create RequestHandler to handle follow-up websocket frames.
  * 3. Start listening on the websocket connection.
  */
-export class SkillWebSocketAdapter {
+export class SkillWebSocketAdapter extends BotFrameworkAdapter {
     private readonly telemetryClient: BotTelemetryClient;
     private readonly skillWebSocketBotAdapter: SkillWebSocketBotAdapter;
     private readonly botSettingsBase: IBotSettingsBase;
@@ -30,6 +30,7 @@ export class SkillWebSocketAdapter {
         botSettingsBase: IBotSettingsBase,
         telemetryClient?: BotTelemetryClient
     ) {
+        super();
         if (skillWebSocketBotAdapter === undefined) { throw new Error('skillWebSocketBotAdapter has no value'); }
         if (botSettingsBase === undefined) { throw new Error('botSettingsBase has no value'); }
         this.skillWebSocketBotAdapter = skillWebSocketBotAdapter;

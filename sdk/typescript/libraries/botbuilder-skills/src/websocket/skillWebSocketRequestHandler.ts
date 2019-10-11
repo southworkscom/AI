@@ -20,11 +20,10 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
 
     // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
     public async processRequest(request: IReceiveRequest, logger?: any, context?: object): Promise<StreamingResponse> {
-        if (this.bot === undefined) { throw new Error(('Missing parameter.  "bot" is required')); }
-        if (this.skillWebSocketBotAdapter === undefined) { throw new Error(('Missing parameter.  "activityHandler" is required')); }
+        if (this.bot === undefined) { throw new Error(('Missing parameter. "bot" is required')); }
+        if (this.skillWebSocketBotAdapter === undefined) { throw new Error(('Missing parameter. "skillWebSocketBotAdapter" is required')); }
 
         const response: StreamingResponse = new StreamingResponse();
-        // MISSING: await request.readBodyAsString();
         const bodyParts: string[] = await Promise.all(request.streams.map((s: ContentStream): Promise<string> => s.readAsString()));
         const body: string = bodyParts.join();
 
@@ -45,7 +44,6 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
 
         try {
             activity = <Activity> JSON.parse(body);
-
         } catch (error) {
             // tslint:disable-next-line:no-unsafe-any
             this.botTelemetryClient.trackException({ exception: error });
@@ -72,14 +70,14 @@ export class SkillWebSocketRequestHandler extends RequestHandler {
                 response.statusCode = 200;
             } else {
                 response.statusCode = invokeResponse.status;
-                if (invokeResponse.body) {
+                if (invokeResponse.body !== undefined) {
                     response.setBody(invokeResponse.body);
                 }
             }
         } catch (error) {
             this.botTelemetryClient.trackException({ exception: error });
             response.statusCode = 500;
-            response.setBody('Error');
+            response.setBody('Internal Server Error');
 
             return response;
         }
