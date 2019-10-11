@@ -130,9 +130,8 @@ const customSkillAdapter: CustomSkillAdapter = new CustomSkillAdapter(
 // PENDING to pass an IAuthenticationProvider
 const skillWebSocketAdapter: SkillWebSocketAdapter = new SkillWebSocketAdapter(
     customSkillAdapter,
-    undefined,
-    telemetryClient,
-    adapterSettings);
+    botSettings,
+    telemetryClient);
 
 let bot: DialogBot<Dialog>;
 try {

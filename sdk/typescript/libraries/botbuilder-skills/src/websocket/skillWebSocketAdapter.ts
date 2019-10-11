@@ -22,12 +22,12 @@ import { SkillWebSocketRequestHandler } from './skillWebSocketRequestHandler';
 export class SkillWebSocketAdapter extends BotFrameworkAdapter {
     private readonly telemetryClient: BotTelemetryClient;
     private readonly skillWebSocketBotAdapter: SkillWebSocketBotAdapter;
-    private readonly botSettingsBase: IBotSettingsBase;
+    private readonly botSettingsBase: Partial<IBotSettingsBase>;
     private readonly authenticationProvider?: IAuthenticationProvider;
 
     public constructor(
         skillWebSocketBotAdapter: SkillWebSocketBotAdapter,
-        botSettingsBase: IBotSettingsBase,
+        botSettingsBase: Partial<IBotSettingsBase>,
         telemetryClient?: BotTelemetryClient
     ) {
         super();
@@ -35,7 +35,10 @@ export class SkillWebSocketAdapter extends BotFrameworkAdapter {
         if (botSettingsBase === undefined) { throw new Error('botSettingsBase has no value'); }
         this.skillWebSocketBotAdapter = skillWebSocketBotAdapter;
         this.botSettingsBase = botSettingsBase;
-        this.authenticationProvider = new MsJWTAuthenticationProvider(this.botSettingsBase.microsoftAppId);
+        const microsoftAppId: string = this.botSettingsBase.microsoftAppId !== undefined
+            ? this.botSettingsBase.microsoftAppId
+            : '';
+        this.authenticationProvider = new MsJWTAuthenticationProvider(microsoftAppId);
         this.telemetryClient = telemetryClient || new NullTelemetryClient();
     }
 
