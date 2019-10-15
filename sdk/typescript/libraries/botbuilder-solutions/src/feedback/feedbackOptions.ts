@@ -2,9 +2,9 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
+import { ActionTypes, CardAction } from 'botframework-schema';
 import { ResponseManager } from '../responses/responseManager';
 import { FeedbackResponses } from './feedbackResponses';
-import { ActionTypes, CardAction } from 'botframework-schema';
 
 export class FeedbackOptions {
     // tslint:disable:variable-name
@@ -29,8 +29,8 @@ export class FeedbackOptions {
      * Default values are "👍" and "👎".
      * @returns A `CardAction[]`.
      */
-    public get feedbacActions(): CardAction[] {
-        if (this.feedbacActions === undefined) {
+    public get feedbackActions(): CardAction[] {
+        if (this.feedbackActions === undefined) {
             return [
                 { type: ActionTypes.PostBack, title: '👍', value: 'positive' },
                 { type: ActionTypes.PostBack, title: '👎', value: 'negative' }
