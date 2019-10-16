@@ -44,7 +44,7 @@ import {
     ISkillManifest,
     ISlot,
     SkillEvents } from './models';
-import { CommonResponses } from './responses/skillResponses';
+import { SkillResponses } from './responses/skillResponses';
 import { FallbackHandler } from './skillTransport';
 
 /**
@@ -93,7 +93,7 @@ export class SkillDialog extends ComponentDialog {
 
         this.responseManager = new ResponseManager(
             ['en', 'de', 'es', 'fr', 'it', 'zh'],
-            [CommonResponses]
+            [SkillResponses]
         );
 
         const intentSwitching: WaterfallStep[] = [
@@ -119,7 +119,7 @@ export class SkillDialog extends ComponentDialog {
             const responseTokens: Map<string, string> = new Map([
                 ['{0}', newIntentName]
             ]);
-            const intentResponse: Partial<Activity> = this.responseManager.getResponse(CommonResponses.confirmSkillSwitch, responseTokens);
+            const intentResponse: Partial<Activity> = this.responseManager.getResponse(SkillResponses.confirmSkillSwitch, responseTokens);
 
             return stepContext.prompt(DialogIds.confirmSkillSwitchPrompt, intentResponse);
         }
@@ -191,7 +191,7 @@ export class SkillDialog extends ComponentDialog {
         if (activity.semanticAction === undefined) {
             const semanticAction: SemanticAction = { id: actionName, entities: {}, state : '' };
 
-            if (actionName !== undefined || actionName !== '') {
+            if (actionName !== undefined && actionName !== '') {
                 // only set the semantic state if action is not empty
                 semanticAction.state = SkillConstants.skillStart;
 
