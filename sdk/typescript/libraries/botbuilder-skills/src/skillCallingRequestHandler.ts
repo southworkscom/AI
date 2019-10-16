@@ -28,7 +28,7 @@ export class SkillCallingRequestHandler extends RequestHandler {
         fallbackRequestHandler?: ActivityAction
     ) {
         super();
-        if (turnContext !== undefined) { throw new Error('Value of \'turnContext\' is null'); }
+        if (turnContext === undefined) { throw new Error('Value of \'turnContext\' is null'); }
 
         this.turnContext = turnContext;
         this.telemetryClient = telemetryClient;
