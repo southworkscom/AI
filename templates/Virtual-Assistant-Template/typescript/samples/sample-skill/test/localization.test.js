@@ -2,9 +2,20 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-
+const assert = require("assert");
 const skillTestBase = require("./helpers/skillTestBase");
 const testNock = require("./helpers/testBase");
+const unhandledReplies = [
+  "Can you try to ask me again? I didn't get what you mean.",
+  "Can you say that in a different way?",
+  "Can you try to ask in a different way?",
+  "Could you elaborate?",
+  "Please say that again in a different way.",
+  "I didn't understand, perhaps try again in a different way.",
+  "I didn't get what you mean, can you try in a different way?",
+  "Sorry, I didn't understand what you meant.",
+  "I didn't quite get that."
+];
 
 describe("localization", function() {
   beforeEach(async function() {
@@ -156,7 +167,7 @@ describe("localization", function() {
   });
 
   describe("Defaulting localization", function () {
-    it("Default to a locale", function (done) {
+    it("Fallback to a locale of the root language locale", function (done) {
       const testAdapter = skillTestBase.getTestAdapter();
       const flow = testAdapter
           .send({
@@ -176,6 +187,22 @@ describe("localization", function() {
           .assertReply("[Enter your intro message here]");
 
         return testNock.resolveWithMocks('localization_response_en-gb', done, flow);
+    });
+  });
+
+  describe("No matching Cognitive Model", function () {
+    it("Send a confused message notice when there is no matching cognitive models and can't fallback", function(done) {
+      const testAdapter = skillTestBase.getTestAdapter();
+      const flow = testAdapter
+        .send({
+          text: 'blah blah',
+          locale: "en-gb"
+        })
+        .assertReply(function(activity) {
+          assert.notStrictEqual(-1, unhandledReplies.indexOf(activity.text));
+        });
+
+      testNock.resolveWithMocks("mainDialog_no_cognitive_models", done, flow);
     });
   });
 });
