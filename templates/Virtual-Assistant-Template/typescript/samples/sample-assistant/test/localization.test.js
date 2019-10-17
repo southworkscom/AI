@@ -176,4 +176,32 @@ describe("Localization", function() {
             });
         });
     });    
+
+    describe("Defaulting localization", function () {
+        it("Default to a locale", function (done) {
+            botTestBase.getTestAdapterDefault().then((testAdapter) => {
+            const flow = testAdapter
+                .send({
+                    type: "conversationUpdate",
+                    membersAdded: [
+                        {
+                            id: "1",
+                            name: "Bot"
+                        }
+                    ],
+                    channelId: "emulator",
+                    recipient: {
+                        id: "1"
+                    },
+                    locale: "en-gb"
+                })
+                .assertReply(function (activity, description) {
+                    assert.strictEqual(activity.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
+                    assert.deepStrictEqual(activity.attachments[0].content, localizationJson);
+                });
+
+                return testNock.resolveWithMocks('localization_response_en-gb', done, flow);
+            });
+        });
+    });  
 });

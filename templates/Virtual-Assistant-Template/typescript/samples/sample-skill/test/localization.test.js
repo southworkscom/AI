@@ -154,4 +154,28 @@ describe("localization", function() {
       return testNock.resolveWithMocks("localization_zh-cn_response", done, flow);
     });
   });
+
+  describe("Defaulting localization", function () {
+    it("Default to a locale", function (done) {
+      const testAdapter = skillTestBase.getTestAdapter();
+      const flow = testAdapter
+          .send({
+            type: "conversationUpdate",
+            membersAdded: [
+                {
+                    id: "1",
+                    name: "Bot"
+                }
+            ],
+            channelId: "emulator",
+            recipient: {
+                id: "1"
+            },
+            locale: "en-gb"
+          })
+          .assertReply("[Enter your intro message here]");
+
+        return testNock.resolveWithMocks('localization_response_en-gb', done, flow);
+    });
+  });
 });

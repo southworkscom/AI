@@ -126,5 +126,20 @@ describe("Main Dialog", function () {
                 testNock.resolveWithMocks('mainDialog_faq_response', done, flow);
             });
         });
-    });
+	});
+
+    describe("No cognitive", function () {
+        it("Send a message notice that there is no cognitive models", function (done) {
+            botTestBase.getTestAdapterDefault().then((testAdapter) => {
+                const flow = testAdapter
+                    .send({
+						text: 'hi',
+						locale: "es-es"
+					})
+                    .assertReply("Lo siento, parece que algo salió mal.");
+                
+                testNock.resolveWithMocks('mainDialog_no_cognitive_models', done, flow);
+            });
+        });
+	});
 });

@@ -69,4 +69,20 @@ describe("main dialog", function() {
       testNock.resolveWithMocks("mainDialog_unhandled_response", done, flow);
     });
   });
+
+  describe("No cognitive", function () {
+    it("Send a message notice that there is no cognitive models", function(done) {
+      const testAdapter = skillTestBase.getTestAdapter();
+      const flow = testAdapter
+        .send({
+          text: 'blah blah',
+          locale: "en-gb"
+        })
+        .assertReply(function(activity) {
+          assert.notStrictEqual(-1, unhandledReplies.indexOf(activity.text));
+        });
+
+      testNock.resolveWithMocks("mainDialog_no_cognitive_models", done, flow);
+    });
+  });
 });
