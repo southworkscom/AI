@@ -178,7 +178,7 @@ describe("Localization", function() {
     });    
 
     describe("Defaulting localization", function () {
-        it("Default to a locale", function (done) {
+        it("Fallback to a locale of the root language locale", function (done) {
             botTestBase.getTestAdapterDefault().then((testAdapter) => {
             const flow = testAdapter
                 .send({
@@ -203,5 +203,20 @@ describe("Localization", function() {
                 return testNock.resolveWithMocks('localization_response_en-gb', done, flow);
             });
         });
-    });  
+    });
+
+    describe("No matching Cognitive Model", function () {
+        it("Send a confused message notice when there is no matching cognitive models and can't fallback", function (done) {
+            botTestBase.getTestAdapterDefault().then((testAdapter) => {
+                const flow = testAdapter
+                    .send({
+						text: 'hi',
+						locale: "es-es"
+					})
+                    .assertReply("Lo siento, no soy capaz de ayudar con eso.");
+                
+                testNock.resolveWithMocks('mainDialog_no_cognitive_models', done, flow);
+            });
+        });
+	});
 });
