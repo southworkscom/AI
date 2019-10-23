@@ -2,20 +2,28 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
+import { ActionTypes, CardAction } from 'botframework-schema';
 import { ResponseManager } from '../responses/responseManager';
 import { FeedbackResponses } from './feedbackResponses';
-import { ActionTypes, CardAction } from 'botframework-schema';
 
+/**
+ * Configures the FeedbackMiddleware object.
+ */
 export class FeedbackOptions {
-    // tslint:disable:variable-name
     private _feedbackActions: CardAction[] = [{ type: '', title: '', value: '' }];
     private _dismissAction: CardAction = { type: '', title: '', value: '' };
     private _feedbackReceivedMessage: string = '';
-    private _commentsEnabled: boolean = false;
     private _commentPrompt: string = '';
     private _commentReceivedMessage: string = '';
-    // tslint:enable:variable-name
     private readonly responseManager: ResponseManager;
+
+    /**
+     * Gets or sets a value indicating whether gets or sets flag to prompt for free-form
+     * comments for all or select feedback choices (comment prompt is shown after user selects a preset choice).
+     * Default value is false.
+     * A value indicating whether gets or sets flag to prompt for free-form comments for all or select feedback choices.
+     */
+    public commentsEnabled: boolean = false;
 
     constructor() {
         this.responseManager = new ResponseManager(
@@ -29,8 +37,8 @@ export class FeedbackOptions {
      * Default values are "👍" and "👎".
      * @returns A `CardAction[]`.
      */
-    public get feedbacActions(): CardAction[] {
-        if (this.feedbacActions === undefined) {
+    public get feedbackActions(): CardAction[] {
+        if (this.feedbackActions === undefined) {
             return [
                 { type: ActionTypes.PostBack, title: '👍', value: 'positive' },
                 { type: ActionTypes.PostBack, title: '👎', value: 'negative' }
@@ -57,7 +65,8 @@ export class FeedbackOptions {
             return {
                 type: ActionTypes.PostBack,
                 title: this.responseManager.getResponseText(FeedbackResponses.dismissTitle),
-                value: 'dismiss' };
+                value: 'dismiss'
+            };
         }
 
         return this._dismissAction;
@@ -74,7 +83,7 @@ export class FeedbackOptions {
     /**
      * Gets message to show when a user provides some feedback.
      * Default value is "Thanks for your feedback!".
-     * @returns A `string`.
+     * @returns A feedbackReceivedMessage as `string`.
      */
     public get feedbackReceivedMessage(): string {
         if (this._feedbackReceivedMessage === '') {
@@ -93,28 +102,9 @@ export class FeedbackOptions {
     }
 
     /**
-     * Gets a value indicating whether gets or sets flag to prompt for free-form
-     * comments for all or select feedback choices (comment prompt is shown after user selects a preset choice).
-     * Default value is `false`.
-     * @returns A `boolean`.
-     */
-    public get commentsEnabled(): boolean {
-        return this._commentsEnabled;
-    }
-
-    /**
-     * Sets a value indicating whether gets or sets flag to prompt for free-form
-     * comments for all or select feedback choices (comment prompt is shown after user selects a preset choice).
-     * @param value A value indicating whether gets or sets flag to prompt for free-form comments for all or select feedback choices.
-     */
-    public set commentsEnabled(value: boolean) {
-        this._commentsEnabled = value;
-    }
-
-    /**
      * Gets the message to show when `CommentsEnabled` is `true`.
      * Default value is "Please add any additional comments in the chat.".
-     * @returns A `string`.
+     * @returns A commentPrompt as `string`.
      */
     public get commentPrompt(): string {
         if (this._commentPrompt === '') {
@@ -135,7 +125,7 @@ export class FeedbackOptions {
     /**
      * Gets the message to show when a user's comment has been received.
      * Default value is "Your comment has been received.".
-     * @returns A `string`.
+     * @returns A commentReceivedMessage as `string`.
      */
     public get commentReceivedMessage(): string {
         if (this._commentReceivedMessage === '') {
