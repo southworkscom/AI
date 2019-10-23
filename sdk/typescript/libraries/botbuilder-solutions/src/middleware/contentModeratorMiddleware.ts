@@ -37,7 +37,7 @@ export class ContentModeratorMiddleware implements Middleware {
         if (region === undefined) throw new Error(`Parameter 'region' cannot be undefined.`);
 
         this.subscriptionKey = subscriptionKey;
-        this.region = region.startsWith('https://') ? region : `https://${ region }`.concat('.api.cognitive.microsoft.com');
+        this.region = (region.startsWith('https://') ? region : `https://${ region }`).concat('.api.cognitive.microsoft.com');
     }
 
     /**
