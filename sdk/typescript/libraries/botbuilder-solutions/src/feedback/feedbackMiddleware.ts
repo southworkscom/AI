@@ -12,49 +12,51 @@ import {
     StatePropertyAccessor,
     TurnContext } from 'botbuilder';
 import { supportsSuggestedActions } from 'botbuilder-dialogs';
-import { CardAction, HeroCard } from 'botframework-schema';
+import { CardAction, Attachment } from 'botframework-schema';
 import { FeedbackOptions } from './feedbackOptions';
 import { FeedbackRecord } from './feedbackRecord';
-export class FeedbackMiddleware implements Middleware {
-    private readonly options: FeedbackOptions;
-    private readonly feedbackAccessor: StatePropertyAccessor<FeedbackRecord>;
-    private readonly conversationState: ConversationState;
-    private readonly telemetryClient: BotTelemetryClient;
-    private readonly traceName: string = 'Feedback';
 
+export class FeedbackMiddleware implements Middleware {
+    private options: FeedbackOptions;
+    private feedbackAccessor: StatePropertyAccessor<FeedbackRecord>;
+    private conversationState: ConversationState;
+    private telemetryClient: BotTelemetryClient;
+    private traceName: string = 'Feedback';
+
+    /**
+     * Initializes a new instance of the FeedbackMiddleware class
+     * @param conversationState The conversation state used for storing the feedback record before logging to Application Insights.
+     * @param telemetryClient The bot telemetry client used for logging the feedback record in Application Insights.
+     * @param options (Optional ) Feedback options object configuring the feedback actions and responses.
+     */
     constructor(
         conversationState: ConversationState,
         telemetryClient: BotTelemetryClient,
-        options?: FeedbackOptions
-    ) {
-        if (conversationState === undefined) {
-            throw new Error('');
-        }
-
-        if (telemetryClient === undefined) {
-            throw new Error('');
-        }
-
+        options?: FeedbackOptions) {
+        if (conversationState === undefined) throw new Error('The value of conversationState is undefined');
+        if (telemetryClient === undefined) throw new Error('The value of telemetryClient is undefined');
         this.conversationState = conversationState;
         this.telemetryClient = telemetryClient;
-        this.options = options ? options : new FeedbackOptions();
+        this.options = options !== undefined ? options : new FeedbackOptions();
 
         // Create FeedbackRecord state accessor
-        this.feedbackAccessor = conversationState.createProperty<FeedbackRecord>('');
+        this.feedbackAccessor = conversationState.createProperty<FeedbackRecord>(FeedbackRecord.name);
     }
 
-    public async requestFeedback(context: TurnContext, tag: string): Promise<void>
-    {
+    /**
+     * Sends a Feedback Request activity with suggested actions to the user.
+     * @param context Turn context for sending activities.
+     * @param tag Tag to categorize feedback record in Application Insights.
+     * @returns A Task representing the asynchronous operation.
+     */
+    public async requestFeedback(context: TurnContext, tag: string): Promise<void> {
         // clear state
         await this.feedbackAccessor.delete(context);
 
         // create feedbackRecord with original activity and tag
-
         const record : FeedbackRecord = {
             request: context.activity,
-            tag: tag,
-            comment: '',
-            feedback: ''
+            tag: tag
         };
 
         // store in state. No need to save changes, because its handled in IBot
@@ -77,23 +79,26 @@ export class FeedbackMiddleware implements Middleware {
             }
         } else {
             // else channel doesn't support suggested actions, so use hero card.
-            await context.sendActivity(MessageFactory.attachment(CardFactory.heroCard('', undefined, this.getFeedbackActions())));
+            const hero: Attachment = CardFactory.heroCard('', undefined, this.getFeedbackActions());
+            await context.sendActivity(MessageFactory.attachment(hero));
         }
     }
 
     public async onTurn(context: TurnContext, next: () => Promise<void>) {
         // get feedback record from state. If we don't find anything, set to null.
-        const record: FeedbackRecord | undefined = await this.feedbackAccessor.get(context);
+        const record: FeedbackRecord = await this.feedbackAccessor.get(context, new FeedbackRecord());
 
         // if we have requested feedback
         if (record !== undefined) {
-            if (this.options.feedbacActions) {
-                // if activity text matches a feedback action
-                // save feedback in state
-                const feedback: CardAction = this.options.feedbackActions
+            // if activity text matches a feedback action
+            // save feedback in state
+            const feedback: CardAction | undefined = this.options.feedbackActions.find((cardAction: CardAction) => {
+                return (context.activity.text === <string> cardAction.value || context.activity.text === cardAction.title)
+            });
 
+            if (feedback !== undefined) {
                 // Set the feedback to the action value for consistency
-                record.feedback = feedback.value;
+                record.feedback = <string> feedback.value;
                 await this.feedbackAccessor.set(context, record);
 
                 if (this.options.commentsEnabled) {
@@ -102,18 +107,17 @@ export class FeedbackMiddleware implements Middleware {
                     if (supportsSuggestedActions(context.activity.channelId)) {
                         const commentPrompt: Partial<Activity> = MessageFactory.suggestedActions(
                             [this.options.dismissAction],
-                            `${ this.options.feedbackReceivedMessage } ${this.options.dismissAction}`
+                            `${ this.options.feedbackReceivedMessage } ${this.options.commentPrompt}`
                         );
 
                         // prompt for comment
                         await context.sendActivity(commentPrompt);
                     } else {
                         // channel doesn't support suggestedActions, so use hero card.
+                        const hero: Attachment = CardFactory.heroCard(this.options.commentPrompt, undefined, [this.options.dismissAction]);
 
                         // prompt for comment
-                        await context.sendActivity(
-                            MessageFactory.attachment(CardFactory.heroCard('', undefined, this.getFeedbackActions()))
-                        );
+                        await context.sendActivity(MessageFactory.attachment(hero));
                     }
                 } else {
                     // comments not enabled, respond and cleanup
@@ -126,17 +130,18 @@ export class FeedbackMiddleware implements Middleware {
                     // clear state
                     await this.feedbackAccessor.delete(context);
                 }
-            } else if (context.activity.text === this.options.dismissAction.value
+            } else if (context.activity.text === <string> this.options.dismissAction.value
                     || context.activity.text === this.options.dismissAction.title) {
                 // if user dismissed
                 // log existing feedback
-                if (record.feedback !== '' || record.feedback !== undefined) {
+                if (record.feedback !== undefined && record.feedback.trim().length > 0) {
+                    // log feedback in appInsights
                     this.logFeedback(record);
                 }
 
                 // clear state
                 await this.feedbackAccessor.delete(context);
-            } else if ((record.feedback !== '' || record.feedback !== undefined) && this.options.commentsEnabled) {
+            } else if (record.feedback !== undefined && record.feedback.trim().length > 0 && this.options.commentsEnabled) {
                 // if we received a comment and user didn't dismiss
                 // store comment in state
                 record.comment = context.activity.text;
@@ -173,9 +178,9 @@ export class FeedbackMiddleware implements Middleware {
 
     private logFeedback(record: FeedbackRecord): void {
         const properties: { [id: string] : string } = {
-             tag: record.tag,
-             feedback: record.feedback,
-             comment: record.comment,
+             tag: record.tag !== undefined ? record.tag : '',
+             feedback: record.feedback !== undefined ? record.feedback : '',
+             comment: record.comment !== undefined ? record.comment : '',
              text: record.request !== undefined ? record.request.text : '',
              id: record.request !== undefined ? record.request.id !== undefined ? record.request.id : '' : '',
              channelId: record.request !== undefined ? record.request.channelId : ''
