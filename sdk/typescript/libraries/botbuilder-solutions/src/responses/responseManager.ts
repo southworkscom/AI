@@ -15,6 +15,7 @@ import { ICardData } from './cardData';
 import { IReply } from './reply';
 import { IResponseIdCollection } from './responseIdCollection';
 import { ResponseTemplate } from './responseTemplate';
+import { IContainer } from 'adaptivecards/lib/schema';
 
 export class ResponseManager {
     private readonly defaultLocaleKey: string = 'default';
@@ -132,17 +133,21 @@ export class ResponseManager {
             const itemContainer: ICardElement | undefined = mainCard.body.find((item: ICardElement): boolean => {
                 return item.type === 'Container' && item.id === containerName;
             });
-
-            if (itemContainer && containerItems) {
-                containerItems.forEach((cardItem: Card): void => {
-                    const itemJson: string = this.loadCardJson(cardItem.name, locale, resourcePath);
-                    const itemCard: IAdaptiveCard = this.buildCard(itemJson, cardItem.data);
-                    itemCard.forEach((body: Card): void => {
-                        itemContainer['items'].push(body)
-                    }
-                    )
+            const itemsAdaptiveContainer: IContainer = <IContainer> itemContainer;
+            if (itemsAdaptiveContainer !== undefined) {
+                if (containerItems !== undefined) {
+                    containerItems.forEach((cardItem: Card) => {
+                        const itemJson: string = this.loadCardJson(cardItem.name, locale, resourcePath);
+                        const itemCard: IAdaptiveCard = this.buildCard(itemJson, cardItem.data);
+                        if (itemCard.body !== undefined) {
+                            itemCard.body.forEach((body) => {
+                                if (itemsAdaptiveContainer.items !== undefined) {
+                                    itemsAdaptiveContainer.items.push(body);
+                                }
+                            });
+                        }
+                    });
                 }
-                )
             }
         }
 
