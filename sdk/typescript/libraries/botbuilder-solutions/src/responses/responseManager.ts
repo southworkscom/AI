@@ -55,6 +55,18 @@ export class ResponseManager {
     }
 
     /**
+     * Gets the Text of a response.
+     * @param templateId The name of the response template.
+     * @param tokens string map of tokens to replace in the response.
+     * @returns The response text.
+     */
+    public getResponseText(templateId: string, tokens?: Map<string, string>): string {
+        const text: string | undefined = this.getResponse(templateId, tokens).text;
+
+        return text !== undefined ? text : '';
+    }
+
+    /**
      * Get a response with an Adaptive Card attachment.
      * @param cards The card(s) to add to the response.
      * @returns An Activity.
