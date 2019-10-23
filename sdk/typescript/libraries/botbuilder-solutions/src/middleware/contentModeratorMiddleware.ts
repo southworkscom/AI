@@ -33,8 +33,16 @@ export class ContentModeratorMiddleware implements Middleware {
      * @param region Azure Service Region.
      */
     public constructor(subscriptionKey: string, region: string) {
+        if (subscriptionKey === undefined) {
+            throw new Error(`Parameter 'subscriptionKey' cannot be undefined.`);
+        }
+
+        if (region === undefined) {
+            throw new Error(`Parameter 'region' cannot be undefined.`);
+        }
+
         this.subscriptionKey = subscriptionKey;
-        this.region = region;
+        this.region = region.startsWith('https://') ? region : `https://${ region }`.concat('.api.cognitive.microsoft.com');
     }
 
     /**
@@ -51,7 +59,7 @@ export class ContentModeratorMiddleware implements Middleware {
             const textStream: Readable = this.textToReadable(context.activity.text);
 
             const credentials: CognitiveServicesCredentials = new CognitiveServicesCredentials(this.subscriptionKey);
-            const client: ContentModeratorClient = new ContentModeratorClient(credentials, `${this.region}.api.cognitive.microsoft.com`);
+            const client: ContentModeratorClient = new ContentModeratorClient(credentials, this.region);
 
             const screenResult: Object = await client.textModeration.screenText(
                 'text/plain',
