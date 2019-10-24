@@ -101,6 +101,14 @@ export class MultiProviderAuthDialog extends ComponentDialog {
         }
     }
 
+    // Validators
+    protected async tokenResponseValidator(promptContext: PromptValidatorContext<Activity>): Promise<boolean> {
+        const activity: Activity | undefined = promptContext.recognized.value;
+        const result: boolean = activity !== undefined && activity.type === ActivityTypes.Event;
+
+        return Promise.resolve(result);
+    }
+
     private async firstStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         if (isRemoteUserTokenProvider(stepContext.context.adapter)) {
             return stepContext.beginDialog(DialogIds.remoteAuthPrompt);
@@ -324,14 +332,6 @@ export class MultiProviderAuthDialog extends ComponentDialog {
                 throw new Error('Adapter does not support IUserTokenProvider');
             }
         }
-    }
-
-    // Validators
-    private async tokenResponseValidator(promptContext: PromptValidatorContext<Activity>): Promise<boolean> {
-        const activity: Activity|undefined = promptContext.recognized.value;
-        const result: boolean = activity !== undefined && activity.type === ActivityTypes.Event;
-
-        return Promise.resolve(result);
     }
 
     private async authPromptValidator(promptContext: PromptValidatorContext<TokenResponse>): Promise<boolean> {
