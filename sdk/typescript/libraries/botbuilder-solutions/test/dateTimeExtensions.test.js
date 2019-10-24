@@ -80,7 +80,7 @@ describe("date time extensions", function() {
                 specificDatePluralHour.toLocaleTimeString(),
                 `at ${specificDatePluralHour.toLocaleTimeString()}`);
 
-            // Spanish from Spain (uses AM PM)
+            // Spanish from Spain (uses 24 hr format)
             const dateEsEsToday = new DateTimeTestData(
                 "es-ES",
                 today,
@@ -100,16 +100,16 @@ describe("date time extensions", function() {
             const dateEsEsSpecificDate = new DateTimeTestData(
                 "es-ES",
                 specificDate,
-                "viernes 04 de Abril",
-                "el viernes 04 de Abril",
+                "viernes 04 de abril",
+                "el viernes 04 de abril",
                 `${specificDate.toLocaleTimeString()}`,
                 `a la ${specificDate.toLocaleTimeString()}`
             );
             const dateEsEsSpecificDatePluralHour = new DateTimeTestData(
                 "es-ES",
                 specificDatePluralHour,
-                "viernes 04 de Abril",
-                "el viernes 04 de Abril",
+                "viernes 04 de abril",
+                "el viernes 04 de abril",
                 `${specificDatePluralHour.toLocaleTimeString()}`,
                 `a las ${specificDatePluralHour.toLocaleTimeString()}`
             );
@@ -118,16 +118,16 @@ describe("date time extensions", function() {
             const dateEsMxSpecificDate = new DateTimeTestData(
                 "es-MX",
                 specificDate,
-                "viernes 04 de Abril",
-                "el viernes 04 de Abril",
+                "viernes 04 de abril",
+                "el viernes 04 de abril",
                 `${specificDate.toLocaleTimeString()}`,
                 `a la ${specificDate.toLocaleTimeString()}`
             );
             const dateEsMxSpecificDatePluralHour = new DateTimeTestData(
                 "es-MX",
                 specificDatePluralHour,
-                "viernes 04 de Abril",
-                "el viernes 04 de Abril",
+                "viernes 04 de abril",
+                "el viernes 04 de abril",
                 `${specificDatePluralHour.toLocaleTimeString()}`,
                 `a las ${specificDatePluralHour.toLocaleTimeString()}`
             );
