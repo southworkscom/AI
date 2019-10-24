@@ -91,7 +91,6 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             if (authDialogAdded) {
                 this.addDialog(new WaterfallDialog(DialogIds.localAuthPrompt, localAuth));
                 const prompt: ChoicePrompt = new ChoicePrompt(DialogIds.providerPrompt);
-                prompt.style = ListStyle.suggestedAction;
                 this.addDialog(prompt);
 
                 this.localAuthConfigured = true;
