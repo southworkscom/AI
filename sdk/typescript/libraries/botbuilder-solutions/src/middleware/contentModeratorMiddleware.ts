@@ -37,7 +37,7 @@ export class ContentModeratorMiddleware implements Middleware {
         if (region === undefined) throw new Error(`Parameter 'region' cannot be undefined.`);
 
         this.subscriptionKey = subscriptionKey;
-        this.region = (region.startsWith('https://') ? region : `https://${ region }`).concat('.api.cognitive.microsoft.com');
+        this.region = region;
     }
 
     /**
@@ -54,7 +54,8 @@ export class ContentModeratorMiddleware implements Middleware {
             const textStream: Readable = this.textToReadable(context.activity.text);
 
             const credentials: CognitiveServicesCredentials = new CognitiveServicesCredentials(this.subscriptionKey);
-            const client: ContentModeratorClient = new ContentModeratorClient(credentials, this.region);
+            const region: string = this.region.startsWith('https://') ? this.region : `https://${ this.region }`;
+            const client: ContentModeratorClient = new ContentModeratorClient(credentials, `${ region }.api.cognitive.microsoft.com`);
 
             const screenResult: Object = await client.textModeration.screenText(
                 'text/plain',
