@@ -5,20 +5,19 @@
 
 import { OAuthProvider } from './oAuthProvider';
 
-export class OAuthProviderExtensions {
+export namespace OAuthProviderExtensions {
 
-    public getAuthenticationProvider(provider: string): OAuthProvider {
+    export function getAuthenticationProvider(provider: string): OAuthProvider {
         switch (provider) {
             case 'Azure Active Directory':
             case 'Azure Active Directory v2':
-            case OAuthProvider.AzureAD.toString():
                 return OAuthProvider.AzureAD;
-            case OAuthProvider.Google.toString():
+            case 'Google':
                 return OAuthProvider.Google;
-            case OAuthProvider.Todoist.toString():
+            case 'Todoist':
                 return OAuthProvider.Todoist;
-            case 'generic Oauth 2':
-            case OAuthProvider.GenericOauth2.toString():
+            case 'Generic Oauth 2':
+            case 'Oauth 2 Generic Provider':
                 return OAuthProvider.GenericOauth2;
             default:
                 throw new Error(`The given provider '${provider}' could not be parsed.`);

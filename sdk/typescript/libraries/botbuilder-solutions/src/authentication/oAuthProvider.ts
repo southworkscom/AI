@@ -16,7 +16,7 @@
     Google,
 
     /**
-     * Google authentication provider.
+     * Todoist authentication provider.
      */
     Todoist,
 

@@ -18,7 +18,8 @@ import { IRemoteUserTokenProvider, isRemoteUserTokenProvider } from '../remoteUs
 import { ResponseManager } from '../responses';
 import { TokenEvents } from '../tokenEvents';
 import { AuthenticationResponses } from './authenticationResponses';
-import { getAuthenticationProvider, IProviderTokenResponse } from './providerTokenResponse';
+import { OAuthProviderExtensions } from './oAuthProviderExtensions';
+import { IProviderTokenResponse } from './providerTokenResponse';
 
 export class MultiProviderAuthDialog extends ComponentDialog {
     private selectedAuthType: string = '';
@@ -292,7 +293,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
         }
 
         const response: IProviderTokenResponse = {
-            authenticationProvider: getAuthenticationProvider(match.serviceProviderDisplayName || ''),
+            authenticationProvider: OAuthProviderExtensions.getAuthenticationProvider(match.serviceProviderDisplayName || ''),
             tokenResponse: tokenResponse
         };
 
