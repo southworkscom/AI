@@ -11,6 +11,7 @@ import { ActivityExtensions } from '../extensions';
 import { InterruptableDialog } from './interruptableDialog';
 import { InterruptionAction } from './interruptionAction';
 import { RouterDialogTurnStatus } from './routerDialogTurnStatus';
+import { RouterDialogTurnResult } from './routerDialogTurnResult';
 
 export abstract class RouterDialog extends InterruptableDialog {
     // Constructor
@@ -56,7 +57,8 @@ export abstract class RouterDialog extends InterruptableDialog {
                                 break;
                             }
                             case DialogTurnStatus.complete: {
-                                if (result.result === RouterDialogTurnStatus.Restart) {
+                                const routerDialogTurnResult: RouterDialogTurnResult = <RouterDialogTurnResult> result.result;
+                                if (routerDialogTurnResult !== undefined && result.status === RouterDialogTurnStatus.Restart) {
                                     await this.route(innerDc);
                                     break;
                                 }
@@ -71,7 +73,7 @@ export abstract class RouterDialog extends InterruptableDialog {
 
                     // If the active dialog was ended on this turn (either on single-turn dialog, or on continueDialogAsync)
                     // run CompleteAsync method.
-                    if (!innerDc.activeDialog) {
+                    if (innerDc.activeDialog === undefined) {
                         await this.complete(innerDc);
                     }
 
