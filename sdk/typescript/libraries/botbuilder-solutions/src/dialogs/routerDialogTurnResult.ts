@@ -4,6 +4,9 @@
  */
 import { RouterDialogTurnStatus } from './routerDialogTurnStatus';
 
+/**
+ * Define router dialog turn result
+ */
 export class RouterDialogTurnResult {
 
     constructor(status: RouterDialogTurnStatus) {
