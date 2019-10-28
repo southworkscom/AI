@@ -10,8 +10,8 @@ import { Activity, ActivityTypes } from 'botframework-schema';
 import { ActivityExtensions } from '../extensions';
 import { InterruptableDialog } from './interruptableDialog';
 import { InterruptionAction } from './interruptionAction';
-import { RouterDialogTurnStatus } from './routerDialogTurnStatus';
 import { RouterDialogTurnResult } from './routerDialogTurnResult';
+import { RouterDialogTurnStatus } from './routerDialogTurnStatus';
 
 export abstract class RouterDialog extends InterruptableDialog {
     // Constructor
@@ -97,11 +97,13 @@ export abstract class RouterDialog extends InterruptableDialog {
         }
     }
 
+    // tslint:disable-next-line: no-unnecessary-override
     protected async onEndDialog(context: TurnContext, instance: DialogInstance, reason: DialogReason): Promise<void> {
         return super.onEndDialog(context, instance, reason);
     }
 
-    protected async onRepromptDialog(context: TurnContext, instance: DialogInstance, ): Promise<void> {
+    // tslint:disable-next-line: no-unnecessary-override
+    protected async onRepromptDialog(context: TurnContext, instance: DialogInstance): Promise<void> {
         return super.onRepromptDialog(context, instance);
     }
 
