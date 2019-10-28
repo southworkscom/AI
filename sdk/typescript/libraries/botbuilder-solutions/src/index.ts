@@ -13,7 +13,6 @@ export * from './middleware';
 export * from './proactive';
 export * from './resources';
 export * from './responses';
-export * from './skills';
 export * from './taskExtensions';
 export * from './util';
 export * from './botSettings';
