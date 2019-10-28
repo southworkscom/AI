@@ -9,7 +9,7 @@ import { RouterDialogTurnStatus } from './routerDialogTurnStatus';
  */
 export class RouterDialogTurnResult {
 
-    constructor(status: RouterDialogTurnStatus) {
+    public constructor(status: RouterDialogTurnStatus) {
         this.status = status;
     }
 
