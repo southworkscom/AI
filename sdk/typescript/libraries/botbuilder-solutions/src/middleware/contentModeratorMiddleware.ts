@@ -33,8 +33,8 @@ export class ContentModeratorMiddleware implements Middleware {
      * @param region Azure Service Region.
      */
     public constructor(subscriptionKey: string, region: string) {
-        if (subscriptionKey === undefined) throw new Error(`Parameter 'subscriptionKey' cannot be undefined.`);
-        if (region === undefined) throw new Error(`Parameter 'region' cannot be undefined.`);
+        if (subscriptionKey === undefined) { throw new Error(`Parameter 'subscriptionKey' cannot be undefined.`); }
+        if (region === undefined) { throw new Error(`Parameter 'region' cannot be undefined.`); }
 
         this.subscriptionKey = subscriptionKey;
         this.region = region;

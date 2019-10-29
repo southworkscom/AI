@@ -5,7 +5,7 @@
 
 import { BotFrameworkAdapter, TurnContext } from 'botbuilder';
 import { Choice, ChoicePrompt, ComponentDialog, DialogTurnResult, DialogTurnStatus, FoundChoice,
-    ListStyle, OAuthPrompt, PromptValidatorContext, WaterfallDialog, WaterfallStep, WaterfallStepContext } from 'botbuilder-dialogs';
+    OAuthPrompt, PromptValidatorContext, WaterfallDialog, WaterfallStep, WaterfallStepContext } from 'botbuilder-dialogs';
 import { MicrosoftAppCredentials } from 'botframework-connector';
 // tslint:disable-next-line:no-submodule-imports
 import { TokenStatus } from 'botframework-connector/lib/tokenApi/models';

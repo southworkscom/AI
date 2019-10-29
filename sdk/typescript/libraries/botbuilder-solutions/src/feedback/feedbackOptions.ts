@@ -10,8 +10,8 @@ import { FeedbackResponses } from './feedbackResponses';
  * Configures the FeedbackMiddleware object.
  */
 export class FeedbackOptions {
-    private _feedbackActions: CardAction[] = [{ type: '', title: '', value: '' }];
-    private _dismissAction: CardAction = { type: '', title: '', value: '' };
+    private _feedbackActions: CardAction[];
+    private _dismissAction: CardAction;
     private _feedbackReceivedMessage: string = '';
     private _commentPrompt: string = '';
     private _commentReceivedMessage: string = '';
@@ -25,11 +25,23 @@ export class FeedbackOptions {
      */
     public commentsEnabled: boolean = false;
 
-    constructor() {
+    public constructor() {
         this.responseManager = new ResponseManager(
             ['en', 'de', 'es', 'fr', 'it', 'zh'],
             [FeedbackResponses]
         );
+
+        this._feedbackActions = [ { type: ActionTypes.PostBack,
+            title: '👍',
+            value: 'positive'
+        },
+        { type: ActionTypes.PostBack,
+            title: '👎',
+            value: 'negative'
+        }];
+        this._dismissAction = { type: ActionTypes.PostBack,
+            title: this.responseManager.getResponseText(FeedbackResponses.dismissTitle),
+            value: 'dismiss'};
     }
 
     /**
@@ -38,13 +50,6 @@ export class FeedbackOptions {
      * @returns A `CardAction[]`.
      */
     public get feedbackActions(): CardAction[] {
-        if (this.feedbackActions === undefined) {
-            return [
-                { type: ActionTypes.PostBack, title: '👍', value: 'positive' },
-                { type: ActionTypes.PostBack, title: '👎', value: 'negative' }
-            ];
-        }
-
         return this._feedbackActions;
     }
 
@@ -61,14 +66,6 @@ export class FeedbackOptions {
      * @returns A `CardAction`.
      */
     public get dismissAction(): CardAction {
-        if (this.dismissAction === undefined) {
-            return {
-                type: ActionTypes.PostBack,
-                title: this.responseManager.getResponseText(FeedbackResponses.dismissTitle),
-                value: 'dismiss'
-            };
-        }
-
         return this._dismissAction;
     }
 
