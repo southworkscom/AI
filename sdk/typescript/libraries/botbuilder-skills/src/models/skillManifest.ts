@@ -38,6 +38,7 @@ export interface IAction {
 export interface IActionDefinition {
     description: string;
     slots: ISlot[];
+    response: any;
     triggers: ITriggers;
 }
 
@@ -76,14 +77,4 @@ export interface IEvent {
 export interface ISlot {
     name: string;
     types: string[];
-}
-
-/**
- * Definition of a Manifest Action. Describes how an action is trigger and any slots (parameters) it accepts.
- */
-export interface IActionDefinition {
-    description: string;
-    slots: ISlot[];
-    response: any;
-    triggers: ITriggers;
 }
