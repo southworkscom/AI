@@ -153,7 +153,7 @@ export class ResponseManager {
                         const itemJson: string = this.loadCardJson(cardItem.name, locale, resourcePath);
                         const itemCard: IAdaptiveCard = this.buildCard(itemJson, cardItem.data);
                         if (itemCard.body !== undefined) {
-                            // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
+                            // tslint:disable-next-line: no-unsafe-any
                             itemCard.body.forEach((body: any): void => {
                                 if (itemsAdaptiveContainer.items !== undefined) {
                                     // tslint:disable-next-line: no-unsafe-any
