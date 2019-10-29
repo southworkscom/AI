@@ -11,17 +11,18 @@ import {
     Middleware,
     StatePropertyAccessor,
     TurnContext } from 'botbuilder';
-import { supportsSuggestedActions } from 'botbuilder-dialogs';
-import { CardAction, Attachment } from 'botframework-schema';
+// tslint:disable-next-line: no-submodule-imports //supportsSuggestedActions not exported, botbuilder-js#1354
+import { supportsSuggestedActions } from 'botbuilder-dialogs/lib/choices/channel';
+import { Attachment, CardAction } from 'botframework-schema';
 import { FeedbackOptions } from './feedbackOptions';
 import { FeedbackRecord } from './feedbackRecord';
 
 export class FeedbackMiddleware implements Middleware {
-    private options: FeedbackOptions;
-    private feedbackAccessor: StatePropertyAccessor<FeedbackRecord>;
-    private conversationState: ConversationState;
-    private telemetryClient: BotTelemetryClient;
-    private traceName: string = 'Feedback';
+    private readonly options: FeedbackOptions;
+    private readonly feedbackAccessor: StatePropertyAccessor<FeedbackRecord>;
+    private readonly conversationState: ConversationState;
+    private readonly telemetryClient: BotTelemetryClient;
+    private readonly traceName: string = 'Feedback';
 
     /**
      * Initializes a new instance of the FeedbackMiddleware class
@@ -29,12 +30,12 @@ export class FeedbackMiddleware implements Middleware {
      * @param telemetryClient The bot telemetry client used for logging the feedback record in Application Insights.
      * @param options (Optional ) Feedback options object configuring the feedback actions and responses.
      */
-    constructor(
+    public constructor(
         conversationState: ConversationState,
         telemetryClient: BotTelemetryClient,
         options?: FeedbackOptions) {
-        if (conversationState === undefined) throw new Error('The value of conversationState is undefined');
-        if (telemetryClient === undefined) throw new Error('The value of telemetryClient is undefined');
+        if (conversationState === undefined) { throw new Error('The value of conversationState is undefined'); }
+        if (telemetryClient === undefined) { throw new Error('The value of telemetryClient is undefined'); }
         this.conversationState = conversationState;
         this.telemetryClient = telemetryClient;
         this.options = options !== undefined ? options : new FeedbackOptions();
@@ -54,7 +55,7 @@ export class FeedbackMiddleware implements Middleware {
         await this.feedbackAccessor.delete(context);
 
         // create feedbackRecord with original activity and tag
-        const record : FeedbackRecord = {
+        const record: FeedbackRecord = {
             request: context.activity,
             tag: tag
         };
@@ -84,7 +85,7 @@ export class FeedbackMiddleware implements Middleware {
         }
     }
 
-    public async onTurn(context: TurnContext, next: () => Promise<void>) {
+    public async onTurn(context: TurnContext, next: () => Promise<void>): Promise<void> {
         // get feedback record from state. If we don't find anything, set to null.
         const record: FeedbackRecord = await this.feedbackAccessor.get(context, new FeedbackRecord());
 
@@ -92,8 +93,8 @@ export class FeedbackMiddleware implements Middleware {
         if (record !== undefined) {
             // if activity text matches a feedback action
             // save feedback in state
-            const feedback: CardAction | undefined = this.options.feedbackActions.find((cardAction: CardAction) => {
-                return (context.activity.text === <string> cardAction.value || context.activity.text === cardAction.title)
+            const feedback: CardAction | undefined = this.options.feedbackActions.find((cardAction: CardAction): boolean => {
+                return (context.activity.text === <string> cardAction.value || context.activity.text === cardAction.title);
             });
 
             if (feedback !== undefined) {
@@ -177,13 +178,13 @@ export class FeedbackMiddleware implements Middleware {
     }
 
     private logFeedback(record: FeedbackRecord): void {
-        const properties: { [id: string] : string } = {
-             tag: record.tag !== undefined ? record.tag : '',
-             feedback: record.feedback !== undefined ? record.feedback : '',
-             comment: record.comment !== undefined ? record.comment : '',
-             text: record.request !== undefined ? record.request.text : '',
-             id: record.request !== undefined ? record.request.id !== undefined ? record.request.id : '' : '',
-             channelId: record.request !== undefined ? record.request.channelId : ''
+        const properties: { [id: string]: string } = {
+            tag: record.tag !== undefined ? record.tag : '',
+            feedback: record.feedback !== undefined ? record.feedback : '',
+            comment: record.comment !== undefined ? record.comment : '',
+            text: record.request !== undefined ? record.request.text : '',
+            id: record.request !== undefined ? record.request.id !== undefined ? record.request.id : '' : '',
+            channelId: record.request !== undefined ? record.request.channelId : ''
         };
         this.telemetryClient.trackEvent({
             name: this.traceName,

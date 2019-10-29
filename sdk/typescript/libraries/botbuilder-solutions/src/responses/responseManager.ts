@@ -4,6 +4,8 @@
  */
 
 import { IAdaptiveCard, ICardElement } from 'adaptivecards';
+// tslint:disable-next-line: no-submodule-imports
+import { IContainer } from 'adaptivecards/lib/schema';
 import { ActivityTypes } from 'botbuilder';
 import { Activity, CardFactory, MessageFactory } from 'botbuilder-core';
 import { ActionTypes, Attachment } from 'botframework-schema';
@@ -15,7 +17,6 @@ import { ICardData } from './cardData';
 import { IReply } from './reply';
 import { IResponseIdCollection } from './responseIdCollection';
 import { ResponseTemplate } from './responseTemplate';
-import { IContainer } from 'adaptivecards/lib/schema';
 
 export class ResponseManager {
     private readonly defaultLocaleKey: string = 'default';
@@ -148,12 +149,14 @@ export class ResponseManager {
             const itemsAdaptiveContainer: IContainer = <IContainer> itemContainer;
             if (itemsAdaptiveContainer !== undefined) {
                 if (containerItems !== undefined) {
-                    containerItems.forEach((cardItem: Card) => {
+                    containerItems.forEach((cardItem: Card): void => {
                         const itemJson: string = this.loadCardJson(cardItem.name, locale, resourcePath);
                         const itemCard: IAdaptiveCard = this.buildCard(itemJson, cardItem.data);
                         if (itemCard.body !== undefined) {
-                            itemCard.body.forEach((body) => {
+                            // tslint:disable-next-line: no-unsafe-any
+                            itemCard.body.forEach((body: any): void => {
                                 if (itemsAdaptiveContainer.items !== undefined) {
+                                    // tslint:disable-next-line: no-unsafe-any
                                     itemsAdaptiveContainer.items.push(body);
                                 }
                             });
@@ -253,7 +256,7 @@ export class ResponseManager {
         }
 
         try {
-            // eslint-disable-next-line @typescript-eslint/tslint/config
+            // tslint:disable-next-line: no-unsafe-any
             const content: { [key: string]: Object } = JSON.parse(this.jsonFromFile(jsonPath));
 
             const localeResponses: Map<string, ResponseTemplate> = this.jsonResponses.get(localeKey) || new Map<string, ResponseTemplate>();
@@ -376,7 +379,7 @@ export class ResponseManager {
         }
 
         // Deserialize/Serialize logic is needed to prevent JSON exception in prompts
-        // eslint-disable-next-line @typescript-eslint/tslint/config
+        // tslint:disable-next-line: no-unsafe-any
         return JSON.parse(jsonOut);
     }
 

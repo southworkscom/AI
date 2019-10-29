@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
- export enum OAuthProvider {
+export enum OAuthProvider {
 
     /**
      * Azure Activity Directory authentication provider.

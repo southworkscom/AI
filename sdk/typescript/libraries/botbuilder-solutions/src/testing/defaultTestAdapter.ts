@@ -6,8 +6,9 @@ import { TestAdapter } from 'botbuilder';
 import { EventDebuggerMiddleware } from '../middleware';
 
 export class DefaultTestAdapter extends TestAdapter {
-    constructor() {
-        super(async() => {});
+    public constructor() {
+        // tslint:disable-next-line: no-empty
+        super(async(): Promise<void> => {});
         this.use(new EventDebuggerMiddleware());
     }
 }
