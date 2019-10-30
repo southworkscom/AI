@@ -57,8 +57,10 @@ export abstract class RouterDialog extends InterruptableDialog {
                                 break;
                             }
                             case DialogTurnStatus.complete: {
+                                // tslint:disable-next-line:no-unsafe-any
                                 const routerDialogTurnResult: RouterDialogTurnResult = <RouterDialogTurnResult> result.result;
-                                if (routerDialogTurnResult !== undefined && result.status === RouterDialogTurnStatus.Restart) {
+                                if (routerDialogTurnResult !== undefined
+                                    && routerDialogTurnResult.status === RouterDialogTurnStatus.Restart) {
                                     await this.route(innerDc);
                                     break;
                                 }
@@ -76,7 +78,6 @@ export abstract class RouterDialog extends InterruptableDialog {
                     if (innerDc.activeDialog === undefined) {
                         await this.complete(innerDc);
                     }
-
                     break;
                 }
                 case ActivityTypes.Event: {
