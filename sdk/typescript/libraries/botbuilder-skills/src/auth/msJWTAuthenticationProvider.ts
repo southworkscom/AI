@@ -20,7 +20,8 @@ import * as jwks from 'jwks-rsa';
 import { IAuthenticationProvider } from './authenticationProvider';
 
 export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
-    private readonly openIdMetadataUrl: string = 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration';
+    // private static openIdConnectConfiguration: openIdConfig;
+    private openIdMetadataUrl: string = 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration';
     private readonly jwtIssuer: string = 'https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/v2.0';
     private readonly httpClient: ServiceClient;
     private readonly appId: string;
@@ -28,6 +29,13 @@ export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
     public constructor(appId: string) {
         this.httpClient = new ServiceClient();
         this.appId = appId;
+    }
+
+    public msJWTAuthenticationProvider (microsoftAppId: string, openIdMetadataUrl: string = 'undefined'): void {
+        if (microsoftAppId === undefined) {
+            throw new Error('Error');
+            this.openIdMetadataUrl = openIdMetadataUrl;
+        }
     }
 
     public async authenticate(authHeader: string): Promise<boolean> {

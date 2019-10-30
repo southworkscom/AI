@@ -7,3 +7,6 @@ export * from './authenticationProvider';
 export * from './microsoftAppCredentialsEx';
 export * from './msJWTAuthenticationProvider';
 export * from './serviceClientCredentials';
+export * from './authHelpers';
+export * from './whitelistAuthenticationProvider';
+export * from './authenticator';
