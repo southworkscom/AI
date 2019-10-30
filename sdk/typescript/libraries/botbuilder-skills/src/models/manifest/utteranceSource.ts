@@ -6,7 +6,7 @@
 /**
  * Source of utterances for a given locale which form part of an Action within a manifest.
  */
-export interface IUtteranceSources {
+export interface IUtteranceSource {
     locale: string;
     source: string[];
 }

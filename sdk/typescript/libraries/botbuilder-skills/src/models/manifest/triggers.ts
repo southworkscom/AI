@@ -3,13 +3,13 @@
  * Licensed under the MIT License.
  */
 
-import { IEvent, IUtterance, IUtteranceSources } from "./";
+import { IEvent, IUtterance, IUtteranceSource } from "./";
 
 /**
  * Definition of the triggers for a given action within a Skill.
  */
 export interface ITriggers {
     utterances?: IUtterance[];
-    utteranceSources: IUtteranceSources[];
+    utteranceSources: IUtteranceSource[];
     events?: IEvent[];
 }
