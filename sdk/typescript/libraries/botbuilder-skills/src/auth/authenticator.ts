@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import {WebRequest, WebResponse } from 'botbuilder';
+import { WebRequest, WebResponse } from 'botbuilder';
 import { ClaimsIdentity } from 'botframework-connector';
 import { Response } from 'microsoft-bot-protocol';
 import { IAuthenticationProvider } from './authenticationProvider';
@@ -11,7 +11,7 @@ import { AuthHelpers } from './authHelpers';
 import { IWhitelistAuthenticationProvider } from './whitelistAuthenticationProvider';
 
 export interface IAuthenticator {
-    authenticate(webRequest: WebRequest, webResponse: WebResponse): Promise<ClaimsIdentity>;
+    authenticate(webRequest: WebRequest, webResponse: WebResponse): Promise<ClaimsIdentity | undefined>;
 }
 
 export class Authenticator implements IAuthenticator {
@@ -29,20 +29,23 @@ export class Authenticator implements IAuthenticator {
             this.whiteListAuthenticationProvider = whitelistAuthenticationProvider;
         }
 
-    public async authenticate(webRequest: WebRequest, webResponse: WebResponse): Promise<ClaimsIdentity> {
-        if (webRequest === undefined) throw new Error('webRequest is undefined');
-        if (webResponse === undefined) throw new Error('webResponse is undefined');
+    public async authenticate(httpRequest: WebRequest, httpResponse: WebResponse): Promise<ClaimsIdentity | undefined> {
+        if (httpRequest === undefined) throw new Error('webRequest is undefined');
+        if (httpResponse === undefined) throw new Error('webResponse is undefined');
 
         const response: Response = new Response();
-        const authorizationHeader: string = webRequest.headers('Authorization');
-        if (authorizationHeader === '') {
+        const authorizationHeader: string = httpRequest.headers('Authorization');
+        if (authorizationHeader === undefined || authorizationHeader.trim().length === 0) {
             response.statusCode = 401;
+
+            return undefined;
         }
 
         const claimsIdentity: ClaimsIdentity = this.authenticationProvider.authenticate(authorizationHeader);
-
         if (claimsIdentity === undefined) {
             response.statusCode = 401;
+
+            return undefined;
         }
 
         const appIdClaimName: string = AuthHelpers.getAppIdClaimName(claimsIdentity);
@@ -51,7 +54,7 @@ export class Authenticator implements IAuthenticator {
         this.whiteListAuthenticationProvider.appsWhitelist.size > 0 &&
         !this.whiteListAuthenticationProvider.appsWhitelist.has(appId)) {
             response.statusCode = 401;
-            await webResponse.send('Skill could not allow access from calling bot.');
+            await httpResponse.send('Skill could not allow access from calling bot.');
         }
 
         return claimsIdentity;
