@@ -23,26 +23,17 @@ export class Authenticator implements IAuthenticator {
         authenticationProvider: IAuthenticationProvider,
         whitelistAuthenticationProvider: IWhitelistAuthenticationProvider
         ) {
-            if (authenticationProvider === undefined) {
-                throw new Error('error');
-            }
-            if (whitelistAuthenticationProvider === undefined) {
-                throw new Error('error');
-            }
+            if (authenticationProvider === undefined) throw new Error('autheticationProvider is undefined');
+            if (whitelistAuthenticationProvider === undefined) throw new Error('whitelistAuthenticationProvider is undefined');
             this.authenticationProvider = authenticationProvider;
             this.whiteListAuthenticationProvider = whitelistAuthenticationProvider;
         }
 
     public async authenticate(webRequest: WebRequest, webResponse: WebResponse): Promise<ClaimsIdentity> {
-        if (webRequest === undefined) {
-            throw new Error('error');
-        }
-        if (webResponse === undefined) {
-            throw new Error('error');
-        }
+        if (webRequest === undefined) throw new Error('webRequest is undefined');
+        if (webResponse === undefined) throw new Error('webResponse is undefined');
 
         const response: Response = new Response();
-        // tslint:disable-next-line: no-unsafe-any
         const authorizationHeader: string = webRequest.headers('Authorization');
         if (authorizationHeader === '') {
             response.statusCode = 401;
@@ -56,11 +47,10 @@ export class Authenticator implements IAuthenticator {
 
         const appIdClaimName: string = AuthHelpers.getAppIdClaimName(claimsIdentity);
         const appId: string | null = claimsIdentity.getClaimValue(appIdClaimName);
-        if (this.whiteListAuthenticationProvider.appsWhitelist !== undefined &&
+        if (appId !== null && this.whiteListAuthenticationProvider.appsWhitelist !== undefined &&
         this.whiteListAuthenticationProvider.appsWhitelist.size > 0 &&
         !this.whiteListAuthenticationProvider.appsWhitelist.has(appId)) {
             response.statusCode = 401;
-            // tslint:disable-next-line: no-unsafe-any
             await webResponse.send('Skill could not allow access from calling bot.');
         }
 
