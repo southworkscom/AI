@@ -14,38 +14,33 @@ declare module 'jsonwebtoken' {
     ): void;
 }
 
-import { HttpOperationResponse, ServiceClient } from '@azure/ms-rest-js';
 import { ClaimsIdentity } from 'botframework-connector';
-import { signingKeyResolver, verify } from 'jsonwebtoken';
 import * as jwks from 'jwks-rsa';
 import { IAuthenticationProvider } from './authenticationProvider';
 
 export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
     // private static openIdConfig: OpenIdConnectConfiguration;
-    private readonly openIdMetadataUrl: string = 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration';
     private readonly microsoftAppId: string;
+    private readonly openIdMetadataUrl: string = 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration';
 
-    public constructor (microsoftAppId: string, openIdMetadataUrl: string = 'undefined') {
-
-        if (microsoftAppId === undefined || microsoftAppId.trim().length === 0) {
-            throw new Error('MicrosoftAppId is undefined');
-        }
+    public constructor (microsoftAppId: string, openIdMetadataUrl: string = '') {
+        if (microsoftAppId === undefined || microsoftAppId.trim().length === 0) throw new Error('MicrosoftAppId is undefined');
         this.microsoftAppId = microsoftAppId;
 
         if (openIdMetadataUrl !== undefined && openIdMetadataUrl.trim().length > 0) {
             this.openIdMetadataUrl = openIdMetadataUrl;
         }
+        /* PENDING: ConfigurationManager and IdentityModel is not present in JS/TS
+            var configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(
+                _openIdMetadataUrl,
+                new OpenIdConnectConfigurationRetriever()
+                );
+            openIdConfig = configurationManager.GetConfigurationAsync(CancellationToken.None).GetAwaiter().GetResult();
+        */
     }
 
-    /* PENDING
-        var configurationManager = new ConfigurationManager<OpenIdConnectConfiguration>(
-            _openIdMetadataUrl,
-            new OpenIdConnectConfigurationRetriever()
-            );
-        openIdConfig = configurationManager.GetConfigurationAsync(CancellationToken.None).GetAwaiter().GetResult();
-    */
     public authenticate(authHeader: string): ClaimsIdentity {
-        /* PENDING
+        /* PENDING: IdentityModel is not present in JS/TS
             try
             {
                 var validationParameters =

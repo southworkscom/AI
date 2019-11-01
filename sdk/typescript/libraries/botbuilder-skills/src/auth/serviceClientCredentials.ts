@@ -9,6 +9,5 @@ export interface IServiceClientCredentials {
     microsoftAppId: string;
 
     getToken(forceRefresh?: boolean): Promise<string>;
-
-    processHttpRequestAsync(request: WebRequest): Promise<void>;
+    processHttpRequest(request: WebRequest): Promise<void>;
 }

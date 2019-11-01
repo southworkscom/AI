@@ -11,7 +11,7 @@ import { AuthHelpers } from './authHelpers';
 import { IWhitelistAuthenticationProvider } from './whitelistAuthenticationProvider';
 
 export interface IAuthenticator {
-    authenticate(webRequest: WebRequest, webResponse: WebResponse): Promise<ClaimsIdentity | undefined>;
+    authenticate(webRequest: WebRequest, webResponse: WebResponse): Promise<ClaimsIdentity>;
 }
 
 export class Authenticator implements IAuthenticator {
@@ -19,17 +19,14 @@ export class Authenticator implements IAuthenticator {
     private readonly authenticationProvider: IAuthenticationProvider;
     private readonly whiteListAuthenticationProvider: IWhitelistAuthenticationProvider;
 
-    public constructor (
-        authenticationProvider: IAuthenticationProvider,
-        whitelistAuthenticationProvider: IWhitelistAuthenticationProvider
-        ) {
+    public constructor (authenticationProvider: IAuthenticationProvider, whitelistAuthenticationProvider: IWhitelistAuthenticationProvider) {
             if (authenticationProvider === undefined) throw new Error('autheticationProvider is undefined');
             if (whitelistAuthenticationProvider === undefined) throw new Error('whitelistAuthenticationProvider is undefined');
             this.authenticationProvider = authenticationProvider;
             this.whiteListAuthenticationProvider = whitelistAuthenticationProvider;
-        }
+    }
 
-    public async authenticate(httpRequest: WebRequest, httpResponse: WebResponse): Promise<ClaimsIdentity | undefined> {
+    public async authenticate(httpRequest: WebRequest, httpResponse: WebResponse): Promise<ClaimsIdentity> {
         if (httpRequest === undefined) throw new Error('webRequest is undefined');
         if (httpResponse === undefined) throw new Error('webResponse is undefined');
 
@@ -37,15 +34,13 @@ export class Authenticator implements IAuthenticator {
         const authorizationHeader: string = httpRequest.headers('Authorization');
         if (authorizationHeader === undefined || authorizationHeader.trim().length === 0) {
             response.statusCode = 401;
-
-            return undefined;
+            Promise.reject();
         }
 
         const claimsIdentity: ClaimsIdentity = this.authenticationProvider.authenticate(authorizationHeader);
         if (claimsIdentity === undefined) {
             response.statusCode = 401;
-
-            return undefined;
+            Promise.reject();
         }
 
         const appIdClaimName: string = AuthHelpers.getAppIdClaimName(claimsIdentity);
