@@ -16,21 +16,12 @@ import { ActivityAction, SkillCallingRequestHandler } from '../skillCallingReque
 import { FallbackHandler, ISkillTransport, TokenRequestHandler } from '../skillTransport';
 
 export class SkillWebSocketTransport implements ISkillTransport {
-    private readonly skillManifest: ISkillManifest;
     private readonly cToken: CancellationToken;
-    private readonly appCredentials: MicrosoftAppCredentials;
     private streamingTransportClient!: IStreamingTransportClient;
     private readonly telemetryClient: BotTelemetryClient;
     private handoffActivity: Partial<Activity> | undefined;
 
-    public constructor(
-        skillManifest: ISkillManifest,
-        appCredentials: MicrosoftAppCredentials,
-        telemetryClient: BotTelemetryClient,
-        streamingTransportClient?: IStreamingTransportClient
-    ) {
-        this.skillManifest = skillManifest;
-        this.appCredentials = appCredentials;
+    public constructor(telemetryClient: BotTelemetryClient, streamingTransportClient?: IStreamingTransportClient) {
         this.telemetryClient = telemetryClient;
 
         if (streamingTransportClient !== undefined) {

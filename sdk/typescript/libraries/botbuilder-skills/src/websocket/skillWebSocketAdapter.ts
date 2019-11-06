@@ -30,7 +30,6 @@ export class SkillWebSocketAdapter extends BotFrameworkAdapter {
     private readonly botSettingsBase: Partial<IBotSettingsBase>;
     private readonly authenticationProvider?: IAuthenticationProvider;
     private readonly botAdapter: SkillWebSocketBotAdapter;
-    // private readonly skillWebSocketBotAdapter: SkillWebSocketBotAdapter;
 
     public constructor(
         // skillWebSocketBotAdapter: SkillWebSocketBotAdapter, PENDING - Websocket functionality
