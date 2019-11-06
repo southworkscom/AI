@@ -103,16 +103,16 @@ describe("date time extensions", function() {
             const dateEsEsSpecificDate = new DateTimeTestData(
                 spanishSpainCulture,
                 specificDate,
-                "viernes 04 de abril",
-                "el viernes 04 de abril",
+                "viernes 04 de Abril",
+                "el viernes 04 de Abril",
                 `${specificDate.toLocaleTimeString()}`,
                 `a la ${specificDate.toLocaleTimeString()}`
             );
             const dateEsEsSpecificDatePluralHour = new DateTimeTestData(
                 spanishSpainCulture,
                 specificDatePluralHour,
-                "viernes 04 de abril",
-                "el viernes 04 de abril",
+                "viernes 04 de Abril",
+                "el viernes 04 de Abril",
                 `${specificDatePluralHour.toLocaleTimeString()}`,
                 `a las ${specificDatePluralHour.toLocaleTimeString()}`
             );
@@ -121,16 +121,16 @@ describe("date time extensions", function() {
             const dateEsMxSpecificDate = new DateTimeTestData(
                 spanishMexicoCulture,
                 specificDate,
-                "viernes 04 de abril",
-                "el viernes 04 de abril",
+                "viernes 04 de Abril",
+                "el viernes 04 de Abril",
                 `${specificDate.toLocaleTimeString()}`,
                 `a la ${specificDate.toLocaleTimeString()}`
             );
             const dateEsMxSpecificDatePluralHour = new DateTimeTestData(
                 spanishMexicoCulture,
                 specificDatePluralHour,
-                "viernes 04 de abril",
-                "el viernes 04 de abril",
+                "viernes 04 de Abril",
+                "el viernes 04 de Abril",
                 `${specificDatePluralHour.toLocaleTimeString()}`,
                 `a las ${specificDatePluralHour.toLocaleTimeString()}`
             );
