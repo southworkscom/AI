@@ -37,7 +37,6 @@ import {
     SkillConstants,
     SkillContext,
     SkillDialogOption,
-    SkillWebSocketTransport,
     TokenRequestHandler } from './';
 import { SkillHttpTransport } from './http';
 import { IServiceClientCredentials } from './auth';
@@ -75,7 +74,6 @@ export class SkillDialog extends ComponentDialog {
      * @param skillIntentRecognizer Skill Intent Recognizer.
      * @param skillTransport Transport used for skill invocation.
      */
-
     public constructor(
         skillManifest: ISkillManifest,
         serviceClientCredentials: IServiceClientCredentials,
@@ -91,7 +89,10 @@ export class SkillDialog extends ComponentDialog {
         this.skillManifest = skillManifest;
         this.serviceClientCredentials = serviceClientCredentials;
         this.skillContextAccessor = skillContextAccessor;
-        this.skillTransport = skillTransport || new SkillWebSocketTransport(telemetryClient);
+        // PENDING: this should be uncommented when the WS is merged
+        // this.skillTransport = skillTransport || new SkillWebSocketTransport(telemetryClient);
+        this.skillTransport = skillTransport || new SkillHttpTransport(skillManifest, this.serviceClientCredentials);
+        
         this.skillIntentRecognizer = skillIntentRecognizer;
         this.responseManager = new ResponseManager(
             ['en', 'de', 'es', 'fr', 'it', 'zh'],
@@ -107,6 +108,7 @@ export class SkillDialog extends ComponentDialog {
             this.authDialog = authDialog;
             this.addDialog(this.authDialog);
         }
+
         this.addDialog(new WaterfallDialog(DialogIds.confirmSkillSwitchFlow, intentSwitching));
         this.addDialog(new ConfirmPrompt(DialogIds.confirmSkillSwitchPrompt));
     }
@@ -135,7 +137,9 @@ export class SkillDialog extends ComponentDialog {
             // Do skill switching
             if (stepContext.result === true) {
                 // 1) End remote skill dialog
-                await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, stepContext.context);
+                // PENDING: this should be uncommented when the cancelRemoteDialog is updated in SkillTransport interface
+                // await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, stepContext.context);
+                await this.skillTransport.cancelRemoteDialogs(stepContext.context);
 
                 // 2) Reset user input
                 stepContext.context.activity.text = skillSwitchConfirmOptions.userInputActivity.text || '';
@@ -161,7 +165,9 @@ export class SkillDialog extends ComponentDialog {
             // when dialog is being ended/cancelled, send an activity to skill
             // to cancel all dialogs on the skill side
             if (this.skillTransport !== undefined) {
-                await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, context);
+                // PENDING: this should be uncommented when the cancelRemoteDialog is updated in SkillTransport interface
+                // await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, context);
+                await this.skillTransport.cancelRemoteDialogs(context);
             }
         }
 
@@ -182,8 +188,8 @@ export class SkillDialog extends ComponentDialog {
         const sc: SkillContext = await this.skillContextAccessor.get(innerDC.context, new SkillContext());
         const skillContext: SkillContext = Object.assign(new SkillContext(), sc);
         const dialogOptions: SkillDialogOption = <SkillDialogOption> options !== undefined
-        ? <SkillDialogOption> options
-        : new SkillDialogOption();
+            ? <SkillDialogOption> options
+            : new SkillDialogOption();
         const actionName: string = dialogOptions.action;
         const activity: Activity = innerDC.context.activity;
 
@@ -343,23 +349,24 @@ export class SkillDialog extends ComponentDialog {
      */
     private async forwardToSkill(innerDc: DialogContext, activity: Partial<Activity>): Promise<DialogTurnResult> {
         try {
-            const handoffActivity: Partial<Activity> = await this.skillTransport.forwardToSkill(
-                this.skillManifest,
-                this.serviceClientCredentials,
+            const handoffActivity: boolean = await this.skillTransport.forwardToSkill(
                 innerDc.context,
                 activity,
-                this.getTokenRequestCallback(innerDc),
-                this.getFallbackCallback(innerDc));
+                this.getTokenRequestCallback(innerDc)
+            );
 
             if (handoffActivity !== undefined) {
                 await innerDc.context.sendActivity({
                     type: ActivityTypes.Trace,
                     text: `<--Ending the skill conversation with the ${ this.skillManifest.name } Skill and handing off to Parent Bot.`
                 });
-                return await innerDc.endDialog(handoffActivity.semanticAction ? handoffActivity.semanticAction.entities : undefined);
+
+                return await innerDc.endDialog();
             } else if (this.authDialogCancelled) {
                 // cancel remote skill dialog if AuthDialog is cancelled
-                await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, innerDc.context);
+                // PENDING: this should be uncommented when the cancelRemoteDialog is updated in SkillTransport interface
+                // await this.skillTransport.cancelRemoteDialogs(this.skillManifest, this.serviceClientCredentials, innerDc.context);
+                await this.skillTransport.cancelRemoteDialogs(innerDc.context);
 
                 await innerDc.context.sendActivity({
                     type: ActivityTypes.Trace,
@@ -401,11 +408,14 @@ export class SkillDialog extends ComponentDialog {
                                     return await innerDc.beginDialog(DialogIds.confirmSkillSwitchFlow, options);
                                 }
 
-                                await this.skillTransport.cancelRemoteDialogs(
-                                    this.skillManifest,
-                                    this.serviceClientCredentials,
-                                    innerDc.context
-                                );
+                                // PENDING: this should be uncommented when the cancelRemoteDialog is updated in SkillTransport interface
+                                // await this.skillTransport.cancelRemoteDialogs(
+                                //     this.skillManifest,
+                                //     this.serviceClientCredentials,
+                                //     innerDc.context
+                                // );
+                                await this.skillTransport.cancelRemoteDialogs(innerDc.context);
+
 
                                 return await innerDc.endDialog(recognizedSkillManifest);
                             }
