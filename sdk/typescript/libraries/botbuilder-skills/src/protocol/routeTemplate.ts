@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { IRouteAction } from './routerAction';
+import { IRouteAction } from './routeAction';
 
 export interface IRouteTemplate {
     method: string;

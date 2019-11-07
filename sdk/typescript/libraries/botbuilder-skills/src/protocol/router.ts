@@ -5,7 +5,7 @@
 
 import { ReceiveRequest } from 'microsoft-bot-protocol';
 import { IRouteContext } from './routeContext';
-import { IRouteAction } from './routerAction';
+import { IRouteAction } from './routeAction';
 import { IRouteTemplate } from './routeTemplate';
 
 export class Router {

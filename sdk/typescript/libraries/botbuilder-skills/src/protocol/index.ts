@@ -6,4 +6,4 @@
 export * from './routeContext';
 export * from './routeTemplate';
 export * from './router';
-export * from './routerAction';
+export * from './routeAction';
