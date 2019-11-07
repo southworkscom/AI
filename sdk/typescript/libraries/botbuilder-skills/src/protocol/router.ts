@@ -4,6 +4,8 @@
  */
 
 import { ReceiveRequest } from 'microsoft-bot-protocol';
+// PENDING: the next line should be uncommented when the ws library is merged
+// import { IReceiveRequest } from 'botframework-streaming-extensions';
 import { IRouteContext } from './routeContext';
 import { IRouteAction } from './routeAction';
 import { IRouteTemplate } from './routeTemplate';
@@ -18,9 +20,16 @@ export class Router {
         this.compile();
     }
 
+    // PENDING: ReceiveRequest should be IReceiveRequest when the ws library is stable
     public route(request: ReceiveRequest): IRouteContext|undefined {
         let found: boolean = true;
         let path: string = request.Path;
+        // PENDING: these lines should be uncommented when the ws library is merged
+        // What is changed is that the path could be undefined and should be validated
+        // let path: string | undefined = request.path;
+        // if (path === undefined) {
+        //     throw new Error('Path is undefined');
+        // }
         // MISSING: if (Uri.IsWellFormedUriString(path, UriKind.Absolute))
         if (path.startsWith('/')) {
             path = path.substr(1);
@@ -28,6 +37,13 @@ export class Router {
 
         const parts: string[] = path.split('/');
         const initial: TrieNode|undefined = this.root.tryGetNext(request.Verb);
+        // PENDING: these lines should be uncommented when the ws library is merged
+        // What is changed is that the verb could be undefined and should be validated
+        // const verb: string | undefined = request.verb;
+        // if (verb === undefined) {
+        //     throw new Error('Verb is undefined');
+        // }
+        // const initial: TrieNode|undefined = this.root.tryGetNext(verb);
         if (initial) {
             let current: TrieNode = initial;
             const routeData: Map<string, Object> = new Map();

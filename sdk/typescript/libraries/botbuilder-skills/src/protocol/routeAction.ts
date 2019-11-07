@@ -4,7 +4,7 @@
  */
 
 import { ReceiveRequest } from 'microsoft-bot-protocol';
-// This line should be uncomment when the ws library is merged
+// PENDING: the next line should be uncommented when the ws library is merged
 // import { IReceiveRequest } from 'botframework-streaming-extensions';
 
 export interface IRouteAction {
