@@ -21,3 +21,7 @@ export * from './skillManifestGenerator';
 export * from './skillMiddleware';
 export * from './skillRouter';
 export * from './skillTransport';
+export * from './skillConstants';
+export * from './skillDialogOption';
+export * from './skillIntentRecognizer';
+export * from './skillSwitchConfirmOption';
