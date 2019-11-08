@@ -24,7 +24,7 @@ export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
     private readonly openIdMetadataUrl: string = 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration';
 
     public constructor (microsoftAppId: string, openIdMetadataUrl: string = '') {
-        if (microsoftAppId === undefined || microsoftAppId.trim().length === 0) throw new Error('MicrosoftAppId is undefined');
+        if (microsoftAppId === undefined || microsoftAppId.trim().length === 0) { throw new Error('MicrosoftAppId is undefined'); }
         this.microsoftAppId = microsoftAppId;
 
         if (openIdMetadataUrl !== undefined && openIdMetadataUrl.trim().length > 0) {
@@ -62,6 +62,6 @@ export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
             }
         */
 
-       return new ClaimsIdentity([], false);
+        return new ClaimsIdentity([], false);
     }
 }

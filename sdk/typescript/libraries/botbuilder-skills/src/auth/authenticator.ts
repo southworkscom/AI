@@ -19,16 +19,19 @@ export class Authenticator implements IAuthenticator {
     private readonly authenticationProvider: IAuthenticationProvider;
     private readonly whiteListAuthenticationProvider: IWhitelistAuthenticationProvider;
 
-    public constructor (authenticationProvider: IAuthenticationProvider, whitelistAuthenticationProvider: IWhitelistAuthenticationProvider) {
-            if (authenticationProvider === undefined) throw new Error('autheticationProvider is undefined');
-            if (whitelistAuthenticationProvider === undefined) throw new Error('whitelistAuthenticationProvider is undefined');
-            this.authenticationProvider = authenticationProvider;
-            this.whiteListAuthenticationProvider = whitelistAuthenticationProvider;
+    public constructor (
+        authenticationProvider: IAuthenticationProvider,
+        whitelistAuthenticationProvider: IWhitelistAuthenticationProvider
+    ) {
+        if (authenticationProvider === undefined) { throw new Error ('autheticationProvider is undefined'); }
+        if (whitelistAuthenticationProvider === undefined) { throw new Error ('whitelistAuthenticationProvider is undefined'); }
+        this.authenticationProvider = authenticationProvider;
+        this.whiteListAuthenticationProvider = whitelistAuthenticationProvider;
     }
 
     public async authenticate(httpRequest: WebRequest, httpResponse: WebResponse): Promise<ClaimsIdentity> {
-        if (httpRequest === undefined) throw new Error('webRequest is undefined');
-        if (httpResponse === undefined) throw new Error('webResponse is undefined');
+        if (httpRequest === undefined) { throw new Error('webRequest is undefined'); }
+        if (httpResponse === undefined) { throw new Error('webResponse is undefined'); }
 
         const response: Response = new Response();
         const authorizationHeader: string = httpRequest.headers('Authorization');

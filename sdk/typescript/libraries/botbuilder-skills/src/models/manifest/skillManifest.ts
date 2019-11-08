@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { IAction, IAuthenticationConnection } from "./";
+import { IAction, IAuthenticationConnection } from './';
 
 /**
  * The SkillManifest class models the Skill Manifest which is used to express the capabilities

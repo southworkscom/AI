@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
- export namespace SkillConstants {
+export namespace SkillConstants {
     export const skillStart: string = 'start';
     export const skillContinue: string = 'continue';
     export const skillDone: string = 'done';
