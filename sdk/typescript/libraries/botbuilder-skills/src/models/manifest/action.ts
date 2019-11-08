@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { IActionDefinition } from "./";
+import { IActionDefinition } from './';
 
 export interface IAction {
     id: string;

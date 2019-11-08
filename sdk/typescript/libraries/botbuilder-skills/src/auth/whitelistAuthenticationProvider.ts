@@ -4,7 +4,7 @@
  */
 
 export interface IWhitelistAuthenticationProvider {
-    readonly appsWhitelist : Set<string>;
+    readonly appsWhitelist: Set<string>;
 }
 
 /**

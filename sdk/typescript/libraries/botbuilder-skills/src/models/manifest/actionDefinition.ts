@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { ISlot, ITriggers } from "./";
+import { ISlot, ITriggers } from './';
 
 /**
  * Definition of a Manifest Action. Describes how an action is trigger and any slots (parameters) it accepts.

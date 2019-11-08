@@ -38,13 +38,13 @@ import {
     SkillContext,
     SkillDialogOption,
     TokenRequestHandler } from './';
-import { SkillHttpTransport } from './http';
 import { IServiceClientCredentials } from './auth';
+import { SkillHttpTransport } from './http';
 import {
-        IAction,
-        ISkillManifest,
-        ISlot,
-        SkillEvents } from './models';
+    IAction,
+    ISkillManifest,
+    ISlot,
+    SkillEvents } from './models';
 import { SkillResponses } from './responses/skillResponses';
 import { FallbackHandler } from './skillTransport';
 
@@ -92,7 +92,6 @@ export class SkillDialog extends ComponentDialog {
         // PENDING: this should be uncommented when the WS is merged
         // this.skillTransport = skillTransport || new SkillWebSocketTransport(telemetryClient);
         this.skillTransport = skillTransport || new SkillHttpTransport(skillManifest, this.serviceClientCredentials);
-        
         this.skillIntentRecognizer = skillIntentRecognizer;
         this.responseManager = new ResponseManager(
             ['en', 'de', 'es', 'fr', 'it', 'zh'],
@@ -156,6 +155,7 @@ export class SkillDialog extends ComponentDialog {
                 return stepContext.endDialog(dialogResult);
             }
         }
+
         // We should never go here
         return stepContext.endDialog();
     }
@@ -173,7 +173,7 @@ export class SkillDialog extends ComponentDialog {
 
         await super.endDialog(context, instance, reason);
     }
-    
+
     /**
      * When a SkillDialog is started, a skillBegin event is sent which firstly indicates the Skill is being invoked in Skill mode,
      * also slots are also provided where the information exists in the parent Bot.
@@ -370,7 +370,8 @@ export class SkillDialog extends ComponentDialog {
 
                 await innerDc.context.sendActivity({
                     type: ActivityTypes.Trace,
-                    text: `<--Ending the skill conversation with the ${ this.skillManifest.name } Skill and handing off to Parent Bot due to unable to obtain token for user.`
+                    text: `<--Ending the skill conversation with the ${
+                        this.skillManifest.name } Skill and handing off to Parent Bot due to unable to obtain token for user.`
                 });
 
                 return await innerDc.endDialog();
@@ -415,7 +416,6 @@ export class SkillDialog extends ComponentDialog {
                                 //     innerDc.context
                                 // );
                                 await this.skillTransport.cancelRemoteDialogs(innerDc.context);
-
 
                                 return await innerDc.endDialog(recognizedSkillManifest);
                             }
