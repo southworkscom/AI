@@ -5,8 +5,6 @@
 
 import { TurnContext } from 'botbuilder';
 import { Activity } from 'botframework-schema';
-// import { IServiceClientCredentials } from './auth';
-// import { ISkillManifest } from './models';
 
 export type TokenRequestHandler = (activity: Activity) => Promise<void>;
 export type FallbackHandler = (activity: Activity) => Promise<void>;

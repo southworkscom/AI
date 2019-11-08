@@ -370,8 +370,8 @@ export class SkillDialog extends ComponentDialog {
 
                 await innerDc.context.sendActivity({
                     type: ActivityTypes.Trace,
-                    text: `<--Ending the skill conversation with the ${ this.skillManifest.name },
-                    Skill and handing off to Parent Bot due to unable to obtain token for user.`
+                    text: `<--Ending the skill conversation with the ${
+                        this.skillManifest.name } Skill and handing off to Parent Bot due to unable to obtain token for user.`
                 });
 
                 return await innerDc.endDialog();

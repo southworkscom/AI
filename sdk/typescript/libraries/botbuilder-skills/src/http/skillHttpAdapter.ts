@@ -32,7 +32,7 @@ export class SkillHttpAdapter extends BotFrameworkAdapter {
     public async processActivity(req: WebRequest, res: WebResponse, logic: (context: TurnContext) => Promise<any>): Promise<void> {
         if (this.authenticationProvider) {
             // grab the auth header from the inbound http request
-            // eslint-disable-next-line @typescript-eslint/tslint/config, @typescript-eslint/no-explicit-any
+            // @typescript-eslint/no-explicit-any
             const authHeader: string = req.headers.authorization || req.headers.Authorization || '';
             const authenticated: boolean = await this.authenticationProvider.authenticate(authHeader);
 
