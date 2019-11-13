@@ -9,7 +9,7 @@ import { IServiceClientCredentials } from './serviceClientCredentials';
 import { WebResource } from '@azure/ms-rest-js';
 
 export class MicrosoftAppCredentialsEx extends MicrosoftAppCredentials implements IServiceClientCredentials {
-    // PENDING
+    // PENDING: we should check if this property exists in MicrosoftAppCredentials
     public microsoftAppId: string;
     // This method should return a Promise<void> once the WebSocket library is merged
     public processHttpRequest(request: WebRequest): Promise<WebResource> {
@@ -21,7 +21,7 @@ export class MicrosoftAppCredentialsEx extends MicrosoftAppCredentials implement
         if (oauthScope) {
             this.oAuthScope = oauthScope;
         }
-        // PENDING
+        // PENDING: we should check if this property exists in MicrosoftAppCredentials
         this.microsoftAppId = appId;
 
         this.oAuthEndpoint = 'https://login.microsoftonline.com/microsoft.com';
