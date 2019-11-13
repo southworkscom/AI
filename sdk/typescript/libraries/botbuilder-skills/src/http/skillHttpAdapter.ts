@@ -4,6 +4,7 @@ import { Activity } from 'botframework-schema';
 import { IActivityHandler } from '../activityHandler';
 import { IAuthenticationProvider } from '../auth';
 import { SkillHttpBotAdapter } from './skillHttpBotAdapter';
+import { ClaimsIdentity } from 'botframework-connector';
 
 /**
  * This adapter is responsible for accepting a bot-to-bot call over http transport.
@@ -34,7 +35,7 @@ export class SkillHttpAdapter extends BotFrameworkAdapter {
             // grab the auth header from the inbound http request
             // @typescript-eslint/no-explicit-any
             const authHeader: string = req.headers.authorization || req.headers.Authorization || '';
-            const authenticated: boolean = await this.authenticationProvider.authenticate(authHeader);
+            const authenticated: ClaimsIdentity = await this.authenticationProvider.authenticate(authHeader);
 
             if (!authenticated) {
                 res.status(401);
