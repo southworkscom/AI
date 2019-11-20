@@ -349,13 +349,13 @@ export class SkillDialog extends ComponentDialog {
      */
     private async forwardToSkill(innerDc: DialogContext, activity: Partial<Activity>): Promise<DialogTurnResult> {
         try {
+            //PENDING: handoffActivity should be Activity instead of boolean
             const handoffActivity: boolean = await this.skillTransport.forwardToSkill(
                 innerDc.context,
                 activity,
                 this.getTokenRequestCallback(innerDc)
             );
-
-            if (handoffActivity !== undefined) {
+            if (handoffActivity) {
                 await innerDc.context.sendActivity({
                     type: ActivityTypes.Trace,
                     text: `<--Ending the skill conversation with the ${ this.skillManifest.name } Skill and handing off to Parent Bot.`
