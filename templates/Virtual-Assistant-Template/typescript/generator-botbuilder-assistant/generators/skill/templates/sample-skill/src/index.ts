@@ -32,7 +32,7 @@ import i18nextNodeFsBackend from 'i18next-node-fs-backend';
 import { join } from 'path';
 import * as restify from 'restify';
 import { DefaultAdapter } from './adapters/defaultAdapter';
-import { SampleSkillAdapter } from './adapters/sampleSkillAdapter';
+import { CustomSkillAdapter } from './adapters/customSkillAdapter';
 import * as appsettings from './appsettings.json';
 import { DialogBot } from './bots/dialogBot';
 import * as cognitiveModelsRaw from './cognitivemodels.json';
