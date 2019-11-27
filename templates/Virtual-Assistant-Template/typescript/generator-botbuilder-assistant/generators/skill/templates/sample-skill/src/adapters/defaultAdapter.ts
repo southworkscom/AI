@@ -13,6 +13,7 @@ import {
     TranscriptLoggerMiddleware,
     TranscriptStore } from 'botbuilder';
 import { AzureBlobTranscriptStore } from 'botbuilder-azure';
+import { WhitelistAuthenticationProvider } from 'botbuilder-skills';
 import {
     EventDebuggerMiddleware,
     FeedbackMiddleware,
@@ -20,11 +21,14 @@ import {
 import { IBotSettings } from '../services/botSettings';
 
 export class DefaultAdapter extends BotFrameworkAdapter {
+    private whitelistAuthenticationProvider: WhitelistAuthenticationProvider;
+
     public constructor(
         settings: Partial<IBotSettings>,
         adapterSettings: Partial<BotFrameworkAdapterSettings>,
         conversationState: ConversationState,
-        telemetryClient: BotTelemetryClient
+        telemetryClient: BotTelemetryClient,
+        whitelistAuthenticationProvider: WhitelistAuthenticationProvider
     ) {
         super(adapterSettings);
 
@@ -36,6 +40,8 @@ export class DefaultAdapter extends BotFrameworkAdapter {
             containerName: settings.blobStorage.container,
             storageAccountOrConnectionString: settings.blobStorage.connectionString
         });
+
+        this.whitelistAuthenticationProvider = whitelistAuthenticationProvider;
 
         // Uncomment the following line for local development without Azure Storage
         // this.use(new TranscriptLoggerMiddleware(new MemoryTranscriptStore()));
