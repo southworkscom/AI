@@ -21,7 +21,9 @@ import {
 import {
     manifestGenerator,
     SkillContext,
-    SkillHttpAdapter } from 'botbuilder-skills';
+    // PENDING: The SkillHttpAdapter should be replaced with SkillWebSocketAdapter
+    SkillHttpAdapter,
+    WhitelistAuthenticationProvider } from 'botbuilder-skills';
 import {
     ICognitiveModelConfiguration,
     Locales,
@@ -105,6 +107,7 @@ const conversationState: ConversationState = new ConversationState(storage);
 const stateAccessor: StatePropertyAccessor<SkillState> = userState.createProperty(SkillState.name);
 const dialogStateAccessor: StatePropertyAccessor<DialogState> = userState.createProperty('DialogState');
 const skillContextAccessor: StatePropertyAccessor<SkillContext> = userState.createProperty(SkillContext.name);
+const whitelistAuthenticationProvider: WhitelistAuthenticationProvider = new WhitelistAuthenticationProvider(botSettings);
 
 const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
     appId: botSettings.microsoftAppId,
@@ -116,7 +119,8 @@ const botAdapter: DefaultAdapter = new DefaultAdapter(
     adapterSettings,
     userState,
     conversationState,
-    telemetryClient);
+    telemetryClient,
+    whitelistAuthenticationProvider);
 
 const sampleSkillAdapter: SampleSkillAdapter = new SampleSkillAdapter(
     botSettings,
