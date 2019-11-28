@@ -79,7 +79,6 @@ const botSettings: Partial<IBotSettings> = {
     skills: skills
 };
 
-// Configure telemetry
 function getTelemetryClient(settings: Partial<IBotSettings>): BotTelemetryClient {
     if (settings !== undefined && settings.appInsights !== undefined && settings.appInsights.instrumentationKey !== undefined) {
         const instrumentationKey: string = settings.appInsights.instrumentationKey;
@@ -90,6 +89,7 @@ function getTelemetryClient(settings: Partial<IBotSettings>): BotTelemetryClient
     return new NullTelemetryClient();
 }
 
+// Configure telemetry
 const telemetryClient: BotTelemetryClient = getTelemetryClient(botSettings);
 
 const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
@@ -118,6 +118,9 @@ const appCredentials: MicrosoftAppCredentials = new MicrosoftAppCredentials(
     botSettings.microsoftAppId || '',
     botSettings.microsoftAppPassword || ''
 );
+
+// Configure adapters
+// DefaultAdapter is for all regular channels that use Http transport
 const adapter: DefaultAdapter = new DefaultAdapter(
     botSettings,
     adapterSettings,
@@ -126,12 +129,11 @@ const adapter: DefaultAdapter = new DefaultAdapter(
     conversationState
 );
 
-    // DefaultWebSocketAdapter is for directline speech channel
-    // This adapter implementation is currently a workaround as
-    // later on we'll have a WebSocketEnabledHttpAdapter implementation that handles
-    // both Http for regular channels and websocket for directline speech channel
-    
-    // const webSocketEnabledHttpAdapter: webSocketEnabledHttpAdapter = (botsettings, adapter))
+// DefaultWebSocketAdapter is for directline speech channel
+// This adapter implementation is currently a workaround as
+// later on we'll have a WebSocketEnabledHttpAdapter implementation that handles
+// both Http for regular channels and websocket for directline speech channel
+// const webSocketEnabledHttpAdapter: webSocketEnabledHttpAdapter = (botsettings, adapter))
 
 let bot: DialogBot<Dialog>;
 try {
@@ -147,6 +149,7 @@ try {
     const onboardingDialog: OnboardingDialog = new OnboardingDialog(botServices, onboardingStateAccessor, telemetryClient);
     const escalateDialog: EscalateDialog = new EscalateDialog(botServices, telemetryClient);
     const cancelDialog: CancelDialog = new CancelDialog();
+
     // Register skill dialogs
     const skillDialogs: SkillDialog[] = skills.map((skill: ISkillManifest): SkillDialog => {
         const authDialog: MultiProviderAuthDialog|undefined = buildAuthDialog(skill, botSettings, appCredentials);
@@ -170,6 +173,7 @@ try {
         telemetryClient
     );
 
+    // Configure bot
     bot = new DialogBot(conversationState, telemetryClient, mainDialog);
 } catch (err) {
     throw err;
