@@ -117,7 +117,7 @@
         ]
       },
       "condition": "[parameters('useCosmosDb')]"
-    },
+    },    
     {
       "comments": "storage account",
       "type": "Microsoft.Storage/storageAccounts",
@@ -181,13 +181,6 @@
                 "https://hosting.onecloud.azure-test.net/"
             ]
           }
-        ],
-        "cors": {
-          "allowedOrigins": [
-              "https://botservice.hosting.portal.azure.net",
-              "https://botservice-ms.hosting.portal.azure.net",
-              "https://hosting.onecloud.azure-test.net/"
-          ]
         }
       },
       "dependsOn": [
@@ -261,7 +254,7 @@
         "accountName": "[parameters('luisServiceName')]",
         "region": "[parameters('luisServiceLocation')]",
         "key": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName')),'2017-04-18').key1]"
-      }   
+      }
     }
   }
 }
