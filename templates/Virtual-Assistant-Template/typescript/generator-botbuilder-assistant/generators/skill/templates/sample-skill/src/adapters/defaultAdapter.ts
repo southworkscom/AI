@@ -21,7 +21,7 @@ import {
 import { IBotSettings } from '../services/botSettings';
 
 export class DefaultAdapter extends BotFrameworkAdapter {
-    private whitelistAuthenticationProvider: WhitelistAuthenticationProvider;
+    private readonly whitelistAuthenticationProvider: WhitelistAuthenticationProvider;
 
     public constructor(
         settings: Partial<IBotSettings>,

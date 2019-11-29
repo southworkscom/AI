@@ -9,12 +9,10 @@ import {
     BotFrameworkAdapter,
     BotTelemetryClient,
     RecognizerResult,
-    SemanticAction,
     StatePropertyAccessor,
     TurnContext } from 'botbuilder';
 import { LuisRecognizer, LuisRecognizerTelemetryClient } from 'botbuilder-ai';
 import {
-    Dialog,
     DialogContext,
     DialogTurnResult,
     DialogTurnStatus } from 'botbuilder-dialogs';
@@ -107,7 +105,6 @@ export class MainDialog extends RouterDialog {
                     default: {
                         // intent was identified but not yet implemented
                         await dc.context.sendActivity(this.responseManager.getResponse(MainResponses.featureNotAvailable));
-                        break;
                     }
                 }
             }
@@ -123,7 +120,7 @@ export class MainDialog extends RouterDialog {
 
     protected async onEvent(dc: DialogContext): Promise<void> {
         switch (dc.context.activity.name) {
-            case Events.tokenResponseEvent: {
+            case Events.tokenResponseEventName: {
                 // Auth dialog completion
                 const result: DialogTurnResult = await dc.continueDialog();
 
@@ -221,8 +218,8 @@ export class MainDialog extends RouterDialog {
 
     private async populateStateFromSemanticAction(context: TurnContext): Promise<void> {
         // Example of populating local state with data passed through semanticAction out of Activity
-        const activity: Activity = context.activity;
-        const semanticAction: SemanticAction | undefined = activity.semanticAction;
+        // const activity: Activity = context.activity;
+        // const semanticAction: SemanticAction | undefined = activity.semanticAction;
 
         // if (semanticAction != null && semanticAction.Entities.ContainsKey("location"))
         // {

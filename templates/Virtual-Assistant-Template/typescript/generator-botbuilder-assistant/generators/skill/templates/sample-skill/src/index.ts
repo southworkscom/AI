@@ -33,8 +33,8 @@ import i18next from 'i18next';
 import i18nextNodeFsBackend from 'i18next-node-fs-backend';
 import { join } from 'path';
 import * as restify from 'restify';
-import { DefaultAdapter } from './adapters/defaultAdapter';
 import { CustomSkillAdapter } from './adapters/customSkillAdapter';
+import { DefaultAdapter } from './adapters/defaultAdapter';
 import * as appsettings from './appsettings.json';
 import { DialogBot } from './bots/dialogBot';
 import * as cognitiveModelsRaw from './cognitivemodels.json';
@@ -117,19 +117,16 @@ const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
 const botAdapter: DefaultAdapter = new DefaultAdapter(
     botSettings,
     adapterSettings,
-    userState,
     conversationState,
     telemetryClient,
     whitelistAuthenticationProvider);
 
-const sampleSkillAdapter: SampleSkillAdapter = new SampleSkillAdapter(
+const customSkillAdapter: CustomSkillAdapter = new CustomSkillAdapter(
     botSettings,
-    userState,
     conversationState,
     telemetryClient,
-    skillContextAccessor,
     dialogStateAccessor);
-const adapter: SkillHttpAdapter = new SkillHttpAdapter(sampleSkillAdapter);
+const adapter: SkillHttpAdapter = new SkillHttpAdapter(customSkillAdapter);
 
 let bot: DialogBot<Dialog>;
 try {
