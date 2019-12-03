@@ -69,17 +69,4 @@ describe("main dialog", function() {
       testNock.resolveWithMocks("mainDialog_unhandled_response", done, flow);
     });
   });
-
-  describe("test single turn", function() {
-    it("send 'single turn' and check you get the expected response", function(done) {
-      const testAdapter = skillTestBase.getTestAdapter();
-      const flow = testAdapter
-        .send("single turn")
-        .assertReply(function(activity) {
-          assert.notStrictEqual(-1, unhandledReplies.indexOf(activity.text));
-        });
-
-      testNock.resolveWithMocks("mainDialog_single_turn", done, flow);
-    });
-  });
 });
