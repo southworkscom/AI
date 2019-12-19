@@ -36,6 +36,7 @@ program
     .option('--ts', 'Determine your assistant project structure to be a TypeScript-like structure')
     .option('--noRefresh', '[OPTIONAL] Determine whether the model of your skills connected are not going to be refreshed (by default they are refreshed)')
     .option('--languages [languages]', '[OPTIONAL] Comma separated list of locales used for LUIS culture (defaults to \'en-us\')')
+    .option('--inlineUtterances', '[OPTIONAL] Determinar wheter the tool looks for the utterances described in the manifest or in the .lu file (by default they are taken from the .lu file)')
     .option('--luisFolder [path]', '[OPTIONAL] Path to the folder containing your Skills\' .lu files (defaults to \'./deployment/resources/skills/en\' inside your assistant folder)')
     .option('--dispatchFolder [path]', '[OPTIONAL] Path to the folder containing your assistant\'s \'.dispatch\' file (defaults to \'./deployment/resources/dispatch/en\' inside your assistant folder)')
     .option('--outFolder [path]', '[OPTIONAL] Path for any output file that may be generated (defaults to your assistant\'s root folder)')
@@ -59,6 +60,7 @@ let localManifest: string;
 let remoteManifest: string;
 let noRefresh: boolean = false;
 let languages: string[];
+let inlineUtterances: boolean = false;
 let luisFolder: string;
 let dispatchFolder: string;
 let outFolder: string;
@@ -87,6 +89,11 @@ lgLanguage = args.cs ? 'cs' : 'ts';
 // noRefresh validation
 if (args.noRefresh) {
     noRefresh = true;
+}
+
+// inlineUtterances validation
+if (args.inlineUtterances) {
+    inlineUtterances = true;
 }
 
 // localManifest && remoteManifest validation
@@ -161,6 +168,7 @@ const configuration: IConnectConfiguration = {
     localManifest: localManifest,
     remoteManifest: remoteManifest,
     noRefresh: noRefresh,
+    inlineUtterances: inlineUtterances,
     languages: languages,
     luisFolder: luisFolder,
     dispatchFolder: dispatchFolder,
