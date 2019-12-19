@@ -158,24 +158,35 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
 
     private async processManifest(manifest: ISkillManifest): Promise<Map<string, string[]>> {
 
-        return manifest.actions.filter((action: IAction): IUtteranceSource[] =>
-            action.definition.triggers.utteranceSources)
-            .reduce((acc: IUtteranceSource[], val: IAction): IUtteranceSource[] => acc.concat(val.definition.triggers.utteranceSources), [])
-            .reduce(
-                (acc: Map<string, string[]>, val: IUtteranceSource): Map<string, string[]> => {
-                    const luisApps: string[] = val.source.map((v: string): string => v.split('#')[0]);
-                    if (acc.has(val.locale)) {
-                        const previous: string[] = acc.get(val.locale) || [];
-                        const filteredluisApps: string[] = [...new Set(luisApps.concat(previous))];
-                        acc.set(val.locale, filteredluisApps);
-                    } else {
-                        const filteredluisApps: string[] = [...new Set(luisApps)];
-                        acc.set(val.locale, filteredluisApps);
-                    }
+        if(!this.configuration.inlineUtterances) {
+            return manifest.actions.filter((action: IAction): IUtteranceSource[] =>
+                action.definition.triggers.utteranceSources)
+                .reduce((acc: IUtteranceSource[], val: IAction): IUtteranceSource[] => acc.concat(val.definition.triggers.utteranceSources), [])
+                .reduce(
+                    (acc: Map<string, string[]>, val: IUtteranceSource): Map<string, string[]> => {
+                        const luisApps: string[] = val.source.map((v: string): string => v.split('#')[0]);
+                        if (acc.has(val.locale)) {
+                            const previous: string[] = acc.get(val.locale) || [];
+                            const filteredluisApps: string[] = [...new Set(luisApps.concat(previous))];
+                            acc.set(val.locale, filteredluisApps);
+                        } else {
+                            const filteredluisApps: string[] = [...new Set(luisApps)];
+                            acc.set(val.locale, filteredluisApps);
+                        }
+    
+                        return acc;
+                    },
+                    new Map());
+        } else {
+            // Steps
+            // 1. Read the utterances from the manifest
+            // 2. Generate a temp .lu file in the Skill (check the name e.g temp_<skill_name>.lu)
+            // 3. Write the temp file
+            // 4. Check the above logic
+            // 5. Return the same structure
 
-                    return acc;
-                },
-                new Map());
+            return new Map();
+        }
     }
 
     private async executeLudownParse(culture: string, executionModelByCulture: Map<string, string>): Promise<void> {
