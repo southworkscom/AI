@@ -14,7 +14,8 @@ import {
     IRefreshConfiguration,
     ISkillFile,
     ISkillManifest,
-    IUtteranceSource
+    IUtteranceSource,
+    IUtterance
 } from '../models';
 import { AuthenticationUtils, ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes } from '../utils';
 import { RefreshSkill } from './refreshSkill';
@@ -185,7 +186,18 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             // 4. Check the above logic
             // 5. Return the same structure
 
-            return new Map();
+            var actionId: string[] = [manifest.actions[0].id.split('_')[0]];
+            return manifest.actions.filter((action: IAction): IUtterance[] => action.definition.triggers.utterances)
+                .reduce((acc: IUtterance[], val: IAction): IUtterance[] => acc.concat(val.definition.triggers.utterances), [])
+                .reduce(
+                    (acc: Map<string, string[]>, val: IUtterance): Map<string, string[]> => {
+                        const unifiedUtterances: string = val.text.map((v: string): string => '- ' + v).join('\n');
+                        writeFileSync(`${this.configuration.luisFolder}\\${val.locale}\\temp_${actionId}.lu`, `# ${actionId}\n` + unifiedUtterances);
+                        
+                        acc.set(val.locale, actionId);
+                        return acc;
+                    },
+                    new Map());
         }
     }
 
