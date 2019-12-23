@@ -194,7 +194,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                         const unifiedUtterances: string = val.text.map((v: string): string => '- ' + v).join('\n');
                         writeFileSync(`${this.configuration.luisFolder}\\${val.locale}\\temp_${actionId}.lu`, `# ${actionId}\n` + unifiedUtterances);
                         
-                        acc.set(val.locale, actionId);
+                        acc.set(val.locale, [`temp_${actionId}`]);
                         return acc;
                     },
                     new Map());
