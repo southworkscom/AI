@@ -1,3 +1,8 @@
+/**
+ * Copyright(c) Microsoft Corporation.All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 import { 
     ComponentDialog,
     WaterfallDialog,
@@ -11,11 +16,7 @@ import {
     ConversationState,
     Activity } from 'botbuilder';
 import { DialogIds } from "../skillDialog";
-
-/**
- * Copyright(c) Microsoft Corporation.All rights reserved.
- * Licensed under the MIT License.
- */
+import { SwitchSkillDialogOptions } from "./switchSkillDialogOptions";
 
 export enum properties
 {
@@ -56,14 +57,16 @@ export class SwitchSkillDialog extends ComponentDialog {
 
     protected async endComponent(dc: DialogContext, result: object): Promise<DialogTurnResult> {
 
-        let skillId = await this.skillIdAccessor.get(dc.context, new());
-        let lastActivity = await this.lastActivityAccessor.get(dc.context, new());
-        dc.context.activity.text = lastActivity.text;
+        let skillId: string | undefined = await this.skillIdAccessor.get(dc.context);
+        let lastActivity: Activity | undefined = await this.lastActivityAccessor.get(dc.context);
+        if(lastActivity !== undefined) {
+            dc.context.activity.text = lastActivity.text;
+        }
 
         // Ends this dialog.
         await dc.endDialog();
 
-        if (result !== undefined) {
+        if (result !== undefined && skillId !== undefined) {
             // If user decided to switch, replace current skill dialog with new skill dialog.
             return await dc.replaceDialog(skillId);
         }
@@ -76,12 +79,14 @@ export class SwitchSkillDialog extends ComponentDialog {
     // Prompts user to switch to a new skill.
     private async promptToSwitch(stepContext: WaterfallStepContext): Promise<DialogTurnResult>
     {
-
-        if (stepContext.context === undefined) {
-            throw new Error ("You must provide options of type.");
+        const options: SwitchSkillDialogOptions = <SwitchSkillDialogOptions> stepContext.options;
+        if (options === undefined) {
+            throw new Error (`You must provide options of type ${SwitchSkillDialogOptions.name}`) 
         }
-        let options = stepContext.options;
-        await this.skillIdAccessor.set(stepContext.context, options);
+
+        if (options.skill?.id !== undefined) {
+            await this.skillIdAccessor.set(stepContext.context, options.skill?.id);
+        }
         await this.lastActivityAccessor.set(stepContext.context, stepContext.context.activity);
 
         return await stepContext.prompt(SwitchSkillDialog.confirmPromptId, options);
