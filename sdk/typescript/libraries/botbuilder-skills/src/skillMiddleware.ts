@@ -34,6 +34,7 @@ export class SkillMiddleware implements Middleware {
                 const currentConversation: DialogState|undefined = await this.dialogStateAccessor.get(turnContext, { dialogStack: [] });
                 if (currentConversation !== undefined) {
                     currentConversation.dialogStack = [];
+                    await this.conversationState.delete(turnContext);
                     await this.dialogStateAccessor.set(turnContext, currentConversation);
                     await this.conversationState.saveChanges(turnContext, true);
                 }
