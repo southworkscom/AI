@@ -5,6 +5,4 @@
 
 export namespace SkillEvents {
     export const cancelAllSkillDialogsEventName: string = 'skill/cancelallskilldialogs';
-    
 }
-
