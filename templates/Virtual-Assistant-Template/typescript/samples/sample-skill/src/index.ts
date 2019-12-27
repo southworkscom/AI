@@ -27,7 +27,7 @@ import {
     SkillHttpAdapter, 
     Authenticator,
     IAuthenticationProvider,
-    WhitelistAuthenticationProvider} from 'botbuilder-skills';
+    WhitelistAuthenticationProvider } from 'botbuilder-skills';
 import {
     ICognitiveModelConfiguration,
     Locales,
@@ -220,7 +220,6 @@ const whitelistAuthenticationProvider: WhitelistAuthenticationProvider = new Whi
 const authenticator: IAuthenticator = new Authenticator(authenticationProvider, whitelistAuthenticationProvider);
 
 server.get('/api/skill/manifest', manifestGenerator(manifestPath, botSettings));
-// PENDING
 server.get('/api/skill/ping', async (req: restify.Request, res: restify.Response): Promise<void> => {
     if (credentialProvider !== undefined && ! await credentialProvider.isAuthenticationDisabled()) {
         await authenticator.authenticate(req, res);

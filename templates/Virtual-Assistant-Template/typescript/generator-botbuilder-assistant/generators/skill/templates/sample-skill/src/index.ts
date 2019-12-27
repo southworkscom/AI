@@ -19,10 +19,15 @@ import {
     Dialog,
     DialogState } from 'botbuilder-dialogs';
 import {
+    IAuthenticator,
     manifestGenerator,
+    MsJWTAuthenticationProvider,
     SkillContext,
     // PENDING: The SkillHttpAdapter should be replaced with SkillWebSocketAdapter
-    SkillHttpAdapter } from 'botbuilder-skills';
+    SkillHttpAdapter,
+    Authenticator,
+    IAuthenticationProvider,
+    WhitelistAuthenticationProvider } from 'botbuilder-skills';
 import {
     ICognitiveModelConfiguration,
     Locales,
@@ -30,6 +35,7 @@ import {
 import i18next from 'i18next';
 import i18nextNodeFsBackend from 'i18next-node-fs-backend';
 import { join } from 'path';
+import { ICredentialProvider, SimpleCredentialProvider } from 'botframework-connector';
 import * as restify from 'restify';
 import {
     CustomSkillAdapter,
@@ -208,7 +214,18 @@ server.post('/api/skill/messages', async (req: restify.Request, res: restify.Res
 const manifestPath: string = join(__dirname, 'manifestTemplate.json');
 server.use(restify.plugins.queryParser());
 server.get('/api/skill/manifest', manifestGenerator(manifestPath, botSettings));
-// PENDING
+
+const credentialProvider: ICredentialProvider = new SimpleCredentialProvider(botSettings.microsoftAppId || '', botSettings.microsoftAppPassword || '');
+const authenticationProvider: IAuthenticationProvider = new MsJWTAuthenticationProvider(botSettings.microsoftAppId || '');
+const whitelistAuthenticationProvider: WhitelistAuthenticationProvider = new WhitelistAuthenticationProvider(appsettings);
+const authenticator: IAuthenticator = new Authenticator(authenticationProvider, whitelistAuthenticationProvider);
+
+server.get('/api/skill/manifest', manifestGenerator(manifestPath, botSettings));
 server.get('/api/skill/ping', async (req: restify.Request, res: restify.Response): Promise<void> => {
-    // await authentication.authenticate(req, res);
+    if (credentialProvider !== undefined && ! await credentialProvider.isAuthenticationDisabled()) {
+        await authenticator.authenticate(req, res);
+    }
+    else {
+        res.statusCode = 200;
+    }
 });
