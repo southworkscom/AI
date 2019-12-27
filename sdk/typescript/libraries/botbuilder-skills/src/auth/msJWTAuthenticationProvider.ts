@@ -67,6 +67,6 @@ export class MsJWTAuthenticationProvider implements IAuthenticationProvider {
         }
         */
 
-        return new Promise<ClaimsIdentity>([], false);
+        return Promise.resolve(new ClaimsIdentity([], false));
     }
 }
