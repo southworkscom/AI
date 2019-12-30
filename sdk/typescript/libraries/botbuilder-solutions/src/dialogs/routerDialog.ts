@@ -10,9 +10,10 @@ import { Activity, ActivityTypes } from 'botframework-schema';
 import { ActivityExtensions } from '../extensions';
 import { InterruptableDialog } from './interruptableDialog';
 import { InterruptionAction } from './interruptionAction';
-import { RouterDialogTurnResult } from './routerDialogTurnResult';
-import { RouterDialogTurnStatus } from './routerDialogTurnStatus';
 
+/** 
+ * DEPRECATED "Please use ActivityHandlerDialog instead. For more information, refer to https://aka.ms/bfvarouting."
+ */ 
 export abstract class RouterDialog extends InterruptableDialog {
     // Constructor
     public constructor(dialogId: string, telemetryClient: BotTelemetryClient) {
@@ -27,12 +28,12 @@ export abstract class RouterDialog extends InterruptableDialog {
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
         const status: InterruptionAction = await this.onInterruptDialog(innerDc);
 
-        if (status === InterruptionAction.MessageSentToUser) {
+        if (status === InterruptionAction.Resume) {
             // Resume the waiting dialog after interruption
             await innerDc.repromptDialog();
 
             return Dialog.EndOfTurn;
-        } else if (status === InterruptionAction.StartedDialog) {
+        } else if (status === InterruptionAction.Waiting) {
             // Stack is already waiting for a response, shelve inner stack
             return Dialog.EndOfTurn;
         } else {
@@ -57,14 +58,6 @@ export abstract class RouterDialog extends InterruptableDialog {
                                 break;
                             }
                             case DialogTurnStatus.complete: {
-                                // tslint:disable-next-line:no-unsafe-any
-                                const routerDialogTurnResult: RouterDialogTurnResult = <RouterDialogTurnResult> result.result;
-                                if (routerDialogTurnResult !== undefined
-                                    && routerDialogTurnResult.status === RouterDialogTurnStatus.Restart) {
-                                    await this.route(innerDc);
-                                    break;
-                                }
-
                                 // End active dialog
                                 await innerDc.endDialog();
                                 break;
@@ -98,12 +91,10 @@ export abstract class RouterDialog extends InterruptableDialog {
         }
     }
 
-    // tslint:disable-next-line: no-unnecessary-override
     protected async onEndDialog(context: TurnContext, instance: DialogInstance, reason: DialogReason): Promise<void> {
         return super.onEndDialog(context, instance, reason);
     }
 
-    // tslint:disable-next-line: no-unnecessary-override
     protected async onRepromptDialog(context: TurnContext, instance: DialogInstance): Promise<void> {
         return super.onRepromptDialog(context, instance);
     }

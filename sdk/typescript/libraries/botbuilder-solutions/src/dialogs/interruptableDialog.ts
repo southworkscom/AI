@@ -31,12 +31,12 @@ export abstract class InterruptableDialog extends ComponentDialog {
     protected async onContinueDialogAsync(dc: DialogContext): Promise<DialogTurnResult> {
         const status: InterruptionAction = await this.onInterruptDialog(dc);
 
-        if (status === InterruptionAction.MessageSentToUser) {
+        if (status === InterruptionAction.Resume) {
             // Resume the waiting dialog after interruption
             await dc.repromptDialog();
 
             return Dialog.EndOfTurn;
-        } else if (status === InterruptionAction.StartedDialog) {
+        } else if (status === InterruptionAction.Waiting) {
 
             // Stack is already waiting for a response, shelve inner stack
             return Dialog.EndOfTurn;
