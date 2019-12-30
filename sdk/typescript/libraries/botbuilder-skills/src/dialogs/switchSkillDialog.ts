@@ -15,64 +15,46 @@ import {
     StatePropertyAccessor,
     ConversationState,
     Activity } from 'botbuilder';
-import { DialogIds } from "../skillDialog";
 import { SwitchSkillDialogOptions } from "./switchSkillDialogOptions";
 
-export enum properties
-{
-    skillId = 'skillSwitchValue',
-    lastActivity = 'skillSwitchActivity'
-}
-
 export class SwitchSkillDialog extends ComponentDialog {
-
     private static confirmPromptId: string = "ConfirmSkillSwitch";
-    private readonly skillIdAccessor: StatePropertyAccessor<string>;
-    private readonly lastActivityAccessor: StatePropertyAccessor<Activity>;
-    private readonly conversationState: ConversationState;
+    private skillIdAccessor: StatePropertyAccessor<string>;
+    private lastActivityAccessor: StatePropertyAccessor<Activity>;
 
-    public constructor(
-        conversationState: ConversationState,
-        skillIdAccessor: StatePropertyAccessor<string>,
-        lastActivityAccessor: StatePropertyAccessor<Activity>
-
-    ){ super(SwitchSkillDialog.name);
-        this.conversationState = conversationState;
-        this.skillIdAccessor = skillIdAccessor;
-        this.lastActivityAccessor = lastActivityAccessor;
-        skillIdAccessor = this.conversationState.createProperty(properties.skillId);
-        lastActivityAccessor = this.conversationState.createProperty(properties.lastActivity);
+    public constructor(conversationState: ConversationState) {
+        super(SwitchSkillDialog.name);
+        this.skillIdAccessor = conversationState.createProperty(Properties.skillId);
+        this.lastActivityAccessor = conversationState.createProperty(Properties.lastActivity);
         
         const intentSwitch: WaterfallStep[] = [
             this.promptToSwitch.bind(this),
             this.end.bind(this)
         ];
 
-        this.addDialog(new WaterfallDialog(DialogIds.confirmSkillSwitchFlow, intentSwitch));
+        this.addDialog(new WaterfallDialog(SwitchSkillDialog.name, intentSwitch));
         this.addDialog(new ConfirmPrompt(SwitchSkillDialog.confirmPromptId));
     }
 
 
     // Runs when this dialog ends. Handles result of prompt to switch skills or resume waiting dialog.
-
-    protected async endComponent(dc: DialogContext, result: object): Promise<DialogTurnResult> {
-
-        let skillId: string | undefined = await this.skillIdAccessor.get(dc.context);
-        let lastActivity: Activity | undefined = await this.lastActivityAccessor.get(dc.context);
-        if(lastActivity !== undefined) {
-            dc.context.activity.text = lastActivity.text;
+    protected async endComponent(outerDc: DialogContext, result: object): Promise<DialogTurnResult> {
+        const skillId: string | undefined = await this.skillIdAccessor.get(outerDc.context);
+        const lastActivity: Activity | undefined = await this.lastActivityAccessor.get(outerDc.context);
+        if (lastActivity !== undefined) {
+            outerDc.context.activity.text = lastActivity.text;
         }
 
         // Ends this dialog.
-        await dc.endDialog();
+        await outerDc.endDialog();
 
-        if (result !== undefined && skillId !== undefined) {
+        if (!!result && skillId !== undefined) {
             // If user decided to switch, replace current skill dialog with new skill dialog.
-            return await dc.replaceDialog(skillId);
+            return await outerDc.replaceDialog(skillId);
         }
         else {
             // Otherwise, continue the waiting skill dialog with the user's previous utterance.
-            return await dc.continueDialog();
+            return await outerDc.continueDialog();
         }
     }
 
@@ -81,11 +63,11 @@ export class SwitchSkillDialog extends ComponentDialog {
     {
         const options: SwitchSkillDialogOptions = <SwitchSkillDialogOptions> stepContext.options;
         if (options === undefined) {
-            throw new Error (`You must provide options of type ${SwitchSkillDialogOptions.name}`) 
+            throw new Error (`You must provide options of type ${typeof(SwitchSkillDialogOptions).toString()}`) 
         }
 
-        if (options.skill?.id !== undefined) {
-            await this.skillIdAccessor.set(stepContext.context, options.skill?.id);
+        if (options.skill !== undefined) {
+            await this.skillIdAccessor.set(stepContext.context, options.skill.id);
         }
         await this.lastActivityAccessor.set(stepContext.context, stepContext.context.activity);
 
@@ -95,7 +77,13 @@ export class SwitchSkillDialog extends ComponentDialog {
     // Ends this dialog, returning the prompt result.
     private async end(stepContext: WaterfallStepContext): Promise<DialogTurnResult>
     {
-        let result: Boolean = stepContext.result;
+        const result: boolean = <boolean> stepContext.result;
         return await stepContext.endDialog(result);
     }
+}
+
+export enum Properties
+{
+    skillId = 'skillSwitchValue',
+    lastActivity = 'skillSwitchActivity'
 }
