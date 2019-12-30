@@ -3,10 +3,12 @@
  * Licensed under the MIT License.
  */
 
-import { LuisRecognizerTelemetryClient, QnAMakerTelemetryClient } from 'botbuilder-ai';
+import { LuisRecognizerTelemetryClient, LuisRecognizer, QnAMaker, QnAMakerEndpoint } from 'botbuilder-ai';
 
 export interface ICognitiveModelSet {
     dispatchService: LuisRecognizerTelemetryClient;
-    luisServices: Map<string, LuisRecognizerTelemetryClient>;
-    qnaServices: Map<string, QnAMakerTelemetryClient>;
+    luisServices: Map<string, LuisRecognizer>; 
+    // DEPRECATED "Please update your Virtual Assistant to use the new QnAMakerDialog with Multi Turn and Active Learning support instead. For more information, refer to https://aka.ms/bfvaqnamakerupdate."
+    qnaServices: Map<string, QnAMaker>;
+    qnaMakerEndpoint: Map<string, QnAMakerEndpoint>;
 }
