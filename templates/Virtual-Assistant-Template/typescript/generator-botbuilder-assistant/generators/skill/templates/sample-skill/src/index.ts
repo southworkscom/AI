@@ -213,7 +213,6 @@ server.post('/api/skill/messages', async (req: restify.Request, res: restify.Res
 
 const manifestPath: string = join(__dirname, 'manifestTemplate.json');
 server.use(restify.plugins.queryParser());
-server.get('/api/skill/manifest', manifestGenerator(manifestPath, botSettings));
 
 const credentialProvider: ICredentialProvider = new SimpleCredentialProvider(botSettings.microsoftAppId || '', botSettings.microsoftAppPassword || '');
 const authenticationProvider: IAuthenticationProvider = new MsJWTAuthenticationProvider(botSettings.microsoftAppId || '');

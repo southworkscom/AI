@@ -24,7 +24,7 @@ import {
     MsJWTAuthenticationProvider,
     SkillContext,
     // PENDING: The SkillHttpAdapter should be replaced with SkillWebSocketAdapter
-    SkillHttpAdapter, 
+    SkillHttpAdapter,
     Authenticator,
     IAuthenticationProvider,
     WhitelistAuthenticationProvider } from 'botbuilder-skills';
