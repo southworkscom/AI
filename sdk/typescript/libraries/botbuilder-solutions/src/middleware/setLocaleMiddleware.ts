@@ -13,6 +13,8 @@ export class SetLocaleMiddleware implements Middleware {
     private readonly defaultLocale: string;
 
     public constructor(defaultLocale: string) {
+        if (defaultLocale === undefined) { throw new Error (`Parameter 'subscriptionKey' cannot be undefined.`); }
+
         this.defaultLocale = defaultLocale;
     }
 

@@ -10,7 +10,7 @@ export class EventDebuggerMiddleware implements Middleware {
     public async onTurn(turnContext: TurnContext, next: () => Promise<void>): Promise<void> {
         const activity: Activity = turnContext.activity;
 
-        if (activity.type === ActivityTypes.Message) {
+        if (activity.type === ActivityTypes.Message && activity.type !== undefined && activity.type.trim().length > 0) {
             const text: string = activity.text;
             const value: string = JSON.stringify(activity.value);
 

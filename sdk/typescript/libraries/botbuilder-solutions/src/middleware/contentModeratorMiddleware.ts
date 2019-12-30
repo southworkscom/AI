@@ -50,7 +50,7 @@ export class ContentModeratorMiddleware implements Middleware {
             throw new Error('Context not found.');
         }
 
-        if (context.activity.type === ActivityTypes.Message) {
+        if (context.activity.type === ActivityTypes.Message && context.activity.text !== undefined && context.activity.text.trim().length > 0) {
             const textStream: Readable = this.textToReadable(context.activity.text);
 
             const credentials: CognitiveServicesCredentials = new CognitiveServicesCredentials(this.subscriptionKey);
