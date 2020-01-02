@@ -45,6 +45,6 @@ export class EventDebuggerMiddleware implements Middleware {
             }
         }
 
-        next();
+        await next();
     }
 }

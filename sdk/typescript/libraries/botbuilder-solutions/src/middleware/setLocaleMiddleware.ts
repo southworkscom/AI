@@ -22,6 +22,6 @@ export class SetLocaleMiddleware implements Middleware {
 
         await i18next.changeLanguage(cultureInfo);
 
-        next();
+        await next();
     }
 }
