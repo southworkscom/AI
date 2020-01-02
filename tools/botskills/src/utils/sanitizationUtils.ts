@@ -24,3 +24,25 @@ export function sanitizePath(path: string): string {
 export function wrapPathWithQuotes(path: string): string {
     return `"${path}"`;
 }
+
+/**
+ * @param endpoint URL of the remove manifest endpoint.
+ * @param inlineUtterances Value of the --inlineUtterances parameter.
+ * @returns Returns an endpoint based on the --inlineUtterances parameter.
+ */
+export function validateRemoteEndpoint(endpoint: string, inlineUtterances: boolean): string {
+    const paramName: string = 'inlineUtterancesSources';
+    const url: string = endpoint.split('?')[0] + '?';
+    const urlParams: URLSearchParams = new URL(endpoint).searchParams;
+    const hasParam: boolean = urlParams.has(paramName);
+
+    if (inlineUtterances && hasParam) {
+        urlParams.set(paramName, 'true');
+    } else if (inlineUtterances && !hasParam) {
+        urlParams.append(paramName, 'true');
+    } else if (hasParam) {
+        urlParams.delete(paramName);
+    }
+
+    return url + urlParams.toString();
+}
