@@ -12,7 +12,6 @@ import { Activity, ActivityTypes } from 'botbuilder';
 /** 
  * Provides interruption logic and methods for handling incoming activities based on type.
  */ 
-
 export abstract class ActivityHandlerDialog extends InterruptableDialog {
 
     public constructor (dialogId: string, telemetryClient: BotTelemetryClient ) {
@@ -29,8 +28,7 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
      * @remarks If the task is successful, the result indicates whether the dialog is still 
      * active after the turn has been processed by the dialog. The result may also contain a return value.
      */
-    protected async onBeginDialog(innerDc: DialogContext, options: object): Promise<DialogTurnResult> {
-
+    protected async onBeginDialog(innerDc: DialogContext, options: Object): Promise<DialogTurnResult> {
         return this.onContinueDialog(innerDc);
     }
 
@@ -51,11 +49,9 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
         if (status === InterruptionAction.Resume) {
             // Interruption message was sent, and the waiting dialog should resume/reprompt.
             await innerDc.repromptDialog();
-
         } else if (status === InterruptionAction.Waiting) {
             // Interruption intercepted conversation and is waiting for user to respond.
             return Dialog.EndOfTurn;
-
         } else if (status === InterruptionAction.End) {
             // Interruption ended conversation, and current dialog should end.
             return await innerDc.endDialog();
@@ -71,8 +67,9 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
                     if (result.status == DialogTurnStatus.empty) {
                         // There was no waiting dialog on the stack, process message normally.    
                         await this.onMessageActivity(innerDc);
-                        break;
                     }
+
+                    break;
                 }
                 case ActivityTypes.Event: {
                     await this.onEventActivity(innerDc);
@@ -104,7 +101,7 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
         return Dialog.EndOfTurn;
     }
 
-    protected async endComponent(outerDc: DialogContext, result: object): Promise<DialogTurnResult> {
+    protected async endComponent(outerDc: DialogContext, result: Object): Promise<DialogTurnResult> {
         // This happens when an inner dialog ends. Could call complete here
         await this.onDialogComplete(outerDc, result);
         return await super.endComponent(outerDc, result);
@@ -116,7 +113,6 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
      * @returns A promise returning an InterruptionAction which indicates what action should be taken after interruption.
      */
     protected async onInterruptDialog(innerDc: DialogContext): Promise<InterruptionAction> {
-        
         return Promise.resolve(InterruptionAction.NoAction);
     }
 
@@ -126,7 +122,6 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
      * @returns A promise representing the asynchronous operation.
      */
     protected async onEventActivity(innerDc: DialogContext): Promise<void> {
-
         return Promise.resolve();
     }
 
@@ -136,7 +131,6 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
      * @returns A promise representing the asynchronous operation.
      */   
     protected async onMessageActivity(innerDc: DialogContext): Promise<void> {
-
         return Promise.resolve();
     }
 
@@ -146,7 +140,6 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
      * @returns A promise representing the asynchronous operation.
      */
     protected async onMembersAdded(innerDc: DialogContext): Promise<void> {
-
         return Promise.resolve();
     }
 
@@ -156,7 +149,6 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
      * @returns A promise representing the asynchronous operation.
      */
     protected async onUnhandledActivityType(innerDc: DialogContext): Promise<void> {
-
         return Promise.resolve();
     }
 
@@ -167,7 +159,6 @@ export abstract class ActivityHandlerDialog extends InterruptableDialog {
      * @returns A promise representing the asynchronous operation.
      */
     protected async onDialogComplete(outerDc: DialogContext, result: object): Promise<void> {
-
         return Promise.resolve();
     }
 }

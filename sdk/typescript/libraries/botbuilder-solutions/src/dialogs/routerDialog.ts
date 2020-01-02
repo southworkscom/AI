@@ -15,13 +15,12 @@ import { InterruptionAction } from './interruptionAction';
  * DEPRECATED "Please use ActivityHandlerDialog instead. For more information, refer to https://aka.ms/bfvarouting."
  */ 
 export abstract class RouterDialog extends InterruptableDialog {
-    // Constructor
     public constructor(dialogId: string, telemetryClient: BotTelemetryClient) {
         super(dialogId, telemetryClient);
         this.telemetryClient = telemetryClient;
     }
 
-    protected async onBeginDialog(innerDc: DialogContext, options: object): Promise<DialogTurnResult> {
+    protected async onBeginDialog(innerDc: DialogContext, options: Object): Promise<DialogTurnResult> {
         return this.onContinueDialog(innerDc);
     }
 
@@ -71,6 +70,7 @@ export abstract class RouterDialog extends InterruptableDialog {
                     if (innerDc.activeDialog === undefined) {
                         await this.complete(innerDc);
                     }
+
                     break;
                 }
                 case ActivityTypes.Event: {
@@ -84,6 +84,7 @@ export abstract class RouterDialog extends InterruptableDialog {
                 }
                 default: {
                     await this.onSystemMessage(innerDc);
+                    break;
                 }
             }
 

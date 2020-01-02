@@ -7,12 +7,12 @@ import { TurnContext } from 'botbuilder';
 import { ActivityPrompt, PromptOptions, PromptRecognizerResult, PromptValidator } from 'botbuilder-dialogs';
 import { Activity, ActivityTypes, IEventActivity } from 'botframework-schema';
 
+/**
+ * Event prompt that enables Bots to wait for a incoming event matching a given name to be received.
+ */
 export class EventPrompt extends ActivityPrompt {
     public eventName: string;
 
-    /**
-     * Event prompt that enables Bots to wait for a incoming event matching a given name to be received.
-     */
     public constructor(dialogId: string, eventName: string, validator: PromptValidator<Activity>) {
         super(dialogId, validator);
 
