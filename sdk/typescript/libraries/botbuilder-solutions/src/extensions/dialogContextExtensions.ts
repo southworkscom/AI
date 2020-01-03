@@ -15,25 +15,26 @@
      * @param suppress Boolean indicating whether any automatic dialog completion message should be suppressed.
      */
     export function suppressCompletionMessage(dc: DialogContext, suppress: Boolean): void {
-
         if (dc === undefined) {
             throw new Error('DialogContext is undefined');
         } else {
-            suppress = dc.context.turnState.get(suppressDialogCompletionKey);
+            dc.context.turnState.set(suppressDialogCompletionKey, suppress);
         }
     }
+
     /**
      * Provides an extension method to DialogContext enabling the caller to retrieve whether it should suppress a dialog completion message.
      * @param dc DialogContext
      * @returns Indicates whether a dialog completion message should be sent.
      */
-    export function suppressMessage(dc: DialogContext): Boolean {
-
-        if (dc === undefined){
+    export function suppressCompletionMessageValidation(dc: DialogContext): Boolean {
+        if (dc === undefined) {
             throw new Error('DialogContext is undefined');
         } else if (dc.context.turnState.has(suppressDialogCompletionKey)) {
-                return <Boolean>dc.context.turnState.get(suppressDialogCompletionKey);
+
+            return <Boolean>dc.context.turnState.get(suppressDialogCompletionKey);
         } else {
+
             return false;
         }
     }

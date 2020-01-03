@@ -3,7 +3,8 @@
  * Licensed under the MIT License.
  */
 
- import { SentimentType } from '../models';
+import { SentimentType } from '../models';
+import { LuisRecognizer } from 'botbuilder-ai';
 
 export namespace LuisRecognizerExtensions {
 
@@ -12,7 +13,8 @@ export namespace LuisRecognizerExtensions {
     export const neutralSentiment: string = "neutral";
     export const negativeSentiment: string = "negative";
 
-    export function getSentimentInfo<T>(luisConverter: <T>() => any, propertyAccessor: (value: T) => Map<string, Object>): (score: number, label: SentimentType) => {
+    /*
+    export function getSentimentInfo<T>(luisConverter: LuisRecognizer, propertyAccessor: Map<string, Object>): [number, SentimentType] {
         let sentimentLabel: SentimentType = SentimentType.None;
         let maxScore: number = 0.0;
 
@@ -20,14 +22,15 @@ export namespace LuisRecognizerExtensions {
         const result: Object | undefined = luisProperty.get(sentiment);
 
         if(luisProperty !== undefined && result !== undefined) {
-            let sentimentInfo: SentimentType = JSON.parse(<string>result);
+            let sentimentInfo: any = JSON.parse(<string>result);
             sentimentLabel = getSentimentType(sentimentInfo.label);
-            maxScore = sentimentInfo.
+            maxScore = sentimentInfo.score.has() ? sentimentInfo.score.value : 0.0;
         }
 
         return (sentimentLabel, maxScore);
     }
-
+    */
+   
     export function getSentimentType (label: string): SentimentType {
         let sentimentType: SentimentType = SentimentType.None;
 
