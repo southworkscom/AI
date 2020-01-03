@@ -9,7 +9,7 @@ import { extname, isAbsolute, join, resolve } from 'path';
 import { ConnectSkill } from './functionality';
 import { ConsoleLogger, ILogger } from './logger';
 import { IAppSetting, IConnectConfiguration } from './models';
-import { sanitizePath, validatePairOfArgs, validateInlineUtterancesEndpoint } from './utils';
+import { sanitizePath, validatePairOfArgs, sanitizeInlineUtterancesEndpoint } from './utils';
 
 function showErrorHelp(): void {
     program.outputHelp((str: string): string => {
@@ -111,7 +111,7 @@ if (args.localManifest && extname(args.localManifest) !== '.json') {
 }
 
 localManifest = args.localManifest;
-remoteManifest = validateInlineUtterancesEndpoint(args.remoteManifest, inlineUtterances);
+remoteManifest = sanitizeInlineUtterancesEndpoint(args.remoteManifest, inlineUtterances);
 
 // outFolder validation -- the var is needed for reassuring 'configuration.outFolder' is not undefined
 outFolder = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');

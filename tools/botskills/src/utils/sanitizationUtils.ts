@@ -30,13 +30,14 @@ export function wrapPathWithQuotes(path: string): string {
  * @param isInlineUtterances Value of the --inlineUtterances parameter.
  * @returns Returns an endpoint based on the --inlineUtterances parameter.
  */
-export function validateInlineUtterancesEndpoint(endpoint: string, isInlineUtterances: boolean): string {
+export function sanitizeInlineUtterancesEndpoint(endpoint: string, isInlineUtterances: boolean): string {
+    let url: string = endpoint.split('?')[0];
     const paramName: string = 'inlineTriggerUtterances';
-    const url: string = endpoint.split('?')[0] + '?';
     const urlParams: URLSearchParams = new URL(endpoint).searchParams;
     const hasParam: boolean = urlParams.has(paramName);
-
+  
     if (isInlineUtterances) {
+        url += '?';
         if (hasParam) {
             urlParams.set(paramName, 'true');
         } else {
@@ -45,6 +46,6 @@ export function validateInlineUtterancesEndpoint(endpoint: string, isInlineUtter
     } else if (hasParam) {
         urlParams.delete(paramName);
     }
-
+  
     return url + urlParams.toString();
 }
