@@ -5,7 +5,8 @@
 
 import { BotFrameworkAdapter, TurnContext } from 'botbuilder';
 import { Choice, ChoicePrompt, ComponentDialog, DialogTurnResult, DialogTurnStatus, FoundChoice,
-    OAuthPrompt, PromptValidatorContext, WaterfallDialog, WaterfallStep, WaterfallStepContext } from 'botbuilder-dialogs';
+    OAuthPrompt, PromptValidatorContext, WaterfallDialog, WaterfallStep, WaterfallStepContext,
+    OAuthPromptSettings } from 'botbuilder-dialogs';
 import { MicrosoftAppCredentials } from 'botframework-connector';
 import { TokenStatus } from 'botframework-connector/lib/tokenApi/models';
 import { ActionTypes, Activity, ActivityTypes, TokenResponse } from 'botframework-schema';
@@ -19,7 +20,9 @@ import { TokenEvents } from '../tokenEvents';
 import { AuthenticationResponses } from './authenticationResponses';
 import { OAuthProviderExtensions } from './oAuthProviderExtensions';
 import { IProviderTokenResponse } from './providerTokenResponse';
-
+/**
+ * Provides the ability to prompt for which Authentication provider the user wishes to use and handles Virtual Assistant and Skill remote authentication scenarios.
+ */
 export class MultiProviderAuthDialog extends ComponentDialog {
     private selectedAuthType: string = '';
     private readonly authenticationConnections: IOAuthConnection[];
@@ -29,9 +32,12 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
     public constructor(
         authenticationConnections: IOAuthConnection[],
-        appCredentials: MicrosoftAppCredentials
+        appCredentials: MicrosoftAppCredentials,
+        promptSettings: OAuthPromptSettings[]
     ) {
         super(MultiProviderAuthDialog.name);
+
+        if (authenticationConnections === undefined) { throw new Error('Error') }
         this.authenticationConnections = authenticationConnections;
         this.appCredentials = appCredentials;
 
@@ -69,22 +75,25 @@ export class MultiProviderAuthDialog extends ComponentDialog {
         if (this.authenticationConnections !== undefined && this.authenticationConnections.length > 0) {
 
             let authDialogAdded: boolean = false;
-            this.authenticationConnections.forEach((connection: IOAuthConnection): void => {
+            for (var i = 0; i < this.authenticationConnections.length; i++) {
+                // We ignore placeholder connections in config that don't have a Name
+                let connection = this.authenticationConnections[i];
+
                 // We ignore placeholder connections in config that don't have a Name
                 if (connection.name !== '') {
-                    const oauthPrompt: OAuthPrompt = new OAuthPrompt(
+                    const settings: OAuthPromptSettings = promptSettings?[i] ?? new OAuthPromptSettings(
                         connection.name,
                         {
                             connectionName: connection.name,
                             title: i18next.t('common:login'),
-                            text: i18next.t('common:loginDescription', connection.name)
+                            text: i18next.t('common:loginDescription', connection.name),
                         },
                         this.authPromptValidator.bind(this));
-                    this.addDialog(oauthPrompt);
-
+                        this.addDialog(new OAuthPrompt( connection.name, settings, this.authPromptValidator));
+                        
                     authDialogAdded = true;
                 }
-            });
+            };
 
             // Only add Auth supporting local auth dialogs if we found valid authentication connections to use
             // otherwise it will just work in remote mode.
@@ -103,7 +112,9 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     // Validators
     protected async tokenResponseValidator(promptContext: PromptValidatorContext<Activity>): Promise<boolean> {
         const activity: Activity | undefined = promptContext.recognized.value;
-        const result: boolean = activity !== undefined && activity.type === ActivityTypes.Event;
+        const result: boolean = (activity !== undefined && 
+            ((activity.type === ActivityTypes.Event && activity.name === 'token/response') || 
+            (activity.type === ActivityTypes.Invoke && activity.name === 'signin/verifyState')));
 
         return Promise.resolve(result);
     }
@@ -339,7 +350,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
         const eventActivity: Activity = promptContext.context.activity;
 
-        if (eventActivity !== undefined && eventActivity.name === 'token/response') {
+        if (eventActivity !== undefined && eventActivity.name === TokenEvents.tokenResponseEventName) {
             promptContext.recognized.value = <TokenResponse> eventActivity.value;
 
             return Promise.resolve(true);
