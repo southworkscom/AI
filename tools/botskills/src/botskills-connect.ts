@@ -9,7 +9,7 @@ import { extname, isAbsolute, join, resolve } from 'path';
 import { ConnectSkill } from './functionality';
 import { ConsoleLogger, ILogger } from './logger';
 import { IAppSetting, IConnectConfiguration } from './models';
-import { sanitizePath, validatePairOfArgs, validateRemoteEndpoint } from './utils';
+import { sanitizePath, validatePairOfArgs, validateInlineUtterancesEndpoint } from './utils';
 
 function showErrorHelp(): void {
     program.outputHelp((str: string): string => {
@@ -107,10 +107,11 @@ if (manifestValidationResult) {
 }
 if (args.localManifest && extname(args.localManifest) !== '.json') {
     logger.error(`The 'localManifest' argument should be a path to a JSON file.`);
-    process.exit(1);}
+    process.exit(1);
+}
 
 localManifest = args.localManifest;
-remoteManifest = validateRemoteEndpoint(args.remoteManifest, inlineUtterances);
+remoteManifest = validateInlineUtterancesEndpoint(args.remoteManifest, inlineUtterances);
 
 // outFolder validation -- the var is needed for reassuring 'configuration.outFolder' is not undefined
 outFolder = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');

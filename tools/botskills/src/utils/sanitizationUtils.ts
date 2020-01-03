@@ -26,20 +26,22 @@ export function wrapPathWithQuotes(path: string): string {
 }
 
 /**
- * @param endpoint URL of the remove manifest endpoint.
- * @param inlineUtterances Value of the --inlineUtterances parameter.
+ * @param endpoint URL of the remote manifest endpoint.
+ * @param isInlineUtterances Value of the --inlineUtterances parameter.
  * @returns Returns an endpoint based on the --inlineUtterances parameter.
  */
-export function validateRemoteEndpoint(endpoint: string, inlineUtterances: boolean): string {
-    const paramName: string = 'inlineUtterancesSources';
+export function validateInlineUtterancesEndpoint(endpoint: string, isInlineUtterances: boolean): string {
+    const paramName: string = 'inlineTriggerUtterances';
     const url: string = endpoint.split('?')[0] + '?';
     const urlParams: URLSearchParams = new URL(endpoint).searchParams;
     const hasParam: boolean = urlParams.has(paramName);
 
-    if (inlineUtterances && hasParam) {
-        urlParams.set(paramName, 'true');
-    } else if (inlineUtterances && !hasParam) {
-        urlParams.append(paramName, 'true');
+    if (isInlineUtterances) {
+        if (hasParam) {
+            urlParams.set(paramName, 'true');
+        } else {
+            urlParams.append(paramName, 'true');
+        }
     } else if (hasParam) {
         urlParams.delete(paramName);
     }
