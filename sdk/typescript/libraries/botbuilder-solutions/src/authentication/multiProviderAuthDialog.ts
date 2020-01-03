@@ -81,16 +81,18 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
                 // We ignore placeholder connections in config that don't have a Name
                 if (connection.name !== '') {
-                    const settings: OAuthPromptSettings = promptSettings?[i] ?? new OAuthPromptSettings(
+                    const settings: OAuthPromptSettings = promptSettings[i] || {
+                        connectionName: connection.name,
+                        title: i18next.t('common:login'),
+                        text: i18next.t('common:loginDescription', connection.name)
+                    };
+
+                    this.addDialog(new OAuthPrompt(
                         connection.name,
-                        {
-                            connectionName: connection.name,
-                            title: i18next.t('common:login'),
-                            text: i18next.t('common:loginDescription', connection.name),
-                        },
-                        this.authPromptValidator.bind(this));
-                        this.addDialog(new OAuthPrompt( connection.name, settings, this.authPromptValidator));
-                        
+                        settings,
+                        this.authPromptValidator.bind(this)
+                    ));
+
                     authDialogAdded = true;
                 }
             };
