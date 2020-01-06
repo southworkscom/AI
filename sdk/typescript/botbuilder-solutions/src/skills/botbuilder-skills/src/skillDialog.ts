@@ -22,7 +22,7 @@ import {
     IProviderTokenResponse,
     isProviderTokenResponse,
     MultiProviderAuthDialog,
-    TokenEvents } from 'botbuilder-solutions';
+    TokenEvents } from '../../../';
 import {
     ISkillTransport,
     SkillConstants,

@@ -3,6 +3,7 @@
  * Licensed under the MIT License.
  */
 
+export * from './botbuilder-skills/src/index';
 export { InProcAdapter } from './inProcAdapter';
 export { SkillDefinition } from './skillDefinition';
 export { ISkillDialogOptions } from './skillDialogOptions';

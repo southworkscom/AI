@@ -1,5 +1,5 @@
 import { BotAdapter, BotTelemetryClient, InvokeResponse, Severity, TurnContext } from 'botbuilder';
-import { ActivityExtensions, IRemoteUserTokenProvider } from 'botbuilder-solutions';
+import { ActivityExtensions, IRemoteUserTokenProvider } from '../../../../';
 import { Activity, ActivityTypes, ConversationReference, ResourceResponse } from 'botframework-schema';
 import { v4 as uuid } from 'uuid';
 import { BotCallbackHandler, IActivityHandler } from '../activityHandler';
