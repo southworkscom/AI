@@ -5,9 +5,10 @@
 
 const { SkillDialog } = require('../../lib/skillDialog');
 
+// Extended implementation of SkillDialog for test purposes that enables us to mock the HttpClient
 class SkillDialogTest extends SkillDialog {
     constructor(skillManifest, appCredentials, telemetryClient, skillContextAccessor, skillTransport){
-        super(skillManifest, appCredentials, telemetryClient, skillContextAccessor, undefined, undefined, skillTransport);
+        super(skillManifest, appCredentials, telemetryClient, skillContextAccessor, undefined, skillTransport);
     }
 }
 
