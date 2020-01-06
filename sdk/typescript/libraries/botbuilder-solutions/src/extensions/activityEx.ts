@@ -4,9 +4,8 @@
  */
 
 import { Activity, ActivityTypes, ChannelAccount, ConversationReference } from 'botframework-schema';
-import { Channels } from '../util/channelEnum'
 
-export namespace ActivityExtensions {
+export namespace ActivityEx {
     export function createReply(source: Activity, text?: string, local?: string): Activity {
         const reply: string = text || '';
 
@@ -49,19 +48,19 @@ export namespace ActivityExtensions {
 
     export function isStartActivity(activity: Activity): boolean {
         switch (activity.channelId) {
-            case Channels.skype: {
+            case 'skype': {
                 if (activity.type === ActivityTypes.ContactRelationUpdate && activity.action === 'add') {
                     return true;
                 }
 
                 return false;
             }
-            case Channels.directline:
-            case Channels.emulator:
-            case Channels.webchat:
-            case Channels.msteams:
-            case Channels.directlineSpeech:
-            case Channels.test: {
+            case 'directline':
+            case 'emulator':
+            case 'webchat':
+            case 'msteams':
+            case 'directlinespeech':
+            case 'test': {
                 if (activity.type === ActivityTypes.ConversationUpdate) {
                     // When bot is added to the conversation (triggers start only once per conversation)
                     if (activity.membersAdded !== undefined &&

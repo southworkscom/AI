@@ -5,8 +5,7 @@
 
 import { SentimentType } from '../models';
 
-export namespace LuisRecognizerExtensions {
-
+export namespace LuisRecognizerEx {
     export const sentiment: string = "sentiment";
     export const positiveSentiment: string = "positive";
     export const neutralSentiment: string = "neutral";
@@ -22,7 +21,7 @@ export namespace LuisRecognizerExtensions {
         if(luisProperty !== undefined && result !== undefined) {
             let sentimentInfo: any = JSON.parse(<string>result);
             sentimentLabel = getSentimentType(sentimentInfo.label);
-            maxScore = sentimentInfo.score.has() ? sentimentInfo.score.value : 0.0;
+            maxScore = sentimentInfo.score !== undefined ? sentimentInfo.score.value : 0.0;
         }
 
         return ([sentimentLabel, maxScore]);
