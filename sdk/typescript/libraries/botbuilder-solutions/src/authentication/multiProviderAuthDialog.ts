@@ -12,7 +12,7 @@ import { ActionTypes, Activity, ActivityTypes, TokenResponse } from 'botframewor
 import i18next from 'i18next';
 import { IOAuthConnection } from '../authentication';
 import { EventPrompt } from '../dialogs/eventPrompt';
-import { ActivityExtensions } from '../extensions';
+import { ActivityEx } from '../extensions';
 import { IRemoteUserTokenProvider, isRemoteUserTokenProvider } from '../remoteUserTokenProvider';
 import { ResponseManager } from '../responses';
 import { TokenEvents } from '../tokenEvents';
@@ -152,7 +152,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
             // Enable Direct Line Speech clients to receive an event that will tell them
             // to trigger a sign-in flow when a token isn't present
-            const requestOAuthFlowEvent: Activity = ActivityExtensions.createReply(stepContext.context.activity);
+            const requestOAuthFlowEvent: Activity = ActivityEx.createReply(stepContext.context.activity);
             requestOAuthFlowEvent.type = ActivityTypes.Event;
             requestOAuthFlowEvent.name = 'RequestOAuthFlow';
 
