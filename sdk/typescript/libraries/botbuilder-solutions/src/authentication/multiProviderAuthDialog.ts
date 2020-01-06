@@ -20,6 +20,7 @@ import { TokenEvents } from '../tokenEvents';
 import { AuthenticationResponses } from './authenticationResponses';
 import { OAuthProviderExtensions } from './oAuthProviderExtensions';
 import { IProviderTokenResponse } from './providerTokenResponse';
+
 /**
  * Provides the ability to prompt for which Authentication provider the user wishes to use and handles Virtual Assistant and Skill remote authentication scenarios.
  */
@@ -37,7 +38,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     ) {
         super(MultiProviderAuthDialog.name);
 
-        if (authenticationConnections === undefined) { throw new Error('Error') }
+        if (authenticationConnections === undefined) { throw new Error('The value of authenticationConnections cannot be undefined') }
         this.authenticationConnections = authenticationConnections;
         this.appCredentials = appCredentials;
 
@@ -73,14 +74,13 @@ export class MultiProviderAuthDialog extends ComponentDialog {
         // If authentication connections are provided locally then we enable "local auth"
         // otherwise we only enable remote auth where the calling Bot handles this for us.
         if (this.authenticationConnections !== undefined && this.authenticationConnections.length > 0) {
-
             let authDialogAdded: boolean = false;
-            for (var i = 0; i < this.authenticationConnections.length; i++) {
-                // We ignore placeholder connections in config that don't have a Name
+
+            for (var i = 0; i < this.authenticationConnections.length; ++i) {
                 let connection = this.authenticationConnections[i];
 
                 // We ignore placeholder connections in config that don't have a Name
-                if (connection.name !== '') {
+                if (connection.name !== undefined && connection.name.trim().length > 0) {
                     const settings: OAuthPromptSettings = promptSettings[i] || {
                         connectionName: connection.name,
                         title: i18next.t('common:login'),
@@ -101,24 +101,25 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             // otherwise it will just work in remote mode.
             if (authDialogAdded) {
                 this.addDialog(new WaterfallDialog(DialogIds.localAuthPrompt, localAuth));
-                const prompt: ChoicePrompt = new ChoicePrompt(DialogIds.providerPrompt);
-                this.addDialog(prompt);
+                this.addDialog(new ChoicePrompt(DialogIds.providerPrompt));
 
                 this.localAuthConfigured = true;
-            } else {
-                throw new Error('Something wrong with the authentication.');
             }
+        } else {
+            throw new Error('There is no authenticationConnections value');
         }
     }
 
     // Validators
     protected async tokenResponseValidator(promptContext: PromptValidatorContext<Activity>): Promise<boolean> {
         const activity: Activity | undefined = promptContext.recognized.value;
-        const result: boolean = (activity !== undefined && 
+        if (activity !== undefined && 
             ((activity.type === ActivityTypes.Event && activity.name === 'token/response') || 
-            (activity.type === ActivityTypes.Invoke && activity.name === 'signin/verifyState')));
+            (activity.type === ActivityTypes.Invoke && activity.name === 'signin/verifyState'))) {
+            return Promise.resolve(true);
+        }
 
-        return Promise.resolve(result);
+        return Promise.resolve(false);
     }
 
     private async firstStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
@@ -126,10 +127,14 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             return stepContext.beginDialog(DialogIds.remoteAuthPrompt);
         }
 
-        if (stepContext.context.activity.channelId === 'directlinespeech') {
+        if (stepContext.context.activity.channelId !== undefined &&
+            stepContext.context.activity.channelId.trim().length > 0 &&
+            stepContext.context.activity.channelId === 'directlinespeech') {
             // Speech channel doesn't support OAuthPrompt./OAuthCards so we rely on tokens being set by the Linked Accounts technique
             // Therefore we don't use OAuthPrompt and instead attempt to directly retrieve the token from the store.
-            if (stepContext.context.activity.from === undefined || stepContext.context.activity.from.id === '') {
+            if (stepContext.context.activity.from === undefined ||
+                stepContext.context.activity.from.id === undefined ||
+                stepContext.context.activity.id?.trim().length === 0) {
                 throw new Error('Missing From or From.Id which is required for token retrieval.');
             }
 
@@ -154,12 +159,10 @@ export class MultiProviderAuthDialog extends ComponentDialog {
                 });
             }
 
-            const responseTokens: Map<string, string> = new Map([
-                ['authType', connectionName]
-            ]);
-
             const noLinkedAccountResponse: Partial<Activity> = this.responseManager.getResponse(
-                AuthenticationResponses.noLinkedAccount, responseTokens);
+                AuthenticationResponses.noLinkedAccount,
+                new Map([['authType', connectionName]])
+            );
 
             await stepContext.context.sendActivity(noLinkedAccountResponse);
 
@@ -210,12 +213,10 @@ export class MultiProviderAuthDialog extends ComponentDialog {
         if (this.authenticationConnections.length === 1) {
             const result: string = this.authenticationConnections[0].name;
 
-            return stepContext.next(result);
+            return await stepContext.next(result);
         }
 
-        // DELTA inconsistences between IUserTokenProvider and BotFrameworkAdapter implementation
         const adapter: BotFrameworkAdapter = <BotFrameworkAdapter> stepContext.context.adapter;
-
         if (adapter !== undefined) {
             const tokenStatusCollection: TokenStatus[] = await adapter.getTokenStatus(
                 stepContext.context,
@@ -278,12 +279,12 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             this.selectedAuthType = stepContext.result;
         } else {
             const choice: FoundChoice = <FoundChoice> stepContext.result;
-            if (choice !== undefined && choice.value !== undefined) {
+            if (choice !== undefined) {
                 this.selectedAuthType = choice.value;
             }
         }
 
-        return stepContext.prompt(this.selectedAuthType, {});
+        return await stepContext.prompt(this.selectedAuthType, {});
     }
 
     private async handleTokenResponse(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
@@ -292,7 +293,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
         if (tokenResponse !== undefined && tokenResponse.token) {
             const result: IProviderTokenResponse = await this.createProviderTokenResponse(stepContext.context, tokenResponse);
 
-            return stepContext.endDialog(result);
+            return await stepContext.endDialog(result);
         }
 
         this.telemetryClient.trackEvent({
@@ -323,11 +324,13 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             throw new Error('"context" undefined');
         }
 
-        if (userId === undefined || userId === '') {
+        if (userId === undefined || userId.trim().length === 0) {
             throw new Error('"userId" undefined');
         }
 
-        if (context.activity.channelId === 'directlinespeech') {
+        if (context.activity.channelId !== undefined &&
+            context.activity.channelId.trim().length > 0 &&
+            context.activity.channelId === 'directlinespeech') {
             if (this.appCredentials === undefined) {
                 throw new Error('AppCredentials were not passed which are required for speech enabled authentication scenarios.');
             }
@@ -346,12 +349,11 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
     private async authPromptValidator(promptContext: PromptValidatorContext<TokenResponse>): Promise<boolean> {
         const token: TokenResponse|undefined = promptContext.recognized.value;
-        if (token !== undefined && token.token !== '') {
+        if (token !== undefined && token.token !== undefined && token.token.trim().length > 0) {
             return Promise.resolve(true);
         }
 
         const eventActivity: Activity = promptContext.context.activity;
-
         if (eventActivity !== undefined && eventActivity.name === TokenEvents.tokenResponseEventName) {
             promptContext.recognized.value = <TokenResponse> eventActivity.value;
 
@@ -366,10 +368,10 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     }
 }
 
-namespace DialogIds {
-    export const providerPrompt: string = 'ProviderPrompt';
-    export const firstStepPrompt: string = 'FirstStep';
-    export const localAuthPrompt: string = 'LocalAuth';
-    export const remoteAuthPrompt: string = 'RemoteAuth';
-    export const remoteAuthEventPrompt: string = 'RemoteAuthEvent';
+export enum DialogIds {
+    providerPrompt = 'ProviderPrompt',
+    firstStepPrompt = 'FirstStep',
+    localAuthPrompt = 'LocalAuth',
+    remoteAuthPrompt = 'RemoteAuth',
+    remoteAuthEventPrompt = 'RemoteAuthEvent'
 }
