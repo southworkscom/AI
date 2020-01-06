@@ -3,10 +3,10 @@
  * Licensed under the MIT License.
  */
 
- import { DialogContext } from 'botbuilder-dialogs';
+import { DialogContext } from 'botbuilder-dialogs';
 
- export namespace suppressDialog {
-    export const suppressDialogCompletionKey : string = 'suppressDialogCompletionMessage';
+export namespace suppressDialog {
+    export const suppressDialogCompletionKey: string = 'suppressDialogCompletionMessage';
     
     /**
      * Provides an extension method to DialogContext enabling a Dialog to indicate whether it wishes to suppress any dialog

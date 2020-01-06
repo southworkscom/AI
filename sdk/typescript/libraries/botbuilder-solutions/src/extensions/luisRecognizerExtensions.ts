@@ -4,7 +4,6 @@
  */
 
 import { SentimentType } from '../models';
-import { LuisRecognizer } from 'botbuilder-ai';
 
 export namespace LuisRecognizerExtensions {
 
@@ -13,8 +12,7 @@ export namespace LuisRecognizerExtensions {
     export const neutralSentiment: string = "neutral";
     export const negativeSentiment: string = "negative";
 
-    /*
-    export function getSentimentInfo<T>(luisConverter: LuisRecognizer, propertyAccessor: Map<string, Object>): [number, SentimentType] {
+    export function getSentimentInfo<T>(luisConverter: T, propertyAccessor: (luisConverter: T) => Map<string, Object>): [SentimentType, number] {
         let sentimentLabel: SentimentType = SentimentType.None;
         let maxScore: number = 0.0;
 
@@ -27,9 +25,9 @@ export namespace LuisRecognizerExtensions {
             maxScore = sentimentInfo.score.has() ? sentimentInfo.score.value : 0.0;
         }
 
-        return (sentimentLabel, maxScore);
+        return ([sentimentLabel, maxScore]);
     }
-    */
+
    
     export function getSentimentType (label: string): SentimentType {
         let sentimentType: SentimentType = SentimentType.None;
