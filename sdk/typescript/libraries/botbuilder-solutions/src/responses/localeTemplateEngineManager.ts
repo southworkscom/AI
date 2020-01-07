@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { TemplateEngine } from 'botbuilder-lg';
+import { TemplateEngine, ActivityFactory } from 'botbuilder-lg';
 import { Activity } from 'botbuilder';
 import i18next from 'i18next';
 
@@ -18,6 +18,7 @@ export class LocaleTemplateEngineManager {
      * private readonly languageFallbackPolicy: LanguagePolicy;
      */
     private readonly localeDefault: string;
+    public templateEnginesPerLocale: Map<string, TemplateEngine> = new Map<string, TemplateEngine>();
 
     /**
      * Initializes a new instance of the LocaleTemplateEngineManager.
@@ -26,7 +27,7 @@ export class LocaleTemplateEngineManager {
      */
     public constructor (localeLGFiles: Map<string, []>, fallbackLocale: string) {
         if (localeLGFiles === undefined) { throw new Error ('The parameter localeLGFiles is undefined') }
-        if (fallbackLocale === undefined || fallbackLocale.trim().length === 0){ throw new Error ('The parameter fallbackLocale is undefined') }
+        if (fallbackLocale === undefined || fallbackLocale.trim().length === 0) { throw new Error ('The parameter fallbackLocale is undefined') }
 
         localeLGFiles.forEach((value: [], key: string) => {
             this.templateEnginesPerLocale.set(key, new TemplateEngine()); 
@@ -40,8 +41,6 @@ export class LocaleTemplateEngineManager {
        this.localeDefault = fallbackLocale;
     }
 
-    public templateEnginesPerLocale: Map<string, TemplateEngine> = new Map<string, TemplateEngine>();
-    
     /**
      * Create an activity through Language Generation using the thread culture or provided override.
      * @param templateName - Langauge Generation template.
@@ -49,7 +48,7 @@ export class LocaleTemplateEngineManager {
      * @param localeOverride Optional override for locale.
      * @returns Activity
      */
-    public generateActivityForLocale(templateName: string, data: Object , localeOverride: string ): Activity {
+    public generateActivityForLocale(templateName: string, data: Object , localeOverride: string ): Partial<Activity> {
         if (templateName === undefined) { throw new Error('The parameter templateName is undefined') }
     
         // By default we use the locale for the current culture, if a locale is provided then we ignore this.
@@ -57,10 +56,7 @@ export class LocaleTemplateEngineManager {
 
         // Do we have a template engine for this locale?
         if (this.templateEnginesPerLocale.has(locale)) {   
-            /**
-             * PENDING - We need the library botbuilder-dialogs-adaptive for this implementation        
-             * return activityBuilder.generateFromLG(this.templateEnginesPerLocale.get(locale)?.evaluateTemplate(templateName, data));
-             */
+            return ActivityFactory.createActivity(this.templateEnginesPerLocale.get(locale)?.evaluateTemplate(templateName, data));
         } else {
             // We don't have a set of matching responses for this locale so we apply fallback policy to find options.
             
@@ -73,15 +69,15 @@ export class LocaleTemplateEngineManager {
                     throw new Error(`No LG responses found for ${locale} or when attempting to fallback`);
                 }
             }
+            */ 
 
             // Work through the fallback hierarchy to find a response
-            locales.forEach((fallBackLocale: LanguagePolicy) => {
-                
-                if (this.templateEnginesPerLocale.has(fallBackLocale)){
-                    return activityBuilder.generateFromLG(this.templateEnginesPerLocale.get(fallBackLocale)?.evaluateTemplate(templateName, data));
-                }
-            });
-            */ 
+            // locales.forEach((fallBackLocale: LanguagePolicy) => {
+            //     if (this.templateEnginesPerLocale.has(fallBackLocale)){
+            //         return ActivityFactory.createActivity(this.templateEnginesPerLocale.get(fallBackLocale)?.evaluateTemplate(templateName, data));
+            //     }
+            // });
+            
         }
 
         throw new Error(`No LG responses found for ${locale} or when attempting to fallback to ${this.localeDefault}`);
