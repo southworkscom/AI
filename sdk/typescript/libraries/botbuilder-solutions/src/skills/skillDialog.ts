@@ -18,7 +18,7 @@ import {
     DialogTurnResult,
     DialogTurnStatus } from 'botbuilder-dialogs';
 import {
-    ActivityExtensions,
+    ActivityEx,
     IProviderTokenResponse,
     isProviderTokenResponse,
     MultiProviderAuthDialog,
@@ -316,7 +316,7 @@ export class SkillDialog extends ComponentDialog {
                 const tokenResponse: IProviderTokenResponse = <IProviderTokenResponse> result.result;
 
                 if (isProviderTokenResponse(tokenResponse)) {
-                    const tokenEvent: Activity = ActivityExtensions.createReply(activity);
+                    const tokenEvent: Activity = ActivityEx.createReply(activity);
                     tokenEvent.type = ActivityTypes.Event;
                     tokenEvent.name = TokenEvents.tokenResponseEventName;
                     tokenEvent.value = tokenResponse;

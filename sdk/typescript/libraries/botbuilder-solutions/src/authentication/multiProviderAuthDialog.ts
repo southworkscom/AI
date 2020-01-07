@@ -132,9 +132,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             stepContext.context.activity.channelId === 'directlinespeech') {
             // Speech channel doesn't support OAuthPrompt./OAuthCards so we rely on tokens being set by the Linked Accounts technique
             // Therefore we don't use OAuthPrompt and instead attempt to directly retrieve the token from the store.
-            if (stepContext.context.activity.from === undefined ||
-                stepContext.context.activity.from.id === undefined ||
-                stepContext.context.activity.id?.trim().length === 0) {
+            if (stepContext.context.activity.from === undefined || stepContext.context.activity.from.id === '') {
                 throw new Error('Missing From or From.Id which is required for token retrieval.');
             }
 
