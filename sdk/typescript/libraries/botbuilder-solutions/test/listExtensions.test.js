@@ -17,6 +17,19 @@ describe("list extensions", function() {
 
     describe("defaults", function() {
         it("verify the speech string of multiple strings", function(){
+            // Configure internationalization and default locale
+            i18next.use(i18nextNodeFsBackend)
+            .init({
+                fallbackLng: "en",
+                preload: ["en"],
+                backend: {
+                    loadPath: join(__dirname, "locales", "{{lng}}.json")
+                }
+            })
+            .then(async () => {
+                await Locales.addResourcesFromPath(i18next, "common");
+            });
+
             const andOperator = i18next.t("common:and"); 
             // Default is ToString and final separator is "and"
             const testList = ["One", "Two", "Three"];
