@@ -30,6 +30,7 @@
         "botbuilder-dialogs": "^4.7.0",
         "botframework-config": "^4.7.0",
         "botframework-connector": "^4.7.0",
+        "botbuilder-lg": "4.7.0-preview",
         "dayjs": "1.8.17",
         "jwks-rsa": "1.5.0",
         "ms-rest-azure": "^2.5.0",
