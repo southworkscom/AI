@@ -5,7 +5,8 @@
 import {
     BotTelemetryClient,
     StatePropertyAccessor,
-    TurnContext } from 'botbuilder';
+    TurnContext, 
+    UserState} from 'botbuilder';
 import {
     ComponentDialog,
     DialogTurnResult,
@@ -18,77 +19,90 @@ import { BotServices } from '../services/botServices';
 
 enum DialogIds {
     namePrompt = 'namePrompt',
-    emailPrompt = 'emailPrompt',
-    locationPrompt =  'locationPrompt'
 }
 
+enum stateProperties {
+    generalResult = "generalResult",
+}
+
+// Example onboarding dialog to initial user profile information.
 export class OnboardingDialog extends ComponentDialog {
 
     // Fields
-    private static readonly responder: OnboardingResponses = new OnboardingResponses();
-    private readonly accessor: StatePropertyAccessor<IOnboardingState>;
-    private state!: IOnboardingState;
+    private services: BotServices;
+    private accessor: StatePropertyAccessor<UserProfileState>;
+    private templateEngine: LocaleTemplateEngine;
 
     // Constructor
-    public constructor(botServices: BotServices, accessor: StatePropertyAccessor<IOnboardingState>, telemetryClient: BotTelemetryClient) {
+    public constructor(serviceProvider: IServiceProvider, telemetryClient: BotTelemetryClient) {
         super(OnboardingDialog.name);
-        this.accessor = accessor;
-        this.initialDialogId = OnboardingDialog.name;
-        const onboarding: ((sc: WaterfallStepContext<IOnboardingState>) => Promise<DialogTurnResult>)[] = [
-            this.askForName.bind(this),
-            this.finishOnboardingDialog.bind(this)
-        ];
+        this.templateEngine = serviceProvider.GetService<LocaleTemplateEngineManager>();
 
-        // To capture built-in waterfall dialog telemetry, set the telemetry client
-        // to the new waterfall dialog and add it to the component dialog
-        this.telemetryClient = telemetryClient;
-        this.addDialog(new WaterfallDialog(this.initialDialogId, onboarding));
-        this.addDialog(new TextPrompt(DialogIds.namePrompt));
+        let userState = serviceProvider.GetService<UserState>();
+        this.accessor = userState.CreateProperty<UserProfileState>(UserProfileState.name);
+        this.services = serviceProvider.GetService<BotServices>();
+
+        let onboarding = new WaterfallStep[]{
+            AskForName,
+            FinishOnboardingDialog,
+        };
+
+         // To capture built-in waterfall dialog telemetry, set the telemetry client
+         // to the new waterfall dialog and add it to the component dialog
+         this.telemetryClient = telemetryClient
+         this.addDialog(new WaterfallDialog(onboarding.name, onboarding){ TelemetryClient = telemetryClient});
+         this.addDialog(new TextPrompt(DialogIds.namePrompt));
     }
 
-    public async askForName(sc: WaterfallStepContext<IOnboardingState>): Promise<DialogTurnResult> {
-        this.state = await this.getStateFromAccessor(sc.context);
+    public async askForName(sc: WaterfallStepContext): Promise<DialogTurnResult> {
+        let state = await this.accessor.get(sc.context, () => new UserProfileState());
 
-        if (this.state.name !== undefined && this.state.name.trim().length > 0) {
-            return sc.next(this.state.name);
+        if (state && state.name !== undefined && state.name.trim().length > 0) {
+            return await sc.next(state.name);
         }
-
-        return sc.prompt(DialogIds.namePrompt, {
-            prompt: await OnboardingDialog.responder.renderTemplate(
-                sc.context,
-                OnboardingResponses.responseIds.namePrompt,
-                sc.context.activity.locale as string)
-        });
+        else {
+            return await sc.prompt(DialogIds.namePrompt, new PromptOptions(){
+                Prompt = this.templateEngine.generateActivityForLocale('NamePrompt'),
+            });
+        }
     }
 
     public async finishOnboardingDialog(sc: WaterfallStepContext<IOnboardingState>): Promise<DialogTurnResult> {
-        this.state = await this.getStateFromAccessor(sc.context);
-        this.state.name = sc.result as string;
-        await this.accessor.set(sc.context, this.state);
+        
+        let userProfile = await this.accessor.get(sc.context, () => new UserProfileState());
+        let name = <string>sc.result;
 
-        await OnboardingDialog.responder.replyWith(
-            sc.context,
-            OnboardingResponses.responseIds.haveNameMessage,
-            {
-                name: this.state.name
-            });
+        let generalResult = sc.context.turnState.get(stateProperties.generalResult);
 
-        return sc.endDialog();
-    }
-
-    private async getStateFromAccessor(context: TurnContext): Promise<IOnboardingState>  {
-        const state: IOnboardingState | undefined = await this.accessor.get(context);
-        if (state === undefined) {
-            const newState: IOnboardingState = {
-                email: '',
-                location: '',
-                name: ''
-            };
-            await this.accessor.set(context, newState);
-
-            return newState;
+        if (generalResult){
+            let localizedServices = this.services.getCognitiveModel();
+            generalResult = await localizedServices.luisServices.get('General')?.recognize(sc.context);
         }
 
-        return state;
+        let general = generalResult.topIntent();
+        let generalIntent = general[0];
+        let generalScore = general[1];
+
+        if (generalIntent == GeneralLuis.Intent.ExtractName && generalScore > 0.5){
+            
+            if (generalResult.entities.personName_Any){
+                name = generalResult.entities.personName_Any[0];
+            }
+            else if (generalResult.entities.personName){
+                name = generalResult.entities.personName[0];
+            }
+        }
+
+        // Captialize name
+        userProfile.name = cultureInfo.currentCulture.textInfo.toTitleCase(name.toLowerCase());
+
+        await this.accessor.set(sc.context, userProfile);
+
+        await sc.context.sendActivity(this.templateEngine.generateActivityForLocale('HaveNameMessage', userProfile));
+        await sc.context.sendActivity(this.templateEngine.generateActivityForLocale('FirstPromptMessage', userProfile));
+
+        sc.SuppressCompletionMessage(true);
+
+        return await sc.endDialog();
     }
 }
