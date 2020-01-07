@@ -15,7 +15,7 @@ const i18next = require("i18next").default;
 const i18nextNodeFsBackend = require("i18next-node-fs-backend");
 const { DateTimeTestData } = require("./helpers/dateTimeTestData");
 const { Locales } = require(join("..", "lib", "localesUtils"));
-const { DateTimeExtensions } = require(join("..", "lib", "extensions", "dateTimeExtensions"));
+const { DateTimeExtensions } = require(join("..", "lib", "extensions", "dateTimeEx"));
 
 describe("date time extensions", function() {
 

@@ -28,10 +28,6 @@ node_modules/
 # Common toolchain intermediate files
 temp
 
-# Rush files
-common/temp/**
-package-deps.json
-
 # Generated folder by build process
 lib/
 
@@ -39,3 +35,6 @@ lib/
 *.bot
 !assistant/test/mockResources/mockedConfiguration.bot
 !assistant/test/mockResources/LocaleConfigurations/*.bot
+
+# Launch.json file
+launch.json
