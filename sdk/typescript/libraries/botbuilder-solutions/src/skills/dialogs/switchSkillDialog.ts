@@ -82,8 +82,7 @@ export class SwitchSkillDialog extends ComponentDialog {
     }
 }
 
-export enum Properties
-{
+export enum Properties {
     skillId = 'skillSwitchValue',
     lastActivity = 'skillSwitchActivity'
 }

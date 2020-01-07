@@ -5,7 +5,7 @@
 
 import { Activity, ActivityTypes, ChannelAccount, ConversationReference } from 'botframework-schema';
 
-export namespace ActivityExtensions {
+export namespace ActivityEx {
     export function createReply(source: Activity, text?: string, local?: string): Activity {
         const reply: string = text || '';
 

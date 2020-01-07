@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-const { SkillDialog } = require('../../lib/skillDialog');
+const { SkillDialog } = require('../../lib/skills/skillDialog');
 
 // Extended implementation of SkillDialog for test purposes that enables us to mock the HttpClient
 class SkillDialogTest extends SkillDialog {

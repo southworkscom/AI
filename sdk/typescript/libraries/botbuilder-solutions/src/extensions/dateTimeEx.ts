@@ -6,7 +6,7 @@
 import * as dayjs from 'dayjs';
 import i18next from 'i18next';
 
-export namespace DateTimeExtensions {
+export namespace DateTimeEx {
     let currentLocale: string;
 
     async function importLocale(locale: string): Promise<void> {
