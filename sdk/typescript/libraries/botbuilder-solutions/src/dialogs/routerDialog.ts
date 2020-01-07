@@ -7,7 +7,7 @@ import { TurnContext } from 'botbuilder';
 import { BotTelemetryClient } from 'botbuilder-core';
 import { Dialog, DialogContext, DialogInstance, DialogReason, DialogTurnResult, DialogTurnStatus } from 'botbuilder-dialogs';
 import { Activity, ActivityTypes } from 'botframework-schema';
-import { ActivityExtensions } from '../extensions';
+import { ActivityEx } from '../extensions';
 import { InterruptableDialog } from './interruptableDialog';
 import { InterruptionAction } from './interruptionAction';
 
@@ -38,7 +38,7 @@ export abstract class RouterDialog extends InterruptableDialog {
         } else {
             const activity: Activity = innerDc.context.activity;
 
-            if (ActivityExtensions.isStartActivity(activity)) {
+            if (ActivityEx.isStartActivity(activity)) {
                 await this.onStart(innerDc);
             }
 
