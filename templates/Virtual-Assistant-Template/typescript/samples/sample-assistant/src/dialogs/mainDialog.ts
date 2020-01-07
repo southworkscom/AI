@@ -134,7 +134,7 @@ export class MainDialog extends ActivityHandlerDialog {
         let userProfile = await this.userProfileState.get(dc.context, () => new UserProfileState());
         let dialog = dc.activeDialog?.id != null ? dc.findDialog(dc.activeDialog?.id) : null;
 
-        if (activity.type === ActivityTypes.Message) {
+        if (activity.type === ActivityTypes.Message && activity.text) {
 
             // Check if the active dialog is a skill for conditional interruption.
             let isSkill = dialog instanceof SkillDialog;
@@ -163,7 +163,6 @@ export class MainDialog extends ActivityHandlerDialog {
 
             if(dispatchIntent == dispatch.Intent.l_general)
             {
-
                 // Get connected LUIS result from turn state.
                 let generalResult = dc.context.turnState.get(stateProperties.generalResult);
                 let general: [string, number] = generalResult.topIntent();
@@ -184,7 +183,7 @@ export class MainDialog extends ActivityHandlerDialog {
                         } 
 
                         case GeneralLuis.Intent.Escalate: {
-                            await dc.context.sendActivity(this,this.templateEngine.generateActivityForLocale('EscalateMessage', userProfile));
+                            await dc.context.sendActivity(this.templateEngine.generateActivityForLocale('EscalateMessage', userProfile));
                             return InterruptionAction.Resume;
                         }
 
@@ -264,7 +263,7 @@ export class MainDialog extends ActivityHandlerDialog {
 
         let userProfile = await this.userProfileState.get(innerDc.context, () => new UserProfileState());
 
-        if (userProfile.name || userProfile != undefined){
+        if (userProfile != undefined && userProfile.name){
 
             // Send new user intro card.
             await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('NewUserIntroCard', userProfile));
@@ -282,12 +281,13 @@ export class MainDialog extends ActivityHandlerDialog {
         innerDc.SuppressCompletionMessage(true);
     }
 
+    // Runs when the dialog stack is empty, and a new message activity comes in.
     protected async onMessageActivity(innerDc: DialogContext): Promise<void> {
 
         let activity = innerDc.context.activity.asMessageActivity();
         let userProfile = await this.userProfileState.get(innerDc.context, () => new UserProfileState());
 
-        if (activity.text || activity != undefined){
+        if (activity != undefined && activity.text){
 
             // Get current cognitive models for the current locale.
             let localizedServices: ICognitiveModelSet = this.services.getCognitiveModel();
@@ -322,6 +322,7 @@ export class MainDialog extends ActivityHandlerDialog {
         }
     }
 
+    // Runs when a new event activity comes in.
     protected async OnEventActivity(innerDc: DialogContext): Promise<void> {
 
         let ev = innerDc.context.activity.asEventActivity();
@@ -344,7 +345,8 @@ export class MainDialog extends ActivityHandlerDialog {
 
             case Events.timeZone: {
                 try {
-                    let timeZoneInfo = await this.skillContext.get(innerDc.context, () => new SkillContext());
+                    
+                    let timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(value);
                     let timeZoneObj = {timezone: Object};
                     timeZoneObj.timezone = timeZoneInfo;
 
@@ -354,7 +356,7 @@ export class MainDialog extends ActivityHandlerDialog {
                     await this.skillContext.set(innerDc.context, skillContext);
                 }
                 catch{
-                    await innerDc.context.sendActivity(new Activity(type: ActivityTypes.Trace, text: 'Received time zone could not be parsed. Property not set.'));
+                    await innerDc.context.sendActivity(new Activity(ActivityTypes.Trace, 'Received time zone could not be parsed. Property not set.'));
                 }
 
                 break;
@@ -367,15 +369,17 @@ export class MainDialog extends ActivityHandlerDialog {
             }
 
             default: {
-                await innerDc.context.sendActivity(new Activity(type:ActivityTypes.Trace, text:`Unknown Event ${ev.name ?? 'undefined'} was received but not processed.`));
+                await innerDc.context.sendActivity(new Activity(ActivityTypes.Trace, `Unknown Event ${ev.name ?? 'undefined'} was received but not processed.`));
             }
         }
     }
 
+    // Runs when an activity with an unknown type is received.
     protected async onUnhandledActivityType(innerDc: DialogContext): Promise<void> {
-        await innerDc.context.sendActivity(new Activity(type: ActivityTypes.Trace, text: 'Unknown activity was received but not processed.'));
+        await innerDc.context.sendActivity(new Activity(ActivityTypes.Trace, 'Unknown activity was received but not processed.'));
     }
 
+    // Runs when the dialog stack completes.
     protected async onDialogComplete(outerDc: DialogContext, result :Object): Promise<void> {
         let userProfile = await this.userProfileState.get(outerDc.context, () => new UserProfileState());
 
@@ -393,6 +397,7 @@ export class MainDialog extends ActivityHandlerDialog {
         if (supported){
 
             tokenProvider = <IUserTokenProvider>dc.context.adapter;
+            
             // Sign out user
             let tokens = await tokenProvider.getTokenStatus(dc.context, dc.context.activity.from.id);
             for (const token of tokens){
