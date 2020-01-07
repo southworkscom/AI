@@ -42,8 +42,6 @@ import { CancelResponses } from '../responses/cancelResponses';
 import { MainResponses } from '../responses/mainResponses';
 import { BotServices } from '../services/botServices';
 import { IBotSettings } from '../services/botSettings';
-import { CancelDialog } from './cancelDialog';
-import { EscalateDialog } from './escalateDialog';
 import { OnboardingDialog } from './onboardingDialog';
 
 enum Events {
