@@ -58,6 +58,7 @@ enum stateProperties{
     timeZone = "timezone"
 }
 
+// Dialog providing activity routing and message/event processing.
 export class MainDialog extends ActivityHandlerDialog {
     // Fields
 
