@@ -137,7 +137,7 @@ export class MainDialog extends ActivityHandlerDialog {
         if (activity.type === ActivityTypes.Message) {
 
             // Check if the active dialog is a skill for conditional interruption.
-            let isSkill = dialog as SkillDialog;
+            let isSkill = dialog instanceof SkillDialog;
 
             // Get Dispatch LUIS result from turn state.
             let dispatchResult = dc.context.turnState.get(stateProperties.dispatchResult);
@@ -145,6 +145,7 @@ export class MainDialog extends ActivityHandlerDialog {
             let dispatch: [string, number] = dispatchResult.topIntent();
             let dispatchIntent: string = dispatch[0];
             let dispatchScore: number = dispatch[1];
+            
              // Check if we need to switch skills.
              if(isSkill){
 
