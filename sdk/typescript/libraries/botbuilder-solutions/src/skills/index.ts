@@ -5,6 +5,7 @@
 
 export * from './auth';
 export * from './http';
+export * from './dialogs';
 export * from './models';
 export * from './responses/skillResponses';
 export * from './activityHandler';
