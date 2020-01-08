@@ -11,17 +11,20 @@ const { LocaleTemplateEngineManager } = require(join("..", "lib", "responses", "
 let localeTemplateEngineManager;
 
 describe("language generation", function() {
-    before(async function() {
+    after(async function() {
+        i18next.changeLanguage('en-us');
+    });
 
+    before(async function() {
         const localeLgFiles = new Map();
         localeLgFiles.set("en-us", [join(__dirname, "responses", "testResponses.lg")]);
         localeLgFiles.set("es-es", [join(__dirname, "responses", "testResponses.es.lg")]);
 
-        localeTemplateEngineManager = new LocaleTemplateEngineManager(localeLgFiles, "en");
+        localeTemplateEngineManager = new LocaleTemplateEngineManager(localeLgFiles, "en-us");
     });
     
     describe("get response with language generation english", function() {
-        it("should return a list that contains the response text", function() {
+        it("should return the correct response included in the possible responses of the locale", function() {
             i18next.changeLanguage("en-us");
 
             // Generate English response using LG with data
@@ -36,7 +39,7 @@ describe("language generation", function() {
     });
 
     describe("get response with language generation spanish", function() {
-        it("should return a list that contains the response text", function() {
+        it("should return the correct response included in the possible responses of the locale", function() {
             i18next.changeLanguage("es-es");
 
             // Generate Spanish response using LG with data
@@ -66,9 +69,5 @@ describe("language generation", function() {
 
             strictEqual(possibleResponses.includes(response.text));
         });
-    });
-
-    after(async function() {
-        i18next.changeLanguage('en-us');
     });
 });
