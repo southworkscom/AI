@@ -3,52 +3,72 @@
  * Licensed under the MIT License.
  */
 
-const { strictEqual } = require("assert");
+const { ok } = require("assert");
 const { join } = require("path");
 const i18next = require("i18next").default;
-const { SomeComplexType } = require(join(__dirname, "helpers", "someComplexType"));
-//const { ListExtensions } = require(join("..", "lib", "extensions", "listEx"));
 const { LocaleTemplateEngineManager } = require(join("..", "lib", "responses", "localeTemplateEngineManager"));
 
-const localeTemplateEngineManager;
+let localeTemplateEngineManager;
 
 describe("language generation", function() {
     before(async function() {
-        const localeLgFiles = [];
-        localeLgFiles.push({
-            key: "en-us",
-            value: [join(".", "Response", "TestResponses.lg")]
-        });
-        localeLgFiles.push({
-            key: "es-es",
-            value: [join(".", "Response", "TestResponses.es.lg")]
-        });
 
-        i18next.use(i18nextNodeFsBackend)
-        .init({
-            fallbackLng: "en",
-            preload: [ "de", "en", "es", "fr", "it", "zh" ],
-            backend: {
-                loadPath: join(__dirname, "locales", "{{lng}}.json")
-            }
-        })
-        .then(async () => {
-            await Locales.addResourcesFromPath(i18next, "common");
-        });
+        const localeLgFiles = new Map();
+        localeLgFiles.set("en-us", [join(__dirname, "responses", "testResponses.lg")]);
+        localeLgFiles.set("es-es", [join(__dirname, "responses", "testResponses.es.lg")]);
 
-        localeTemplateEngineManager = new LocaleTemplateEngineManager(localeLgFiles, "en-us");
+        localeTemplateEngineManager = new LocaleTemplateEngineManager(localeLgFiles, "en");
     });
     
     describe("get response with language generation english", function() {
-        i18next.changeLanguage("en");
+        it("should return a list that contains the response text", function() {
+            i18next.changeLanguage("en-us");
 
-        // Generate English response using LG with data
-        let data = { name: "Darren" };
-        let response = localeTemplateEngineManager.generateActivityForLocale("HaveNameMessage", data);
+            // Generate English response using LG with data
+            let data = { Name: "Darren" };
+            let response = localeTemplateEngineManager.generateActivityForLocale("HaveNameMessage", data);
 
-        // Retrieve possible responses directly from the correct template to validate logic
-        var possibleResponses = localeTemplateEngineManager.templateEnginesPerLocale["en-us"].expandTemplate("HaveNameMessage", data);
+            // Retrieve possible responses directly from the correct template to validate logic
+            let possibleResponses = localeTemplateEngineManager.templateEnginesPerLocale.get("en-us").expandTemplate("HaveNameMessage", data);
 
-        strictEqual(possibleResponses.includes(response.text));
+            ok(possibleResponses.includes(response.text));
+        });
+    });
+
+    describe("get response with language generation spanish", function() {
+        it("should return a list that contains the response text", function() {
+            i18next.changeLanguage("es-es");
+
+            // Generate Spanish response using LG with data
+            let data = { name: "Darren" };
+            let response = localeTemplateEngineManager.generateActivityForLocale("HaveNameMessage", data);
+
+            // Retrieve possible responses directly from the correct template to validate logic
+            var possibleResponses = localeTemplateEngineManager.templateEnginesPerLocale.get("es-es").expandTemplate("HaveNameMessage", data);
+
+            ok(possibleResponses.includes(response.text));
+        });
+    });
+
+    xdescribe("get response with language generation fallback", function() {
+        // This test will remain commented until the fallback for Template Engine is implemented
+        it("should return a list that contains the response text of the fallback language", function() {
+            // German locale not supported, locale template engine should fallback to english as per default in Test Setup.
+            i18next.changeLanguage("de-de");
+
+            // Generate English response using LG with data
+            let data = { name: "Darren" };
+            let response = localeTemplateEngineManager.generateActivityForLocale("HaveNameMessage", data);
+
+            // Retrieve possible responses directly from the correct template to validate logic
+            // Logic should fallback to english due to unsupported locale
+            var possibleResponses = localeTemplateEngineManager.templateEnginesPerLocale["en-us"].expandTemplate("HaveNameMessage", data);
+
+            strictEqual(possibleResponses.includes(response.text));
+        });
+    });
+
+    after(async function() {
+        i18next.changeLanguage('en-us');
     });
 });
