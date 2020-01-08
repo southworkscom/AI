@@ -17,7 +17,7 @@ describe("list extensions", function() {
 
     describe("defaults", function() {
         it("verify the speech string of multiple strings", function(){
-            i18next.language = 'en-us';
+            i18next.changeLanguage('en-us');
             const andOperator = i18next.t("common:and"); 
             // Default is ToString and final separator is "and"
             const testList = ["One", "Two", "Three"];
@@ -28,7 +28,7 @@ describe("list extensions", function() {
 
     describe("to speech string", function() {
         it("verify the speech string of multiple complex type objects", function(){
-            i18next.language = 'en-us';
+            i18next.changeLanguage('en-us');
             const testList = [];
 
             strictEqual("", ListEx.toSpeechString(testList, this.orOperator, (li) => { return li.number }));

@@ -21,7 +21,7 @@ export namespace LuisRecognizerEx {
         if(luisProperty !== undefined && result !== undefined) {
             let sentimentInfo: any = JSON.parse(<string>result);
             sentimentLabel = getSentimentType(sentimentInfo.label);
-            maxScore = sentimentInfo.score !== undefined ? sentimentInfo.score.value : 0.0;
+            maxScore = sentimentInfo.score !== undefined ? sentimentInfo.score : 0.0;
         }
 
         return ([sentimentLabel, maxScore]);
