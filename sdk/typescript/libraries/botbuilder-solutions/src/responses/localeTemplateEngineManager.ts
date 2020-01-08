@@ -51,11 +51,11 @@ export class LocaleTemplateEngineManager {
      * @param localeOverride Optional override for locale.
      * @returns Activity
      */
-    public generateActivityForLocale(templateName: string, data: Object , localeOverride: string ): Partial<Activity> {
+    public generateActivityForLocale(templateName: string, data: Object = {} , localeOverride: string = ''): Partial<Activity> {
         if (templateName === undefined) { throw new Error('The parameter templateName is undefined') }
     
         // By default we use the locale for the current culture, if a locale is provided then we ignore this.
-        let locale: string = localeOverride !== undefined ? localeOverride : i18next.language;
+        let locale: string = localeOverride.trim().length > 0 ? localeOverride : i18next.language;
 
         // Do we have a template engine for this locale?
         if (this.templateEnginesPerLocale.has(locale)) {   
