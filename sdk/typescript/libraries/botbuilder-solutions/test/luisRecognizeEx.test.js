@@ -13,10 +13,10 @@ const sentiment = "sentiment";
 describe("luis recognize extensions", function() {
     describe("get sentiment info with sentiment enabled", function() {
         it("should return a sentiment type and its score", function(){
-            const myMap = new Map();
-            myMap.set(sentiment, "{\"label\": \"positive\", \"score\": 0.91}");
+            const sentiments = new Map();
+            sentiments.set(sentiment, "{\"label\": \"positive\", \"score\": 0.91}");
             
-            const skillLuis = new SkillLuis(myMap);
+            const skillLuis = new SkillLuis(sentiments);
 
             const [type, score] = LuisRecognizerEx.getSentimentInfo(skillLuis,
                 (skillLuis) => {
@@ -30,8 +30,8 @@ describe("luis recognize extensions", function() {
 
     describe("get sentiment info with sentiment not enabled", function() {
         it("should return a neutral sentiment and no score", function(){
-            const myMap = new Map();
-            const skillLuis = new SkillLuis(myMap);
+            const sentiments = new Map();
+            const skillLuis = new SkillLuis(sentiments);
 
             const [type, score] = LuisRecognizerEx.getSentimentInfo(skillLuis,
                 (skillLuis) => {
