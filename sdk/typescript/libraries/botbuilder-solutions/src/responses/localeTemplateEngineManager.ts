@@ -30,15 +30,18 @@ export class LocaleTemplateEngineManager {
         if (fallbackLocale === undefined || fallbackLocale.trim().length === 0) { throw new Error ('The parameter fallbackLocale is undefined') }
 
         localeLGFiles.forEach((value: [], key: string) => {
-            this.templateEnginesPerLocale.set(key, new TemplateEngine()); 
-            this.templateEnginesPerLocale.get(key)?.addFiles(value);
+            this.templateEnginesPerLocale.set(key, new TemplateEngine());
+            const templateEngine: TemplateEngine | undefined = this.templateEnginesPerLocale.get(key);
+            if (templateEngine) {
+                templateEngine.addFiles(value);
+            }
         });
 
-       /**
+        /**
         * PENDING - We need the library botbuilder-dialogs-adaptive for this implementation
         * this.languageFallbackPolicy = new LanguagePolicy();
         */
-       this.localeDefault = fallbackLocale;
+        this.localeDefault = fallbackLocale;
     }
 
     /**
@@ -52,11 +55,15 @@ export class LocaleTemplateEngineManager {
         if (templateName === undefined) { throw new Error('The parameter templateName is undefined') }
     
         // By default we use the locale for the current culture, if a locale is provided then we ignore this.
-        let locale: string = localeOverride ?? i18next.language;
+        let locale: string = localeOverride !== undefined ? localeOverride : i18next.language;
 
         // Do we have a template engine for this locale?
         if (this.templateEnginesPerLocale.has(locale)) {   
-            return ActivityFactory.createActivity(this.templateEnginesPerLocale.get(locale)?.evaluateTemplate(templateName, data));
+            const templateEngine: TemplateEngine | undefined = this.templateEnginesPerLocale.get(locale);
+            if (templateEngine) {
+                return ActivityFactory.createActivity(templateEngine.evaluateTemplate(templateName, data));
+            }
+            
         } else {
             // We don't have a set of matching responses for this locale so we apply fallback policy to find options.
             
