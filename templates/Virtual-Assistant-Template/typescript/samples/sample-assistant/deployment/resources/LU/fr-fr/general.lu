@@ -105,10 +105,18 @@
 
 
 ## ExtractName
-- ([vous pouvez]|[s'il vous plaît]) Appelle-moi {PersonName.Any} [.]
-- mon nom est {PersonName.Any} [.]
-- (je|suis) {PersonName.Any} [.]
-- (c'est|ça) {PersonName.Any} [.]
+- appelez-moi steve !
+- je suis anna
+- Je suis John Jackson.
+- Je suis lys
+- c'est jackson .
+- c'est Alice anderson!
+- mon nom est bill jones
+- c'est john w.smith .
+- ([vous pouvez] [s'il vous plaît]) Appelle-moi  {PersonName.Any} [.]
+- mon nom est  {PersonName.Any} [.]
+- (je suis)  {PersonName.Any} [.]
+- (c'est c'est ça)  {PersonName.Any} [.]
 
 
 ## FinishTask
@@ -520,6 +528,8 @@ $DirectionalReference:simple
 $PREBUILT:number
 
 $PREBUILT:ordinal
+
+$PREBUILT:personName
 
 > # Phrase list definitions
 
