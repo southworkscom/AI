@@ -22,5 +22,4 @@ export interface IConnectConfiguration {
     cognitiveModelsFile: string;
     lgLanguage: string;
     logger?: ILogger;
-    tempFiles: string[];
 }

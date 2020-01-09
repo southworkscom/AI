@@ -17,15 +17,16 @@ import {
     IUtteranceSource,
     IUtterance
 } from '../models';
-import { AuthenticationUtils, ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes } from '../utils';
+import { AuthenticationUtils, ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes, deleteTempFiles } from '../utils';
 import { RefreshSkill } from './refreshSkill';
-import fs = require("fs");
 
 export class ConnectSkill {
     private readonly authenticationUtils: AuthenticationUtils;
     private readonly childProcessUtils: ChildProcessUtils;
     private readonly configuration: IConnectConfiguration;
     private readonly logger: ILogger;
+    private tempFiles: string[] = [];
+
 
     public constructor(configuration: IConnectConfiguration, logger?: ILogger) {
         this.configuration = configuration;
@@ -40,62 +41,20 @@ export class ConnectSkill {
         intentName: string,
         dispatchName: string): Map<string, string> {
 
-        if(this.configuration.inlineUtterances)
+        const luFile: string = `${luisApp}.lu`;
+        const luisFile: string = `${luisApp}.luis`;
+        const dispatchFile: string = `${dispatchName}.dispatch`;
+        const dispatchFolderPath: string = join(this.configuration.dispatchFolder, culture);
+        const dispatchFilePath: string = join(dispatchFolderPath, dispatchFile);
+        let luFilePath: string;
+        let luisFolderPath: string;
+        let luisFilePath: string;
+
+        if(!this.configuration.inlineUtterances)
         {
-            const luFile: string = `${luisApp}.lu`;
-            const luisFile: string = `${luisApp}.luis`;
-            const luFilePath: string = join(this.configuration.outFolder + '\\deployment\\resources\\LU\\', culture, luFile);
-            const luisFolderPath: string = join(this.configuration.outFolder + '\\deployment\\resources\\LU\\', culture);
-            const luisFilePath: string = join(luisFolderPath, luisFile);
-            const dispatchFile: string = `${dispatchName}.dispatch`;
-            const dispatchFolderPath: string = join(this.configuration.dispatchFolder, culture);
-            const dispatchFilePath: string = join(dispatchFolderPath, dispatchFile);
-            this.configuration.tempFiles.push(luFilePath,luisFilePath);
-
-            // Validate 'ludown' arguments
-            if (!existsSync(this.configuration.outFolder + '\\deployment\\resources\\LU\\')) {
-                throw new Error(`Path to the LUIS folder (${this.configuration.outFolder + '\\deployment\\resources\\LU\\'}) leads to a nonexistent folder.
-                Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
-            } else if (!existsSync(luFilePath)) {
-                throw new Error(`Path to the ${luisApp}.lu file leads to a nonexistent file.
-                Make sure your Skill's .lu file's name matches your Skill's manifest id`);
-            }
-
-            // Validate 'dispatch add' arguments
-            if (!existsSync(dispatchFolderPath)) {
-                throw new Error(
-                    `Path to the Dispatch folder (${dispatchFolderPath}) leads to a nonexistent folder.
-    Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch folder.`);
-            } else if (!existsSync(dispatchFilePath)) {
-                throw new Error(`Path to the ${dispatchFile} file leads to a nonexistent file.`);
-            }
-
-            const executionModelMap: Map<string, string> = new Map();
-            executionModelMap.set('luisApp', luisApp);
-            executionModelMap.set('luisFile', luisFile);
-            executionModelMap.set('luisFilePath', luisFilePath);
-            executionModelMap.set('--in', wrapPathWithQuotes(luFilePath));
-            executionModelMap.set('--luis_culture', culture);
-            executionModelMap.set('--out_folder', wrapPathWithQuotes(luisFolderPath));
-            executionModelMap.set('--out', luisFile);
-            executionModelMap.set('--type', 'file');
-            executionModelMap.set('--name', intentName);
-            executionModelMap.set('--filePath', luisFilePath);
-            executionModelMap.set('--intentName', intentName);
-            executionModelMap.set('--dataFolder', dispatchFolderPath);
-            executionModelMap.set('--dispatch', dispatchFilePath);
-
-            return executionModelMap;
-        }
-        else {
-            const luFile: string = `${luisApp}.lu`;
-            const luisFile: string = `${luisApp}.luis`;
-            const luFilePath: string = join(this.configuration.luisFolder, culture, luFile);
-            const luisFolderPath: string = join(this.configuration.luisFolder, culture);
-            const luisFilePath: string = join(luisFolderPath, luisFile);
-            const dispatchFile: string = `${dispatchName}.dispatch`;
-            const dispatchFolderPath: string = join(this.configuration.dispatchFolder, culture);
-            const dispatchFilePath: string = join(dispatchFolderPath, dispatchFile);
+            luFilePath = join(this.configuration.luisFolder, culture, luFile);
+            luisFolderPath = join(this.configuration.luisFolder, culture);
+            luisFilePath = join(luisFolderPath, luisFile);
 
             // Validate 'ludown' arguments
             if (!existsSync(this.configuration.luisFolder)) {
@@ -105,33 +64,48 @@ export class ConnectSkill {
                 throw new Error(`Path to the ${luisApp}.lu file leads to a nonexistent file.
             Make sure your Skill's .lu file's name matches your Skill's manifest id`);
             }
-
-            // Validate 'dispatch add' arguments
-            if (!existsSync(dispatchFolderPath)) {
-                throw new Error(
-                    `Path to the Dispatch folder (${dispatchFolderPath}) leads to a nonexistent folder.
-                Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch folder.`);
-            } else if (!existsSync(dispatchFilePath)) {
-                throw new Error(`Path to the ${dispatchFile} file leads to a nonexistent file.`);
-            }
-
-            const executionModelMap: Map<string, string> = new Map();
-            executionModelMap.set('luisApp', luisApp);
-            executionModelMap.set('luisFile', luisFile);
-            executionModelMap.set('luisFilePath', luisFilePath);
-            executionModelMap.set('--in', wrapPathWithQuotes(luFilePath));
-            executionModelMap.set('--luis_culture', culture);
-            executionModelMap.set('--out_folder', wrapPathWithQuotes(luisFolderPath));
-            executionModelMap.set('--out', luisFile);
-            executionModelMap.set('--type', 'file');
-            executionModelMap.set('--name', intentName);
-            executionModelMap.set('--filePath', luisFilePath);
-            executionModelMap.set('--intentName', intentName);
-            executionModelMap.set('--dataFolder', dispatchFolderPath);
-            executionModelMap.set('--dispatch', dispatchFilePath);
-
-            return executionModelMap;
         }
+        else {
+            luFilePath = join(this.configuration.outFolder + '\\deployment\\resources\\LU\\', culture, luFile);
+            luisFolderPath = join(this.configuration.outFolder + '\\deployment\\resources\\LU\\', culture);
+            luisFilePath = join(luisFolderPath, luisFile);
+            this.tempFiles.push(luFilePath,luisFilePath);
+
+            // Validate 'ludown' arguments
+            if (!existsSync(this.configuration.outFolder + '\\deployment\\resources\\LU\\')) {
+                throw new Error(`Path to the LUIS folder (${this.configuration.outFolder + '\\deployment\\resources\\LU\\'}) leads to a nonexistent folder.
+                Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
+            } else if (!existsSync(luFilePath)) {
+                throw new Error(`Path to the ${luisApp}.lu file leads to a nonexistent file.
+                Make sure your Skill's .lu file's name matches your Skill's manifest id`);
+            }
+        }
+        
+        // Validate 'dispatch add' arguments
+        if (!existsSync(dispatchFolderPath)) {
+            throw new Error(
+                `Path to the Dispatch folder (${dispatchFolderPath}) leads to a nonexistent folder.
+                Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch folder.`);
+        } else if (!existsSync(dispatchFilePath)) {
+            throw new Error(`Path to the ${dispatchFile} file leads to a nonexistent file.`);
+        }
+
+        const executionModelMap: Map<string, string> = new Map();
+        executionModelMap.set('luisApp', luisApp);
+        executionModelMap.set('luisFile', luisFile);
+        executionModelMap.set('luisFilePath', luisFilePath);
+        executionModelMap.set('--in', wrapPathWithQuotes(luFilePath));
+        executionModelMap.set('--luis_culture', culture);
+        executionModelMap.set('--out_folder', wrapPathWithQuotes(luisFolderPath));
+        executionModelMap.set('--out', luisFile);
+        executionModelMap.set('--type', 'file');
+        executionModelMap.set('--name', intentName);
+        executionModelMap.set('--filePath', luisFilePath);
+        executionModelMap.set('--intentName', intentName);
+        executionModelMap.set('--dataFolder', dispatchFolderPath);
+        executionModelMap.set('--dispatch', dispatchFilePath);
+
+        return executionModelMap;
     }
 
     private getLocalManifest(): ISkillManifest {
@@ -230,29 +204,23 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                     },
                     new Map());
         } else {
-            // Steps
-            // 1. Read the utterances from the manifest
-            // 2. Generate a temp .lu file in the Skill (check the name e.g temp_<skill_name>.lu)
-            // 3. Write the temp file
-            // 4. Check the above logic
-            // 5. Return the same structure
 
             let actionId: string[] = [manifest.actions[0].id.split('_')[0]];
             let filteredUtterances = manifest.actions.filter((action: IAction): IUtterance[] => action.definition.triggers.utterances)
                 .reduce((acc: IUtterance[], val: IAction): IUtterance[] => acc.concat(val.definition.triggers.utterances), [])
 
-            let utterancesGroupByLocale: { [key: string]: IUtterance[] }  = filteredUtterances.reduce((groupedUtterances: any, utterance: IUtterance) => {
+            let utterancesGroupByLocale: { [key: string]: IUtterance[] }  = filteredUtterances.reduce((groupedUtterances: any, utterance: IUtterance): { [key: string]: IUtterance[] } => {
                 groupedUtterances[utterance.locale] = groupedUtterances[utterance.locale] || []; 
                 groupedUtterances[utterance.locale].push(utterance);
                 return groupedUtterances; 
             }, {});
 
             let temporalFiles: Map<string, string[]> = new Map();
-            Object.keys(utterancesGroupByLocale).forEach((locale: string) =>{
+            Object.keys(utterancesGroupByLocale).forEach((locale: string): void =>{
                 let textUnifiedByLocale: string[] = [];
 
-                Object.values(utterancesGroupByLocale[locale]).forEach(utterances => {
-                    utterances.text.forEach(text =>{
+                Object.values(utterancesGroupByLocale[locale]).forEach((utterances): void => {
+                    utterances.text.forEach((text): void =>{
                         textUnifiedByLocale.push(text);
                     })
                 })
@@ -395,7 +363,8 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             this.logger.message('Updating Dispatch');
             await this.updateModel(luisDictionary, skillManifest.id);
 
-            await this.deleteTempFiles();
+            await deleteTempFiles(this.tempFiles);
+            this.logger.success('Successfully deleted the temporal files');
             // Adding the skill manifest to the assistant skills array
             this.logger.message(`Appending '${skillManifest.name}' manifest to your assistant's skills configuration file.`);
             assistantSkills.push(skillManifest);
@@ -413,15 +382,6 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             this.logger.error(`There was an error while connecting the Skill to the Assistant:\n${err}`);
 
             return false;
-        }
-    }
-
-    private async deleteTempFiles(): Promise<void> {
-        
-        for(const file of this.configuration.tempFiles){
-            if(existsSync(file)){
-                fs.unlinkSync(file);
-            }
         }
     }
 }

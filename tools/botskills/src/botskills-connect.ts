@@ -70,7 +70,6 @@ let resourceGroup: string = '';
 let appSettingsFile: string;
 let cognitiveModelsFile: string;
 let lgLanguage: string;
-let tempFiles: string [] = [];
 
 logger.isVerbose = args.verbose;
 
@@ -180,8 +179,7 @@ const configuration: IConnectConfiguration = {
     appSettingsFile: appSettingsFile,
     cognitiveModelsFile: cognitiveModelsFile,
     lgLanguage: lgLanguage,
-    logger: logger,
-    tempFiles: tempFiles
+    logger: logger
 };
 
 // End of arguments validation

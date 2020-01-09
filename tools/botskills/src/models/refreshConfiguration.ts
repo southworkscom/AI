@@ -13,6 +13,4 @@ export interface IRefreshConfiguration {
     cognitiveModelsFile: string;
     logger?: ILogger;
     skillsFile: string;
-    InileUtterances?: boolean;
-    tempFiles: string[];
 }

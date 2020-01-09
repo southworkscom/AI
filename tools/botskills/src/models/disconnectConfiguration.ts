@@ -16,5 +16,4 @@ export interface IDisconnectConfiguration {
     lgOutFolder: string;
     lgLanguage: string;
     logger?: ILogger;
-    tempFiles: string[];
 }

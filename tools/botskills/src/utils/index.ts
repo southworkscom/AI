@@ -9,3 +9,4 @@ export { ChildProcessUtils } from './childProcessUtils';
 export { getDispatchNames } from './dispatchUtils';
 export { sanitizePath, wrapPathWithQuotes, sanitizeInlineUtterancesEndpoint } from './sanitizationUtils';
 export { isValidCultures, validatePairOfArgs } from './validationUtils';
+export { deleteTempFiles } from './tempFilesUtils';

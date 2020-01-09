@@ -51,7 +51,6 @@ let outFolder: string;
 let lgOutFolder: string;
 let cognitiveModelsFile: string;
 let skillsFile: string;
-let tempFiles: string[] = [];
 
 logger.isVerbose = args.verbose;
 
@@ -72,7 +71,7 @@ lgLanguage = args.cs ? 'cs' : 'ts';
 outFolder = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');
 
 // skillsFile validation
-skillsFile = args.appSettingsFile || join(outFolder, (args.ts ? join('src', 'skills.json') : 'skills.json'));
+skillsFile = join(outFolder, (args.ts ? join('src', 'skills.json') : 'skills.json'));
 
 // cognitiveModelsFile validation
 cognitiveModelsFile = args.cognitiveModelsFile || join(outFolder, (args.ts ? join('src', 'cognitivemodels.json') : 'cognitivemodels.json'));
@@ -93,8 +92,7 @@ const configuration: IRefreshConfiguration = {
     lgOutFolder: lgOutFolder,
     cognitiveModelsFile: cognitiveModelsFile,
     logger: logger,
-    skillsFile: skillsFile,
-    tempFiles: tempFiles
+    skillsFile: skillsFile
 };
 
 new RefreshSkill(<IRefreshConfiguration> configuration, logger).refreshSkill();

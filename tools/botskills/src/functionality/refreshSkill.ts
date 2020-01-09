@@ -6,13 +6,14 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ConsoleLogger, ILogger } from '../logger';
 import { ICognitiveModel, IRefreshConfiguration, ISkillManifest, IAction, ISkillFile, IUtterance  } from '../models';
-import { ChildProcessUtils, getDispatchNames, wrapPathWithQuotes } from '../utils';
-import fs = require("fs");
+import { ChildProcessUtils, getDispatchNames, wrapPathWithQuotes, deleteTempFiles } from '../utils';
 
 export class RefreshSkill {
     public logger: ILogger;
     private readonly childProcessUtils: ChildProcessUtils;
     private readonly configuration: IRefreshConfiguration;
+    private tempFiles: string[] = [];
+    private inlineUtterances: boolean = false;
 
     public constructor(configuration: IRefreshConfiguration, logger?: ILogger) {
         this.configuration = configuration;
@@ -88,7 +89,7 @@ export class RefreshSkill {
         const dispatchFile: string = `${dispatchName}.dispatch`;
         const dispatchFolderPath: string = join(this.configuration.dispatchFolder, culture);
         const dispatchFilePath: string = join(dispatchFolderPath, dispatchFile);
-        this.configuration.tempFiles.push(luFilePath,luisFilePath);
+        this.tempFiles.push(luFilePath,luisFilePath);
 
         // Validate 'ludown' arguments
         if (!existsSync(this.configuration.outFolder + '\\deployment\\resources\\LU\\')) {
@@ -178,13 +179,15 @@ export class RefreshSkill {
         try {
             const luisDictionary: Map<string, string[]> = await this.processSkillFile();
 
-            if(this.configuration.InileUtterances)
+            if(this.inlineUtterances)
                 await this.updateModelUtterances(luisDictionary);
 
             await this.updateModel();
                 
-            await this.deleteTempFiles();
             this.logger.success('Successfully refreshed Dispatch model');
+
+            await deleteTempFiles(this.tempFiles);
+            this.logger.success('Successfully deleted the temporal files');
             this.logger.warning(
                 'You need to re-publish your Virtual Assistant in order to have these changes available for Azure based testing');
 
@@ -234,7 +237,7 @@ export class RefreshSkill {
         }
     }
 
-    public async processSkillFile(): Promise<Map<string, string[]>> {
+    private async processSkillFile(): Promise<Map<string, string[]>> {
         try {
             let skillsArray: ISkillFile = JSON.parse(readFileSync(this.configuration.skillsFile, 'UTF8'));
             let temporalFiles: Map<string, string[]> = new Map();
@@ -244,22 +247,22 @@ export class RefreshSkill {
                 let utterancesGroupByLocale: { [key: string]: IUtterance[] } = 
                     skill.actions.filter((action: IAction): IUtterance[] => action.definition.triggers.utterances)
                         ?.reduce((acc: IUtterance[], val: IAction): IUtterance[] => acc.concat(val.definition.triggers.utterances), [])
-                        ?.reduce((groupedUtterances: any, utterance: IUtterance) => {
+                        ?.reduce((groupedUtterances: any, utterance: IUtterance): { [key: string]: IUtterance[] } => {
                             groupedUtterances[utterance.locale] = groupedUtterances[utterance.locale] || []; 
                             groupedUtterances[utterance.locale].push(utterance);
                             return groupedUtterances; 
                         }, {})
-                
+            
                 if(utterancesGroupByLocale){
-                    this.configuration.InileUtterances = true;
+                    this.inlineUtterances = true;
                 
                         
 
-                    Object.keys(utterancesGroupByLocale).forEach((locale: string) => {
+                    Object.keys(utterancesGroupByLocale).forEach((locale: string): void => {
                         let textUnifiedByLocale: string[] = [];
 
-                        Object.values(utterancesGroupByLocale[locale]).forEach(utterances => {
-                            utterances.text.forEach(text =>{
+                        Object.values(utterancesGroupByLocale[locale]).forEach((utterances): void => {
+                            utterances.text.forEach((text): void =>{
                                 textUnifiedByLocale.push(text);
                             })
                         })
@@ -270,7 +273,7 @@ export class RefreshSkill {
                         {
                             let tempStoringArray: string[] = [];
                             let temporalFileValue: string[] = temporalFiles.get(locale) || [];
-                            temporalFileValue.forEach(element => {
+                            temporalFileValue.forEach((element): void => {
                                 tempStoringArray.push(element);
                             });
                             
@@ -315,15 +318,6 @@ export class RefreshSkill {
             
         } catch (err) {
             throw new Error(`There was an error in the ludown parse command:\nCommand: ${ludownParseCommand.join(' ')}\n${err}`);
-        }
-    }
-
-    private async deleteTempFiles(): Promise<void> {
-        
-        for(const file of this.configuration.tempFiles){
-            if(existsSync(file)){
-                fs.unlinkSync(file);
-            }
         }
     }
 }
