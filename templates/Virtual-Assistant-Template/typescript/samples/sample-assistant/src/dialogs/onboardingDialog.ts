@@ -93,7 +93,7 @@ export class OnboardingDialog extends ComponentDialog {
         await sc.context.sendActivity(this.templateEngine.generateActivityForLocale('HaveNameMessage', userProfile));
         await sc.context.sendActivity(this.templateEngine.generateActivityForLocale('FirstPromptMessage', userProfile));
 
-        DialogContextEx.suppressCompletionMessageValidation(sc);
+        DialogContextEx.suppressCompletionMessage(sc, true);
 
         return await sc.endDialog();
     }
