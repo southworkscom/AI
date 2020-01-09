@@ -12,4 +12,7 @@ export interface IRefreshConfiguration {
     lgOutFolder: string;
     cognitiveModelsFile: string;
     logger?: ILogger;
+    skillsFile: string;
+    InileUtterances?: boolean;
+    tempFiles: string[];
 }

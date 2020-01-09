@@ -59,6 +59,7 @@ let languages: string[];
 let dispatchFolder: string;
 let lgOutFolder: string;
 let lgLanguage: string;
+let tempFiles: string[] = [];
 
 logger.isVerbose = args.verbose;
 
@@ -133,6 +134,7 @@ const configuration: IDisconnectConfiguration = {
     dispatchFolder: dispatchFolder,
     lgOutFolder: lgOutFolder,
     lgLanguage: lgLanguage,
-    logger: logger
+    logger: logger,
+    tempFiles: tempFiles
 };
 new DisconnectSkill(<IDisconnectConfiguration> configuration, logger).disconnectSkill();

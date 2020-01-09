@@ -71,6 +71,7 @@ let resourceGroup: string = '';
 let appSettingsFile: string;
 let cognitiveModelsFile: string;
 let lgLanguage: string;
+let tempFiles: string [] = [];
 
 logger.isVerbose = args.verbose;
 
@@ -183,7 +184,8 @@ const configuration: IUpdateConfiguration = {
     appSettingsFile: appSettingsFile,
     cognitiveModelsFile: cognitiveModelsFile,
     lgLanguage: lgLanguage,
-    logger: logger
+    logger: logger,
+    tempFiles: tempFiles
 };
 
 new UpdateSkill(<IUpdateConfiguration> configuration, logger).updateSkill();

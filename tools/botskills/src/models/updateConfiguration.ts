@@ -23,4 +23,5 @@ export interface IUpdateConfiguration {
     cognitiveModelsFile: string;
     lgLanguage: string;
     logger?: ILogger;
+    tempFiles: string[];
 }

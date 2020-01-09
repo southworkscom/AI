@@ -9,7 +9,7 @@ import { extname, isAbsolute, join, resolve } from 'path';
 import { ConnectSkill } from './functionality';
 import { ConsoleLogger, ILogger } from './logger';
 import { IAppSetting, IConnectConfiguration } from './models';
-import { sanitizePath, validatePairOfArgs } from './utils';
+import { sanitizePath, validatePairOfArgs, sanitizeInlineUtterancesEndpoint } from './utils';
 
 function showErrorHelp(): void {
     program.outputHelp((str: string): string => {
@@ -70,6 +70,7 @@ let resourceGroup: string = '';
 let appSettingsFile: string;
 let cognitiveModelsFile: string;
 let lgLanguage: string;
+let tempFiles: string [] = [];
 
 logger.isVerbose = args.verbose;
 
@@ -111,7 +112,7 @@ if (args.localManifest && extname(args.localManifest) !== '.json') {
 }
 
 localManifest = args.localManifest;
-remoteManifest = args.remoteManifest;
+remoteManifest = sanitizeInlineUtterancesEndpoint(args.remoteManifest, inlineUtterances);
 
 // outFolder validation -- the var is needed for reassuring 'configuration.outFolder' is not undefined
 outFolder = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');
@@ -179,7 +180,8 @@ const configuration: IConnectConfiguration = {
     appSettingsFile: appSettingsFile,
     cognitiveModelsFile: cognitiveModelsFile,
     lgLanguage: lgLanguage,
-    logger: logger
+    logger: logger,
+    tempFiles: tempFiles
 };
 
 // End of arguments validation
