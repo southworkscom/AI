@@ -8,15 +8,12 @@ import {
     BotTelemetryClient,
     RecognizerResult,
     StatePropertyAccessor, 
-    UserState,
-    ConversationState,
     TurnContext} from 'botbuilder';
 import { LuisRecognizer, QnAMakerResult, QnAMaker } from 'botbuilder-ai';
 import {
     DialogContext,
-    DialogTurnResult,
-} from 'botbuilder-dialogs';
-
+    DialogTurnResult, 
+    Dialog} from 'botbuilder-dialogs';
 import {
     ICognitiveModelSet,
     InterruptionAction,
@@ -31,7 +28,6 @@ import {
     SkillContext,
     SkillDialog
 } from 'botbuilder-solutions';
-
 import { TokenStatus } from 'botframework-connector';
 import {
     Activity,
@@ -42,26 +38,10 @@ import { BotServices } from '../services/botServices';
 import { IBotSettings } from '../services/botSettings';
 import { OnboardingDialog } from './onboardingDialog';
 
-enum Events {
-    location = 'VA.Location',
-    timeZone = 'VA.Timezone'
-}
-
-enum stateProperties{
-        
-    dispatchResult = "dispatchResult",
-    generalResult = "generalResult",
-    previousBotResponse = "previousBotResponse",
-    location = "location",
-    timeZone = "timezone"
-}
-
 // Dialog providing activity routing and message/event processing.
 export class MainDialog extends ActivityHandlerDialog {
-    // Fields
-
-    private readonly settings: IBotSettings;
     private readonly services: BotServices;
+    private readonly settings: IBotSettings;
     private onboardingDialog: OnboardingDialog;
     private switchSkillDialog: SwitchSkillDialog;
     private templateEngine: LocaleTemplateEngineManager;
@@ -69,32 +49,31 @@ export class MainDialog extends ActivityHandlerDialog {
     private userProfileState: StatePropertyAccessor<IUserProfileState>;
     private previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]>
     
-    // Constructor
     public constructor(
-        telemetryClient: BotTelemetryClient,
         settings: IBotSettings,
         services: BotServices,
         templateEngine: LocaleTemplateEngineManager,
-        userState: UserState,
+        userProfileState: StatePropertyAccessor<IUserProfileState>,
+        skillContext: StatePropertyAccessor<SkillContext>,
+        previousResponseAccessor: StatePropertyAccessor<Partial<Activity>[]>,
         onboardingDialog: OnboardingDialog,
         switchSkillDialog: SwitchSkillDialog,
-        skillDialogs: [SkillDialog],
-        conversationState: ConversationState
-
+        skillDialogs: SkillDialog[],
+        telemetryClient: BotTelemetryClient
     ) {
         super(MainDialog.name, telemetryClient);
-        this.settings = settings
+
         this.services = services
+        this.settings = settings
         this.templateEngine = templateEngine
         this.telemetryClient = telemetryClient;
         
         // Create user state properties
-        const userProfileState: IUserProfileState = {name: ''}
-        this.userProfileState = userState.createProperty<IUserProfileState>(userProfileState.name);
-        this.skillContext = userState.createProperty<SkillContext>(SkillContext.name);
+        this.userProfileState = userProfileState;
+        this.skillContext = skillContext;
 
         // Create conversation state properties
-        this.previousResponseAccesor = conversationState.createProperty<[Activity]>(stateProperties.previousBotResponse)
+        this.previousResponseAccesor = previousResponseAccessor;
 
         // Register dialogs
         this.onboardingDialog = onboardingDialog
@@ -109,21 +88,22 @@ export class MainDialog extends ActivityHandlerDialog {
 
     // Runs on every turn of the conversation.
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
-        if (innerDc.context.activity.type == ActivityTypes.Message)
-        {
+        if (innerDc.context.activity.type == ActivityTypes.Message) {
             // Get cognitive models for the current locale.
             const localizedServices = this.services.getCognitiveModel();
 
             // Run LUIS recognition and store result in turn state.
-            const dispatchResult = await localizedServices.dispatchService.recognize(innerDc.context);
-            innerDc.context.turnState.set(stateProperties.dispatchResult, dispatchResult);
+            const dispatchResult: RecognizerResult = await localizedServices.dispatchService.recognize(innerDc.context);
+            innerDc.context.turnState.set(StateProperties.dispatchResult, dispatchResult);
 
             const intent: string = LuisRecognizer.topIntent(dispatchResult);
-            if(intent == 'l_General')
-            {
+            if(intent == 'l_general') {
                 // Run LUIS recognition on General model and store result in turn state.
-                const generalResult = await localizedServices.luisServices.get("General")?.recognize(innerDc.context);
-                innerDc.context.turnState.set(stateProperties.generalResult, generalResult);
+                const generalLuis: LuisRecognizer | undefined = localizedServices.luisServices.get("general");
+                if (generalLuis !== undefined) {
+                    const generalResult: RecognizerResult = await generalLuis.recognize(innerDc.context);
+                    innerDc.context.turnState.set(StateProperties.generalResult, generalResult);
+                }
             }
         }
 
@@ -135,52 +115,48 @@ export class MainDialog extends ActivityHandlerDialog {
 
     // Runs on every turn of the conversation to check if the conversation should be interrupted.
     protected async onInterruptDialog(dc: DialogContext): Promise<InterruptionAction> {
+        const activity: Activity = dc.context.activity;
+        const userProfile: IUserProfileState = await this.userProfileState.get(dc.context, { name: '' });
+        const dialog: Dialog | undefined = dc.activeDialog !== undefined ? dc.findDialog(dc.activeDialog.id) : undefined;
 
-        const activity = dc.context.activity;
-        const userProfile = await this.userProfileState.get(dc.context, {name:''});
-        const dialog = dc.activeDialog?.id != null ? dc.findDialog(dc.activeDialog?.id) : null;
-
-        if (activity.type === ActivityTypes.Message && activity.text) {
-
+        if (activity.type === ActivityTypes.Message && activity.text.trim().length > 0) {
             // Check if the active dialog is a skill for conditional interruption.
-            const isSkill = dialog instanceof SkillDialog;
+            const isSkill: boolean = dialog instanceof SkillDialog;
 
             // Get Dispatch LUIS result from turn state.
-            const dispatchResult: RecognizerResult = dc.context.turnState.get(stateProperties.dispatchResult);
-
+            const dispatchResult: RecognizerResult = dc.context.turnState.get(StateProperties.dispatchResult);
             const intent: string = LuisRecognizer.topIntent(dispatchResult);
             
              // Check if we need to switch skills.
-             if(isSkill){
+             if (isSkill) {
+                if (dialog !== undefined) {
+                    if (intent !== dialog.id && dispatchResult.intents[intent].score > 0.9) {
+                        const identifiedSkill: ISkillManifest | undefined = SkillRouter.isSkill(this.settings.skills, LuisRecognizer.topIntent(dispatchResult).toString());
+     
+                        if (identifiedSkill) {
+                            const prompt: Partial<Activity> = this.templateEngine.generateActivityForLocale('SkillSwitchPrompt', { skill: identifiedSkill.name });
+                            await dc.beginDialog(this.switchSkillDialog.id, new SwitchSkillDialogOptions(prompt, identifiedSkill));
 
-                if(intent != dialog?.id && dispatchResult.intents[intent].score > 0.9){
-
-                    const identifiedSkill: ISkillManifest | undefined = SkillRouter.isSkill(this.settings.skills, LuisRecognizer.topIntent(dispatchResult).toString());
-
-                    if(identifiedSkill){
-                        const prompt: Partial<Activity> = this.templateEngine.generateActivityForLocale('SkillSwitchPrompt', { skill: identifiedSkill.name });
-                        await dc.beginDialog(this.switchSkillDialog.id, new SwitchSkillDialogOptions(<Activity>prompt, identifiedSkill));
-                        return InterruptionAction.Waiting;
+                            return InterruptionAction.Waiting;
+                        }
                     }
                 }
             }
 
-            if(intent == 'l_general')
-            {
+            if(intent == 'l_general') {
                 // Get connected LUIS result from turn state.
-                const generalResult: RecognizerResult = dc.context.turnState.get(stateProperties.generalResult);
+                const generalResult: RecognizerResult = dc.context.turnState.get(StateProperties.generalResult);
                 const intent: string = LuisRecognizer.topIntent(generalResult);
 
-                 if(generalResult.intents[intent].score > 0.5){
-
-                    switch(intent.toString())
-                    {
+                 if(generalResult.intents[intent].score > 0.5) {
+                    switch(intent.toString()) {
                         case 'Cancel': { 
                             // Suppress completion message for utility functions.
-                            DialogContextEx.suppressCompletionMessageValidation(dc);
+                            DialogContextEx.suppressCompletionMessage(dc, true);
 
                             await dc.context.sendActivity(this.templateEngine.generateActivityForLocale('CancelledMessage', userProfile));
                             await dc.cancelAllDialogs();
+
                             return InterruptionAction.End;
                         } 
 
@@ -191,24 +167,21 @@ export class MainDialog extends ActivityHandlerDialog {
 
                         case 'Help': {
                             // Suppress completion message for utility functions.
-                            DialogContextEx.suppressCompletionMessageValidation(dc);
+                            DialogContextEx.suppressCompletionMessage(dc, true);
 
-                            if(isSkill)
-                            {
+                            if(isSkill) {
                                 // If current dialog is a skill, allow it to handle its own help intent.
                                 await dc.continueDialog();
                                 break;
-                            }
-                            else{
+                            } else {
                                 await dc.context.sendActivity(this.templateEngine.generateActivityForLocale('HelpCard', userProfile));
                                 return InterruptionAction.Resume;
                             }
                         }
 
                         case 'Logout': {
-                            
                             // Suppress completion message for utility functions.
-                            DialogContextEx.suppressCompletionMessageValidation(dc);
+                            DialogContextEx.suppressCompletionMessage(dc, true);
 
                             // Log user out of all accounts.
                             await this.logUserOut(dc);
@@ -219,14 +192,12 @@ export class MainDialog extends ActivityHandlerDialog {
 
                         case 'Repeat': {
                             // No need to send the usual dialog completion message for utility capabilities such as these.
-                            DialogContextEx.suppressCompletionMessageValidation(dc);
+                            DialogContextEx.suppressCompletionMessage(dc, true);
 
                             // Sends the activities since the last user message again.
-                           
                             const previousResponse: Partial<Activity>[] = await this.previousResponseAccesor.get(dc.context, []);
 
-
-                            previousResponse.forEach( async (response) => {
+                            previousResponse.forEach(async (response: Partial<Activity>) => {
                                 // Reset id of original activity so it can be processed by the channel.
                                 response.id = '';
                                 await dc.context.sendActivity(response);
@@ -236,20 +207,18 @@ export class MainDialog extends ActivityHandlerDialog {
                         }
 
                         case 'StartOver': {
-                            
                             // Suppresss completion message for utility functions.
-                            DialogContextEx.suppressCompletionMessageValidation(dc);
+                            DialogContextEx.suppressCompletionMessage(dc, true);
 
                             await dc.context.sendActivity(this.templateEngine.generateActivityForLocale('StartOverMessage', userProfile))
 
                             // Cancel all dialogs on the stack.
                             await dc.cancelAllDialogs();
-                            return InterruptionAction.End;
 
+                            return InterruptionAction.End;
                         }
 
                         case 'Stop': {
-
                              // Use this intent to send an event to your device that can turn off the microphone in speech scenarios.
                              break;
                         }
@@ -263,93 +232,79 @@ export class MainDialog extends ActivityHandlerDialog {
 
     // Runs when the dialog stack is empty, and a new member is added to the conversation. Can be used to send an introduction activity.
     protected async onMembersAdded(innerDc: DialogContext): Promise<void> {
+        const userProfile: IUserProfileState = await this.userProfileState.get(innerDc.context, { name: '' });
 
-        const userProfile: IUserProfileState = await this.userProfileState.get(innerDc.context, {name:''});
-
-        if (userProfile != undefined && userProfile.name){
-
+        if (userProfile === undefined || userProfile.name.trim().length === 0) {
             // Send new user intro card.
             await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('NewUserIntroCard', userProfile));
 
             // Start onboarding dialog.
             await innerDc.beginDialog(OnboardingDialog.name);
-        }
-        else{
-
+        } else {
             // Send returning user intro card.
             await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('ReturningUserIntroCard', userProfile));
         }
 
         // Suppress completion message.
-        DialogContextEx.suppressCompletionMessageValidation(innerDc);
+        DialogContextEx.suppressCompletionMessage(innerDc, true);
     }
 
     // Runs when the dialog stack is empty, and a new message activity comes in.
     protected async onMessageActivity(innerDc: DialogContext): Promise<void> {
-
+        //PENDING: This should be const activity: IMessageActivity = innerDc.context.activity.asMessageActivity()
+        // but it's not in botbuilder-js currently
         const activity: Activity = innerDc.context.activity;
+        const userProfile: IUserProfileState = await this.userProfileState.get(innerDc.context, { name: '' });
 
-        const userProfile: IUserProfileState = await this.userProfileState.get(innerDc.context, {name:''});
-
-        if (activity != undefined && activity.text){
-
+        if (activity !== undefined && activity.text.trim().length > 0){
             // Get current cognitive models for the current locale.
             const localizedServices: ICognitiveModelSet = this.services.getCognitiveModel();
 
             // Get dispatch result from turn state.
-            const dispatchResult: RecognizerResult = innerDc.context.turnState.get(stateProperties.dispatchResult);
-
+            const dispatchResult: RecognizerResult = innerDc.context.turnState.get(StateProperties.dispatchResult);
             const dispatch: string = LuisRecognizer.topIntent(dispatchResult);
 
             // Check if the dispatch intent maps to a skill.
             const identifiedSkill: ISkillManifest | undefined = SkillRouter.isSkill(this.settings.skills, dispatch.toString());
 
-            if(identifiedSkill){
-
+            if (identifiedSkill !== undefined) {
                 // Start the skill dialog.
                 await innerDc.beginDialog(identifiedSkill.id);
-            }
-            else if (dispatch.toString() === 'q_faq'){
-
+            } else if (dispatch.toString() === 'q_faq') {
                 const qnaMaker: QnAMaker | undefined = localizedServices.qnaServices.get('Faq');
-                if (qnaMaker !== undefined){
+                if (qnaMaker !== undefined) {
                     await this.callQnaMaker(innerDc, qnaMaker);
                 }
-
             }
-            else if (dispatch.toString() === 'q_chitchat'){
-
-                DialogContextEx.suppressCompletionMessageValidation(innerDc);
-                
+            else if (dispatch.toString() === 'q_chitchat') {
+                DialogContextEx.suppressCompletionMessage(innerDc, true);
                 const qnaMaker: QnAMaker | undefined = localizedServices.qnaServices.get('Chitchat');
                 if (qnaMaker !== undefined){
                     await this.callQnaMaker(innerDc, qnaMaker);
                 }
-            }
-            else{
-                
-                DialogContextEx.suppressCompletionMessageValidation(innerDc);
-                await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage',userProfile));
+            } else {
+                DialogContextEx.suppressCompletionMessage(innerDc, true);
+
+                await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage', userProfile));
             }
         }
     }
 
     // Runs when a new event activity comes in.
     protected async OnEventActivity(innerDc: DialogContext): Promise<void> {
-
-        const ev = innerDc.context.activity;
+        //PENDING: This should be const ev: IEventActivity = innerDc.context.activity.asEventActivity()
+        // but it's not in botbuilder-js currently
+        const ev: Activity = innerDc.context.activity;
         const value: string = ev.value?.toString();
 
-        switch (ev.name){
-
-            case Events.location:{
-
-                const locationObj = {location: ''};
+        switch (ev.name) {
+            case Events.location: {
+                const locationObj = { location: ''};
                 locationObj.location = value;
 
                 // Store location for use by skills.
-                const skillContext = await this.skillContext.get(innerDc.context, new SkillContext());
-                skillContext.setObj(stateProperties.location, locationObj);
+                const skillContext: SkillContext = await this.skillContext.get(innerDc.context, new SkillContext());
+                skillContext.setObj(StateProperties.location, locationObj);
                 await this.skillContext.set(innerDc.context, skillContext);
 
                 break;
@@ -358,18 +313,14 @@ export class MainDialog extends ActivityHandlerDialog {
             case Events.timeZone: {
                 try {
                     const tz: string = new Date().toLocaleString(value);
-                    const timeZoneObj: {
-                        timezone: string;
-                    } = {
-                        timezone: tz
-                    };
+                    const timeZoneObj: { timezone: string;} = { timezone: tz };
 
                     // Store location for use by skills.
-                    const skillContext = await this.skillContext.get(innerDc.context, new SkillContext());
-                    skillContext.setObj(stateProperties.timeZone, timeZoneObj);
+                    const skillContext: SkillContext = await this.skillContext.get(innerDc.context, new SkillContext());
+                    skillContext.setObj(StateProperties.timeZone, timeZoneObj);
                     await this.skillContext.set(innerDc.context, skillContext);
                 }
-                catch{
+                catch (err) {
                     await innerDc.context.sendActivity({type: ActivityTypes.Trace, text: 'Received time zone could not be parsed. Property not set.'});
                 }
 
@@ -384,6 +335,7 @@ export class MainDialog extends ActivityHandlerDialog {
 
             default: {
                 await innerDc.context.sendActivity({type: ActivityTypes.Trace, text: `Unknown Event ${ev.name ?? 'undefined'} was received but not processed.`});
+                break;
             }
         }
     }
@@ -398,18 +350,18 @@ export class MainDialog extends ActivityHandlerDialog {
         const userProfile: IUserProfileState = await this.userProfileState.get(outerDc.context, {name:''});
 
         // Only send a completion message if the user sent a message activity.
-        if (outerDc.context.activity.type === ActivityTypes.Message && !DialogContextEx.suppressCompletionMessageValidation(outerDc)){
+        if (outerDc.context.activity.type === ActivityTypes.Message && !DialogContextEx.suppressCompletionMessageValidation(outerDc)) {
             await outerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('CompletedMessage', userProfile));
         }
     }
 
     private async logUserOut(dc: DialogContext): Promise<void> {
         const tokenProvider: BotFrameworkAdapter = <BotFrameworkAdapter> dc.context.adapter;
-        if (tokenProvider){
+        if (tokenProvider !== undefined){
             // Sign out user
             const tokens: TokenStatus[] = await tokenProvider.getTokenStatus(dc.context, dc.context.activity.from.id)
             tokens.forEach(async (token: TokenStatus) => {
-                if(token.connectionName) {
+                if (token.connectionName !== undefined) {
                     await tokenProvider.signOutUser(dc.context, token.connectionName);
                 }
             });
@@ -417,27 +369,24 @@ export class MainDialog extends ActivityHandlerDialog {
             // Cancel all active dialogs
             await dc.cancelAllDialogs();
 
-        }
-        else{
+        } else {
             throw new Error('OAuthPrompt.SignOutUser(): not supported by the current adapter')
         }
     }
 
     private async callQnaMaker(innerDc: DialogContext, qnaMaker: QnAMaker): Promise<void> {
-        const userProfile: IUserProfileState = await this.userProfileState.get(innerDc.context, {name:''});
+        const userProfile: IUserProfileState = await this.userProfileState.get(innerDc.context, { name: '' });
 
         const answer: QnAMakerResult[] = await qnaMaker.getAnswers(innerDc.context);
 
-        if (answer && answer != undefined && answer.length > 0){
+        if (answer !== undefined && answer.length > 0){
             await innerDc.context.sendActivity(answer[0].answer, answer[0].answer);
-        }
-        else {
+        } else {
             await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage', userProfile));
         }
     }
     
     private async storeOutgoingActivities(turnContext: TurnContext, activities: Partial<Activity>[], next: () => Promise<ResourceResponse[]>): Promise<ResourceResponse[]> {
-        
         const messageActivities: Partial<Activity>[] = activities.filter(a => a.type == ActivityTypes.Message);
 
         // If the bot is sending message activities to the user (as opposed to trace activities)
@@ -445,14 +394,25 @@ export class MainDialog extends ActivityHandlerDialog {
             let botResponse: Partial<Activity>[] = await this.previousResponseAccesor.get(turnContext, []);
 
             // Get only the activities sent in response to last user message
-            botResponse = botResponse
-            .concat(messageActivities)
-            .filter(a => a.replyToId == turnContext.activity.id);
+            botResponse = botResponse.concat(messageActivities)
+                        .filter(a => a.replyToId == turnContext.activity.id);
 
             await this.previousResponseAccesor.set(turnContext, botResponse);
         }
 
         return await next();
     }
+}
 
+enum Events {
+    location = 'VA.Location',
+    timeZone = 'VA.Timezone'
+}
+
+enum StateProperties {
+    dispatchResult = "dispatchResult",
+    generalResult = "generalResult",
+    previousBotResponse = "previousBotResponse",
+    location = "location",
+    timeZone = "timezone"
 }
