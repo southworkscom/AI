@@ -3,7 +3,7 @@
 Param(
 	[string] $name,
 	[string] $luisAuthoringRegion,
-    [string] $luisAuthoringKey,
+	[string] $luisAuthoringKey,
 	[string] $luisAccountName,
 	[string] $luisAccountRegion,
 	[string] $luisSubscriptionKey,
@@ -187,7 +187,7 @@ foreach ($language in $languageArr)
 					authoringRegion = $luisAuthoringRegion
 					subscriptionKey = $luisSubscriptionKey
 					version = $luisApp.activeVersion
-					region = $luisAuthoringRegion
+					region = $luisAccountRegion
 				}
 			}
 			else {

@@ -5,7 +5,7 @@ Param(
     [switch] $useLuisGen = $true,
     [string] $configFile = $(Join-Path (Get-Location) 'src' 'cognitivemodels.json'),
     [string] $dispatchFolder = $(Join-Path $PSScriptRoot '..' 'resources' 'Dispatch'),
-	[string] $luisFolder = $(Join-Path $PSScriptRoot '..' 'resources' 'LU'),
+    [string] $luisFolder = $(Join-Path $PSScriptRoot '..' 'resources' 'LU'),
     [string] $qnaFolder = $(Join-Path $PSScriptRoot '..' 'resources' 'QnA'),
     [string] $lgOutFolder = $(Join-Path (Get-Location) 'src' 'services'),
     [string] $logFile = $(Join-Path $PSScriptRoot .. "update_cognitive_models_log.txt")
@@ -24,15 +24,14 @@ else {
 
 Write-Host "> Getting config file ..."
 $languageMap = @{}
-$config = Get-Content -Encoding utf8 -Raw -Path $configFile | ConvertFrom-Json
+$config = Get-Content -Raw -Path $configFile -Encoding utf8  | ConvertFrom-Json
 $config.cognitiveModels.PSObject.Properties | Foreach-Object { $languageMap[$_.Name] = $_.Value }
 
 foreach ($langCode in $languageMap.Keys) {
     $models = $languageMap[$langCode]
     $dispatch = $models.dispatchModel
 
-    if($RemoteToLocal)
-    {
+    if($RemoteToLocal) {
         # Update local LU files based on hosted models
         foreach ($luisApp in $models.languageModels) {
             $culture = (luis get application `
@@ -41,13 +40,15 @@ foreach ($langCode in $languageMap.Keys) {
                     --subscriptionKey $luisApp.subscriptionKey `
                     --region $luisApp.authoringRegion | ConvertFrom-Json).culture
 
-            Write-Host "> Updating local $($luisApp.id).lu file ..."
+            Write-Host "> Updating local $($luisApp.id).lu file"
             luis export version `
                 --appId $luisApp.appId `
                 --versionId $luisApp.version `
                 --region $luisApp.authoringRegion `
-                --authoringKey $luisApp.authoringKey | ludown refresh `
-                --stdin `
+                --authoringKey "$($luisApp.authoringKey)" > $(Join-Path $luisFolder $langCode "$($luisApp.id).luis")
+
+                ludown refresh `
+                -i $(Join-Path $luisFolder $langCode "$($luisApp.id).luis") `
                 -n "$($luisApp.id).lu" `
                 -o $(Join-Path $luisFolder $langCode)
 
@@ -76,23 +77,24 @@ foreach ($langCode in $languageMap.Keys) {
                 (dispatch add `
                     --type "luis" `
                     --name $luisApp.name `
-                    --id $luisApp.appid  `
+                    --id $luisApp.appId  `
                     --region $luisApp.authoringRegion `
                     --intentName "l_$($luisApp.id)" `
                     --dispatch $(Join-Path $dispatchFolder $langCode "$($dispatch.name).dispatch") `
-                    --dataFolder $(Join-Path $dispatchFolder $langCode))  2>> $logFile | Out-Null
+                    --dataFolder $(Join-Path $dispatchFolder $langCode))  2>> $logFile | Out-Null        
             }
         }
 
         # Update local LU files based on hosted QnA KBs
-        foreach ($kb in $models.knowledgeBases)
-        {
+        foreach ($kb in $models.knowledgeBases) {
             Write-Host "> Updating local $($kb.id).lu file ..."
             qnamaker export kb `
                 --environment Prod `
                 --kbId $kb.kbId `
-                --subscriptionKey $kb.subscriptionKey | ludown refresh `
-                --stdin `
+                --subscriptionKey $kb.subscriptionKey > $(Join-Path $qnaFolder $langCode "$($kb.id).qna")
+                
+            ludown refresh `
+                -q $(Join-Path $qnaFolder $langCode "$($kb.id).qna") `
                 -n "$($kb.id).lu" `
                 -o $(Join-Path $qnaFolder $langCode)
 
@@ -123,6 +125,7 @@ foreach ($langCode in $languageMap.Keys) {
                 -region $luisApp.authoringRegion `
 				-authoringKey $luisApp.authoringKey `
                 -subscriptionKey $luisApp.subscriptionKey
+                            
             if ($useLuisGen) {
                 Write-Host "> Running LuisGen for $($luisApp.id) app ..."
                 $luPath = $(Join-Path $luisFolder $langCode "$($luisApp.id).lu")
@@ -139,7 +142,7 @@ foreach ($langCode in $languageMap.Keys) {
 				-kbId $kb.kbId `
 				-qnaSubscriptionKey $kb.subscriptionKey
         }
-	}
+    }
     if ($dispatch) {
         # Update dispatch model
         Write-Host "> Updating dispatch model ..."
@@ -147,7 +150,7 @@ foreach ($langCode in $languageMap.Keys) {
             --dispatch $(Join-Path $dispatchFolder $langCode "$($dispatch.name).dispatch") `
             --dataFolder $(Join-Path $dispatchFolder $langCode) 2>> $logFile | Out-Null
         if ($useLuisGen) {
-        # Update dispatch.cs file
+        # Update dispatch file
             Write-Host "> Running LuisGen for Dispatch app..."
             luisgen $(Join-Path $dispatchFolder $langCode "$($dispatch.name).json") -ts "DispatchLuis" -o $lgOutFolder 2>> $logFile | Out-Null
         }
