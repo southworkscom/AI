@@ -11,11 +11,12 @@ Param(
 	[string] $parametersFile,
 	[string] $languages = "en-us",
 	[string] $projDir = $(Get-Location),
-	[string] $logFile = $(Join-Path $PSScriptRoot ".." "deploy_log.txt")
+	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
 )
 
 # Src folder path
 $srcDir = $(Join-Path $projDir "src")
+
 # Reset log file
 if (Test-Path $logFile) {
 	Clear-Content $logFile -Force | Out-Null
@@ -114,7 +115,8 @@ if ($parametersFile) {
 		--template-file "$(Join-Path $PSScriptRoot '..' 'resources' 'template.json')" `
 		--parameters "@$($parametersFile)" `
 		--parameters name=$name microsoftAppId=$appId microsoftAppPassword="`"$($appPassword)`"" `
-        --output json
+		--output json
+
 	if ($validation) {
 		$validation >> $logFile
 		$validation = $validation | ConvertFrom-Json
@@ -215,7 +217,7 @@ if ($outputs)
 	Write-Host "- Bot Web App: $($outputs.botWebAppName.value)`n" -ForegroundColor Yellow
 
 	# Publish bot
-	Invoke-Expression "& '$(Join-Path $PSScriptRoot 'publish.ps1')' -name $($outputs.botWebAppName.value) -resourceGroup $($outputs.resourceGroupName.value) -projFolder '$($projDir)'"
+	Invoke-Expression "& '$(Join-Path $PSScriptRoot 'publish.ps1')' -name $($outputs.botWebAppName.value) -resourceGroup $($resourceGroup) -projFolder '$($projDir)'"
 	Write-Host "> Done."
 }
 else
