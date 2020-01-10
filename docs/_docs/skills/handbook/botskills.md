@@ -98,3 +98,11 @@ botskills list
 ```
 
 For further information, see the [List command documentation]({{site.repo}}/tree/master/tools/botskills/docs/list.md).
+
+### Using inline trigger utterances
+
+{:.no_toc}
+
+When using `connect` or `update` commands, by default the tool looks for utterances in the `.lu` files.
+
+By adding `--inlineUtterances true` to either the `connect` or `update` commands, Botskills will use the utterances saved in the manifest instead of using the local `.lu` files.
