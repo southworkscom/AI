@@ -18,7 +18,6 @@ Param(
 . $PSScriptRoot\luis_functions.ps1
 . $PSScriptRoot\qna_functions.ps1
 
-$qnamaker = "qnamaker";
 # Reset log file
 if (Test-Path $logFile) {
 	Clear-Content $logFile -Force | Out-Null
@@ -91,6 +90,7 @@ if (-not $luisSubscriptionKey) {
 if (-not $luisAccountRegion) {
 	$luisAccountRegion = Read-Host "? LUIS Service Location"
 }
+
 if (-not $qnaSubscriptionKey) {
 	$useQna = $false
 }
@@ -131,9 +131,9 @@ foreach ($language in $languageArr)
 
     # Deploy LUIS apps
     $luisFiles = Get-ChildItem "$(Join-Path $PSScriptRoot .. 'resources' 'LU' $langCode)" | Where {$_.extension -eq ".lu"}
-   
 	if ($luisFiles) {
 		$config | Add-Member -MemberType NoteProperty -Name languageModels -Value @()	
+
 		foreach ($lu in $luisFiles)
 		{
 			# Deploy LUIS model
@@ -146,7 +146,6 @@ foreach ($language in $languageArr)
 			-log $logFile 
 			
 			Write-Host "> Setting LUIS subscription key ..."
-
 			if ($luisApp) {
 				# Setting subscription key
 				$addKeyResult = luis add appazureaccount `
@@ -229,7 +228,7 @@ foreach ($language in $languageArr)
 							kbId = $qnaKb.kbId
 							subscriptionKey = $qnaKb.subscriptionKey
 							endpointKey = $qnaKb.endpointKey
-							hostname = "$($qnaKb.hostname)/$($qnamaker)"
+							hostname = $qnaKb.hostname
 						}
 					}
 					else {
@@ -247,7 +246,6 @@ foreach ($language in $languageArr)
 	}
 	
 	if ($useDispatch) {
-
 		# Create dispatch model
 		Write-Host "> Creating dispatch model..."  
 		$dispatch = (dispatch create `
