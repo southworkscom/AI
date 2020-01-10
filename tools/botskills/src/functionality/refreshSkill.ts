@@ -94,10 +94,10 @@ export class RefreshSkill {
         // Validate 'ludown' arguments
         if (!existsSync(this.configuration.outFolder + '\\deployment\\resources\\LU\\')) {
             throw new Error(`Path to the LUIS folder (${this.configuration.outFolder + '\\deployment\\resources\\LU\\'}) leads to a nonexistent folder.
-            Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
+Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
         } else if (!existsSync(luFilePath)) {
             throw new Error(`Path to the ${luisApp}.lu file leads to a nonexistent file.
-            Make sure your Skill's .lu file's name matches your Skill's manifest id`);
+Make sure your Skill's .lu file's name matches your Skill's manifest id`);
         }
 
         if (!existsSync(this.configuration.dispatchFolder)) {
@@ -134,7 +134,7 @@ export class RefreshSkill {
         const dataFolder: string = join(this.configuration.dispatchFolder, culture);
         if (!existsSync(this.configuration.dispatchFolder)) {
             throw new Error(`Path to the Dispatch folder (${this.configuration.dispatchFolder}) leads to a nonexistent folder.
-            Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch folder.`);
+Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch folder.`);
         } else if (!existsSync(dispatchFilePath)) {
             throw new Error(`Path to the ${dispatchFile} file leads to a nonexistent file.`);
         }
