@@ -364,7 +364,6 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             await this.updateModel(luisDictionary, skillManifest.id);
 
             await deleteTempFiles(this.tempFiles);
-            this.logger.success('Successfully deleted the temporal files');
             // Adding the skill manifest to the assistant skills array
             this.logger.message(`Appending '${skillManifest.name}' manifest to your assistant's skills configuration file.`);
             assistantSkills.push(skillManifest);

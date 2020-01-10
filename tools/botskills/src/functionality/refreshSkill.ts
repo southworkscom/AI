@@ -187,7 +187,6 @@ export class RefreshSkill {
             this.logger.success('Successfully refreshed Dispatch model');
 
             await deleteTempFiles(this.tempFiles);
-            this.logger.success('Successfully deleted the temporal files');
             this.logger.warning(
                 'You need to re-publish your Virtual Assistant in order to have these changes available for Azure based testing');
 
