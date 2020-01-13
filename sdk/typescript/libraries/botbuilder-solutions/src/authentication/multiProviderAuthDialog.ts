@@ -366,7 +366,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     }
 }
 
-export enum DialogIds {
+enum DialogIds {
     providerPrompt = 'ProviderPrompt',
     firstStepPrompt = 'FirstStep',
     localAuthPrompt = 'LocalAuth',

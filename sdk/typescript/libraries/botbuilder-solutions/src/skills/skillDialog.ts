@@ -330,7 +330,8 @@ export class SkillDialog extends ComponentDialog {
     }
 }
 
-export enum DialogIds {
+//  eslint-disable-next-line @typescript-eslint/no-unused-vars
+enum DialogIds {
     confirmSkillSwitchPrompt = 'confirmSkillSwitchPrompt',
     confirmSkillSwitchFlow = 'confirmSkillSwitchFlow'
 }
