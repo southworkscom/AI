@@ -47,6 +47,7 @@ import { IBotSettings } from './services/botSettings';
 import { skills as skillsRaw } from './skills.json';
 import { Activity } from 'botframework-schema';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
+import { DefaultActivityHandler } from './bots/defaultActivityHandler';
 
 // Configure internationalization and default locale
 i18next.use(i18nextNodeFsBackend)
@@ -151,6 +152,9 @@ const adapter: DefaultAdapter = new DefaultAdapter(
     telemetryInitializerMiddleware,
     telemetryClient
 );
+
+const defaultActivity: DefaultActivityHandler = new DefaultActivityHandler(conversationState, userState, telemetryClient, MainDialog);
+
 // const webSocketEnabledHttpAdapter: webSocketEnabledHttpAdapter = (botsettings, adapter))
 
 let bot: DialogBot<Dialog>;
