@@ -16,7 +16,7 @@ export { IDisconnectConfiguration } from './disconnectConfiguration';
 export { IUpdateConfiguration } from './updateConfiguration';
 export { IDispatchFile, IDispatchService } from './dispatchFile';
 export { IListConfiguration } from './listConfiguration';
-export { ISkillFile } from './skillFile';
+export { ISkillFile } from './oldManifest/skillFile';
 export {
     IAction,
     IActionDefinition,
@@ -26,5 +26,21 @@ export {
     ISlot,
     ITriggers,
     IUtterance,
-    IUtteranceSource } from './skillManifest';
+    IUtteranceSource } from './oldManifest/skillManifest';
+export { 
+    INewSkillManifest,
+    IDefinitions,
+    IEventSummary,
+    ITimeZone,
+    IChangeEventStatusInfo,
+    IEventInfo,
+    IProperty,
+    IActivitySent,
+    IAnyOf,
+    IActivity,
+    IRef,
+    IEndpoint,
+    IDispatchModel,
+    IModel } from './manifest/newSkillManifest';
+export { INewSkillFile } from './manifest/newSkillFile';
 export { IRefreshConfiguration } from './refreshConfiguration';
