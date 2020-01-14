@@ -11,8 +11,7 @@ import {
     StatePropertyAccessor,
     TurnContext,
     UserState, 
-    TelemetryLoggerMiddleware
-     } from 'botbuilder';
+    TelemetryLoggerMiddleware } from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
 import {
     CosmosDbStorage,
@@ -25,11 +24,11 @@ import {
     MultiProviderAuthDialog,
     IAuthenticationConnection,
     ISkillManifest,
+    LocaleTemplateEngineManager, 
     MicrosoftAppCredentialsEx,
     SkillContext,
-    SkillDialog, 
-    LocaleTemplateEngineManager, 
-    SwitchSkillDialog} from 'botbuilder-solutions';
+    SkillDialog,
+    SwitchSkillDialog } from 'botbuilder-solutions';
 import { MicrosoftAppCredentials } from 'botframework-connector';
 import i18next from 'i18next';
 import i18nextNodeFsBackend from 'i18next-node-fs-backend';
@@ -37,17 +36,16 @@ import * as path from 'path';
 import * as restify from 'restify';
 import { DefaultAdapter } from './adapters/defaultAdapter';
 import * as appsettings from './appsettings.json';
-import { DialogBot } from './bots/dialogBot';
+import { DefaultActivityHandler } from './bots/defaultActivityHandler';
 import * as cognitiveModelsRaw from './cognitivemodels.json';
 import { MainDialog } from './dialogs/mainDialog';
 import { OnboardingDialog } from './dialogs/onboardingDialog';
-
 import { BotServices } from './services/botServices';
 import { IBotSettings } from './services/botSettings';
 import { skills as skillsRaw } from './skills.json';
 import { Activity } from 'botframework-schema';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
-import { DefaultActivityHandler } from './bots/defaultActivityHandler';
+import { IUserProfileState } from './models/userProfileState'
 
 // Configure internationalization and default locale
 i18next.use(i18nextNodeFsBackend)
@@ -118,26 +116,24 @@ const appCredentials: MicrosoftAppCredentials = new MicrosoftAppCredentials(
     botSettings.microsoftAppPassword || ''
 );
 
-const localizedTemplates: Map<string, []> = new Map<string, []>();
+const localizedTemplates: Map<string, string[]> = new Map<string, string[]>();
 const templateFiles: string[] = ['MainResponses','OnboardingResponses'];
-const supportedLocales: string[] =  ['en-us','de-de','es-es','fr-fr','it-it','zh-cn']
+const supportedLocales: string[] =  ['en-us','de-de','es-es','fr-fr','it-it','zh-cn'];
     
-    supportedLocales.forEach(locale => {
-        
-        const localeTemplateFiles: [] = [];
-
-        templateFiles.forEach(template => {
-            // LG template for default locale should not include locale in file extension.
-            if (locale == (botSettings.defaultLocale || 'en-us')){
-                localeTemplateFiles.push(path.join('.','Responses', `${template}.lg`) as never)
-            }
-            else {
-                localeTemplateFiles.push(path.join('.','Responses', `${template}.${locale}.lg`) as never)
-            }
-        });
-
-        localizedTemplates.set(locale, localeTemplateFiles);
+supportedLocales.forEach((locale: string) => {
+    const localeTemplateFiles: string[] = [];
+    templateFiles.forEach(template => {
+        // LG template for default locale should not include locale in file extension.
+        if (locale === (botSettings.defaultLocale || 'en-us')) {
+            localeTemplateFiles.push(path.join(__dirname, 'responses', `${template}.lg`));
+        }
+        else {
+            localeTemplateFiles.push(path.join(__dirname, 'responses', `${template}.${locale}.lg`));
+        }
     });
+
+    localizedTemplates.set(locale, localeTemplateFiles);
+});
     
 const localeTemplateEngine: LocaleTemplateEngineManager = new LocaleTemplateEngineManager(localizedTemplates, botSettings.defaultLocale || 'en-us')
 
@@ -153,19 +149,11 @@ const adapter: DefaultAdapter = new DefaultAdapter(
     telemetryClient
 );
 
-const defaultActivity: DefaultActivityHandler = new DefaultActivityHandler(conversationState, userState, telemetryClient, MainDialog);
-
-// const webSocketEnabledHttpAdapter: webSocketEnabledHttpAdapter = (botsettings, adapter))
-
-let bot: DialogBot<Dialog>;
+let bot: DefaultActivityHandler<Dialog>;
 try {
     const botServices: BotServices = new BotServices(botSettings, telemetryClient);
 
-    const skillContextAccessor: StatePropertyAccessor<SkillContext> =
-        userState.createProperty<SkillContext>(SkillContext.name);
-
-        
-
+    const skillContextAccessor: StatePropertyAccessor<SkillContext> = userState.createProperty<SkillContext>(SkillContext.name);
     const botServicesAccesor: StatePropertyAccessor<BotServices> = userState.createProperty<BotServices>(BotServices.name)
     const onboardingDialog: OnboardingDialog = new OnboardingDialog(botServicesAccesor, botServices , localeTemplateEngine, telemetryClient);
     const switchSkillDialog: SwitchSkillDialog = new SwitchSkillDialog(conversationState);
@@ -182,7 +170,6 @@ try {
 
         return new SkillDialog(skill, credentials, telemetryClient, skillContextAccessor, authDialog);
     });
-
     
     const userProfileStateAccesor: StatePropertyAccessor<IUserProfileState> =
     userState.createProperty<IUserProfileState>('IUserProfileState');
@@ -199,7 +186,7 @@ try {
         telemetryClient,
     );
 
-    bot = new DialogBot(conversationState, telemetryClient, mainDialog);
+    bot = new DefaultActivityHandler(conversationState, userState, telemetryClient, mainDialog);
 } catch (err) {
     throw err;
 }
