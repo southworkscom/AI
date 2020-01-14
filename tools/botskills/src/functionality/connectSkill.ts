@@ -12,8 +12,8 @@ import {
     ICognitiveModel,
     IConnectConfiguration,
     IRefreshConfiguration,
-    ISkillFile,
-    ISkillManifest,
+    ISkillFileV1,
+    ISkillManifestV1,
     IUtteranceSource
 } from '../models';
 import { AuthenticationUtils, ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes } from '../utils';
@@ -82,7 +82,7 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
         return executionModelMap;
     }
 
-    private getLocalManifest(): ISkillManifest {
+    private getLocalManifest(): ISkillManifestV1 {
         const manifestPath: string = this.configuration.localManifest;
         const skillManifestPath: string = isAbsolute(manifestPath) ? manifestPath : join(resolve('./'), manifestPath);
 
@@ -94,7 +94,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         return JSON.parse(readFileSync(skillManifestPath, 'UTF8'));
     }
 
-    private validateManifestSchema(skillManifest: ISkillManifest): void {
+    private validateManifestSchema(skillManifest: ISkillManifestV1): void {
         if (!skillManifest.name) {
             this.logger.error(`Missing property 'name' of the manifest`);
         }
@@ -127,14 +127,14 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         }
     }
 
-    private async getManifest(): Promise<ISkillManifest> {
+    private async getManifest(): Promise<ISkillManifestV1> {
 
         return this.configuration.localManifest
             ? this.getLocalManifest()
             : this.getRemoteManifest();
     }
 
-    private async getRemoteManifest(): Promise<ISkillManifest> {
+    private async getRemoteManifest(): Promise<ISkillManifestV1> {
         try {
             return get({
                 uri: this.configuration.remoteManifest,
@@ -156,7 +156,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
         }
     }
 
-    private async processManifest(manifest: ISkillManifest): Promise<Map<string, string[]>> {
+    private async processManifest(manifest: ISkillManifestV1): Promise<Map<string, string[]>> {
 
         return manifest.actions.filter((action: IAction): IUtteranceSource[] =>
             action.definition.triggers.utteranceSources)
@@ -276,7 +276,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             // Take cognitiveModels
             const cognitiveModelsFile: ICognitiveModel = JSON.parse(readFileSync(this.configuration.cognitiveModelsFile, 'UTF8'));
             // Take skillManifest
-            const skillManifest: ISkillManifest = await this.getManifest();
+            const skillManifest: ISkillManifestV1 = await this.getManifest();
             // Manifest schema validation
             this.validateManifestSchema(skillManifest);
 
@@ -287,11 +287,11 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             // End of manifest schema validation
 
             // Take VA Skills configurations
-            const assistantSkillsFile: ISkillFile = JSON.parse(readFileSync(this.configuration.skillsFile, 'UTF8'));
-            const assistantSkills: ISkillManifest[] = assistantSkillsFile.skills !== undefined ? assistantSkillsFile.skills : [];
+            const assistantSkillsFile: ISkillFileV1 = JSON.parse(readFileSync(this.configuration.skillsFile, 'UTF8'));
+            const assistantSkills: ISkillManifestV1[] = assistantSkillsFile.skills !== undefined ? assistantSkillsFile.skills : [];
 
             // Check if the skill is already connected to the assistant
-            if (assistantSkills.find((assistantSkill: ISkillManifest): boolean => assistantSkill.id === skillManifest.id)) {
+            if (assistantSkills.find((assistantSkill: ISkillManifestV1): boolean => assistantSkill.id === skillManifest.id)) {
                 this.logger.warning(`The skill '${skillManifest.name}' is already registered.`);
 
                 return false;

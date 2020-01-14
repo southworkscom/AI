@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-export interface INewSkillManifest {
+export interface ISkillManifestV2 {
     schema: string;
     id: string;
     name: string;

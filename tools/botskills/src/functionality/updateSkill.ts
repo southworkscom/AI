@@ -7,7 +7,7 @@ import { existsSync, readFileSync } from 'fs';
 import { isAbsolute, join, resolve } from 'path';
 import { get } from 'request-promise-native';
 import { ConsoleLogger, ILogger } from '../logger';
-import { IConnectConfiguration, IDisconnectConfiguration, ISkillFile, ISkillManifest, IUpdateConfiguration } from '../models';
+import { IConnectConfiguration, IDisconnectConfiguration, ISkillFileV1, ISkillManifestV1, IUpdateConfiguration } from '../models';
 import { ConnectSkill } from './connectSkill';
 import { DisconnectSkill } from './disconnectSkill';
 
@@ -20,7 +20,7 @@ export class UpdateSkill {
         this.logger = logger || new ConsoleLogger();
     }
 
-    private async getRemoteManifest(manifestUrl: string): Promise<ISkillManifest> {
+    private async getRemoteManifest(manifestUrl: string): Promise<ISkillManifestV1> {
         try {
             return get({
                 uri: manifestUrl,
@@ -31,7 +31,7 @@ export class UpdateSkill {
         }
     }
 
-    private getLocalManifest(manifestPath: string): ISkillManifest {
+    private getLocalManifest(manifestPath: string): ISkillManifestV1 {
         const skillManifestPath: string = isAbsolute(manifestPath) ? manifestPath : join(resolve('./'), manifestPath);
 
         if (!existsSync(skillManifestPath)) {
@@ -45,13 +45,13 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
     private async existSkill(): Promise<boolean> {
         try {
             // Take skillManifest
-            const skillManifest: ISkillManifest = this.configuration.localManifest
+            const skillManifest: ISkillManifestV1 = this.configuration.localManifest
                 ? this.getLocalManifest(this.configuration.localManifest)
                 : await this.getRemoteManifest(this.configuration.remoteManifest);
-            const assistantSkillsFile: ISkillFile = JSON.parse(readFileSync(this.configuration.skillsFile, 'UTF8'));
-            const assistantSkills: ISkillManifest[] = assistantSkillsFile.skills !== undefined ? assistantSkillsFile.skills : [];
+            const assistantSkillsFile: ISkillFileV1 = JSON.parse(readFileSync(this.configuration.skillsFile, 'UTF8'));
+            const assistantSkills: ISkillManifestV1[] = assistantSkillsFile.skills !== undefined ? assistantSkillsFile.skills : [];
             // Check if the skill is already connected to the assistant
-            if (assistantSkills.find((assistantSkill: ISkillManifest): boolean => assistantSkill.id === skillManifest.id)) {
+            if (assistantSkills.find((assistantSkill: ISkillManifestV1): boolean => assistantSkill.id === skillManifest.id)) {
                 this.configuration.skillId = skillManifest.id;
 
                 return true;
