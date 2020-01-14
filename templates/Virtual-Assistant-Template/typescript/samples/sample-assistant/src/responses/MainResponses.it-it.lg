@@ -1,64 +1,64 @@
-﻿# CompletedMessage
-- I’m here if you need anything else.
-- Let me know if there’s anything else you need.
-- Let me know if I can help you with anything else.
-- All done. Let me know if I can do anything else.
+# CompletedMessage
+- Sono qui se hai bisogno di qualcos'altro.
+- Fammi sapere se c'è qualcos'altro di cui hai bisogno.
+- Fammi sapere se posso aiutarti con qualcos'altro.
+- Tutto fatto. Fammi sapere se posso fare qualcos'altro.
 
 # CancelledMessage
-- OK@{RandomName()}, cancelling your request. Let me know if I can do anything else for you.
-- OK, cancelling your request. Let me know if I can do anything else for you.
-- No problem, let me know if I can help you with anything else.
-- Sure, I’ll cancel your request. Let me know if I can help with anything else
+- Ok@{RandomName()}, annullando la richiesta. Fammi sapere se posso fare qualcos'altro per te.
+- Ok, cancellando la tua richiesta. Fammi sapere se posso fare qualcos'altro per te.
+- Nessun problema, fammi sapere se posso aiutarti con qualcos'altro.
+- Certo, annullerò la tua richiesta. Fammi sapere se posso aiutare con qualsiasi altra cosa
 
 # UnsupportedMessage
-- I'm sorry, I'm not able to help with that.
-- Sorry, that’s not something I can help with yet.
-- Apologies, I don’t know how to do that right now.
-- Unfortunately I can’t help you with that right now. Apologies.
-- Sorry@{RandomName()}, that’s not something I can help with yet.
-- Apologies@{RandomName()}, I don’t know how to do that right now.
+- Mi dispiace, non sono in grado di aiutarti.
+- Si è verificato un problema sconosciuto.
+- Mi scuso, non so come farlo in questo momento.
+- Sfortunatamente non posso aiutarti in questo momento. Scuse.
+- mi dispiace@{RandomName()}, questo non è qualcosa che posso aiutare con ancora.
+- Scuse@{RandomName()}, non so come farlo in questo momento.
 
 # ConfusedMessage
-- I'm sorry, I didn’t understand that. Can you give me some more information?
-- Sorry, I didn't get that. Can you tell me more?
-- Sorry@{RandomName()}, I didn't get that. Can you tell me more?
-- Apologies, I didn't quite understand. Can you give me more information?
+- Mi dispiace, non l'ho capito. Puoi darmi qualche informazione in più?
+- Scusa, non l'ho capito. Puoi dirmi di più?
+- mi dispiace@{RandomName()}, non l'ho capito. Puoi dirmi di più?
+- Mi scuso, non ho capito bene. Puoi darmi maggiori informazioni?
 
 # ErrorMessage
-- Sorry@{RandomName()}, it looks like something went wrong. Please try again later.
-- Apologies@{RandomName()}, it looks like something went wrong. Try your request again later.
-- Sorry, it looks like something went wrong. Please try again later.
-- Hmm, it looks like there was an error. Sorry about that. You can try again later.
-- Apologies, it looks like something went wrong. Try your request again later.
+- mi dispiace@{RandomName()}, sembra che qualcosa sia andato storto. Riprova più tardi.
+- Scuse@{RandomName()}, sembra che qualcosa sia andato storto. Riprovare la richiesta in un secondo momento.
+- Mi dispiace, sembra che qualcosa sia andato storto. Riprova più tardi.
+- Hmm, sembra che ci sia stato un errore. Mi dispiace per questo. È possibile riprovare in un secondo momento.
+- Mi scuso, sembra che qualcosa sia andato storto. Riprovare la richiesta in un secondo momento.
 
 # StartOverMessage
-- OK@{RandomName()}, let's try that again.
-- No problem@{RandomName()}, we can start over.
-- OK, let's try that again.
-- Sure, let's try again.
-- No problem, we can start over.
+- Ok@{RandomName()}, proviamo di nuovo.
+- Non c'è problema@{RandomName()}, possiamo ricominciare da capo.
+- Ok, proviamo di nuovo.
+- Certo, proviamo di nuovo.
+- Nessun problema, possiamo ricominciare da capo.
 
 # FirstPromptMessage
-- What can I help you with today?
-- What can I do for you?
-- Is there anything I can do for you?
-- How can I help you?
+- Con cosa posso aiutarti oggi?
+- Cosa posso fare per te?
+- C'è qualcosa che posso fare per te?
+- Come posso aiutarla?
 
 # LogoutMessage
-- OK@{RandomName()}, you're signed out.
-- Alright@{RandomName()}, you’re signed out.
-- No problem@{RandomName()}, I’ve signed you out.
-- OK, you're signed out.
-- Alright, signed out.
-- Sure, you’ve been signed out.
-- No problem, I’ve signed you out.
+- Ok@{RandomName()}, sei disconnesso.
+- forma alternativa britannica di "all right"@{RandomName()}, sei disconnesso.
+- Non c'è problema@{RandomName()}, ti ho disconnesso.
+- Ok, sei disconnesso.
+- Va bene, ti sei disconnesso.
+- Certo, sei stato disconnesso.
+- Non c'è problema, ti ho disconnesso.
 
 # SkillSwitchPrompt
-- Would you like to switch to the @{Skill}?
+- Vuoi passare alla @{Skill}?
 
 # EscalateMessage
 [HeroCard
-  subtitle=Our agents are available 24/7 at 1(800)555-1234. Or connect with us through Microsoft Teams.
+  subtitle=i nostri agenti sono disponibili 24 ore su 24, 7 giorni su 7, al numero 1(800)555-1234. Oppure connettiti con noi tramite Microsoft Teams.
 ]
 
 # NewUserIntroCard
@@ -67,10 +67,10 @@
 ]
 
 # NewUserIntroCardTitle
-- Hi there!
-- Welcome
-- Pleased to meet you!
-- Hello and welcome!
+- Ehilà!
+- benvenuto
+- Piacere di conoscerti!
+- Ciao e benvenuto!
 
 # NewUserIntroCardJson
 - ```
@@ -109,7 +109,7 @@
           "id": "body",
           "size": "Medium",
           "color": "Light",
-          "text": "Now that I'm up and running, explore the links here to learn what I can do.",
+          "text": "Ora che sono in funzione, esplora i link qui per scoprire cosa posso fare.",
           "wrap": true
         }
       ]
@@ -118,14 +118,14 @@
   "actions": [
     {
       "type": "Action.Submit",
-      "title": "Get started",
+      "title": "Guida introduttiva",
       "data": {
         "action": "startOnboarding"
       }
     },
     {
       "type": "Action.OpenUrl",
-      "title": "Documentation",
+      "title": "Documentazione",
       "url": "https://aka.ms/virtualassistantdocs"
     },
     {
@@ -146,9 +146,9 @@
 ]
 
 # ReturningUserIntroCardTitle
-- Welcome Back@{RandomName()}!
-- Good to see you again.
-- Hey, welcome back!
+- Bentornato@{RandomName()}!
+- È bello rivederti.
+- Ehi, bentornato!
 
 # ReturningUserIntroCardJson
 - ```
@@ -193,7 +193,7 @@
                   "id": "body",
                   "size": "Medium",
                   "color": "Light",
-                  "text": "How can I help?",
+                  "text": "Come posso essere d'aiuto?",
                   "wrap": true
                 }
               ],
@@ -212,8 +212,8 @@
 
 # HelpCard
 [HeroCard 
-    title=Help for Virtual Assistant
-    subtitle=This card can be used to display information to help your user interact with your bot.
+    title=Guida per l'Assistente virtuale
+    subtitle=questa scheda può essere usata per visualizzare informazioni che consentano all'utente di interagire con il bot.
 ]
 
 # RandomName 
@@ -223,9 +223,9 @@
     - 
 
 # QnaMakerAdaptiveLearningCardTitle
-- Did you mean:
-- One of these?
+- Intendevi:
+- Uno di questi?
 
 # QnaMakerNoMatchText
-- None of the above.
-- None of these.
+- Nessuna delle precedenti.
+- Niente di tutto questo.
