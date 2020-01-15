@@ -248,7 +248,7 @@ describe("Localization", function() {
                     assert.strictEqual(1, activity.attachments.length);
                 });
 
-                return testNock.resolveWithMocks('localization_response_en-gb', done, flow);
+                 return testNock.resolveWithMocks('localization_response_en-uk', done, flow);
             });
         });
     });
