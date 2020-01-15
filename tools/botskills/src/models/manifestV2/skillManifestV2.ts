@@ -4,8 +4,8 @@
  */
 
 export interface ISkillManifestV2 {
-    schema: string;
-    id: string;
+    $schema: string;
+    $id: string;
     name: string;
     description: string;
     publisherName: string;
@@ -16,7 +16,7 @@ export interface ISkillManifestV2 {
     privacyUrl: string;
     tags: string[];
     endpoints: IEndpoint[];
-    dipatchModels: IDispatchModel;
+    dispatchModels: IDispatchModel;
     activities: Map<string, IActivity>;
     activitiesSent: IActivitySent;
     definitions: IDefinitions;
