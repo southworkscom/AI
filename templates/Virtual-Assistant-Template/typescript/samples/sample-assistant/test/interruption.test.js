@@ -4,21 +4,20 @@
  */
 
 const assert = require('assert');
-const { testUserProfileState } = require('./helpers/botTestBase');
-const botTestBase = require('./helpers/botTestBase');
+const { getTestAdapterDefault, templateEngine, testUserProfileState } = require('./helpers/botTestBase');
 const { MemoryStorage } = require('botbuilder-core')
 const testNock = require("./helpers/testBase");
 let testStorage = new MemoryStorage();
 
 describe("Interruption", function() {
-    describe("Help Interruption", function() {
+    describe("help interruption", function() {
         beforeEach(function(done) {
             testStorage = new MemoryStorage();
             done();
         });
 
-        it("Test Help Interruption", function(done) {
-            botTestBase.getTestAdapterDefault({ storage: testStorage }).then((testAdapter) => {
+        it("send help and check that there is a attachment", function(done) {
+            getTestAdapterDefault({ storage: testStorage }).then((testAdapter) => {
                 const flow = testAdapter
                 .send("Help")
                 .assertReply((activity, description) => {
@@ -29,10 +28,10 @@ describe("Interruption", function() {
             });
         });
 
-        it("Test Help Interruption In Dialog", function(done) {
-            const allNamePromptVariations = localeTemplateEngineManager.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
+        it("send help and check that there is a attachment of the response file", function(done) {
+            const allNamePromptVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
 
-            botTestBase.getTestAdapterDefault({ storage: testStorage }).then((testAdapter) => {
+            getTestAdapterDefault({ storage: testStorage }).then((testAdapter) => {
                 const flow = testAdapter
                 .send({
                     type: "conversationUpdate",
@@ -58,11 +57,11 @@ describe("Interruption", function() {
         });
     });
 
-    describe ("Cancel Interruption", function(done) {
-        it("Test Cancel Interruption", function(done) {
-            const allResponseVariations = localeTemplateEngineManager.templateEnginesPerLocale.get("en-us").expandTemplate("CancelledMessage", testUserProfileState);
+    describe ("cancel interruption", function(done) {
+        it("send cancel and check the response is one of the file", function(done) {
+            const allResponseVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("CancelledMessage", testUserProfileState);
 
-            botTestBase.getTestAdapterDefault().then((testAdapter) => {
+            getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                     .send("Cancel")
                     .assertReplyOneOf(allResponseVariations)
@@ -71,11 +70,11 @@ describe("Interruption", function() {
             });
         });
 
-        it("Test Cancel Interruption Confirmed", function(done) {
-            const allNamePromptVariations = localeTemplateEngineManager.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
-            const allCancelledVariations = localeTemplateEngineManager.templateEnginesPerLocale.get("en-us").expandTemplate("CancelledMessage", testUserProfileState);
+        it("send cancel during a flow and check the response is one of the file", function(done) {
+            const allNamePromptVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
+            const allCancelledVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("CancelledMessage", testUserProfileState);
 
-            botTestBase.getTestAdapterDefault().then((testAdapter) => {
+            getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                     .send({
                         type: "conversationUpdate",
@@ -96,10 +95,10 @@ describe("Interruption", function() {
             });
         });
 
-        it("Test Repeat interruption", function(done) {
-            const allNamePromptVariations = localeTemplateEngineManager.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
+        it("send repeat during a flow and check the response is one of the file", function(done) {
+            const allNamePromptVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
 
-            botTestBase.getTestAdapterDefault().then((testAdapter) => {
+            getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                     .send({
                         type: "conversationUpdate",
