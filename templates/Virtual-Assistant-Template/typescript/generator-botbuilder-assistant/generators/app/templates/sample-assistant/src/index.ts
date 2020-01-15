@@ -13,9 +13,7 @@ import {
     UserState, 
     TelemetryLoggerMiddleware } from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
-import {
-    CosmosDbStorage,
-    CosmosDbStorageSettings } from 'botbuilder-azure';
+import { CosmosDbStorage, CosmosDbStorageSettings } from 'botbuilder-azure';
 import { Dialog, OAuthPromptSettings } from 'botbuilder-dialogs';
 import {
     ICognitiveModelConfiguration,
@@ -154,8 +152,8 @@ try {
     const botServices: BotServices = new BotServices(botSettings, telemetryClient);
 
     const skillContextAccessor: StatePropertyAccessor<SkillContext> = userState.createProperty<SkillContext>(SkillContext.name);
-    const botServicesAccesor: StatePropertyAccessor<BotServices> = userState.createProperty<BotServices>(BotServices.name)
-    const onboardingDialog: OnboardingDialog = new OnboardingDialog(botServicesAccesor, botServices , localeTemplateEngine, telemetryClient);
+    const userProfileStateAccesor: StatePropertyAccessor<IUserProfileState> = userState.createProperty<IUserProfileState>('IUserProfileState');
+    const onboardingDialog: OnboardingDialog = new OnboardingDialog(userProfileStateAccesor, botServices , localeTemplateEngine, telemetryClient);
     const switchSkillDialog: SwitchSkillDialog = new SwitchSkillDialog(conversationState);
     const previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]> =
     userState.createProperty<Partial<Activity>[]>('Activity');
@@ -171,8 +169,6 @@ try {
         return new SkillDialog(skill, credentials, telemetryClient, skillContextAccessor, authDialog);
     });
     
-    const userProfileStateAccesor: StatePropertyAccessor<IUserProfileState> =
-    userState.createProperty<IUserProfileState>('IUserProfileState');
     const mainDialog: MainDialog = new MainDialog(
         botSettings as IBotSettings,
         botServices,
@@ -186,7 +182,7 @@ try {
         telemetryClient,
     );
 
-    bot = new DefaultActivityHandler(conversationState, userState, telemetryClient, mainDialog);
+    bot = new DefaultActivityHandler(conversationState, userState, mainDialog);
 } catch (err) {
     throw err;
 }
