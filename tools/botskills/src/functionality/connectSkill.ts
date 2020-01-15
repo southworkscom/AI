@@ -313,8 +313,8 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             writeFileSync(this.configuration.skillsFile, JSON.stringify(assistantSkillsFile, undefined, 4));
             this.logger.success(`Successfully appended '${skillManifest.name}' manifest to your assistant's skills configuration file!`);
             // Configuring bot auth settings
-            this.logger.message('Configuring bot auth settings');
-            await this.authenticationUtils.authenticate(this.configuration, skillManifest, this.logger);
+            //this.logger.message('Configuring bot auth settings');
+            //await this.authenticationUtils.authenticate(this.configuration, skillManifest, this.logger);
 
             return true;
         } catch (err) {
