@@ -6,16 +6,12 @@
 const assert = require('assert');
 const botTestBase = require('./helpers/botTestBase');
 const testNock = require('./helpers/testBase');
-const localizationJsonDe = require('../src/content/NewUserGreeting.de-de.json');
-const localizationJsonEs = require('../src/content/NewUserGreeting.es-es.json');
-const localizationJsonFr = require('../src/content/NewUserGreeting.fr-fr.json');
-const localizationJsonIt = require('../src/content/NewUserGreeting.it-it.json');
-const localizationJson = require('../src/content/NewUserGreeting.json');
-const localizationJsonZh = require('../src/content/NewUserGreeting.zh-cn.json');
+const localeTemplateEngineManager = require('botbuilder-solutions');
 
 describe("Localization", function() {
 	describe("de-de locale", function () {
             it("send conversationUpdate and check the card is received with the de-de locale", function (done) {
+                let allIntroCardTitleVariations =  localeTemplateEngineManager.templateEnginesPerLocale.get("de-de").expandTemplate("NewUserIntroCardTitle");
                 botTestBase.getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                 .send({
@@ -23,18 +19,14 @@ describe("Localization", function() {
                     membersAdded: [
                         {
                             id: "1",
-                            name: "Bot"
+                            name: "user"
                         }
                     ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
                     locale: "de-de"
                 })
                 .assertReply(function (activity, description) {
                     assert.strictEqual(activity.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
-					assert.deepStrictEqual(activity.attachments[0].content, localizationJsonDe);
+					assert.deepStrictEqual(activity.attachments[0].content, );
                 });
 
                 return testNock.resolveWithMocks('localization_response_de-de', done, flow);
@@ -43,6 +35,7 @@ describe("Localization", function() {
     });
 	describe("es-es locale", function () {
         it("send conversationUpdate and check the card is received with the es-es locale", function (done) {
+            let allIntroCardTitleVariations =  localeTemplateEngineManager.templateEnginesPerLocale.get("es-es").expandTemplate("NewUserIntroCardTitle");
                 botTestBase.getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                 .send({
@@ -50,18 +43,14 @@ describe("Localization", function() {
                     membersAdded: [
                         {
                             id: "1",
-                            name: "Bot"
+                            name: "user"
                         }
                     ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
                     locale: "es-es"
                 })
                 .assertReply(function (activity, description) {
                     assert.strictEqual(activity.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
-					assert.deepStrictEqual(activity.attachments[0].content, localizationJsonEs);
+					assert.deepStrictEqual(activity.attachments[0].content,);
                 });
 
                 return testNock.resolveWithMocks('localization_response_es-es', done, flow);
@@ -70,6 +59,7 @@ describe("Localization", function() {
     });
 	describe("fr-fr locale", function () {
             it("send conversationUpdate and check the card is received with the fr-fr locale", function (done) {
+                let allIntroCardTitleVariations =  localeTemplateEngineManager.templateEnginesPerLocale.get("fr-fr").expandTemplate("NewUserIntroCardTitle");
                 botTestBase.getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                 .send({
@@ -77,18 +67,14 @@ describe("Localization", function() {
                     membersAdded: [
                         {
                             id: "1",
-                            name: "Bot"
+                            name: "user"
                         }
                     ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
                     locale: "fr-fr"
                 })
                 .assertReply(function (activity, description) {
                     assert.strictEqual(activity.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
-					assert.deepStrictEqual(activity.attachments[0].content, localizationJsonFr);
+					assert.deepStrictEqual(activity.attachments[0].content,);
                 });
 
                 return testNock.resolveWithMocks('localization_response_fr-fr', done, flow);
@@ -97,6 +83,7 @@ describe("Localization", function() {
     });
 	describe("it-it locale", function () {
             it("send conversationUpdate and check the card is received with the it-it locale", function (done) {
+                let allIntroCardTitleVariations =  localeTemplateEngineManager.templateEnginesPerLocale.get("it-it").expandTemplate("NewUserIntroCardTitle");
                 botTestBase.getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                 .send({
@@ -104,18 +91,14 @@ describe("Localization", function() {
                     membersAdded: [
                         {
                             id: "1",
-                            name: "Bot"
+                            name: "user"
                         }
                     ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
                     locale: "it-it"
                 })
                 .assertReply(function (activity, description) {
                     assert.strictEqual(activity.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
-					assert.deepStrictEqual(activity.attachments[0].content, localizationJsonIt);
+					assert.deepStrictEqual(activity.attachments[0].content,);
                 });
 
                 return testNock.resolveWithMocks('localization_response_it-it', done, flow);
@@ -124,6 +107,7 @@ describe("Localization", function() {
     });
 	describe("en-us locale", function () {
             it("send conversationUpdate and check the card is received with the en-us locale", function (done) {
+                let allIntroCardTitleVariations =  localeTemplateEngineManager.templateEnginesPerLocale.get("en-us").expandTemplate("NewUserIntroCardTitle");
                 botTestBase.getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                 .send({
@@ -131,18 +115,14 @@ describe("Localization", function() {
                     membersAdded: [
                         {
                             id: "1",
-                            name: "Bot"
+                            name: "user"
                         }
                     ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
                     locale: "en-us"
                 })
                 .assertReply(function (activity, description) {
                     assert.strictEqual(activity.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
-					assert.deepStrictEqual(activity.attachments[0].content, localizationJson);
+					assert.deepStrictEqual(activity.attachments[0].content,);
                 });
 
                 return testNock.resolveWithMocks('localization_response_en-us', done, flow);
@@ -151,6 +131,7 @@ describe("Localization", function() {
     });
 	describe("zh-cn locale", function () {
             it("send conversationUpdate and check the card is received with the zh-cn locale", function (done) {
+                let allIntroCardTitleVariations =  localeTemplateEngineManager.templateEnginesPerLocale.get("zh-cn").expandTemplate("NewUserIntroCardTitle");
                 botTestBase.getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                 .send({
@@ -158,18 +139,14 @@ describe("Localization", function() {
                     membersAdded: [
                         {
                             id: "1",
-                            name: "Bot"
+                            name: "user"
                         }
                     ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
                     locale: "zh-cn"
                 })
                 .assertReply(function (activity, description) {
                     assert.strictEqual(activity.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
-					assert.deepStrictEqual(activity.attachments[0].content, localizationJsonZh);
+					assert.deepStrictEqual(activity.attachments[0].content,);
                 });
 
                 return testNock.resolveWithMocks('localization_response_zh-cn', done, flow);
@@ -185,18 +162,14 @@ describe("Localization", function() {
                     membersAdded: [
                         {
                             id: "1",
-                            name: "Bot"
+                            name: "user"
                         }
                     ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
                     locale: "en-gb"
                 })
                 .assertReply(function (activity, description) {
                     assert.strictEqual(activity.attachments[0].contentType, 'application/vnd.microsoft.card.adaptive');
-                    assert.deepStrictEqual(activity.attachments[0].content, localizationJson);
+                    assert.deepStrictEqual(activity.attachments[0].content,);
                 });
 
                 return testNock.resolveWithMocks('localization_response_en-gb', done, flow);
