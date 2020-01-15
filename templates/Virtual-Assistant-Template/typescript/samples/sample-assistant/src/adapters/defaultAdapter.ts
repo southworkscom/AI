@@ -12,11 +12,14 @@ import {
     ShowTypingMiddleware,
     TranscriptLoggerMiddleware,
     TranscriptStore,
-    TurnContext
-} from 'botbuilder';
+    TurnContext } from 'botbuilder';
 import { AzureBlobTranscriptStore } from 'botbuilder-azure';
-import { ISkillManifest } from 'botbuilder-skills';
-import { EventDebuggerMiddleware, SetLocaleMiddleware, LocaleTemplateEngineManager } from 'botbuilder-solutions';
+import {
+    EventDebuggerMiddleware,
+    FeedbackMiddleware,
+    ISkillManifest,
+    LocaleTemplateEngineManager,
+    SetLocaleMiddleware } from 'botbuilder-solutions';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IBotSettings } from '../services/botSettings.js';
 

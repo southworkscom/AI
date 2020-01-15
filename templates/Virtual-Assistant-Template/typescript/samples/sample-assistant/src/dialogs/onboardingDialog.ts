@@ -2,18 +2,15 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-import {
-    BotTelemetryClient,
-    StatePropertyAccessor,
-    RecognizerResult} from 'botbuilder';
+import { BotTelemetryClient, StatePropertyAccessor, RecognizerResult } from 'botbuilder';
 import {
     ComponentDialog,
     DialogTurnResult,
     TextPrompt,
     WaterfallDialog,
     WaterfallStepContext, 
-    WaterfallStep} from 'botbuilder-dialogs';
-import { IOnboardingState } from '../models/onboardingState';
+    WaterfallStep } from 'botbuilder-dialogs';
+import { IUserProfileState } from '../models/userProfileState';
 import { BotServices } from '../services/botServices';
 import { LocaleTemplateEngineManager, DialogContextEx } from 'botbuilder-solutions';
 import { LuisRecognizer } from 'botbuilder-ai';
@@ -60,13 +57,13 @@ export class OnboardingDialog extends ComponentDialog {
         }
     }
 
-    public async finishOnboardingDialog(sc: WaterfallStepContext<IOnboardingState>): Promise<DialogTurnResult> {
+    public async finishOnboardingDialog(sc: WaterfallStepContext): Promise<DialogTurnResult> {
         const userProfile: IUserProfileState = await this.accessor.get(sc.context, { name: ''});
-        let name = <string> sc.result;
+        let name: string = sc.result as string;
 
         let generalResult: RecognizerResult = sc.context.turnState.get(StateProperties.GeneralResult);
         if (generalResult) {
-            const localizedServices = this.services.getCognitiveModel();
+            const localizedServices = this.services.getCognitiveModels();
             const generalLuisService: LuisRecognizer | undefined = await localizedServices.luisServices.get('General');
             if (generalLuisService) {
                 generalResult = await generalLuisService.recognize(sc.context);

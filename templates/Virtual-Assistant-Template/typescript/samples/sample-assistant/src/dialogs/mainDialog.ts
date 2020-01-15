@@ -13,27 +13,23 @@ import { LuisRecognizer, QnAMakerResult, QnAMaker } from 'botbuilder-ai';
 import {
     DialogContext,
     DialogTurnResult, 
-    Dialog} from 'botbuilder-dialogs';
+    Dialog } from 'botbuilder-dialogs';
 import {
+    ActivityHandlerDialog,
+    DialogContextEx,
     ICognitiveModelSet,
     InterruptionAction,
-    TokenEvents, 
-    SkillRouter,
     ISkillManifest,
     LocaleTemplateEngineManager,
-    DialogContextEx,
+    SkillContext,
+    SkillDialog,
+    SkillRouter,
     SwitchSkillDialog,
     SwitchSkillDialogOptions,
-    ActivityHandlerDialog,
-    SkillContext,
-    SkillDialog
-} from 'botbuilder-solutions';
+    TokenEvents } from 'botbuilder-solutions';
 import { TokenStatus } from 'botframework-connector';
-import {
-    Activity,
-    ActivityTypes, 
-    ResourceResponse
-    } from 'botframework-schema';
+import { Activity, ActivityTypes, ResourceResponse } from 'botframework-schema';
+import { IUserProfileState } from '../models/userProfileState';
 import { BotServices } from '../services/botServices';
 import { IBotSettings } from '../services/botSettings';
 import { OnboardingDialog } from './onboardingDialog';
@@ -90,7 +86,7 @@ export class MainDialog extends ActivityHandlerDialog {
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
         if (innerDc.context.activity.type == ActivityTypes.Message) {
             // Get cognitive models for the current locale.
-            const localizedServices = this.services.getCognitiveModel();
+            const localizedServices = this.services.getCognitiveModels();
 
             // Run LUIS recognition and store result in turn state.
             const dispatchResult: RecognizerResult = await localizedServices.dispatchService.recognize(innerDc.context);
@@ -135,7 +131,7 @@ export class MainDialog extends ActivityHandlerDialog {
      
                         if (identifiedSkill) {
                             const prompt: Partial<Activity> = this.templateEngine.generateActivityForLocale('SkillSwitchPrompt', { skill: identifiedSkill.name });
-                            await dc.beginDialog(this.switchSkillDialog.id, new SwitchSkillDialogOptions(prompt, identifiedSkill));
+                            await dc.beginDialog(this.switchSkillDialog.id, new SwitchSkillDialogOptions(prompt as Activity, identifiedSkill));
 
                             return InterruptionAction.Waiting;
                         }
@@ -258,7 +254,7 @@ export class MainDialog extends ActivityHandlerDialog {
 
         if (activity !== undefined && activity.text.trim().length > 0){
             // Get current cognitive models for the current locale.
-            const localizedServices: ICognitiveModelSet = this.services.getCognitiveModel();
+            const localizedServices: ICognitiveModelSet = this.services.getCognitiveModels();
 
             // Get dispatch result from turn state.
             const dispatchResult: RecognizerResult = innerDc.context.turnState.get(StateProperties.dispatchResult);
@@ -313,7 +309,7 @@ export class MainDialog extends ActivityHandlerDialog {
             case Events.timeZone: {
                 try {
                     const tz: string = new Date().toLocaleString(value);
-                    const timeZoneObj: { timezone: string;} = { timezone: tz };
+                    const timeZoneObj: { timezone: string} = { timezone: tz };
 
                     // Store location for use by skills.
                     const skillContext: SkillContext = await this.skillContext.get(innerDc.context, new SkillContext());
@@ -346,7 +342,7 @@ export class MainDialog extends ActivityHandlerDialog {
     }
 
     // Runs when the dialog stack completes.
-    protected async onDialogComplete(outerDc: DialogContext, result :Object): Promise<void> {
+    protected async onDialogComplete(outerDc: DialogContext, result: Object): Promise<void> {
         const userProfile: IUserProfileState = await this.userProfileState.get(outerDc.context, {name:''});
 
         // Only send a completion message if the user sent a message activity.
@@ -356,7 +352,7 @@ export class MainDialog extends ActivityHandlerDialog {
     }
 
     private async logUserOut(dc: DialogContext): Promise<void> {
-        const tokenProvider: BotFrameworkAdapter = <BotFrameworkAdapter> dc.context.adapter;
+        const tokenProvider: BotFrameworkAdapter = dc.context.adapter as BotFrameworkAdapter;
         if (tokenProvider !== undefined){
             // Sign out user
             const tokens: TokenStatus[] = await tokenProvider.getTokenStatus(dc.context, dc.context.activity.from.id)
