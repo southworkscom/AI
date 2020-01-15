@@ -58,29 +58,6 @@ describe("Main Dialog", function () {
 			});
         });
     });
-
-	describe("Localization", function () {
-		it("Send a message in spanish, set locale property on activity and validate the localized response", function (done) {
-			botTestBase.getTestAdapterDefault().then((testAdapter) => {
-				const flow = testAdapter
-				.send({
-					type: "conversationUpdate",
-					membersAdded: [
-						{
-							id: "1",
-							name: "user"
-						}
-					],
-					locale: "es-es"
-				})
-				.assertReply(function (activity, description) {
-					assert.strictEqual(1, activity.attachments.length);
-				});
-
-				return testNock.resolveWithMocks('mainDialog_localization_response', done, flow);
-			});
-		});
-	});
 	
     describe("Confused", function () {
         it("Send an unhandled message", function (done) {
