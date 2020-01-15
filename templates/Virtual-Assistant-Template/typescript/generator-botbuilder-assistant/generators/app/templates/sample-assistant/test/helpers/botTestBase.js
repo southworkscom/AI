@@ -28,6 +28,25 @@ const cognitiveModelMap = new Map(Object.entries(cognitiveModelDictionary));
 cognitiveModelMap.forEach((value, key) => {
     cognitiveModels.set(key, value);
 });
+const localizedTemplates = new Map();
+const templateFiles = ['MainResponses','OnboardingResponses'];
+const supportedLocales =  ['en-us','de-de','es-es','fr-fr','it-it','zh-cn'];
+supportedLocales.forEach(locale => {
+    const localeTemplateFiles = [];
+    templateFiles.forEach(template => {
+        // LG template for default locale should not include locale in file extension.
+        if (locale === 'en-us'){
+            localeTemplateFiles.push(path.join(__dirname, 'responses', `${template}.lg`));
+        }
+        else {
+            localeTemplateFiles.push(path.join(__dirname, 'responses', `${template}.${locale}.lg`));
+        }
+    });
+
+    localizedTemplates.set(locale, localeTemplateFiles);
+});
+
+const templateEngine = new LocaleTemplateEngineManager(localizedTemplates, 'en-us');
 const testUserProfileState = { name: 'Bot' };
 
 async function initConfiguration() {
@@ -63,25 +82,7 @@ async function getTestAdapterDefault(settings) {
         properties: {},
         skills: skills
     };
-
-    const localizedTemplates = new Map();
-    const templateFiles = ['MainResponses','OnboardingResponses'];
-    const supportedLocales =  ['en-us','de-de','es-es','fr-fr','it-it','zh-cn']
-    supportedLocales.forEach(locale => {
-        const localeTemplateFiles = [];
-        templateFiles.forEach(template => {
-            // LG template for default locale should not include locale in file extension.
-            if (locale === 'en-us'){
-                localeTemplateFiles.push(path.join(__dirname, 'responses', `${template}.lg`));
-            }
-            else {
-                localeTemplateFiles.push(path.join(__dirname, 'responses', `${template}.${locale}.lg`));
-            }
-        });
-
-        localizedTemplates.set(locale, localeTemplateFiles);
-    });
-
+    
     const telemetryClient = new NullTelemetryClient();
     const storage = settings.storage || new MemoryStorage();
     // create conversation and user state
@@ -89,7 +90,6 @@ async function getTestAdapterDefault(settings) {
     const userState = new UserState(storage);
 
     const botServices = new BotServices(botSettings);
-    const localeTemplateEngine = new LocaleTemplateEngineManager(localizedTemplates, 'en-us');
     const skillContextAccessor = userState.createProperty(SkillContext.name);
     const botServicesAccesor = userState.createProperty(BotServices.name)
     const onboardingDialog = new OnboardingDialog(botServicesAccesor, botServices , localeTemplateEngine, telemetryClient);
@@ -135,5 +135,6 @@ async function getTestAdapterDefault(settings) {
 
 module.exports = {
     getTestAdapterDefault: getTestAdapterDefault,
+    templateEngine: templateEngine,
     testUserProfileState: testUserProfileState
 }
