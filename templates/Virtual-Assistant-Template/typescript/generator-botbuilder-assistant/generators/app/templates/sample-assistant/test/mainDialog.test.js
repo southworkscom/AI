@@ -4,14 +4,13 @@
  */
 
 const assert = require('assert');
-const botTestBase = require('./helpers/botTestBase');
 const testNock = require('./helpers/testBase');
-const {templateEngine, testUserProfileState } = require('./helpers/botTestBase');
+const { getTestAdapterDefault, templateEngine, testUserProfileState } = require('./helpers/botTestBase');
 
 describe("Main Dialog", function () {
-	describe("Intro Card", function() {
-		it("Send conversationUpdate and verify card is received", function(done) {
-			botTestBase.getTestAdapterDefault().then((testAdapter) => {
+	describe("intro card", function() {
+		it("send a 'conversationUpdate' and verify intro message card is received", function(done) {
+			getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                 .send({
                     type: "conversationUpdate",
@@ -31,9 +30,9 @@ describe("Main Dialog", function () {
 		});
 	});
 
-	describe("Help", function () {
-		it("Send Help and check you get the expected response", function (done) {
-			botTestBase.getTestAdapterDefault().then((testAdapter) => {
+	describe("help", function () {
+		it("send 'Help' and verify help message card is received", function (done) {
+			getTestAdapterDefault().then((testAdapter) => {
 				const flow = testAdapter
 					.send('Help')
 					.assertReply(function (activity, description) {
@@ -45,9 +44,9 @@ describe("Main Dialog", function () {
 		});
 	});
 
-	describe("Escalating", function () {
-        it("Send 'I want to talk to a human' and check you get the expected response", function (done) {
-            botTestBase.getTestAdapterDefault().then((testAdapter) => {
+	describe("escalating", function () {
+        it("send 'I want to talk to a human' and check you get the expected response", function (done) {
+            getTestAdapterDefault().then((testAdapter) => {
 				const flow = testAdapter
 					.send('I want to talk to a human')	
 					.assertReply(function (activity, description) {
@@ -59,13 +58,14 @@ describe("Main Dialog", function () {
         });
     });
 	
-    describe("Confused", function () {
-        it("Send an unhandled message", function (done) {
-			var allResponseVariations = templateEngine.templateEnginesPerLocale.get['en-us'].expandTemplate("UnsupportedMessage", testUserProfileState);
-            botTestBase.getTestAdapterDefault().then((testAdapter) => {
+    describe("confused", function () {
+        it("send an unhandled message", function (done) {
+			const allResponseVariations = templateEngine.templateEnginesPerLocale.get['en-us'].expandTemplate("UnsupportedMessage", testUserProfileState);
+
+			getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                     .send('Unhandled message')
-                    .assertReply(allResponseVariations);
+                    .assertReplyOneOf(allResponseVariations);
                     
                 testNock.resolveWithMocks('mainDialog_unhandled_response', done, flow);
             });
