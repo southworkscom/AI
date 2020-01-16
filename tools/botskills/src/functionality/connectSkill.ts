@@ -16,7 +16,8 @@ import {
     ISkillManifestV1,
     IUtteranceSource,
     ISkillManifestV2,
-    ISkillFileV2
+    ISkillFileV2,
+    IAppSetting
 } from '../models';
 import { ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes, isInstanceOfISkillManifestV1, isInstanceOfISkillManifestV2 } from '../utils';
 import { RefreshSkill } from './refreshSkill';
@@ -243,7 +244,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                     const culture: string = item[0];
                     const executionModelByCulture: Map<string, string> = item[1];
                     await this.executeLudownParse(culture, executionModelByCulture);
-                    await this.executeDispatchAdd(culture, executionModelByCulture);
+                    // await this.executeDispatchAdd(culture, executionModelByCulture);
                 }));
 
             // Check if it is necessary to refresh the skill
@@ -301,6 +302,30 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
         }
     }
 
+    private test(skill: ISkillManifestV1 | ISkillManifestV2): void {
+        let test2: IAppSetting = JSON.parse(readFileSync(this.configuration.appSettingsFile, 'UTF8'));
+        
+        if (isInstanceOfISkillManifestV1(skill as ISkillManifestV1)) {
+            var asd: ISkillManifestV1 = skill as ISkillManifestV1;
+            test2.botframeworkSkills = [{
+                endpoint: asd.endpoint,
+                id: asd.id,
+                skillAppId: asd.msaAppId
+            }]
+        }
+
+        if (isInstanceOfISkillManifestV2(skill as ISkillManifestV2)) {
+            var asd2: ISkillManifestV2 = skill as ISkillManifestV2;
+            test2.botframeworkSkills = [{
+                endpoint: asd2.endpoints[0].endpointUrl,
+                skillAppId: asd2.endpoints[0].msAppId,
+                id: asd2.$id
+            }]
+        }
+        
+        writeFileSync(this.configuration.appSettingsFile, JSON.stringify(test2, undefined, 4));
+    }
+
     private async connectSkillManifestV1(cognitiveModelsFile: ICognitiveModel, skillManifest: ISkillManifestV1): Promise<void> {
         try {
             // Take VA Skills configurations
@@ -314,24 +339,24 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             }
 
             // Process the manifest to get the intents and cultures of each intent
-            const luisDictionary: Map<string, string[]> = await this.processManifestV1(skillManifest);
+            //const luisDictionary: Map<string, string[]> = await this.processManifestV1(skillManifest);
             // Validate cultures
-            await this.validateCultures(cognitiveModelsFile, luisDictionary);
+            //await this.validateCultures(cognitiveModelsFile, luisDictionary);
             // Updating Dispatch
             this.logger.message('Updating Dispatch');
-            await this.updateModel(luisDictionary, skillManifest.id);
+            //await this.updateModel(luisDictionary, skillManifest.id);
             // Adding the skill manifest to the assistant skills array
             this.logger.message(`Appending '${skillManifest.name}' manifest to your assistant's skills configuration file.`);
             assistantSkills.push(skillManifest);
             // Updating the assistant skills file's skills property with the assistant skills array
             assistantSkillsFile.skills = assistantSkills;
             // Writing (and overriding) the assistant skills file
-            writeFileSync(this.configuration.skillsFile, JSON.stringify(assistantSkillsFile, undefined, 4));
+            //writeFileSync(this.configuration.skillsFile, JSON.stringify(assistantSkillsFile, undefined, 4));
             this.logger.success(`Successfully appended '${skillManifest.name}' manifest to your assistant's skills configuration file!`);
             // Configuring bot auth settings
             //this.logger.message('Configuring bot auth settings');
             //await this.authenticationUtils.authenticate(this.configuration, skillManifest, this.logger);
-
+            this.test(skillManifest as ISkillManifestV1);
         } catch (err) {
             this.logger.error(`There was an error while connecting the Skill to the Assistant:\n${err}`);
         }

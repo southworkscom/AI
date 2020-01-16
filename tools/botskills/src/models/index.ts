@@ -44,3 +44,4 @@ export {
     IModel } from './manifestV2/skillManifestV2';
 export { ISkillFileV2 } from './manifestV2/skillFileV2';
 export { IRefreshConfiguration } from './refreshConfiguration';
+export { ISkill } from './skill';
