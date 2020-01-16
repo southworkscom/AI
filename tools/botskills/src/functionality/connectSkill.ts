@@ -302,7 +302,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
         }
     }
 
-    private test(skill: ISkillManifestV1 | ISkillManifestV2): void {
+    private AddSkill(skill: ISkillManifestV1 | ISkillManifestV2): void {
         let test2: IAppSetting = JSON.parse(readFileSync(this.configuration.appSettingsFile, 'UTF8'));
         
         if (isInstanceOfISkillManifestV1(skill as ISkillManifestV1)) {
@@ -356,7 +356,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             // Configuring bot auth settings
             //this.logger.message('Configuring bot auth settings');
             //await this.authenticationUtils.authenticate(this.configuration, skillManifest, this.logger);
-            this.test(skillManifest as ISkillManifestV1);
+            this.AddSkill(skillManifest as ISkillManifestV1);
         } catch (err) {
             this.logger.error(`There was an error while connecting the Skill to the Assistant:\n${err}`);
         }
