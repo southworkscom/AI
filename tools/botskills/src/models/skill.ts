@@ -5,7 +5,7 @@
 // import { IEndpoint } from './manifestV2/skillManifestV2';
 
 export interface ISkill {
-    id: string;
-    endpoint: string;
-    skillAppId: string;
+    Id: string;
+    AppId: string;
+    SkillEndpoint: string;
 }
