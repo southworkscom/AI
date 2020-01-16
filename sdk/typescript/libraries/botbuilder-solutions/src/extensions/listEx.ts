@@ -5,7 +5,7 @@
 
 import i18next from 'i18next';
 
-export namespace ListExtensions {
+export namespace ListEx {
     /**
      * Converts a list into a string that can be used in speech.
      * @param list The list to be converted.
