@@ -243,7 +243,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                     const culture: string = item[0];
                     const executionModelByCulture: Map<string, string> = item[1];
                     await this.executeLudownParse(culture, executionModelByCulture);
-                    // await this.executeDispatchAdd(culture, executionModelByCulture);
+                    await this.executeDispatchAdd(culture, executionModelByCulture);
                 }));
 
             // Check if it is necessary to refresh the skill
