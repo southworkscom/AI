@@ -16,7 +16,8 @@ import {
     IUtteranceSource,
     ISkillManifestV2,
     IAppSetting,
-    ISkill
+    ISkill,
+    IModel
 } from '../models';
 import { ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes, isInstanceOfISkillManifestV1, isInstanceOfISkillManifestV2 } from '../utils';
 import { RefreshSkill } from './refreshSkill';
@@ -339,12 +340,12 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             }
 
             // Process the manifest to get the intents and cultures of each intent
-            //const luisDictionary: Map<string, string[]> = await this.processManifestV1(skillManifest);
+            const luisDictionary: Map<string, string[]> = await this.processManifestV1(skillManifest);
             // Validate cultures
-            //await this.validateCultures(cognitiveModelsFile, luisDictionary);
+            await this.validateCultures(cognitiveModelsFile, luisDictionary);
             // Updating Dispatch
             this.logger.message('Updating Dispatch');
-            //await this.updateModel(luisDictionary, skillManifest.id);
+            await this.updateModel(luisDictionary, skillManifest.id);
             // Adding the skill manifest to the assistant skills array
             this.logger.message(`Appending '${skillManifest.name}' manifest to your assistant's skills configuration file.`);
             // Updating the assistant skills file's skills property with the assistant skills array
@@ -372,12 +373,44 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                 return;
             }
 
-            this.AddSkill(assistantSkillsFile, assistantSkills, skillManifest);
-            //TO DO Pending implementation process skill Manifest V2
+            const luisDictionary: Map<string, string[]> = await this.processManifestV2(skillManifest);
 
+            // Validate cultures
+            await this.validateCultures(cognitiveModelsFile, luisDictionary);
+            // Updating Dispatch
+            this.logger.message('Updating Dispatch');
+            await this.updateModel(luisDictionary, skillManifest.$id);
+            // Adding the skill manifest to the assistant skills array
+            this.logger.message(`Appending '${skillManifest.name}' manifest to your assistant's skills configuration file.`);
+            // Updating the assistant skills file's skills property with the assistant skills array
+            // Writing (and overriding) the assistant skills file
+            //writeFileSync(this.configuration.skillsFile, JSON.stringify(assistantSkillsFile, undefined, 4));
+            this.AddSkill(assistantSkillsFile, assistantSkills, skillManifest);
+            this.logger.success(`Successfully appended '${skillManifest.name}' manifest to your assistant's skills configuration file!`);
+            // Configuring bot auth settings
+            //this.logger.message('Configuring bot auth settings');
+            //await this.authenticationUtils.authenticate(this.configuration, skillManifest, this.logger);
+            
             return;
         } catch (err) {
             this.logger.error(`There was an error while connecting the Skill to the Assistant:\n${err}`);
         }
+    }
+
+    private async processManifestV2(manifest: ISkillManifestV2): Promise<Map<string, string[]>> {
+        const acc: Map<string, string[]> = new Map();
+        const entries = Object.entries(manifest.dispatchModels.languages);
+
+        entries.forEach(([locale, value]): void => {
+            const luisApps: string[] = [];
+            value.forEach((model: IModel): void => {
+                luisApps.push(model.id);
+            });
+        
+            const filteredluisApps: string[] = [...new Set(luisApps)]
+            acc.set(locale, filteredluisApps);
+        });
+
+        return acc;
     }
 }
