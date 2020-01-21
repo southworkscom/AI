@@ -39,11 +39,29 @@ export class ConnectSkill {
         this.childProcessUtils = new ChildProcessUtils();
     }
 
-    private getExecutionModel(
+    private async getExecutionModel(
         luisApp: string,
         culture: string,
         intentName: string,
-        dispatchName: string): Map<string, string> {
+        dispatchName: string): Promise<Map<string, string>> {
+
+        const skillManifest: ISkillManifestV1 | ISkillManifestV2 = await this.getManifest();
+        // Manifest schema validation
+        const validVersion: manifestVersion = this.validateManifestSchema(skillManifest);
+        // End of manifest schema validation
+
+        switch (validVersion) {
+            case manifestVersion.V1: {
+                this.connectSkillManifestV1(cognitiveModelsFile, skillManifest as ISkillManifestV1);
+                break;
+            }
+            case manifestVersion.V2: {
+                this.connectSkillManifestV2(cognitiveModelsFile, skillManifest as ISkillManifestV2);
+                break;
+            }
+        }
+
+        
         const luFile: string = `${luisApp}.lu`;
         const luisFile: string = `${luisApp}.luis`;
         const luFilePath: string = join(this.configuration.luisFolder, culture, luFile);
@@ -304,7 +322,6 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
     }
 
     private AddSkill(assistantSkillsFile: IAppSetting, assistantSkills: ISkill[], skill: ISkillManifestV1 | ISkillManifestV2): void {
-
         if (isInstanceOfISkillManifestV1(skill as ISkillManifestV1)) {
             const skillManifestV1: ISkillManifestV1 = skill as ISkillManifestV1;
             assistantSkills.push({
