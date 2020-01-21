@@ -17,7 +17,8 @@ import {
     ISkillManifestV2,
     IAppSetting,
     ISkill,
-    IModel
+    IModel,
+    IEndpoint
 } from '../models';
 import { ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes, isInstanceOfISkillManifestV1, isInstanceOfISkillManifestV2 } from '../utils';
 import { RefreshSkill } from './refreshSkill';
@@ -316,10 +317,13 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
 
         if (isInstanceOfISkillManifestV2(skill as ISkillManifestV2)) {
             const skillManifestV2: ISkillManifestV2 = skill as ISkillManifestV2;
+            const endpoint: IEndpoint = skillManifestV2.endpoints.find((endpoint) => endpoint.name === this.configuration.endpointName) 
+            || skillManifestV2.endpoints[0];
+            
             assistantSkills.push({
                 Id: skillManifestV2.$id,
-                AppId: skillManifestV2.endpoints[0].msAppId,
-                SkillEndpoint: skillManifestV2.endpoints[0].endpointUrl,
+                AppId: endpoint.msAppId,
+                SkillEndpoint: endpoint.endpointUrl,
             })
             assistantSkillsFile.BotFrameworkSkills = assistantSkills;
         }
