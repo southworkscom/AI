@@ -32,6 +32,8 @@ export class ConnectSkill {
     private readonly childProcessUtils: ChildProcessUtils;
     private readonly configuration: IConnectConfiguration;
     private readonly logger: ILogger;
+    private manifestVersion: manifestVersion | undefined;
+    private skillManifest: ISkillManifestV2 | undefined;
 
     public constructor(configuration: IConnectConfiguration, logger?: ILogger) {
         this.configuration = configuration;
@@ -39,37 +41,64 @@ export class ConnectSkill {
         this.childProcessUtils = new ChildProcessUtils();
     }
 
-    private async getExecutionModel(
+    private getExecutionModel(
         luisApp: string,
         culture: string,
         intentName: string,
-        dispatchName: string): Promise<Map<string, string>> {
+        dispatchName: string): Map<string, string> {
 
-        const skillManifest: ISkillManifestV1 | ISkillManifestV2 = await this.getManifest();
-        // Manifest schema validation
-        const validVersion: manifestVersion = this.validateManifestSchema(skillManifest);
-        // End of manifest schema validation
+        let luFile: string = '';
+        let luisFile: string = '';
+        let luFilePath: string = '';
+        let luisFolderPath: string = '';
+        let luisFilePath: string = '';
+        let dispatchFile: string = '';
+        let dispatchFolderPath: string = '';
+        let dispatchFilePath: string = '';
 
-        switch (validVersion) {
-            case manifestVersion.V1: {
-                this.connectSkillManifestV1(cognitiveModelsFile, skillManifest as ISkillManifestV1);
-                break;
-            }
-            case manifestVersion.V2: {
-                this.connectSkillManifestV2(cognitiveModelsFile, skillManifest as ISkillManifestV2);
-                break;
+        if (this.manifestVersion == manifestVersion.V1)
+        {
+            luFile = `${luisApp}.lu`;
+            luisFile = `${luisApp}.luis`;
+            luFilePath = join(this.configuration.luisFolder, culture, luFile);
+            luisFolderPath = join(this.configuration.luisFolder, culture);
+            luisFilePath = join(luisFolderPath, luisFile);
+            dispatchFile = `${dispatchName}.dispatch`;
+            dispatchFolderPath = join(this.configuration.dispatchFolder, culture);
+            dispatchFilePath = join(dispatchFolderPath, dispatchFile);
+        }
+        else {
+
+            if (this.skillManifest){
+                let model: IModel = {id: '', name: '', contentType: '', url: '', description: '' };
+                let entries = Object.entries(this.skillManifest?.dispatchModels.languages);
+                let currentLocaleApps = entries.find((entry: [string, IModel[]]): boolean => entry[0] === culture) || [model]
+                let localeApps: IModel[] = currentLocaleApps[1];
+                let currentApp: IModel = localeApps.find((model: IModel): boolean => model.id === luisApp) || model;
+                
+                let splitCurrentApp: string[] = currentApp.url.split('file:///');
+                let filePath: string = '';
+                if (splitCurrentApp.length > 1){
+                    filePath = splitCurrentApp[1];
+                }
+                else {
+                    filePath = splitCurrentApp[0];
+                }
+
+                if(!existsSync(filePath)){
+                    throw new Error(`Path to the LU file (${filePath}) leads to a nonexistent file.`);
+                }
+    
+                luFile = `${luisApp}.lu`;
+                luisFile = `${luisApp}.luis`;
+                luFilePath = join(filePath);
+                luisFolderPath = join(this.configuration.luisFolder, culture);
+                luisFilePath = join(luisFolderPath, luisFile);
+                dispatchFile = `${dispatchName}.dispatch`;
+                dispatchFolderPath = join(this.configuration.dispatchFolder, culture);
+                dispatchFilePath = join(dispatchFolderPath, dispatchFile);
             }
         }
-
-        
-        const luFile: string = `${luisApp}.lu`;
-        const luisFile: string = `${luisApp}.luis`;
-        const luFilePath: string = join(this.configuration.luisFolder, culture, luFile);
-        const luisFolderPath: string = join(this.configuration.luisFolder, culture);
-        const luisFilePath: string = join(luisFolderPath, luisFile);
-        const dispatchFile: string = `${dispatchName}.dispatch`;
-        const dispatchFolderPath: string = join(this.configuration.dispatchFolder, culture);
-        const dispatchFilePath: string = join(dispatchFolderPath, dispatchFile);
 
         // Validate 'ludown' arguments
         if (!existsSync(this.configuration.luisFolder)) {
@@ -253,7 +282,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                 const luisCulture: string = item[0];
                 const filteredluisApps: string[] = item[1];
                 const dispatchName: string = <string> dispatchNames.get(luisCulture);
-                filteredluisApps.map((luisApp: string): void => {
+                filteredluisApps.map(async (luisApp: string): Promise<void> => {
                     executionsModelMap.set(luisCulture, this.getExecutionModel(luisApp, luisCulture, intentName, dispatchName));
                 });
             });
@@ -300,10 +329,12 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
 
             switch (validVersion) {
                 case manifestVersion.V1: {
+                    this.manifestVersion = manifestVersion.V1;
                     this.connectSkillManifestV1(cognitiveModelsFile, skillManifest as ISkillManifestV1);
                     break;
                 }
                 case manifestVersion.V2: {
+                    this.manifestVersion = manifestVersion.V2;
                     this.connectSkillManifestV2(cognitiveModelsFile, skillManifest as ISkillManifestV2);
                     break;
                 }
@@ -334,7 +365,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
 
         if (isInstanceOfISkillManifestV2(skill as ISkillManifestV2)) {
             const skillManifestV2: ISkillManifestV2 = skill as ISkillManifestV2;
-            const endpoint: IEndpoint = skillManifestV2.endpoints.find((endpoint) => endpoint.name === this.configuration.endpointName) 
+            const endpoint: IEndpoint = skillManifestV2.endpoints.find((endpoint: IEndpoint): boolean => endpoint.name === this.configuration.endpointName) 
             || skillManifestV2.endpoints[0];
             
             assistantSkills.push({
@@ -393,7 +424,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                 this.logger.warning(`The skill '${skillManifest.name}' is already registered.`);
                 return;
             }
-
+            this.skillManifest = skillManifest;
             const luisDictionary: Map<string, string[]> = await this.processManifestV2(skillManifest);
 
             // Validate cultures
