@@ -41,11 +41,11 @@ export class ConnectSkill {
         this.childProcessUtils = new ChildProcessUtils();
     }
 
-    private getExecutionModel(
+    private async getExecutionModel(
         luisApp: string,
         culture: string,
         intentName: string,
-        dispatchName: string): Map<string, string> {
+        dispatchName: string): Promise<Map<string, string>> {
 
         let luFile: string = '';
         let luisFile: string = '';
@@ -70,19 +70,34 @@ export class ConnectSkill {
         else {
 
             if (this.skillManifest){
-                let model: IModel = {id: '', name: '', contentType: '', url: '', description: '' };
-                let entries = Object.entries(this.skillManifest?.dispatchModels.languages);
-                let currentLocaleApps = entries.find((entry: [string, IModel[]]): boolean => entry[0] === culture) || [model]
-                let localeApps: IModel[] = currentLocaleApps[1];
-                let currentApp: IModel = localeApps.find((model: IModel): boolean => model.id === luisApp) || model;
-                
-                let splitCurrentApp: string[] = currentApp.url.split('file:///');
+                const model: IModel = {id: '', name: '', contentType: '', url: '', description: '' };
+                const entries = Object.entries(this.skillManifest?.dispatchModels.languages);
+                const currentLocaleApps = entries.find((entry: [string, IModel[]]): boolean => entry[0] === culture) || [model]
+                const localeApps: IModel[] = currentLocaleApps[1];
+                const currentApp: IModel = localeApps.find((model: IModel): boolean => model.id === luisApp) || model;
+
+                const splitCurrentApp: string[] = currentApp.url.split('file:///');
                 let filePath: string = '';
                 if (splitCurrentApp.length > 1){
                     filePath = splitCurrentApp[1];
                 }
                 else {
-                    filePath = splitCurrentApp[0];
+                    const splitCurrentHttpApp: string[] = currentApp.url.split('https://');
+                    if (splitCurrentHttpApp.length > 1) {
+
+                        const headers = {'Content-Type': 'application/lu', 'Authorization': 'Basic <Base 64 encode token>'};  
+                        try {
+                            const remoteLuFile = await this.getRemoteLu(currentApp.url, headers);
+                            const luPath = join(this.configuration.luisFolder, culture, luisApp + '.lu');
+                            writeFileSync(luPath, remoteLuFile);
+                            filePath = luPath;
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                    else {
+                        filePath = splitCurrentApp[0];
+                    }
                 }
 
                 if(!existsSync(filePath)){
@@ -177,6 +192,18 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
             });
         } catch (err) {
             throw new Error(`There was a problem while getting the remote manifest:\n${err}`);
+        }
+    }
+
+    private async getRemoteLu(path: string, headers: {'Content-Type': string; 'Authorization': string}): Promise<string> {
+        try {
+            return get({
+                uri: path,
+                json: false,
+                headers: headers
+            });
+        } catch (err) {
+            throw new Error(`There was a problem while getting the remote lu file:\n${err}`);
         }
     }
 
@@ -278,14 +305,14 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             const dispatchNames: Map<string, string> = getDispatchNames(cognitiveModelsFile);
 
             const executionsModelMap: Map<string, Map<string, string>> = new Map();
-            filteredLuisDictionary.map((item: [string, string[]]): void => {
+            await Promise.all(filteredLuisDictionary.map( async (item: [string, string[]]): Promise<void> => {
                 const luisCulture: string = item[0];
                 const filteredluisApps: string[] = item[1];
                 const dispatchName: string = <string> dispatchNames.get(luisCulture);
-                filteredluisApps.map(async (luisApp: string): Promise<void> => {
-                    executionsModelMap.set(luisCulture, this.getExecutionModel(luisApp, luisCulture, intentName, dispatchName));
-                });
-            });
+                await Promise.all(filteredluisApps.map(async (luisApp: string): Promise<void> => {
+                    executionsModelMap.set(luisCulture, await this.getExecutionModel(luisApp, luisCulture, intentName, dispatchName));
+                }));
+            }));
 
             await Promise.all(Array.from(executionsModelMap.entries())
                 .map(async (item: [string, Map<string, string>]): Promise<void> => {
