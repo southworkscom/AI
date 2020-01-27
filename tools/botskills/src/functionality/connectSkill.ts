@@ -80,7 +80,10 @@ export class ConnectSkill {
                 const isLocalLu: boolean = currentApp.url.startsWith('file');
                 let filePath: string = '';
                 if (isLocalLu){
-                    filePath = currentApp.url.split('file:///')[1];
+                    filePath = currentApp.url.split('file://')[1];
+                    if(!existsSync(filePath)) {
+                        filePath = join(this.configuration.luisFolder, culture, filePath);
+                    }
                 }
                 else {
                     const isDeployedLu: boolean = currentApp.url.startsWith('http');
