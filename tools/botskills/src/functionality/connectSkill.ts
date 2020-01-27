@@ -70,24 +70,24 @@ export class ConnectSkill {
         else {
 
             if (this.skillManifest){
-                const model: IModel = {id: '', name: '', contentType: '', url: '', description: '' };
+
+                const model: IModel = {id: '', name: '', contentType: '', url: '', description: ''};
                 const entries = Object.entries(this.skillManifest?.dispatchModels.languages);
                 const currentLocaleApps = entries.find((entry: [string, IModel[]]): boolean => entry[0] === culture) || [model]
                 const localeApps: IModel[] = currentLocaleApps[1];
                 const currentApp: IModel = localeApps.find((model: IModel): boolean => model.id === luisApp) || model;
-
-                const splitCurrentApp: string[] = currentApp.url.split('file:///');
+                
+                const isLocalLu: boolean = currentApp.url.startsWith('file');
                 let filePath: string = '';
-                if (splitCurrentApp.length > 1){
-                    filePath = splitCurrentApp[1];
+                if (isLocalLu){
+                    filePath = currentApp.url.split('file:///')[1];
                 }
                 else {
-                    const splitCurrentHttpApp: string[] = currentApp.url.split('https://');
-                    if (splitCurrentHttpApp.length > 1) {
+                    const isDeployedLu: boolean = currentApp.url.startsWith('http');
+                    if (isDeployedLu) {
 
-                        const headers = {'Content-Type': 'application/lu', 'Authorization': 'Basic <Base 64 encode token>'};  
                         try {
-                            const remoteLuFile = await this.getRemoteLu(currentApp.url, headers);
+                            const remoteLuFile = await this.getRemoteLu(currentApp.url);
                             const luPath = join(this.configuration.luisFolder, culture, luisApp + '.lu');
                             writeFileSync(luPath, remoteLuFile);
                             filePath = luPath;
@@ -96,7 +96,7 @@ export class ConnectSkill {
                         }
                     }
                     else {
-                        filePath = splitCurrentApp[0];
+                        filePath = currentApp.url;
                     }
                 }
 
@@ -195,12 +195,10 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
         }
     }
 
-    private async getRemoteLu(path: string, headers: {'Content-Type': string; 'Authorization': string}): Promise<string> {
+    private async getRemoteLu(path: string): Promise<string> {
         try {
             return get({
-                uri: path,
-                json: false,
-                headers: headers
+                uri: path
             });
         } catch (err) {
             throw new Error(`There was a problem while getting the remote lu file:\n${err}`);
