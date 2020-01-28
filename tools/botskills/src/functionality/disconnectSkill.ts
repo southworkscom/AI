@@ -13,8 +13,8 @@ import {
     IDispatchFile,
     IDispatchService,
     IRefreshConfiguration,
-    ISkillFile,
-    ISkillManifest
+    ISkillFileV1,
+    ISkillManifestV1
 } from '../models';
 import { getDispatchNames } from '../utils';
 
@@ -97,11 +97,11 @@ Please make sure to provide a valid path to your Assistant Skills configuration 
             }
 
             // Take VA Skills configurations
-            const assistantSkillsFile: ISkillFile = JSON.parse(readFileSync(this.configuration.skillsFile, 'UTF8'));
-            const assistantSkills: ISkillManifest[] = assistantSkillsFile.skills !== undefined ? assistantSkillsFile.skills : [];
+            const assistantSkillsFile: ISkillFileV1 = JSON.parse(readFileSync(this.configuration.skillsFile, 'UTF8'));
+            const assistantSkills: ISkillManifestV1[] = assistantSkillsFile.skills !== undefined ? assistantSkillsFile.skills : [];
 
             // Check if the skill is present in the assistant
-            const skillToRemove: ISkillManifest | undefined = assistantSkills.find((assistantSkill: ISkillManifest): boolean =>
+            const skillToRemove: ISkillManifestV1 | undefined = assistantSkills.find((assistantSkill: ISkillManifestV1): boolean =>
                 assistantSkill.id === this.configuration.skillId
             );
 
