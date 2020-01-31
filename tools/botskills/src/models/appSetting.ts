@@ -13,5 +13,5 @@ export interface IAppSetting {
     botWebAppName: string;
     resourceGroupName: string;
     BotFrameworkSkills?: ISkill[];
-    SkillHostEndpoint: string;
+    SkillHostEndpoint?: string;
 }
