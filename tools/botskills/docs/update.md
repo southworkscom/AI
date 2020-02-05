@@ -14,9 +14,9 @@ botskills update [options]
 
 | Option                        | Description                                                                                                                                                                 |
 |-------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -l, --localManifest \<path>   | Path to local Skill Manifest file                                                                                                                                           |
-| -r, --remoteManifest \<url>   | URL to remote Skill Manifest                                                                                |
-| -e, --endpointName \<name>  | (OPTIONAL) Name of the endpoint to connect to your assistant (case sensitive)(defaults to using the first endpoint) (Intended V2 manifests)                                   |
+| -l, --localManifest [path]   | Path to local Skill Manifest file                                                                                                                                           |
+| -r, --remoteManifest [url]   | URL to remote Skill Manifest                                                                                |
+| -e, --endpointName [name]  | (OPTIONAL) Name of the endpoint to connect to your assistant (case sensitive)(defaults to using the first endpoint) (Intended V2 manifests)                                   |
 | --cs                          | Determine your Virtual Assistant project structure to be a csharp-like structure                                                                                            |
 | --ts                          | Determine your Virtual Assistant project structure to be a TypeScript-like structure                                                                                        |
 | --noRefresh [true\|FALSE]                   | (OPTIONAL) Determine whether the model of your skills connected are not going to be trained (by default they are trained)                                                   |
@@ -26,7 +26,7 @@ botskills update [options]
 | --outFolder [path]            | (OPTIONAL) Path for any output file that may be generated (defaults to your Virtual Assistant's root folder)                                                                |
 | --lgOutFolder [path]          | (OPTIONAL) Path for the LuisGen output (defaults to a 'service' folder inside your Virtual Assistant's folder)                                                              |
 | --resourceGroup [name]        | (OPTIONAL) Name of your Virtual Assistant's resource group in Azure (defaults to your Virtual Assistant's bot name)                                                         |
-| --appSettingsFile [path]      | (OPTIONAL) Path to your appsettings file (defaults to `appsettings.json` inside your Virtual Assistant's folder. Also, the skills are stored here.)                         |
+| --appSettingsFile [path]      | (OPTIONAL) Path to your appsettings file (defaults to `appsettings.json` inside your Virtual Assistant's folder. Also, the skills are stored here)                         |
 | --cognitiveModelsFile [path]  | (OPTIONAL) Path to your Cognitive Models file (defaults to `cognitivemodels.json` inside your Virtual Assistant's folder)                                                   |
 | --verbose                     | (OPTIONAL) Output detailed information about the processing of the tool                                                                                                     |
 | -h, --help                    | Output usage information                                                                                                                                                    |
