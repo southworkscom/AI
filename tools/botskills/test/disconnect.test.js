@@ -24,24 +24,67 @@ const filledDispatch = normalizeContent(JSON.stringify(
     },
     null, 4));
 
-const filledSkills = normalizeContent(JSON.stringify(
-    {
-        "skills": [
-            {
-                "id": "testSkill"
+    const noAuthConnectionAppSettings = normalizeContent(JSON.stringify(
+        {
+            "microsoftAppId": "",
+            "microsoftAppPassword": "",
+            "appInsights": {
+                "appId": "",
+                "instrumentationKey": ""
             },
-            {
-                "id": "testDispatch"
+            "blobStorage": {
+                "connectionString": "",
+                "container": ""
+            },
+            "cosmosDb": {
+                "authkey": "",
+                "collectionId": "",
+                "cosmosDBEndpoint": "",
+                "databaseId": ""
+            },
+            "contentModerator": {
+                "key": ""
             }
-        ]
-    },
-    null, 4));
+        },
+        null, 4));
+    
+    const noAuthConnectionAppSettingsWithConnectedSkill = normalizeContent(JSON.stringify(
+        {
+            "microsoftAppId": "",
+            "microsoftAppPassword": "",
+            "appInsights": {
+                "appId": "",
+                "instrumentationKey": ""
+            },
+            "blobStorage": {
+                "connectionString": "",
+                "container": ""
+            },
+            "cosmosDb": {
+                "authkey": "",
+                "collectionId": "",
+                "cosmosDBEndpoint": "",
+                "databaseId": ""
+            },
+            "contentModerator": {
+                "key": ""
+            },
+            "BotFrameworkSkills": [
+                {
+                    "Id": "connectableSkill",
+                    "AppId": "00000000-0000-0000-0000-000000000000",
+                    "SkillEndpoint": "https://bftestskill.azurewebsites.net/api/skill/messages",
+                    "Name": "Test Skill"
+                }
+            ],
+            "SkillHostEndpoint": "https://.azurewebsites.net/api/skills"
+        },
+        null, 4));
 
 function undoChangesInTemporalFiles() {
-    writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "en-us", "filleden-usDispatchNoJson.dispatch")), filledDispatch);
     writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "en-us", "filleden-usDispatch.dispatch")), filledDispatch);
-    writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "es-es", "filledes-esDispatch.dispatch")), filledDispatch);
-    writeFileSync(resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")), filledSkills);
+    writeFileSync(resolve(__dirname, join("mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json")), noAuthConnectionAppSettingsWithConnectedSkill);
+    writeFileSync(resolve(__dirname, join("mocks", "appsettings", "noAuthConnectionAppSettings.json")), noAuthConnectionAppSettings);
 }
 
 describe("The disconnect command", function () {
@@ -63,7 +106,7 @@ describe("The disconnect command", function () {
         it("when there is no skills File", async function () {
             const configuration = {
                 skillId : "",
-                skillsFile : "",
+                appSettingsFile : "",
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -76,14 +119,14 @@ describe("The disconnect command", function () {
             await this.disconnector.disconnectSkill();
             const errorList = this.logger.getError();
 
-            strictEqual(errorList[errorList.length - 1], `The 'skillsFile' argument is absent or leads to a non-existing file.
-Please make sure to provide a valid path to your Assistant Skills configuration file using the '--skillsFile' argument.`);
+            strictEqual(errorList[errorList.length - 1], `The 'appSettingsFile' argument is absent or leads to a non-existing file.
+Please make sure to provide a valid path to your Assistant Skills configuration file using the '--appSettingsFile' argument.`);
         });
 
-        it("when the skillsFile points to a bad formatted Assistant Skills configuration file", async function () {
+        it("when the appSettingsFile points to a bad formatted Assistant Skills configuration file", async function () {
             const configuration = {
                 skillId : "testSkill",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "badSkills.jso"),
+                appSettingsFile: resolve(__dirname, "mocks", "virtualAssistant", "badAppSettings.jso"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -103,8 +146,8 @@ SyntaxError: Unexpected token N in JSON at position 0`);
 
         it("when there is no cognitiveModels file", async function () {
             const configuration = {
-                skillId : "testSkill",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "connectableSkill",
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "nonCognitiveModels.json"),
                 languages : "",
@@ -123,8 +166,8 @@ Error: Could not find the cognitiveModels file (${configuration.cognitiveModelsF
 
         it("when the dispatchFolder points to a nonexistent path", async function () {
             const configuration = {
-                skillId : "testSkill",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "connectableSkill",
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -138,7 +181,7 @@ Error: Could not find the cognitiveModels file (${configuration.cognitiveModelsF
             await this.disconnector.disconnectSkill();
             const errorList = this.logger.getError();
 
-            strictEqual(errorList[0], `There was an error while disconnecting the Skill testSkill from the Assistant:
+            strictEqual(errorList[0], `There was an error while disconnecting the Skill connectableSkill from the Assistant:
 Error: An error ocurred while updating the Dispatch model:
 Error: The path to the dispatch file doesn't exists: ${configuration.dispatchFolder}\\en-us\\filleden-usDispatch.dispatch`);
         });
@@ -148,8 +191,8 @@ Error: The path to the dispatch file doesn't exists: ${configuration.dispatchFol
                 return Promise.reject(new Error("Mocked function throws an Error"));
             });
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "connectableSkill",
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -170,8 +213,8 @@ Error: Mocked function throws an Error`);
 
         it("when the lgOutFolder argument is invalid ", async function () {
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "connectableSkill",
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -191,8 +234,8 @@ Please make sure to provide a valid path to your LUISGen output folder using the
 
         it("when the lgLanguage argument is invalid", async function () {
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "connectableSkill",
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -212,10 +255,10 @@ It should be either 'cs' or 'ts' depending on your assistant's language. Please 
     });
 
     describe("should show a warning", function () {
-        it("when the skillsFile points to a bad formatted Assistant Skills configuration file", async function () {
+        it("when the appSettingsFile points to a bad formatted Assistant Skills configuration file", async function () {
             const configuration = {
-                skillId : "testSkill",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "emptySkills.json"),
+                skillId : "connectableSkill",
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettings.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -229,14 +272,14 @@ It should be either 'cs' or 'ts' depending on your assistant's language. Please 
             await this.disconnector.disconnectSkill();
             const warningList = this.logger.getWarning();
 
-            strictEqual(warningList[warningList.length - 1], `The skill 'testSkill' is not present in the assistant Skills configuration file.
-Run 'botskills list --skillsFile "<YOUR-ASSISTANT-SKILLS-FILE-PATH>"' in order to list all the skills connected to your assistant`);
+            strictEqual(warningList[warningList.length - 1], `The skill 'connectableSkill' is not present in the assistant Skills configuration file.
+Run 'botskills list --appSettingsFile "<YOUR-ASSISTANT-SKILLS-FILE-PATH>"' in order to list all the skills connected to your assistant`);
         });
 
         it("when the noRefresh flag is applied", async function () {
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "connectableSkill",
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -259,8 +302,8 @@ Run 'botskills list --skillsFile "<YOUR-ASSISTANT-SKILLS-FILE-PATH>"' in order t
     describe("should show a success message", function () {
         it("when the skill is successfully disconnected", async function () {
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "connectableSkill",
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
