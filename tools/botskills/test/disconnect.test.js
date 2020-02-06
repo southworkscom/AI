@@ -75,6 +75,12 @@ const filledDispatch = normalizeContent(JSON.stringify(
                     "AppId": "00000000-0000-0000-0000-000000000000",
                     "SkillEndpoint": "https://bftestskill.azurewebsites.net/api/skill/messages",
                     "Name": "Test Skill"
+                },
+                {
+                    "Id": "testSkill",
+                    "AppId": "00000000-0000-0000-0000-000000000000",
+                    "SkillEndpoint": "https://bftestskill.azurewebsites.net/api/skill/messages",
+                    "Name": "Test Skill"
                 }
             ],
             "SkillHostEndpoint": "https://.azurewebsites.net/api/skills"
