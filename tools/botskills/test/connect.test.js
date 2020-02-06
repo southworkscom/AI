@@ -10,18 +10,6 @@ const sandbox = require("sinon").createSandbox();
 const testLogger = require("./helpers/testLogger");
 const { normalizeContent } = require("./helpers/normalizeUtils");
 const botskills = require("../lib/index");
-const filledSkills = normalizeContent(JSON.stringify(
-    {
-        "skills": [
-            {
-                "id": "testSkill"
-            },
-            {
-                "id": "testDispatch"
-            }
-        ]
-    },
-    null, 4));
 
 const noAuthConnectionAppSettings = normalizeContent(JSON.stringify(
     {
@@ -82,7 +70,6 @@ const noAuthConnectionAppSettingsWithConnectedSkill = normalizeContent(JSON.stri
     
 
 function undoChangesInTemporalFiles() {
-    writeFileSync(resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")), filledSkills);
     writeFileSync(resolve(__dirname, join("mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json")), noAuthConnectionAppSettingsWithConnectedSkill);
     writeFileSync(resolve(__dirname, join("mocks", "appsettings", "noAuthConnectionAppSettings.json")), noAuthConnectionAppSettings);
 }
