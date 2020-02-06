@@ -10,21 +10,47 @@ const sandbox = require("sinon").createSandbox();
 const testLogger = require("./helpers/testLogger");
 const { normalizeContent } = require("./helpers/normalizeUtils");
 const botskills = require("../lib/index");
-const filledSkills = normalizeContent(JSON.stringify(
+const noAuthConnectionAppSettingsWithConnectedSkill = normalizeContent(JSON.stringify(
     {
-        "skills": [
+        "microsoftAppId": "",
+        "microsoftAppPassword": "",
+        "appInsights": {
+            "appId": "",
+            "instrumentationKey": ""
+        },
+        "blobStorage": {
+            "connectionString": "",
+            "container": ""
+        },
+        "cosmosDb": {
+            "authkey": "",
+            "collectionId": "",
+            "cosmosDBEndpoint": "",
+            "databaseId": ""
+        },
+        "contentModerator": {
+            "key": ""
+        },
+        "BotFrameworkSkills": [
             {
-                "id": "testSkill"
+                "Id": "connectableSkill",
+                "AppId": "00000000-0000-0000-0000-000000000000",
+                "SkillEndpoint": "https://bftestskill.azurewebsites.net/api/skill/messages",
+                "Name": "Test Skill"
             },
             {
-                "id": "testDispatch"
+                "Id": "testSkill",
+                "AppId": "00000000-0000-0000-0000-000000000000",
+                "SkillEndpoint": "https://bftestskill.azurewebsites.net/api/skill/messages",
+                "Name": "Test Skill"
             }
-        ]
+        ],
+        "SkillHostEndpoint": "https://.azurewebsites.net/api/skills"
     },
     null, 4));
 
 function undoChangesInTemporalFiles() {
-    writeFileSync(resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")), filledSkills);
+    writeFileSync(resolve(__dirname, join("mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json")), noAuthConnectionAppSettingsWithConnectedSkill);
 }
 
 describe("The update command", function () {
@@ -43,16 +69,15 @@ describe("The update command", function () {
         it("when the local skill to update is not present in the assistant manifest", async function() {
             const configuration = {
                 botName: "mock-assistant",
-                localManifest: resolve(__dirname, join("mocks", "skills", "absentManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "skillsV1", "absentManifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 resourceGroup: "",
-                appSettingsFile: "",
                 cognitiveModelsFile: "",
                 lgLanguage: "ts",
                 logger: this.logger
@@ -74,15 +99,14 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --localM
             const configuration = {
                 botName: "mock-assistant",
                 localManifest: "",
-                remoteManifest: resolve(__dirname, join("mocks", "skills", "absentManifest.json")),
+                remoteManifest: resolve(__dirname, join("mocks", "skillsV1", "absentManifest.json")),
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 resourceGroup: "",
-                appSettingsFile: "",
                 cognitiveModelsFile: "",
                 lgLanguage: "ts",
                 logger: this.logger
@@ -99,14 +123,13 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --remote
         it("when the localManifest points to a nonexisting Skill manifest file", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "nonexistentSkill.json")),
+                localManifest: resolve(__dirname, join("mocks", "skillsV1", "nonexistentSkill.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: "",
                 resourceGroup: "",
                 appSettingsFile: "",
                 cognitiveModelsFile: "",
@@ -133,7 +156,6 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: "",
                 resourceGroup: "",
                 appSettingsFile: "",
                 cognitiveModelsFile: "",
@@ -146,7 +168,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
             const errorList = this.logger.getError();
 
             strictEqual(errorList[errorList.length - 1], `There was an error while updating the Skill from the Assistant:
-RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net nonexistentskill.azurewebsites.net:80`);            
+RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net`);            
         });
     });
 
@@ -161,16 +183,15 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
             const configuration = {
                 skillId: "testSkill",
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "repeatedManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "skillsV1", "repeatedManifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
+                appSettingsFile: resolve(__dirname, "mocks", "appsettings", "noAuthConnectionAppSettingsWithConnectedSkill.json"),
                 resourceGroup: "",
-                appSettingsFile: "",
                 cognitiveModelsFile: "",
                 lgLanguage: "ts",
                 logger: this.logger
