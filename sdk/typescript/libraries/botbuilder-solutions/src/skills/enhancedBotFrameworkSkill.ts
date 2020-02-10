@@ -3,10 +3,12 @@
  * Licensed under the MIT License.
  */
 
+import { BotFrameworkSkill } from 'botbuilder';
+
  /**
  * Enhanced version of BotFrameworkSkill that adds additional properties commonly needed by a Skills VA
  */
-export interface EnhancedBotFrameworkSkill {
+export interface EnhancedBotFrameworkSkill extends BotFrameworkSkill {
     
     /**
      * Gets or sets the Name of the skill.
