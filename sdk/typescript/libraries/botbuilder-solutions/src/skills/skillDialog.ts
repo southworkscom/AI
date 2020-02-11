@@ -15,6 +15,8 @@ import {
     DialogReason,
     DialogTurnResult, 
     Dialog} from 'botbuilder-dialogs';
+import EnhancedBotFrameworkSkill from './enhancedBotFrameworkSkill';
+import dialogArgs from './skillDialogArgs';
 
 /**
  * A sample dialog that can wrap remote calls to a skill.
@@ -25,27 +27,27 @@ export class SkillDialog extends Dialog {
     private readonly conversationState: ConversationState;
     private readonly skillClient: SkillHttpClient;
     private readonly skill: EnhancedBotFrameworkSkill;
-    private readonly skillHostEndpoint: Uri;
+    // private readonly skillHostEndpoint: Uri;
 
     public constructor(
-        botId: string,
         conversationState: ConversationState,
         skillClient: SkillHttpClient,
-        enhancedBotFrameworkSkill: EnhancedBotFrameworkSkill,
-        configuration: IConfiguration;
-        skillHostEndpoint: Uri;
-
+        enhancedBotFrameworkSkill: EnhancedBotFrameworkSkill
+        //  configuration: IConfiguration;
+        //  skillHostEndpoint: Uri;
     ) {
-        super(SkillDialog);
+        super(SkillDialog.name);
+
         if (this.configuration === null) { throw new Error ('configuration has no value') }
-
-        if (botId === null) { throw new Error ('configuration has no value') }
-
-        this.id = skill.id;
-        this.skillHostEndpoint  = skillHostEndpoint;
+        // if (botId === null) { throw new Error ($"{MicrosoftAppCredentials.MicrosoftAppIdKey} is not in configuration") }
         if (this.skillClient === null) { throw new Error ('skillClient has no value') }
         if (this.skill === null) { throw new Error ('skill has no value') }
         if (this.conversationState === null) { throw new Error ('conversationState has no value') }
+
+        this.id = this.skill.id;
+        this.skillClient  = skillClient;
+        this.conversationState = conversationState;              
+        this.skillHostEndpoint  = skillHostEndpoint;
     }
 
     /**
@@ -62,26 +64,26 @@ export class SkillDialog extends Dialog {
         }
         */
 
-        let skillId = dialogArgs.SkillId;
+        let skillId = dialogArgs.skillId;
         //await dc.Context.TraceActivityAsync($"{GetType().name}.BeginDialogAsync()", label: $"Using activity of type: {dialogArgs.ActivityType}", cancellationToken: cancellationToken).ConfigureAwait(false);
         let  skillActivity: Activity;
 
         switch (dialogArgs.ActivityType) {
             case ActivityTypes.Event:
-                let eventActivity = Activity.CreateEventActivity();
+                let eventActivity = activty.createEventActivity();
                 eventActivity.name = dialogArgs.name;
-                eventActivity.ApplyConversationReference(innerDC.context.activity.getConversationReference(), true);
-                skillActivity = <Activity> eventActivity;
+                eventActivity.applyConversationReference(innerDC.context.activity.getConversationReference(), true);
+                skillActivity = eventActivity;
                 break;
 
             case ActivityTypes.Message:
-                var messageActivity = Activity.CreateMessageActivity();
-                messageActivity.Text = dc.Context.Activity.Text;
-                skillActivity = (Activity)messageActivity;
+                var messageActivity = activty.createMessageActivity();
+                messageActivity.Text = innerDC.context.activity.text;
+                skillActivity = messageActivity;
                 break;
 
             default:
-                throw new Error ("Invalid activity type in ${dialogArgs.ActivityType} in ${SkillDialogArgs}");
+                // throw new Error ("Invalid activity type in ${dialogArgs.ActivityType} in ${SkillDialogArgs}");
         }
 
         this.applyParentActivityProperties(innerDC.context, skillActivity, dialogArgs);
@@ -112,7 +114,7 @@ export class SkillDialog extends Dialog {
         if (reason === DialogReason.cancelCalled || reason === DialogReason.replaceCalled) {
             //await turnContext.sendTraceActivity($"{GetType().Name}.EndDialogAsync()", label: $"ActivityType: {turnContext.Activity.Type}", cancellationToken: cancellationToken).ConfigureAwait(false);
 
-            const activity: Activity = activity.CreateEndOfConversationActivity();
+            const activity: Activity = activity.createEndOfConversationActivity();
             this.applyParentActivityProperties(turnContext, activity, null);
 
             await this.sendToSkill( null, activity);
