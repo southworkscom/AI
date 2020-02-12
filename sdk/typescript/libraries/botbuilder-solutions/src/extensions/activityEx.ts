@@ -3,7 +3,9 @@
  * Licensed under the MIT License.
  */
 
-import { Activity, ActivityTypes, ChannelAccount, ConversationReference } from 'botframework-schema';
+import { Activity, ActivityTypes, ChannelAccount, ConversationReference, IEventActivity, IEndOfConversationActivity } from 'botframework-schema';
+import { TestAdapter } from 'botbuilder';
+import { ChannelAccount } from 'botframework-connector/lib/connectorApi/models/mappers';
 
 export namespace ActivityEx {
     export function createReply(source: Activity, text?: string, local?: string): Activity {
@@ -74,5 +76,13 @@ export namespace ActivityEx {
             default:
                 return false;
         }
+    }
+
+    export function createEventActivity(): Partial<IEventActivity> {
+        return { value: ActivityTypes.Event };
+    }
+
+    export function createEndOfConversationActivity(): Partial<IEndOfConversationActivity> {
+        return { code: ActivityTypes.EndOfConversation };
     }
 }
