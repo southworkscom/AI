@@ -40,7 +40,7 @@ export class SkillDialog extends Dialog {
     ) {
         super(SkillDialog.name);
         if (configuration === undefined) { throw new Error ('configuration has no value') }
-        if (configuration.microsoftAppId === undefined || configuration.microsoftAppId === "") { throw new Error ($"The bot ID is not in configuration") }
+        if (configuration.microsoftAppId === undefined || configuration.microsoftAppId === "") { throw new Error ('The bot ID is not in configuration') }
         if (skillClient === undefined) { throw new Error ('skillClient has no value') }
         if (skill === undefined) { throw new Error ('skill has no value') }
         if (conversationState === undefined) { throw new Error ('conversationState has no value') }
@@ -59,7 +59,7 @@ export class SkillDialog extends Dialog {
      * @param options options
      * @returns dialog turn result.
      */
-    public async onBeginDialog(dc: DialogContext, options?: object): Promise<DialogTurnResult> {
+    public async beginDialog(dc: DialogContext, options?: object): Promise<DialogTurnResult> {
         if (!(options instanceof SkillDialogArgs)) {
             throw new Error("Unable to cast 'options' to SkillDialogArgs");
         }
@@ -87,7 +87,7 @@ export class SkillDialog extends Dialog {
         }
         
         this.applyParentActivityProperties(dc.context, skillActivity, dialogArgs);
-        return await this.sendToSkill(dc, skillActivity);
+        return await this.sendToSkill(skillActivity, dc);
     }
 
     /**
@@ -106,7 +106,7 @@ export class SkillDialog extends Dialog {
         }
 
         // Just forward to the remote skill
-        await this.sendToSkill(dc, dc.context.activity);
+        return await this.sendToSkill(dc.context.activity, dc);
     }
 
     public async  ResumeDialog (dc: DialogContext, reason: DialogReason, result: Object): Promise<DialogTurnResult> {
@@ -120,7 +120,7 @@ export class SkillDialog extends Dialog {
             const activity: Activity = <Activity>ActivityEx.createEndOfConversationActivity();
             this.applyParentActivityProperties(turnContext, activity);
 
-            await this.sendToSkill(undefined, activity);
+            await this.sendToSkill(activity, undefined);
         }
 
         await super.endDialog(turnContext, instance, reason);
@@ -138,20 +138,18 @@ export class SkillDialog extends Dialog {
         }
     }
 
-    private async sendToSkill(dc?: DialogContext, activity: Activity): Promise<DialogTurnResult> {
-        if (dc !== null)
+    private async sendToSkill(activity: Activity, dc?: DialogContext): Promise<DialogTurnResult> {
+        if (dc !== undefined)
         {
-            /**
-             * Always save state before forwarding
-             * (the dialog stack won't get updated with the skillDialog and things won't work if you don't)
-             */
+            // Always save state before forwarding
+            // (the dialog stack won't get updated with the skillDialog and things won't work if you don't)
             await this.conversationState.saveChanges(dc.context, true);
         }
 
-        // const response = await this.skillClient.postActivity(this.botId, this.skill, this.skillHostEndpoint, activity);
+        const response = await this.skillClient.postToSkill(this.botId, this.skill, this.skillHostEndpoint, activity);
         if (!(response.status >= 200 && response.status <= 299))
         {
-            // throw new Error ("Error invoking the skill id: `\${this.botId}\` at \`${this.skillHostEndpoint}\` (status is `${response.status}`). \r\n `${response.Body}`");
+            throw new Error (`Error invoking the skill id: "${ this.skill.Id }" at "${ this.skill.SkillEndpoint }" (status is ${ response.status }).\r\n${ response.body }`);
         }
 
         return SkillDialog.EndOfTurn;
