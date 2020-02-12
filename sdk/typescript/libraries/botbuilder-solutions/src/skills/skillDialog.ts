@@ -14,7 +14,7 @@ import {
     DialogReason,
     DialogTurnResult, 
     Dialog} from 'botbuilder-dialogs';
-import EnhancedBotFrameworkSkill from './enhancedBotFrameworkSkill';
+import { EnhancedBotFrameworkSkill } from './enhancedBotFrameworkSkill';
 import { SkillDialogArgs } from './skillDialogArgs';
 import { IBotSettingsBase } from '../botSettings';
 import { Activity } from 'botframework-schema';
@@ -66,7 +66,7 @@ export class SkillDialog extends Dialog {
         
         let dialogArgs: SkillDialogArgs = options;
         let skillId = dialogArgs.skillId;
-        await dc.context.sendTraceActivity(`${ DialogContext.name }.BeginDialogAsync()`, undefined, undefined, `Using activity of type: ${ dialogArgs.activityType }`);
+        await dc.context.sendTraceActivity(`${ DialogContext.name }.beginDialog()`, undefined, undefined, `Using activity of type: ${ dialogArgs.activityType }`);
         
         let skillActivity: Activity;
 
@@ -95,19 +95,18 @@ export class SkillDialog extends Dialog {
      * @param innerDC Inner Dialog Context.
      * @returns DialogTurnResult.
      */
-    protected async onContinueDialog(innerDC: DialogContext): Promise<DialogTurnResult> {
-        /*
-        await dc.Context.TraceActivityAsync($"{GetType().Name}.ContinueDialogAsync()", label: $"ActivityType: {dc.Context.Activity.Type}", cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        if (dc.Context.Activity.Type == ActivityTypes.EndOfConversation)
+    protected async onContinueDialog(dc: DialogContext): Promise<DialogTurnResult> {
+        dc.continueDialog
+        await dc.context.sendTraceActivity(`${ DialogContext.name }.continueDialog()`, undefined, undefined, `ActivityType: ${ dc.context.activity.type }`);
+        
+        if (dc.context.activity.type === ActivityTypes.EndOfConversation)
         {
-            await dc.Context.TraceActivityAsync($"{GetType().Name}.ContinueDialogAsync()", label: $"Got EndOfConversation", cancellationToken: cancellationToken).ConfigureAwait(false);
-            return await dc.EndDialogAsync(dc.Context.Activity.Value, cancellationToken).ConfigureAwait(false);
+            await dc.context.sendTraceActivity(`${ DialogContext.name }.continueDialog()`, undefined, undefined, 'Got EndOfConversation');
+            return await dc.endDialog(dc.context.activity.value);
         }
-        */
 
         // Just forward to the remote skill
-        await this.sendToSkill(innerDC, innerDC.context.activity)
+        await this.sendToSkill(dc, dc.context.activity);
     }
 
     public async endDialog(turnContext: TurnContext, instance: DialogInstance, reason: DialogReason): Promise<void> {
