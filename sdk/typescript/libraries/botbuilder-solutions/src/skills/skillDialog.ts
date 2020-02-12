@@ -4,7 +4,6 @@
  */
 
 import {
-    Activity,
     ActivityTypes,
     TurnContext, 
     ConversationState,
@@ -16,7 +15,10 @@ import {
     DialogTurnResult, 
     Dialog} from 'botbuilder-dialogs';
 import EnhancedBotFrameworkSkill from './enhancedBotFrameworkSkill';
-import dialogArgs from './skillDialogArgs';
+import { SkillDialogArgs } from './skillDialogArgs';
+import { IBotSettingsBase } from '../botSettings';
+import { Activity } from 'botframework-schema';
+import { ActivityEx } from '../extensions';
 
 /**
  * A sample dialog that can wrap remote calls to a skill.
@@ -27,67 +29,65 @@ export class SkillDialog extends Dialog {
     private readonly conversationState: ConversationState;
     private readonly skillClient: SkillHttpClient;
     private readonly skill: EnhancedBotFrameworkSkill;
-    // private readonly skillHostEndpoint: Uri;
+    private readonly skillHostEndpoint: string;
 
     public constructor(
         conversationState: ConversationState,
         skillClient: SkillHttpClient,
-        enhancedBotFrameworkSkill: EnhancedBotFrameworkSkill
-        //  configuration: IConfiguration;
-        //  skillHostEndpoint: Uri;
+        skill: EnhancedBotFrameworkSkill,
+        configuration: IBotSettingsBase,
+        skillHostEndpoint: string
     ) {
         super(SkillDialog.name);
-
-        if (this.configuration === null) { throw new Error ('configuration has no value') }
-        // if (botId === null) { throw new Error ($"{MicrosoftAppCredentials.MicrosoftAppIdKey} is not in configuration") }
-        if (this.skillClient === null) { throw new Error ('skillClient has no value') }
-        if (this.skill === null) { throw new Error ('skill has no value') }
-        if (this.conversationState === null) { throw new Error ('conversationState has no value') }
-
-        this.id = this.skill.id;
-        this.skillClient  = skillClient;
-        this.conversationState = conversationState;              
-        this.skillHostEndpoint  = skillHostEndpoint;
+        if (configuration === undefined) { throw new Error ('configuration has no value') }
+        if (configuration.microsoftAppId === undefined || configuration.microsoftAppId === "") { throw new Error ($"The bot ID is not in configuration") }
+        if (skillClient === undefined) { throw new Error ('skillClient has no value') }
+        if (skill === undefined) { throw new Error ('skill has no value') }
+        if (conversationState === undefined) { throw new Error ('conversationState has no value') }
+        
+        this.botId = configuration.microsoftAppId;
+        this.skillHostEndpoint = skillHostEndpoint;
+        this.skillClient = skillClient;
+        this.skill = skill;
+        this.conversationState = conversationState;
     }
 
     /**
      * When a SkillDialog is started, a skillBegin event is sent which firstly indicates the Skill is being invoked in Skill mode,
      * also slots are also provided where the information exists in the parent Bot.
-     * @param innerDC inner dialog context.
+     * @param dc inner dialog context.
      * @param options options
      * @returns dialog turn result.
      */
-    protected async onBeginDialog(innerDC: DialogContext, options?: object): Promise<DialogTurnResult> {
-        /*
-        if (!(options is SkillDialogArgs dialogArgs)) {
-            throw new Error("Unable to cast ${options} to ${SkillDialogArgs}");
+    public async onBeginDialog(dc: DialogContext, options?: object): Promise<DialogTurnResult> {
+        if (!(options instanceof SkillDialogArgs)) {
+            throw new Error("Unable to cast 'options' to SkillDialogArgs");
         }
-        */
-
+        
+        let dialogArgs: SkillDialogArgs = options;
         let skillId = dialogArgs.skillId;
-        //await dc.Context.TraceActivityAsync($"{GetType().name}.BeginDialogAsync()", label: $"Using activity of type: {dialogArgs.ActivityType}", cancellationToken: cancellationToken).ConfigureAwait(false);
-        let  skillActivity: Activity;
+        await dc.context.sendTraceActivity(`${ DialogContext.name }.BeginDialogAsync()`, undefined, undefined, `Using activity of type: ${ dialogArgs.activityType }`);
+        
+        let skillActivity: Activity;
 
-        switch (dialogArgs.ActivityType) {
+        switch (dialogArgs.activityType) {
             case ActivityTypes.Event:
-                let eventActivity = activty.createEventActivity();
-                eventActivity.name = dialogArgs.name;
-                eventActivity.applyConversationReference(innerDC.context.activity.getConversationReference(), true);
-                skillActivity = eventActivity;
+                    let eventActivity = ActivityEx.createEventActivity();
+                    eventActivity.name = dialogArgs.name;
+                    eventActivity.relatesTo = dc.context.activity.relatesTo;
+                    skillActivity = <Activity>eventActivity;
                 break;
-
-            case ActivityTypes.Message:
-                var messageActivity = activty.createMessageActivity();
-                messageActivity.Text = innerDC.context.activity.text;
-                skillActivity = messageActivity;
+            case ActivityTypes.Event:
+                    let messageActivity = ActivityEx.createEventActivity();
+                    messageActivity.name = dc.context.activity.text;
+                    skillActivity = <Activity>messageActivity;
                 break;
-
             default:
-                // throw new Error ("Invalid activity type in ${dialogArgs.ActivityType} in ${SkillDialogArgs}");
+                throw new Error(`Invalid activity type in ${ dialogArgs.activityType } in ${ SkillDialogArgs.name }`)
         }
-
-        this.applyParentActivityProperties(innerDC.context, skillActivity, dialogArgs);
-        return await this.sendToSkill(innerDC, skillActivity);
+        
+        this.applyParentActivityProperties(dc.context, skillActivity, dialogArgs);
+        return await this.sendToSkill(dc, skillActivity);
     }
 
     /**
