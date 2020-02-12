@@ -128,12 +128,11 @@ export class SkillDialog extends Dialog {
 
     private applyParentActivityProperties(turnContext: TurnContext, skillActivity: Activity, dialogArgs?: SkillDialogArgs) {
         // Apply conversation reference and common properties from incoming activity before sending.
-
-        // skillActivity.applyConversationReference(turnContext.activity.getConversationReference(), true);
+        skillActivity.relatesTo = turnContext.activity.relatesTo;
         skillActivity.channelData = turnContext.activity.channelData;
-        // skillActivity.properties = turnContext.activity.Properties;
+        // skillActivity.properties = turnContext.activity.properties; PENDING
 
-        if (dialogArgs !== null)
+        if (dialogArgs !== undefined)
         {
             skillActivity.value = dialogArgs?.value
         }
