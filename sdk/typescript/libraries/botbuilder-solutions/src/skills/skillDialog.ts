@@ -66,7 +66,7 @@ export class SkillDialog extends Dialog {
         
         let dialogArgs: SkillDialogArgs = options;
         let skillId = dialogArgs.skillId;
-        await dc.context.sendTraceActivity(`${ DialogContext.name }.beginDialog()`, undefined, undefined, `Using activity of type: ${ dialogArgs.activityType }`);
+        await dc.context.sendTraceActivity(`${ SkillDialog.name }.onBeginDialog()`, undefined, undefined, `Using activity of type: ${ dialogArgs.activityType }`);
         
         let skillActivity: Activity;
 
@@ -97,11 +97,11 @@ export class SkillDialog extends Dialog {
      */
     protected async onContinueDialog(dc: DialogContext): Promise<DialogTurnResult> {
         dc.continueDialog
-        await dc.context.sendTraceActivity(`${ DialogContext.name }.continueDialog()`, undefined, undefined, `ActivityType: ${ dc.context.activity.type }`);
+        await dc.context.sendTraceActivity(`${ SkillDialog.name }.onContinueDialog()`, undefined, undefined, `ActivityType: ${ dc.context.activity.type }`);
         
         if (dc.context.activity.type === ActivityTypes.EndOfConversation)
         {
-            await dc.context.sendTraceActivity(`${ DialogContext.name }.continueDialog()`, undefined, undefined, 'Got EndOfConversation');
+            await dc.context.sendTraceActivity(`${ SkillDialog.name }.onContinueDialog()`, undefined, undefined, 'Got EndOfConversation');
             return await dc.endDialog(dc.context.activity.value);
         }
 
@@ -109,25 +109,24 @@ export class SkillDialog extends Dialog {
         await this.sendToSkill(dc, dc.context.activity);
     }
 
+    public async  ResumeDialog (dc: DialogContext, reason: DialogReason, result: Object): Promise<DialogTurnResult> {
+        return SkillDialog.EndOfTurn;
+    }
+
     public async endDialog(turnContext: TurnContext, instance: DialogInstance, reason: DialogReason): Promise<void> {
         if (reason === DialogReason.cancelCalled || reason === DialogReason.replaceCalled) {
-            //await turnContext.sendTraceActivity($"{GetType().Name}.EndDialogAsync()", label: $"ActivityType: {turnContext.Activity.Type}", cancellationToken: cancellationToken).ConfigureAwait(false);
+            await turnContext.sendTraceActivity(`${ SkillDialog.name }.endDialog()`, undefined, undefined, `ActivityType: ${turnContext.activity.type}`);
 
-            const activity: Activity = activity.createEndOfConversationActivity();
-            this.applyParentActivityProperties(turnContext, activity, null);
+            const activity: Activity = <Activity>ActivityEx.createEndOfConversationActivity();
+            this.applyParentActivityProperties(turnContext, activity);
 
-            await this.sendToSkill( null, activity);
+            await this.sendToSkill(undefined, activity);
         }
 
         await super.endDialog(turnContext, instance, reason);
     }
 
-
-    public async  ResumeDialog (dc: DialogContext, reason: DialogReason, result: Object): Promise<DialogTurnResult> {
-        return SkillDialog.EndOfTurn;
-    }
-
-    private applyParentActivityProperties(turnContext: TurnContext, skillActivity: Activity, dialogArgs: SkillDialogArgs) {
+    private applyParentActivityProperties(turnContext: TurnContext, skillActivity: Activity, dialogArgs?: SkillDialogArgs) {
         // Apply conversation reference and common properties from incoming activity before sending.
 
         // skillActivity.applyConversationReference(turnContext.activity.getConversationReference(), true);
@@ -140,7 +139,7 @@ export class SkillDialog extends Dialog {
         }
     }
 
-    private async sendToSkill(dc: DialogContext, activity: Activity): Promise<DialogTurnResult> {
+    private async sendToSkill(dc?: DialogContext, activity: Activity): Promise<DialogTurnResult> {
         if (dc !== null)
         {
             /**
