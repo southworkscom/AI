@@ -19,7 +19,8 @@ import {
     FeedbackMiddleware,
     ISkillManifest,
     LocaleTemplateEngineManager,
-    SetLocaleMiddleware } from 'botbuilder-solutions';
+    SetLocaleMiddleware, 
+    SetSpeakMiddleware} from 'botbuilder-solutions';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IBotSettings } from '../services/botSettings.js';
 
@@ -32,7 +33,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
         conversationState: ConversationState,
         adapterSettings: Partial<BotFrameworkAdapterSettings>,
         telemetryMiddleware: TelemetryInitializerMiddleware,
-        telemetryClient: BotTelemetryClient
+        telemetryClient: BotTelemetryClient,
     ) {
         super(adapterSettings);
 
@@ -67,5 +68,6 @@ export class DefaultAdapter extends BotFrameworkAdapter {
         this.use(new FeedbackMiddleware(conversationState, telemetryClient));
         this.use(new SetLocaleMiddleware(settings.defaultLocale || 'en-us'));
         this.use(new EventDebuggerMiddleware());
+        this.use(new SetSpeakMiddleware());
     }
 }
