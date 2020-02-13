@@ -33,7 +33,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
         conversationState: ConversationState,
         adapterSettings: Partial<BotFrameworkAdapterSettings>,
         telemetryMiddleware: TelemetryInitializerMiddleware,
-        telemetryClient: BotTelemetryClient,
+        telemetryClient: BotTelemetryClient
     ) {
         super(adapterSettings);
 
