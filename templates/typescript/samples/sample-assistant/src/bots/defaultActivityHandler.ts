@@ -8,13 +8,15 @@ import {
     TurnContext, 
     UserState,
     TeamsActivityHandler,
-    StatePropertyAccessor } from 'botbuilder';
+    StatePropertyAccessor, 
+    Activity,
+    ActivityTypes} from 'botbuilder';
 import {
     Dialog,
     DialogContext,
     DialogSet,
     DialogState } from 'botbuilder-dialogs';
-import { DialogEx } from 'botbuilder-solutions';
+import { DialogEx, LocaleTemplateEngineManager, TokenEvents } from 'botbuilder-solutions';
 
 export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandler {
     private readonly solutionName: string = 'sampleAssistant';
@@ -22,11 +24,14 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     private readonly dialogs: DialogSet;
     private readonly dialog: Dialog;
     private dialogStateAccessor: StatePropertyAccessor;
+    private userProfileState: StatePropertyAccessor;
+    private engineTemplate: TemplateManager;
 
     public constructor(
         conversationState: ConversationState,
         userState: UserState,
-        dialog: T) {
+        dialog: T,
+        templateEngine: LocaleTemplateEngineManager) {
         super();
 
         this.dialog = dialog;
@@ -34,6 +39,8 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
         this.dialogs = new DialogSet(conversationState.createProperty<DialogState>(this.solutionName));
         this.dialogs.add(this.dialog);
         this.dialogStateAccessor = conversationState.createProperty<DialogState>('DialogState');
+        this.userProfileState = userState.createProperty<DialogState>('UserProfileState');
+        this.engineTemplate = templateEngine;
         this.onTurn(this.turn.bind(this));
     }
 
@@ -51,6 +58,16 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     }
 
     protected async onTeamsMembersAdded(turnContext: TurnContext): Promise<void> {
+        let userProfile = await this.userProfileState.get(turnContext, () => { name: '' })
+
+        if( userProfile.name === '' ) {
+            // Send new user intro card.
+            await turnContext.sendActivity(this.engineTemplate.generateActivityForLocale('NewUserIntroCard', userProfile));
+        } else {
+            // Send returning user intro card.
+            await turnContext.sendActivity(this.engineTemplate.generateActivityForLocale('ReturningUserIntroCard', userProfile));
+        }
+        
         return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
@@ -63,6 +80,18 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     }
 
     protected async onEventActivity(turnContext: TurnContext): Promise<any> {
-        return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+        //PENDING: This should be const ev: IEventActivity = innerDc.context.activity.asEventActivity()
+        // but it's not in botbuilder-js currently
+        const ev: Activity = turnContext.activity;
+        const value: string = ev.value?.toString();
+
+        switch (ev.name) {
+            case TokenEvents.tokenResponseEventName:
+                // Forward the token response activity to the dialog waiting on the stack.
+                return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+        
+            default:
+                return turnContext.sendActivity({ type: ActivityTypes.Trace, text: `Unknown Event '${ev.name ?? 'undefined' }' was received but not processed.` });
+        }
     }
 }
