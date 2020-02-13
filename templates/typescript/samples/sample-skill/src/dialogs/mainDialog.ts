@@ -23,7 +23,7 @@ import {
     ICognitiveModelSet,
     InterruptionAction,
     LocaleTemplateEngineManager,
-    InterruptionAction, 
+    SkillContext,
     TokenEvents,
     isRemoteUserTokenProvider} from 'botbuilder-solutions';
 import { TokenStatus } from 'botframework-connector';
