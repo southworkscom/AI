@@ -9,7 +9,7 @@ import {
     RecognizerResult,
     StatePropertyAccessor, 
     TurnContext} from 'botbuilder';
-import { LuisRecognizer, QnAMakerResult, QnAMaker, QnAMakerTelemetryClient } from 'botbuilder-ai';
+import { LuisRecognizer, QnAMakerResult, QnAMaker } from 'botbuilder-ai';
 import {
     DialogContext,
     DialogTurnResult, 
@@ -17,24 +17,25 @@ import {
     ComponentDialog,
     WaterfallStepContext,
     TextPrompt,
-    Prompt,
-    PromptOptions} from 'botbuilder-dialogs';
+    PromptOptions, 
+    WaterfallDialog,
+    DialogTurnStatus} from 'botbuilder-dialogs';
 import {
     DialogContextEx,
     ICognitiveModelSet,
     LocaleTemplateEngineManager,
     SkillDialog,
-    SkillRouter,
     SwitchSkillDialog,
     SwitchSkillDialogOptions, 
     SkillsConfiguration,
-    EnhancedBotFrameworkSkill} from 'botbuilder-solutions';
+    EnhancedBotFrameworkSkill } from 'botbuilder-solutions';
 import { TokenStatus } from 'botframework-connector';
 import { Activity, ActivityTypes, ResourceResponse, IMessageActivity } from 'botframework-schema';
 import { IUserProfileState } from '../models/userProfileState';
 import { BotServices } from '../services/botServices';
 import { IBotSettings } from '../services/botSettings';
 import { OnboardingDialog, StateProperties } from './onboardingDialog';
+import { DispatchService } from 'botframework-config';
 
 // Dialog providing activity routing and message/event processing.
 export class MainDialog extends ComponentDialog {
@@ -73,11 +74,15 @@ export class MainDialog extends ComponentDialog {
         this.previousResponseAccesor = previousResponseAccessor;
 
         const steps: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
-            this.oboardingStep.bind(this),
+            this.onBoardingStep.bind(this),
             this.introStep.bind(this),
             this.routeStep.bind(this),
             this.finalStep.bind(this)
         ];
+
+        this.addDialog(new WaterfallDialog (MainDialog.name, steps));
+        this.addDialog(new TextPrompt(TextPrompt.name));
+        const InitialDialogId: string = MainDialog.name;
 
         // Register dialogs
         this.onboardingDialog = onboardingDialog
@@ -87,22 +92,6 @@ export class MainDialog extends ComponentDialog {
 
         // Register a QnAMakerDialog for each registered knowledgebase and ensure localised responses are provided.
         let localizedServices = services.getCognitiveModels();
-        
-        /* PENDING - QnaMakerDialog does not exist in BotBuilder-js
-        localizedServices.qnaServices.forEach((knowledgebase : QnAMakerTelemetryClient ) => {
-            let qnaDialog = new QnaMakerDialog(
-                knowledgeBaseId: knowledgebase.Value.KnowledgeBaseId,
-                endpointKey: knowledgebase.Value.EndpointKey,
-                hostName: knowledgebase.Value.Host,
-                noAnswer: _templateEngine.GenerateActivityForLocale("UnsupportedMessage"),
-                activeLearningCardTitle: _templateEngine.GenerateActivityForLocale("QnaMakerAdaptiveLearningCardTitle").Text,
-                cardNoMatchText: _templateEngine.GenerateActivityForLocale("QnaMakerNoMatchText").Text)
-            {
-                Id = knowledgebase.Key
-            };
-            this.addDialog(qnaDialog);
-        });
-        */
 
         // Register skill dialogs
         skillDialogs.forEach((skillDialog: SkillDialog): void => {
@@ -194,8 +183,8 @@ export class MainDialog extends ComponentDialog {
             const dispatchResult: RecognizerResult = innerDc.context.turnState.get(StateProperties.dispatchResult);
             const intent: string = LuisRecognizer.topIntent(dispatchResult);
             
-             // Check if we need to switch skills.
-             if (isSkill) {
+            // Check if we need to switch skills.
+            if (isSkill) {
                 if (dialog !== undefined) {
                     if (intent !== dialog.id && dispatchResult.intents[intent].score > 0.9) {
                         const identifiedSkill: EnhancedBotFrameworkSkill;
@@ -237,7 +226,7 @@ export class MainDialog extends ComponentDialog {
                         }
 
                         case 'Help': {
-                            if(isSkill) {
+                            if (!isSkill) {
                                 await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('HelpCard', userProfile));
                                 await innerDc.repromptDialog();
                                 interrupted = true;
@@ -259,7 +248,7 @@ export class MainDialog extends ComponentDialog {
 
                         case 'Repeat': {
                             // Sends the activities since the last user message again.
-                            const previousResponse: Partial<Activity>[] = await this.previousResponseAccesor.get(dc.context, []);
+                            const previousResponse: Partial<Activity>[] = await this.previousResponseAccesor.get(innerDc.context, []);
 
                             previousResponse.forEach(async (response: Partial<Activity>) => {
                                 // Reset id of original activity so it can be processed by the channel.
@@ -294,7 +283,7 @@ export class MainDialog extends ComponentDialog {
     }
 
     // Runs when the dialog stack is empty, and a new member is added to the conversation. Can be used to send an introduction activity.
-    protected async oboardingStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+    protected async onBoardingStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const userProfile: IUserProfileState = await this.userProfileState.get(stepContext.context, { name: '' });
 
         if (userProfile === undefined || userProfile.name.trim().length === 0) {
@@ -318,7 +307,7 @@ export class MainDialog extends ComponentDialog {
         const activity: IMessageActivity = stepContext.context.activity;
         const userProfile: IUserProfileState = await this.userProfileState.get(stepContext.context, { name: '' });
 
-        if (activity !== undefined && activity.text.trim().length > 0){
+        if (activity !== undefined && activity.text.trim().length > 0) {
             // Get current cognitive models for the current locale.
             const localizedServices: ICognitiveModelSet = this.services.getCognitiveModels();
 
@@ -326,7 +315,7 @@ export class MainDialog extends ComponentDialog {
             const dispatchResult: RecognizerResult = stepContext.context.turnState.get(StateProperties.dispatchResult);
             const dispatch: string = LuisRecognizer.topIntent(dispatchResult);
 
-            if ( dispatch !== undefined) {
+            if (this.IsSkillIntent !== undefined) {
                 const dispatchIntentSkill = dispatch.toString();
                 const skillDialogArgs: SkillDialogArgs = skillDialogArgs{ skillId = dispatchIntentSkill };
                 
@@ -334,23 +323,25 @@ export class MainDialog extends ComponentDialog {
                 return await stepContext.beginDialog(dispatchIntentSkill, skillDialogArgs);
             
             } else if (dispatch === 'q_faq') {
-                DialogContextEx.suppressCompletionMessage(stepContext, true);
-
-                return await stepContext.beginDialog('faq');
+                const qnaMaker: QnAMaker | undefined = localizedServices.qnaServices.get('faq');
+                if (qnaMaker !== undefined) {
+                    return await this.callQnaMaker(stepContext, qnaMaker);
+                }
             } else if (dispatch === 'q_chitchat') {
                 DialogContextEx.suppressCompletionMessage(stepContext, true);
-                
-                return await stepContext.beginDialog('chitchat');
+                const qnaMaker: QnAMaker | undefined = localizedServices.qnaServices.get('chitchat');
+                if (qnaMaker !== undefined){
+                    return await this.callQnaMaker(stepContext, qnaMaker);
+                }
             } else {
                 DialogContextEx.suppressCompletionMessage(stepContext, true);
                 await stepContext.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage', userProfile));
                 
                 return await stepContext.next();
             } 
-        } else {
-            
-            return await stepContext.next();
-        }  
+        } 
+
+        return await stepContext.next();
     }
 
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
@@ -376,6 +367,20 @@ export class MainDialog extends ComponentDialog {
             throw new Error('OAuthPrompt.SignOutUser(): not supported by the current adapter')
         }
     }
+
+    private async callQnaMaker(innerDc: DialogContext, qnaMaker: QnAMaker): Promise<DialogTurnResult> {
+        const userProfile: IUserProfileState = await this.userProfileState.get(innerDc.context, { name: '' });
+
+        const answer: QnAMakerResult[] = await qnaMaker.getAnswers(innerDc.context);
+
+        if (answer !== undefined && answer.length > 0){
+            await innerDc.context.sendActivity(answer[0].answer, answer[0].answer);
+        } else {
+            await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage', userProfile));
+        }
+
+        return {status: DialogTurnStatus.empty};
+    }
     
     private async storeOutgoingActivities(turnContext: TurnContext, activities: Partial<Activity>[], next: () => Promise<ResourceResponse[]>): Promise<ResourceResponse[]> {
         const messageActivities: Partial<Activity>[] = activities.filter(a => a.type == ActivityTypes.Message);
@@ -394,17 +399,12 @@ export class MainDialog extends ComponentDialog {
         return await next();
     }
 
-    /* PENDING - 
-    private IsSkillIntent(dispatchIntent: DispatchService) {
-        if (dispatchIntent.toString().match(DispatchLuis.Intent.l_General.ToString(), StringComparison.InvariantCultureIgnoreCase) ||
-            dispatchIntent.toString().Equals(DispatchLuis.Intent.q_Faq.ToString(), StringComparison.InvariantCultureIgnoreCase) ||
-            dispatchIntent.toString().Equals(DispatchLuis.Intent.q_Chitchat.ToString(), StringComparison.InvariantCultureIgnoreCase) ||
-            dispatchIntent.toString().Equals(DispatchLuis.Intent.None.ToString(), StringComparison.InvariantCultureIgnoreCase))
-        {
+    private IsSkillIntent(dispatchIntent: string) {
+        if (dispatchIntent.toLowerCase() === 'l_general' || dispatchIntent.toLowerCase() === 'q_chichat' || dispatchIntent.toLowerCase() === 'q_faq' || dispatchIntent.toLowerCase() === 'none') {
             return false;
         }
 
         return true;
     }
-    */
+    
 }
