@@ -11,30 +11,6 @@ describe("localization", function() {
         await skillTestBase.initialize();
     });
 
-    describe("de-de locale", function() {
-        it("send conversationUpdate and check the intro message is received with the de-de locale", function(done) {
-            const testAdapter = skillTestBase.getTestAdapter();
-            const flow = testAdapter
-                .send({
-                    type: "conversationUpdate",
-                    membersAdded: [
-                        {
-                            id: "1",
-                            name: "user"
-                        }
-                    ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
-                    locale: "de-de"
-                })
-                .assertReply(skillTestBase.templateEngine.generateActivityForLocale('IntroMessage'));
-
-            return testNock.resolveWithMocks("localization_de-de_response", done, flow);
-        });
-    });
-
     describe("es-es locale", function() {
         it("send conversationUpdate and check the intro message is received with the es-es locale", function(done) {
             const testAdapter = skillTestBase.getTestAdapter();
@@ -53,11 +29,37 @@ describe("localization", function() {
                     },
                     locale: "es-es"
                 })
-                .assertReply(skillTestBase.templateEngine.generateActivityForLocale('IntroMessage'));
+                .assertReply("¡Bienvenido a tu skill personalizada!");
 
             return testNock.resolveWithMocks("localization_es-es_response", done, flow);
         });
     });
+
+    describe("de-de locale", function() {
+        it("send conversationUpdate and check the intro message is received with the de-de locale", function(done) {
+            const testAdapter = skillTestBase.getTestAdapter();
+            const flow = testAdapter
+                .send({
+                    type: "conversationUpdate",
+                    membersAdded: [
+                        {
+                            id: "1",
+                            name: "user"
+                        }
+                    ],
+                    channelId: "emulator",
+                    recipient: {
+                        id: "1"
+                    },
+                    locale: "de-de"
+                })
+                .assertReply("Willkommen zu Ihrem benutzerdefinierten skill!");
+
+            return testNock.resolveWithMocks("localization_de-de_response", done, flow);
+        });
+    });
+
+    
 
     describe("fr-fr locale", function() {
         it("send conversationUpdate and check the intro message is received with the fr-fr locale", function(done) {
@@ -77,7 +79,7 @@ describe("localization", function() {
                     },
                     locale: "fr-fr"
                 })
-                .assertReply(skillTestBase.templateEngine.generateActivityForLocale('IntroMessage'));
+                .assertReply("Bienvenue à vos skill personnalisées!");
 
             return testNock.resolveWithMocks("localization_fr-fr_response", done, flow);
         });
@@ -101,33 +103,9 @@ describe("localization", function() {
                     },
                     locale: "it-it"
                 })
-                .assertReply(skillTestBase.templateEngine.generateActivityForLocale('IntroMessage'));
+                .assertReply("Benvenuto nella tua skill personalizzata!");
 
             return testNock.resolveWithMocks("localization_it-it_response", done, flow);
-        });
-    });
-
-    describe("en-us locale", function() {
-        it("send conversationUpdate and check the intro message is received with the en-us locale", function(done) {
-            const testAdapter = skillTestBase.getTestAdapter();
-            const flow = testAdapter
-                .send({
-                    type: "conversationUpdate",
-                    membersAdded: [
-                        {
-                            id: "1",
-                            name: "user"
-                        }
-                    ],
-                    channelId: "emulator",
-                    recipient: {
-                        id: "1"
-                    },
-                    locale: "en-us"
-                })
-                .assertReply(skillTestBase.templateEngine.generateActivityForLocale('IntroMessage'));
-
-            return testNock.resolveWithMocks("localization_en-us_response", done, flow);
         });
     });
 
@@ -149,14 +127,14 @@ describe("localization", function() {
                     },
                     locale: "zh-cn"
                 })
-                .assertReply(skillTestBase.templateEngine.generateActivityForLocale('IntroMessage'));
+                .assertReply("欢迎来到您的定制技能！");
 
             return testNock.resolveWithMocks("localization_zh-cn_response", done, flow);
         });
     });
 
-    describe("Defaulting localization", function () {
-        it("Fallback to a locale of the root language locale", function (done) {
+    describe("en-us locale", function() {
+        it("send conversationUpdate and check the intro message is received with the en-us locale", function(done) {
             const testAdapter = skillTestBase.getTestAdapter();
             const flow = testAdapter
                 .send({
@@ -171,11 +149,35 @@ describe("localization", function() {
                     recipient: {
                         id: "1"
                     },
-                    locale: "en-gb"
+                    locale: "en-us"
                 })
-                .assertReply(skillTestBase.templateEngine.generateActivityForLocale('IntroMessage'));
+                .assertReply("Welcome to your custom skill!");
 
-            return testNock.resolveWithMocks('localization_response_en-gb', done, flow);
+            return testNock.resolveWithMocks("localization_en-us_response", done, flow);
+        });
+    });
+
+    describe("Defaulting localization", function () {
+        xit("Fallback to a locale of the root language locale", function (done) {
+            const testAdapter = skillTestBase.getTestAdapter();
+            const flow = testAdapter
+                .send({
+                    type: "conversationUpdate",
+                    membersAdded: [
+                        {
+                            id: "1",
+                            name: "user"
+                        }
+                    ],
+                    channelId: "emulator",
+                    recipient: {
+                        id: "1"
+                    },
+                    locale: "en-uk"
+                })
+                .assertReply("Welcome to your custom skill!");
+
+            return testNock.resolveWithMocks('localization_response_en-uk', done, flow);
         });
     });
 });

@@ -8,8 +8,8 @@
         "response": {
             "query": "help",
             "topScoringIntent": {
-                "intent": "Help",
-                "score": 0.98982656
+                "intent": "None",
+                "score": 0.873317
             },
             "entities": []
         },
@@ -19,23 +19,60 @@
             "Pragma",
             "no-cache",
             "Content-Length",
-            "121",
+            "119",
             "Content-Type",
             "application/json; charset=utf-8",
             "Apim-Request-Id",
-            "d218630d-5e2a-4c3f-80fb-1fa5fac811e1",
+            "aaaf96f0-5f9f-42b0-9172-d15a86395d73",
             "Request-Id",
-            "d218630d-5e2a-4c3f-80fb-1fa5fac811e1",
+            "aaaf96f0-5f9f-42b0-9172-d15a86395d73",
             "Strict-Transport-Security",
             "max-age=31536000; includeSubDomains; preload",
-            "Request-Context",
-            "appId=cid-v1:26a3540d-a02a-4998-a060-715488fd769b",
             "X-Content-Type-Options",
             "nosniff",
             "X-Frame-Options",
             "SAMEORIGIN",
             "Date",
-            "Fri, 06 Sep 2019 15:45:32 GMT",
+            "Tue, 18 Feb 2020 13:24:06 GMT",
+            "Connection",
+            "close"
+        ]
+    },
+    {
+        "scope": "https://westus.api.cognitive.microsoft.com:443",
+        "method": "POST",
+        "path": "/luis/v2.0/apps/f7c2ee78-8679-4a3e-b384-0cd10c67e554?verbose=false&staging=false&spellCheck=false&log=true",
+        "body": "help",
+        "status": 200,
+        "response": {
+            "query": "help",
+            "topScoringIntent": {
+                "intent": "Help",
+                "score": 0.987597764
+            },
+            "entities": []
+        },
+        "rawHeaders": [
+            "Cache-Control",
+            "no-store, proxy-revalidate, no-cache, max-age=0, private",
+            "Pragma",
+            "no-cache",
+            "Content-Length",
+            "122",
+            "Content-Type",
+            "application/json; charset=utf-8",
+            "Apim-Request-Id",
+            "db712778-6d53-4874-a5e3-8ab10821857d",
+            "Request-Id",
+            "db712778-6d53-4874-a5e3-8ab10821857d",
+            "Strict-Transport-Security",
+            "max-age=31536000; includeSubDomains; preload",
+            "X-Content-Type-Options",
+            "nosniff",
+            "X-Frame-Options",
+            "SAMEORIGIN",
+            "Date",
+            "Tue, 18 Feb 2020 13:24:07 GMT",
             "Connection",
             "close"
         ]
