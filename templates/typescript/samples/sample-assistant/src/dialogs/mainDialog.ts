@@ -35,7 +35,6 @@ import { IUserProfileState } from '../models/userProfileState';
 import { BotServices } from '../services/botServices';
 import { IBotSettings } from '../services/botSettings';
 import { OnboardingDialog, StateProperties } from './onboardingDialog';
-import { DispatchService } from 'botframework-config';
 
 // Dialog providing activity routing and message/event processing.
 export class MainDialog extends ComponentDialog {
@@ -62,10 +61,11 @@ export class MainDialog extends ComponentDialog {
     ) {
         super(MainDialog.name);
 
-        this.services = services
-        this.settings = settings
-        this.templateEngine = templateEngine
-        this.telemetryClient = telemetryClient;
+        this.services = services,
+        this.settings = settings,
+        this.templateEngine = templateEngine,
+        this.skillsConfig = skillsConfig,
+        this.telemetryClient = telemetryClient
         
         // Create user state properties
         this.userProfileState = userProfileState;
@@ -82,7 +82,7 @@ export class MainDialog extends ComponentDialog {
 
         this.addDialog(new WaterfallDialog (MainDialog.name, steps));
         this.addDialog(new TextPrompt(TextPrompt.name));
-        const InitialDialogId: string = MainDialog.name;
+        const initialDialogId: string = MainDialog.name;
 
         // Register dialogs
         this.onboardingDialog = onboardingDialog
