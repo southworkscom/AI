@@ -34,6 +34,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
         adapterSettings: Partial<BotFrameworkAdapterSettings>,
         telemetryMiddleware: TelemetryInitializerMiddleware,
         telemetryClient: BotTelemetryClient
+        // PENDING: Pass IChannelProvider to BotFrameworkHttpAdapter but neither exists in BotBuilder-JS
     ) {
         super(adapterSettings);
 
