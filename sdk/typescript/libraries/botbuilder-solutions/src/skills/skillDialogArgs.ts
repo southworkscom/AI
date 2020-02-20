@@ -2,7 +2,6 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-
 import { ActivityTypes } from 'botframework-schema';
 
 /**
@@ -36,7 +35,7 @@ export class SkillDialogArgs {
     public value: Object = new Object(); 
 
     /**
-     * A class with dialog arguments for a SkillDialog
+     * Gets or sets the text property for the 'ActivityTypes.Message' to send to the skill (ignored for other types of activities).
      * @param text
      */
     public text: string = ""; 
