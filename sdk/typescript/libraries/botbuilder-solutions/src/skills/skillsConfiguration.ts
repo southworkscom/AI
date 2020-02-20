@@ -14,7 +14,7 @@ export class SkillsConfiguration {
 
     public constructor(skills: EnhancedBotFrameworkSkill[], skillHostEndpoint: string) {
         
-        if (skills !== null)
+        if (skills !== undefined)
         {
             skills.forEach((skill: EnhancedBotFrameworkSkill): void => {
 
