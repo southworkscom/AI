@@ -2,9 +2,7 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-
-import { SkillConversationIdFactoryBase, Storage } from 'botbuilder';
-import { ConversationReference} from 'botbuilder';
+import { ConversationReference, SkillConversationIdFactoryBase, Storage } from 'botbuilder';
 
  /**
  * A SkillConversationIdFactory that uses IStorage to store and retrieve ConversationReference instances.
@@ -25,16 +23,16 @@ export class SkillConversationIdFactory extends SkillConversationIdFactoryBase {
 
         if (conversationReference === null) { throw new Error('The value of conversationReference is undefined'); }
 
-        if (conversationReference.conversation.id === undefined || conversationReference.conversation.id.trim().length > 0) { 
+        if (conversationReference.conversation.id === undefined || conversationReference.conversation.id.trim().length <= 0) { 
             throw new Error('The value of conversationId is undefined'); 
         }
         
-        if (conversationReference.channelId === undefined || conversationReference.channelId.trim().length > 0) { 
+        if (conversationReference.channelId === undefined || conversationReference.channelId.trim().length <= 0) { 
             throw new Error('The value of channelId is undefined'); 
         }
         
-        let storageKey: string = `${conversationReference.conversation.id}-${conversationReference.channelId}-skillconvo`;
-        let skillConversationInfo: Map<string, ConversationReference> = new Map<string, ConversationReference>();
+        const storageKey: string = `${conversationReference.conversation.id}-${conversationReference.channelId}-skillconvo`;
+        const skillConversationInfo: Map<string, ConversationReference> = new Map<string, ConversationReference>();
         skillConversationInfo.set(storageKey, conversationReference); 
         await this.storage.write(skillConversationInfo); 
 
@@ -43,17 +41,17 @@ export class SkillConversationIdFactory extends SkillConversationIdFactoryBase {
 
     public async getConversationReference(skillConversationId: string): Promise<ConversationReference>
     {
-        if (skillConversationId === null) { throw new Error('The value of skillConversationId is undefined'); }
+        if (skillConversationId === undefined || skillConversationId === "") { throw new Error('The value of skillConversationId is undefined or empty'); }
 
-        let skillConversationInfo = await this.storage.read([skillConversationId]);
+        const skillConversationInfo = await this.storage.read([skillConversationId]);
         if (skillConversationInfo)
         {
-            let conversationInfo: ConversationReference = skillConversationInfo[skillConversationId];
+            const conversationInfo: ConversationReference = skillConversationInfo[skillConversationId];
 
             return conversationInfo;
         }
 
-        throw new Error('Return undefined');        
+        throw new Error(`'conversationInfo' is undefined`);
     }
 
     public async deleteConversationReference(skillConversationId: string): Promise<void>
