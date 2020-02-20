@@ -5,7 +5,7 @@
 
 import { Activity, BotAdapter, ConversationReference, Middleware, ResourceResponse, TurnContext } from 'botbuilder';
 import { setTimeout } from 'timers';
-import { ActivityExtensions } from '../extensions';
+import { ActivityEx } from '../extensions';
 import { IBackgroundTaskQueue } from '../taskExtensions';
 import { CommonUtil } from '../util';
 
@@ -52,7 +52,7 @@ export class InProcAdapter extends BotAdapter {
             throw new Error('Missing parameter.  logic is required');
         }
 
-        const context: TurnContext = new TurnContext(this, ActivityExtensions.getContinuationActivity(reference));
+        const context: TurnContext = new TurnContext(this, ActivityEx.getContinuationActivity(reference));
         await this.runMiddleware(context, logic);
     }
 
@@ -70,7 +70,7 @@ export class InProcAdapter extends BotAdapter {
         const responses: ResourceResponse[] = [];
         const proactiveActivities: Partial<Activity>[] = [];
 
-        activities.forEach(async(activity: Partial<Activity>): Promise<void> => {
+        activities.forEach(async (activity: Partial<Activity>): Promise<void> => {
             if (!activity.id) {
                 activity.id = this.nextId;
             }
@@ -84,7 +84,6 @@ export class InProcAdapter extends BotAdapter {
                 // hack directly in the POST method. Replicating that here
                 // to keep the behavior as close as possible to facilitate
                 // more realistic tests.
-                // eslint-disable-next-line @typescript-eslint/tslint/config
                 const delayMs: number = activity.value;
                 await this.sleep(delayMs);
             } else {

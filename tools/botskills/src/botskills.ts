@@ -16,12 +16,12 @@ const pkg: IPackage = JSON.parse(readFileSync(join(__dirname, '..', 'package.jso
 
 const requiredVersion: string = pkg.engines.node;
 if (!semver.satisfies(process.version, requiredVersion)) {
-    logger.error(`Required node version ${requiredVersion} not satisfied with current version ${process.version}.`);
+    logger.error(`Required node version ${ requiredVersion } not satisfied with current version ${ process.version }.`);
     process.exit(1);
 }
 
 program.Command.prototype.unknownOption = (flag: string): void => {
-    logger.error(`Unknown arguments: ${flag}`);
+    logger.error(`Unknown arguments: ${ flag }`);
     program.outputHelp((str: string): string => {
         logger.error(str);
 
@@ -39,13 +39,14 @@ program
     .command('disconnect', 'disconnect a specific skill from your assitant bot')
     .command('update', 'update a specific skill from your assistant bot')
     .command('refresh', 'refresh the connected skills')
-    .command('list', 'list the connected skills in the assistant');
+    .command('list', 'list the connected skills in the assistant')
+    .command('migrate', 'migrate the Skills connected in your assistant to the new schema');
 
 const args: program.Command = program.parse(process.argv);
 // args should be undefined is subcommand is executed
 if (args !== undefined) {
     const unknownArgs: string[] = process.argv.slice(2);
-    logger.error(`Unknown arguments: ${unknownArgs.join(' ')}`);
+    logger.error(`Unknown arguments: ${ unknownArgs.join(' ') }`);
     program.outputHelp((str: string): string => {
         logger.error(str);
 

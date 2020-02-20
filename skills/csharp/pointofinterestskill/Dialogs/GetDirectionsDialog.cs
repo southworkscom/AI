@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
-using Microsoft.Bot.Builder.Solutions.Responses;
+using Microsoft.Bot.Solutions.Responses;
 using PointOfInterestSkill.Responses.Shared;
 using PointOfInterestSkill.Services;
 using PointOfInterestSkill.Utilities;
@@ -54,7 +54,7 @@ namespace PointOfInterestSkill.Dialogs
         {
             var state = await Accessor.GetAsync(sc.Context);
             var hasCurrentCoordinates = state.CheckForValidCurrentCoordinates();
-            if (hasCurrentCoordinates)
+            if (hasCurrentCoordinates || !string.IsNullOrEmpty(state.Address))
             {
                 return await sc.ReplaceDialogAsync(Actions.FindPointOfInterest);
             }

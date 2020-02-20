@@ -15,17 +15,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Builder.Solutions.Models;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Util;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions;
+using Microsoft.Bot.Solutions.Models;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.Util;
 using PointOfInterestSkill.Models;
 using PointOfInterestSkill.Responses.FindPointOfInterest;
 using PointOfInterestSkill.Responses.Shared;
 using PointOfInterestSkill.Services;
 using PointOfInterestSkill.Utilities;
+using SkillServiceLibrary.Models;
+using SkillServiceLibrary.Services;
+using SkillServiceLibrary.Utilities;
 using static Microsoft.Recognizers.Text.Culture;
 
 namespace PointOfInterestSkill.Dialogs
@@ -605,17 +608,6 @@ namespace PointOfInterestSkill.Dialogs
             return options;
         }
 
-        // Validators
-        protected async Task<List<PointOfInterestModel>> CurrentLocationValidator(PromptValidatorContext<string> promptContext, CancellationToken cancellationToken)
-        {
-            var result = promptContext.Recognized.Value;
-            var service = ServiceManager.InitMapsService(Settings);
-
-            var pointOfInterestList = await service.GetPointOfInterestListByQueryAsync(double.NaN, double.NaN, result);
-
-            return await Task.FromResult(pointOfInterestList);
-        }
-
         // service: for details. the one generates pointOfInterestList
         protected async Task<List<Card>> GetPointOfInterestLocationCards(DialogContext sc, List<PointOfInterestModel> pointOfInterestList, IGeoSpatialService service)
         {
@@ -911,7 +903,7 @@ namespace PointOfInterestSkill.Dialogs
         // workaround. if connect skill directly to teams, the following response does not work.
         protected bool SupportOpenDefaultAppReply(ITurnContext turnContext)
         {
-            return turnContext.Adapter is IRemoteUserTokenProvider || Channel.GetChannelId(turnContext) != Channels.Msteams;
+            return turnContext.IsSkill() || Channel.GetChannelId(turnContext) != Channels.Msteams;
         }
 
         private string GetCardImageUri(string imagePath)
@@ -928,9 +920,7 @@ namespace PointOfInterestSkill.Dialogs
             }
             else
             {
-                var localeConfig = Services.GetCognitiveModels();
-                localeConfig.LuisServices.TryGetValue("PointOfInterest", out var poiService);
-                var poiResult = await poiService.RecognizeAsync<PointOfInterestLuis>(promptContext.Context, CancellationToken.None);
+                var poiResult = promptContext.Context.TurnState.Get<PointOfInterestLuis>(StateProperties.POILuisResultKey);
                 var topIntent = poiResult.TopIntent();
 
                 if (topIntent.score > 0.5 && topIntent.intent != PointOfInterestLuis.Intent.None)
@@ -955,7 +945,9 @@ namespace PointOfInterestSkill.Dialogs
             else
             {
                 var state = await Accessor.GetAsync(promptContext.Context);
-                if (state.GeneralIntent == General.Intent.Reject || state.GeneralIntent == General.Intent.SelectNone)
+                var generalLuisResult = promptContext.Context.TurnState.Get<General>(StateProperties.GeneralLuisResultKey);
+                var intent = generalLuisResult.TopIntent().intent;
+                if (intent == General.Intent.Reject || intent == General.Intent.SelectNone)
                 {
                     promptContext.Recognized.Value = new FoundChoice { Index = -1 };
                     return true;

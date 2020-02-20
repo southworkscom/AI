@@ -1,4 +1,5 @@
 Overview:
+- What's New
 Virtual Assistant:
 - Create
 - Customize
@@ -8,8 +9,7 @@ Skills:
 - Create
 - Customize
 - Connect to a sample
-- Convert a v4 Bot
-- Extend a v4 Bot
+- Add action support
 - Handbook
 - Samples
 Solution Accelerators:
@@ -25,4 +25,3 @@ Clients and Channels:
 - Extend to Direct Line Speech
 - Extend to Microsoft Teams
 Help:
-- Reference

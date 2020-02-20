@@ -10,6 +10,8 @@ import { ConsoleLogger, ILogger} from './logger';
 import { IRefreshConfiguration } from './models';
 import { sanitizePath, validatePairOfArgs } from './utils';
 
+const logger: ILogger = new ConsoleLogger();
+
 function showErrorHelp(): void {
     program.outputHelp((str: string): string => {
         logger.error(str);
@@ -19,10 +21,8 @@ function showErrorHelp(): void {
     process.exit(1);
 }
 
-const logger: ILogger = new ConsoleLogger();
-
 program.Command.prototype.unknownOption = (flag: string): void => {
-    logger.error(`Unknown arguments: ${flag}`);
+    logger.error(`Unknown arguments: ${ flag }`);
     showErrorHelp();
 };
 
@@ -31,7 +31,7 @@ program
     .description('Refresh the connected skills.')
     .option('--cs', 'Determine your assistant project structure to be a CSharp-like structure')
     .option('--ts', 'Determine your assistant project structure to be a TypeScript-like structure')
-    .option('--dispatchFolder [path]', '[OPTIONAL] Path to the folder containing your assistant\'s \'.dispatch\' file (defaults to \'./deployment/resources/dispatch/en\' inside your assistant folder)')
+    .option('--dispatchFolder [path]', '[OPTIONAL] Path to the folder containing your assistant\'s \'.dispatch\' file (defaults to \'./deployment/resources/dispatch\' inside your assistant folder)')
     .option('--outFolder [path]', '[OPTIONAL] Path for any output file that may be generated (defaults to your assistant\'s root folder)')
     .option('--lgOutFolder [path]', '[OPTIONAL] Path for the LuisGen output (defaults to a \'service\' folder inside your assistant\'s folder)')
     .option('--cognitiveModelsFile [path]', '[OPTIONAL] Path to your Cognitive Models file (defaults to \'cognitivemodels.json\' inside your assistant\'s folder)')
@@ -90,4 +90,4 @@ const configuration: IRefreshConfiguration = {
     logger: logger
 };
 
-new RefreshSkill(<IRefreshConfiguration> configuration, logger).refreshSkill();
+new RefreshSkill(configuration as IRefreshConfiguration, logger).refreshSkill();
