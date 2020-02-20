@@ -18,30 +18,28 @@ import {
     WaterfallStepContext,
     WaterfallDialog,
     TextPrompt,
-    Dialog
+    PromptOptions,
+    ComponentDialog
 } from 'botbuilder-dialogs';
 import {
-    ActivityHandlerDialog,
     ICognitiveModelSet,
-    InterruptionAction,
-    LocaleTemplateEngineManager,
-    TokenEvents,
-    isRemoteUserTokenProvider } from 'botbuilder-solutions';
+    LocaleTemplateEngineManager 
+} from 'botbuilder-solutions';
 import { TokenStatus } from 'botframework-connector';
 import { SkillState } from '../models/skillState';
 import { BotServices } from '../services/botServices';
 import { SampleDialog } from './sampleDialog';
 import { StateProperties } from '../models';
+import { SampleActionInput, SampleAction } from './sampleAction';
 
-export class MainDialog extends ActivityHandlerDialog {
+export class MainDialog extends ComponentDialog {
 
     // Fields
     private readonly services: BotServices;
     private readonly sampleDialog: SampleDialog;
-    private readonly sampleAction: SampleDialog;
+    private readonly sampleAction: SampleAction;
     private readonly templateEngine: LocaleTemplateEngineManager;
     private readonly stateAccessor: StatePropertyAccessor<SkillState>;
-    private readonly telemetryClient: BotTelemetryClient;
     
     // Constructor
     public constructor(
@@ -49,7 +47,7 @@ export class MainDialog extends ActivityHandlerDialog {
         telemetryClient: BotTelemetryClient,
         stateAccessor: StatePropertyAccessor<SkillState>,
         sampleDialog: SampleDialog,
-        sampleAction: SampleDialog,
+        sampleAction: SampleAction,
         templateEngine: LocaleTemplateEngineManager,
     ) {
         super(MainDialog.name);
@@ -61,14 +59,14 @@ export class MainDialog extends ActivityHandlerDialog {
         this.stateAccessor = stateAccessor;
 
         const steps: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
-            introStep.bind(this),
-            routeStep.bind(this),
-            finalStep.bind(this),
+            this.introStep.bind(this),
+            this.routeStep.bind(this),
+            this.finalStep.bind(this)
         ];
 
         this.addDialog(new WaterfallDialog (MainDialog.name, steps));
         this.addDialog(new TextPrompt(TextPrompt.name));
-        const InitialDialogId: string = MainDialog.name;
+        this.initialDialogId = MainDialog.name;
         
         // Register dialogs
         this.sampleDialog = sampleDialog;
@@ -99,7 +97,7 @@ export class MainDialog extends ActivityHandlerDialog {
             }
 
             // Check for any interruptions
-            var interrupted = await onInterruptDialog(innerDc);
+            var interrupted = await this.interruptDialog(innerDc);
 
             if (interrupted) {
                 // If dialog was interrupted, return EndOfTurn
@@ -111,7 +109,7 @@ export class MainDialog extends ActivityHandlerDialog {
     }
 
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
-        if (innerDc.context.activity.type == ActivityTypes.Message) {
+        if (innerDc.context.activity.type === ActivityTypes.Message) {
         
             // Get cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels();
@@ -124,7 +122,7 @@ export class MainDialog extends ActivityHandlerDialog {
             }
         
             // Check for any interruptions
-            var interrupted = await onInterruptDialog(innerDc);
+            var interrupted = await this.interruptDialog(innerDc);
 
             if (interrupted) {
                 // If dialog was interrupted, return EndOfTurn
@@ -136,7 +134,7 @@ export class MainDialog extends ActivityHandlerDialog {
     }
 
     // Runs on every turn of the conversation to check if the conversation should be interrupted.
-    protected async onInterruptDialog(innerDc: DialogContext): Promise<Boolean> {
+    protected async interruptDialog(innerDc: DialogContext): Promise<Boolean> {
         let interrupted: Boolean = false;
         const activity: Activity = innerDc.context.activity;
 
@@ -146,13 +144,13 @@ export class MainDialog extends ActivityHandlerDialog {
             const generalResult: RecognizerResult = innerDc.context.turnState.get(StateProperties.generalLuisResult);
             const intent: string = LuisRecognizer.topIntent(generalResult);
 
-            if(generalResult.intents[intent].score > 0.5) {
+            if (generalResult.intents[intent].score > 0.5) {
                 switch(intent.toString()) {
                     case 'Cancel': { 
 
                         await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('CancelledMessage'));
                         await innerDc.cancelAllDialogs();
-                        await innerDc.beginDialog(initialDialogId);
+                        await innerDc.beginDialog(this.initialDialogId);
                         interrupted = true;
                         break;
                     } 
@@ -170,7 +168,7 @@ export class MainDialog extends ActivityHandlerDialog {
 
                         await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('LogoutMessage'));
                         await innerDc.cancelAllDialogs();
-                        await innerDc.beginDialog(initialDialogId);
+                        await innerDc.beginDialog(this.initialDialogId);
                         interrupted = true;
                         break;
                     }
@@ -182,14 +180,14 @@ export class MainDialog extends ActivityHandlerDialog {
     }
 
     // Handles introduction/continuation prompt logic.
-    private async introStepAsync(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+    private async introStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         if (stepContext.context.IsSkill()) {
             // If the bot is in skill mode, skip directly to route and do not prompt
             return await stepContext.next();
         } else {
             // If bot is in local mode, prompt with intro or continuation message
-            const promptOptions = new PromptOptions {
-                Prompt = stepContext.options as Activity ?? this.templateEngine.GenerateActivityForLocale("FirstPromptMessage")
+            const promptOptions: PromptOptions = {
+                prompt: stepContext.options as Activity ?? this.templateEngine.generateActivityForLocale("FirstPromptMessage")
             };
 
             return await stepContext.prompt(TextPrompt.name, promptOptions);
@@ -198,11 +196,12 @@ export class MainDialog extends ActivityHandlerDialog {
 
     // Runs when the dialog stack is empty, and a new message activity comes in.
     protected async routeStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+        
         //PENDING: This should be const activity: IMessageActivity = innerDc.context.activity.asMessageActivity()
         // but it's not in botbuilder-js currently
         const activity: Activity = stepContext.context.activity;
 
-        if (activity !== undefined && activity.text.trim().length > 0){
+        if (activity !== undefined && activity.text.trim().length > 0) {
             // Get current cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels();
 
@@ -223,55 +222,62 @@ export class MainDialog extends ActivityHandlerDialog {
 
                         await stepContext.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage'));
                         return await stepContext.next();
-                        break;
                     }
                 }  
             } else {
                 throw new Error("The specified LUIS Model could not be found in your Bot Services configuration.");
-            } /* PENDING else if (activity.type === ActivityTypes.Event) {
+            } 
+        } else if (activity.type === ActivityTypes.Event) {
                 
-                const ev = activity.asEventActivity();
+                // PENDING const ev = activity.AsEventActivity();
+                const ev = activity;
                 switch (ev.name) {
-                    /* PENDING
+                    
                     case "SampleAction": {
-                            const actionData: SampleActionInput = '';
+                        const actionData: SampleActionInput = '';
 
-                            if (ev.value is JObject eventValue)
-                            {
-                                actionData = eventValue.ToObject<SampleActionInput>();
-                            }
-
-                            // Invoke the SampleAction dialog passing input data if available
-                            return await stepContext.beginDialog(SampleAction.name, actionData);
+                        if (ev.value is eventValue) {
+                            // constactionData = eventValue.ToObject<SampleActionInput>();
                         }
 
+                        // Invoke the SampleAction dialog passing input data if available
+                        return await stepContext.beginDialog(this.sampleAction.name, actionData);
+                    }
+
                     default: {
-                        await stepContext.context.sendActivity(new Activity(type: ActivityTypes.Trace, text: $"Unknown Event '{ev.Name ?? "undefined"}' was received but not processed."));
+                        await stepContext.context.sendActivity({ 
+                            type: ActivityTypes.Trace, 
+                            text: `Unknown Event ${ev.name ?? 'undefined' } was received but not processed.`                       
+                        });
                         break;
                     }  
                 }
+        } else {
+                await stepContext.context.sendActivity({
+                    type: ActivityTypes.Trace, 
+                    text: 'An event with no name was received but not processed.'
+                });
             }
-            */
-        }
+
+        // If activity was unhandled, flow should continue to next step
+        return await stepContext.next();
     }
 
     // Handles conversation cleanup.
-    private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult>
-    {
-        if (stepContext.context.IsSkill())
-        {
+    private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+        if (stepContext.context.IsSkill()) {
             // EndOfConversation activity should be passed back to indicate that VA should resume control of the conversation
-            const endOfConversation: Activity = new Activity(ActivityTypes.EndOfConversation) {
+            const endOfConversation: Partial<Activity> = (ActivityTypes.EndOfConversation) {
                 code = EndOfConversationCodes.CompletedSuccessfully,
-                value = stepContext.result,
+                value = stepContext.result
             };
 
-            await stepContext.context.sendActivities(endOfConversation);
+            await stepContext.context.sendActivity(endOfConversation);
+
             return await stepContext.endDialog();
-        }
-        else
-        {
-            return await stepContext.replaceDialog(Dialog.id, this.templateEngine.GenerateActivityForLocale("CompletedMessage"));
+        } else {
+            
+            return await stepContext.replaceDialog(this.sampleDialog.id, this.templateEngine.generateActivityForLocale("CompletedMessage"));
         }
     }
 
