@@ -19,3 +19,5 @@ export * from './skillTransport';
 export * from './skillConstants';
 export * from './skillDialogOption';
 export * from './skillDialogArgs';
+export * from './skillsConfiguration';
+export * from './enhancedBotFrameworkSkill';
