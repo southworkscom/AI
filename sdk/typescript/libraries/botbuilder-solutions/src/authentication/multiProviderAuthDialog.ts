@@ -14,7 +14,6 @@ import i18next from 'i18next';
 import { IOAuthConnection } from '../authentication';
 import { EventPrompt } from '../dialogs/eventPrompt';
 import { ActivityEx } from '../extensions';
-import { IRemoteUserTokenProvider, isRemoteUserTokenProvider } from '../remoteUserTokenProvider';
 import { ResponseManager } from '../responses';
 import { TokenEvents } from '../tokenEvents';
 import { AuthenticationResponses } from './authenticationResponses';
@@ -28,7 +27,6 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     private selectedAuthType: string = '';
     private readonly authenticationConnections: IOAuthConnection[];
     private readonly responseManager: ResponseManager;
-    private readonly localAuthConfigured: boolean = false;
     private readonly appCredentials: MicrosoftAppCredentials;
 
     public constructor(
