@@ -2,12 +2,12 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
+
 import { ActivityTypes } from 'botframework-schema';
 
 /**
  * A class with dialog arguments for a SkillDialog
  */
-
 export class SkillDialogArgs {
 
     /**
