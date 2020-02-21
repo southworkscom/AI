@@ -6,8 +6,7 @@ import {
     DialogTurnResult,
     WaterfallStepContext,
     WaterfallDialog,
-    TextPrompt,
-    PromptOptions } from 'botbuilder-dialogs';
+    TextPrompt } from 'botbuilder-dialogs';
 import { SkillDialogBase } from './skillDialogBase';
 import { BotTelemetryClient, StatePropertyAccessor, Activity } from 'botbuilder';
 import { BotServices } from '../services/botServices';
@@ -17,11 +16,11 @@ import { IBotSettings } from '../services/botSettings';
 import { SampleDialog } from './sampleDialog';
 
 export class SampleActionInput {
-    name = ''
+    name: string = '';
 }
 
 export class SampleActionOutput {
-    customerId = ''
+    customerId: string = '';
 }
 
 export class SampleAction extends SkillDialogBase {
@@ -45,13 +44,13 @@ export class SampleAction extends SkillDialogBase {
         this.addDialog(new WaterfallDialog(SampleAction.name, sample));
         this.addDialog(new TextPrompt(DialogIds.namePrompt));
 
-        const initialDialogId: string = SampleAction.name;
+        this.initialDialogId = SampleAction.name;
     }
 
     private async promptForName(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         // If we have been provided a input data structure we pull out provided data as appropriate
         // and make a decision on whether the dialog needs to prompt for anything.
-        const actionInput = stepContext.options as SampleActionInput;
+        const actionInput: SampleActionInput = stepContext.options as SampleActionInput;
 
         if (actionInput !== null && actionInput.name.trim().length > 0) {
             // We have Name provided by the caller so we skip the Name prompt.
@@ -66,7 +65,7 @@ export class SampleAction extends SkillDialogBase {
         const tokens: Map<string, string> = new Map<string, string>();
         tokens.set(this.nameKey, stepContext.result as string);
 
-        const response = this.templateEngine.generateActivityForLocale("HaveNameMessage", tokens);
+        const response: Partial<Activity> = this.templateEngine.generateActivityForLocale("HaveNameMessage", tokens);
         await stepContext.context.sendActivity(response);
 
         // Pass the response which we'll return to the user onto the next step
@@ -75,7 +74,7 @@ export class SampleAction extends SkillDialogBase {
 
     private async end(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         // Simulate a response object payload
-        const actionResponse = new SampleActionOutput();
+        const actionResponse: SampleActionOutput = new SampleActionOutput();
         actionResponse.customerId = Math.random().toString();
 
         // We end the dialog (generating an EndOfConversation event) which will serialize the result object in the Value field of the Activity

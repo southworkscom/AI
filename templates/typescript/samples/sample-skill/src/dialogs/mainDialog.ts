@@ -181,7 +181,7 @@ export class MainDialog extends ComponentDialog {
 
     // Handles introduction/continuation prompt logic.
     private async introStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        if (stepContext.context.IsSkill()) {
+        if (stepContext.context.isSkill()) {
             // If the bot is in skill mode, skip directly to route and do not prompt
             return await stepContext.next();
         } else {
@@ -231,13 +231,12 @@ export class MainDialog extends ComponentDialog {
                 
                 // PENDING const ev = activity.AsEventActivity();
                 const ev = activity;
-                switch (ev.name) {
-                    
+                switch (ev.name) {      
                     case "SampleAction": {
-                        const actionData: SampleActionInput = '';
+                        let actionData: Object = '';
 
-                        if (ev.value is eventValue) {
-                            // constactionData = eventValue.ToObject<SampleActionInput>();
+                        if (ev.value !== undefined) {
+                            actionData = ev.value;
                         }
 
                         // Invoke the SampleAction dialog passing input data if available
@@ -265,12 +264,13 @@ export class MainDialog extends ComponentDialog {
 
     // Handles conversation cleanup.
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        if (stepContext.context.IsSkill()) {
+        if (stepContext.context.isSkill()) {
             // EndOfConversation activity should be passed back to indicate that VA should resume control of the conversation
-            const endOfConversation: Partial<Activity> = (ActivityTypes.EndOfConversation) {
-                code = EndOfConversationCodes.CompletedSuccessfully,
-                value = stepContext.result
-            };
+            const endOfConversation: Partial <Activity> = ({
+                type: ActivityTypes.EndOfConversation,
+                code: EndOfConversationCodes.CompletedSuccessfully,
+                value: stepContext.result
+            });
 
             await stepContext.context.sendActivity(endOfConversation);
 
