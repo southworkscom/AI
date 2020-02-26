@@ -5,10 +5,9 @@
 
 import { BotFrameworkSkill } from 'botbuilder';
 
- /**
- * Enhanced version of BotFrameworkSkill that adds additional properties commonly needed by a Skills VA
- */
-export interface EnhancedBotFrameworkSkill extends BotFrameworkSkill {
+/**
+* Enhanced version of BotFrameworkSkill that adds additional properties commonly needed by a Skills VA
+*/
     
     /**
      * Gets or sets the Name of the skill.

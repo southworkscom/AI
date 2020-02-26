@@ -5,9 +5,9 @@
 
 import { ConversationReference, SkillConversationIdFactoryBase, Storage } from 'botbuilder';
 
- /**
- * A SkillConversationIdFactory that uses IStorage to store and retrieve ConversationReference instances.
- */
+/**
+* A SkillConversationIdFactory that uses IStorage to store and retrieve ConversationReference instances.
+*/
 export class SkillConversationIdFactory extends SkillConversationIdFactoryBase {
 
     public readonly storage: Storage;
