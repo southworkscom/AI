@@ -9,5 +9,6 @@ export interface IServiceClientCredentials {
     microsoftAppId: string;
 
     getToken(forceRefresh?: boolean): Promise<string>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     signRequest(webResource: WebResource | any): Promise<WebResource | any>;
 }

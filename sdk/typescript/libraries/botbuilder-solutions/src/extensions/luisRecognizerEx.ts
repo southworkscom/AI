@@ -19,6 +19,7 @@ export namespace LuisRecognizerEx {
         const result: Object | undefined = luisProperty.get(sentiment);
 
         if(luisProperty !== undefined && result !== undefined) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let sentimentInfo: any = JSON.parse(<string>result);
             sentimentLabel = getSentimentType(sentimentInfo.label);
             maxScore = sentimentInfo.score !== undefined ? sentimentInfo.score : 0.0;

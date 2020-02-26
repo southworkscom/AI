@@ -153,7 +153,7 @@ export class ResponseManager {
                         const itemJson: string = this.loadCardJson(cardItem.name, locale, resourcePath);
                         const itemCard: IAdaptiveCard = this.buildCard(itemJson, cardItem.data);
                         if (itemCard.body !== undefined) {
-                            itemCard.body.forEach((body: any): void => {
+                            itemCard.body.forEach((body: ICardElement): void => {
                                 if (itemsAdaptiveContainer.items !== undefined) {
                                     itemsAdaptiveContainer.items.push(body);
                                 }

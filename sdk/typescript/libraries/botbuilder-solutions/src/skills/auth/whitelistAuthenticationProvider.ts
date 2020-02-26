@@ -13,6 +13,7 @@ export interface IWhitelistAuthenticationProvider {
 export class WhitelistAuthenticationProvider implements IWhitelistAuthenticationProvider {
     public readonly appsWhitelist: Set<string> = new Set();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public constructor(configuration: any, whitelistProperty: string = 'skillAuthenticationWhitelist') {
         // skillAuthenticationWhitelist is the setting in appsettings.json file
         // that conists of the list of parent bot ids that are allowed to access the skill

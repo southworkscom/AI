@@ -11,6 +11,7 @@ import { ISlot, ITriggers } from './';
 export interface IActionDefinition {
     description: string;
     slots: ISlot[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     response: any;
     triggers: ITriggers;
 }
