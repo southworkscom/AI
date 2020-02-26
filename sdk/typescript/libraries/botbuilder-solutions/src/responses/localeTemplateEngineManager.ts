@@ -29,7 +29,7 @@ export class LocaleTemplateEngineManager {
         if (localeLGFiles === undefined) { throw new Error ('The parameter localeLGFiles is undefined') }
         if (fallbackLocale === undefined || fallbackLocale.trim().length === 0) { throw new Error ('The parameter fallbackLocale is undefined') }
 
-        localeLGFiles.forEach((value: string[], key: string) => {
+        localeLGFiles.forEach((value: string[], key: string): void => {
             this.templateEnginesPerLocale.set(key, new TemplateEngine());
             const templateEngine: TemplateEngine | undefined = this.templateEnginesPerLocale.get(key);
             if (templateEngine) {
