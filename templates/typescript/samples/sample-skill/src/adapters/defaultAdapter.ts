@@ -43,13 +43,17 @@ export class DefaultAdapter extends BotFrameworkAdapter {
                 type: ActivityTypes.Trace,
                 text: error.message || JSON.stringify(error)
             });
+            await context.sendActivity({
+                type: ActivityTypes.Trace,
+                text: error.stack
+            });
+            
             await context.sendActivity(templateEngine.generateActivityForLocale('ErrorMessage'));
             telemetryClient.trackException({ exception: error });
 
             if (context.isSkill()){
                 // Send and EndOfConversation activity to the skill caller with the error to end the conversation
                 // and let the caller decide what to do.
-                
                 const endOfconversation = new Activity(ActivityTypes.EndOfConversation)
                 endOfconversation.code = "SkillError";
                 endOfconversation.text = error.message;
