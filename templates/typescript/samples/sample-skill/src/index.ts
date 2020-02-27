@@ -106,7 +106,7 @@ supportedLocales.forEach((locale: string): void => {
     const localeTemplateFiles: string[] = [];
     templateFiles.forEach((template: string): void => {
         // LG template for en-us does not include locale in file extension.
-        if (locale === (botSettings.defaultLocale || 'en-us')) {
+        if (locale === 'en-us') {
             localeTemplateFiles.push(join(__dirname, '..', 'src', 'responses', `${ template }.lg`));
         } else {
             localeTemplateFiles.push(join(__dirname, '..', 'src',  'responses', `${template}.${locale}.lg`));
