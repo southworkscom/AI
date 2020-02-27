@@ -6,10 +6,10 @@
 import { PromptOptions } from "botbuilder-dialogs";
 import { Activity } from "botbuilder";
 import { ISkillManifest } from '../models/manifest/skillManifest';
-import { EnhancedBotFrameworkSkill } from "../enhancedBotFrameworkSkill";
+import { IEnhancedBotFrameworkSkill } from "../enhancedBotFrameworkSkill";
 
 export class SwitchSkillDialogOptions implements PromptOptions {
-    public skill?: EnhancedBotFrameworkSkill; 
+    public skill?: IEnhancedBotFrameworkSkill; 
     public prompt?: string | Partial<Activity>;
     
     /**
@@ -17,7 +17,7 @@ export class SwitchSkillDialogOptions implements PromptOptions {
      * @param prompt The Activity to display when prompting to switch skills.
      * @param skill The EnhancedBotFrameworkSkill for the new skill.
      */
-    public constructor(prompt: Activity, skill: EnhancedBotFrameworkSkill) {
+    public constructor(prompt: Activity, skill: IEnhancedBotFrameworkSkill) {
         this.prompt = prompt;
         this.skill = skill;
     }
