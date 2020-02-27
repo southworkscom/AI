@@ -4,8 +4,6 @@
  */
 
 import { Activity, ActivityTypes, ChannelAccount, ConversationReference, IEventActivity, IEndOfConversationActivity } from 'botframework-schema';
-import { TestAdapter } from 'botbuilder';
-import { ChannelAccount } from 'botframework-connector/lib/connectorApi/models/mappers';
 
 export namespace ActivityEx {
     export function createReply(source: Activity, text?: string, local?: string): Activity {

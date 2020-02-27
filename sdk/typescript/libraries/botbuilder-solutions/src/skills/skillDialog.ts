@@ -77,9 +77,9 @@ export class SkillDialog extends Dialog {
                     eventActivity.relatesTo = dc.context.activity.relatesTo;
                     skillActivity = <Activity>eventActivity;
                 break;
-            case ActivityTypes.Event:
+            case ActivityTypes.Message:
                     let messageActivity = ActivityEx.createEventActivity();
-                    messageActivity.name = dc.context.activity.text;
+                    messageActivity.text = dc.context.activity.text;
                     skillActivity = <Activity>messageActivity;
                 break;
             default:
