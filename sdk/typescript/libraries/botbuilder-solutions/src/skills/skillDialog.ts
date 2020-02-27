@@ -17,7 +17,7 @@ import {
 import { EnhancedBotFrameworkSkill } from './enhancedBotFrameworkSkill';
 import { SkillDialogArgs } from './skillDialogArgs';
 import { IBotSettingsBase } from '../botSettings';
-import { Activity } from 'botframework-schema';
+import { Activity, IMessageActivity } from 'botframework-schema';
 import { ActivityEx } from '../extensions';
 
 /**
@@ -78,7 +78,7 @@ export class SkillDialog extends Dialog {
                     skillActivity = <Activity>eventActivity;
                 break;
             case ActivityTypes.Message:
-                    let messageActivity = ActivityEx.createEventActivity();
+                    let messageActivity = ActivityEx.createMessageActivity();
                     messageActivity.text = dc.context.activity.text;
                     skillActivity = <Activity>messageActivity;
                 break;
