@@ -4,7 +4,6 @@
  */
 
 import { Activity, ActivityTypes, ChannelAccount, ConversationReference, IEventActivity, IEndOfConversationActivity, IMessageActivity } from 'botframework-schema';
-import { Activity } from 'botframework-connector/lib/teams/models/mappers';
 
 export namespace ActivityEx {
     export function createReply(source: Activity, text?: string, local?: string): Activity {
