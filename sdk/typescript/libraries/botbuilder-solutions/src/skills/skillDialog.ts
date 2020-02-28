@@ -17,7 +17,7 @@ import {
 import { EnhancedBotFrameworkSkill } from './enhancedBotFrameworkSkill';
 import { SkillDialogArgs } from './skillDialogArgs';
 import { IBotSettingsBase } from '../botSettings';
-import { Activity, IMessageActivity } from 'botframework-schema';
+import { Activity, ConversationReference } from 'botframework-schema';
 import { ActivityEx } from '../extensions';
 
 /**
@@ -74,7 +74,8 @@ export class SkillDialog extends Dialog {
             case ActivityTypes.Event:
                     let eventActivity = ActivityEx.createEventActivity();
                     eventActivity.name = dialogArgs.name;
-                    eventActivity.relatesTo = dc.context.activity.relatesTo;
+                    const reference: Partial<ConversationReference> = TurnContext.getConversationReference(dc.context.activity);
+                    eventActivity = ActivityEx.applyConversationReference(eventActivity, reference, true);
                     skillActivity = <Activity>eventActivity;
                 break;
             case ActivityTypes.Message:
@@ -96,7 +97,6 @@ export class SkillDialog extends Dialog {
      * @returns DialogTurnResult.
      */
     protected async onContinueDialog(dc: DialogContext): Promise<DialogTurnResult> {
-        dc.continueDialog
         await dc.context.sendTraceActivity(`${ SkillDialog.name }.onContinueDialog()`, undefined, undefined, `ActivityType: ${ dc.context.activity.type }`);
         
         if (dc.context.activity.type === ActivityTypes.EndOfConversation)
@@ -128,9 +128,11 @@ export class SkillDialog extends Dialog {
 
     private applyParentActivityProperties(turnContext: TurnContext, skillActivity: Activity, dialogArgs?: SkillDialogArgs) {
         // Apply conversation reference and common properties from incoming activity before sending.
-        skillActivity.relatesTo = turnContext.activity.relatesTo;
+        const reference: Partial<ConversationReference> = TurnContext.getConversationReference(turnContext.activity);
+        skillActivity = <Activity>ActivityEx.applyConversationReference(skillActivity, reference, true);
         skillActivity.channelData = turnContext.activity.channelData;
-        // skillActivity.properties = turnContext.activity.properties; PENDING
+        // PENDING, the property 'Properties' does not exists in Activity
+        //skillActivity.properties = turnContext.activity.properties;
 
         if (dialogArgs !== undefined)
         {
@@ -138,7 +140,7 @@ export class SkillDialog extends Dialog {
         }
     }
 
-    private async sendToSkill(activity: Activity, dc?: DialogContext): Promise<DialogTurnResult> {
+    private async sendToSkill(dc: DialogContext | undefined, activity: Activity): Promise<DialogTurnResult> {
         if (dc !== undefined)
         {
             // Always save state before forwarding
