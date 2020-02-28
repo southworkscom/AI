@@ -9,7 +9,7 @@ import { SkillsConfiguration } from 'botbuilder-solutions';
 /**
  * Sample claims validator that loads an allowed list from configuration if present and checks that responses are coming from configured skills.
  */
-export class allowedCallersClaimsValidator {
+export class AllowedCallersClaimsValidator {
     private readonly allowedSkills: string[];
 
     public constructor (skillsConfig: SkillsConfiguration) {
