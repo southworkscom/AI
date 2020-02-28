@@ -14,7 +14,7 @@ export class AllowedCallersClaimsValidator {
 
     public constructor (skillsConfig: SkillsConfiguration) {
         if (skillsConfig === undefined) {
-            throw new Error ('the value of skillsConfig is undefined');
+            throw new Error ('The value of skillsConfig is undefined');
         }
 
         // Load the appIds for the configured skills (we will only allow responses from skills we have configured).
