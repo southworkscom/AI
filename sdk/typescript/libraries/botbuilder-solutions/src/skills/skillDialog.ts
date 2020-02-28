@@ -88,7 +88,7 @@ export class SkillDialog extends Dialog {
         }
         
         this.applyParentActivityProperties(dc.context, skillActivity, dialogArgs);
-        return await this.sendToSkill(skillActivity, dc);
+        return await this.sendToSkill(dc, skillActivity);
     }
 
     /**
@@ -106,7 +106,7 @@ export class SkillDialog extends Dialog {
         }
 
         // Just forward to the remote skill
-        return await this.sendToSkill(dc.context.activity, dc);
+        return await this.sendToSkill(dc, dc.context.activity);
     }
 
     public async  ResumeDialog (dc: DialogContext, reason: DialogReason, result: Object): Promise<DialogTurnResult> {
@@ -120,7 +120,7 @@ export class SkillDialog extends Dialog {
             const activity: Activity = <Activity>ActivityEx.createEndOfConversationActivity();
             this.applyParentActivityProperties(turnContext, activity);
 
-            await this.sendToSkill(activity, undefined);
+            await this.sendToSkill(undefined, activity);
         }
 
         await super.endDialog(turnContext, instance, reason);
