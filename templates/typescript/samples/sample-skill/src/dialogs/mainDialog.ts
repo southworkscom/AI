@@ -119,7 +119,7 @@ export class MainDialog extends ComponentDialog {
             // Run LUIS recognition on Skill model and store result in turn state.
             const skillLuis: LuisRecognizer | undefined = localizedServices.luisServices ? localizedServices.luisServices.get("sampleSkill") : undefined;
             if (skillLuis !== undefined) {
-                // Run LUIS recognition and store result in turn state.
+                // Run LUIS recognition on General model and store result in turn state.
                 const skillResult: RecognizerResult = await skillLuis.recognize(innerDc.context);
                 innerDc.context.turnState.set(StateProperties.skillLuisResult, skillResult);
             }
