@@ -10,7 +10,8 @@ import {
     TeamsActivityHandler,
     StatePropertyAccessor, 
     Activity,
-    ActivityTypes} from 'botbuilder';
+    ActivityTypes,
+    BotState } from 'botbuilder';
 import {
     Dialog,
     DialogContext,
@@ -19,6 +20,8 @@ import {
 import { DialogEx, LocaleTemplateEngineManager, TokenEvents } from 'botbuilder-solutions';
 
 export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandler {
+    private readonly conversationState: BotState;
+    private readonly userState: BotState;
     private readonly solutionName: string = 'sampleAssistant';
     private readonly rootDialogId: string;
     private readonly dialogs: DialogSet;
@@ -30,37 +33,42 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     public constructor(
         conversationState: ConversationState,
         userState: UserState,
-        dialog: T,
-        templateEngine: LocaleTemplateEngineManager) {
+        templateEngine: LocaleTemplateEngineManager,
+        dialog: T
+        ) {
         super();
-
         this.dialog = dialog;
         this.rootDialogId = this.dialog.id;
-        this.dialogs = new DialogSet(conversationState.createProperty<DialogState>(this.solutionName));
-        this.dialogs.add(this.dialog);
+        this.conversationState = conversationState;
+        this.userState = userState;
         this.dialogStateAccessor = conversationState.createProperty<DialogState>('DialogState');
-        this.userProfileState = userState.createProperty<DialogState>('UserProfileState');
         this.templateEngine = templateEngine;
+        this.dialogs = new DialogSet(this.dialogStateAccessor);
+        this.dialogs.add(this.dialog);
+        this.userProfileState = userState.createProperty<DialogState>('UserProfileState');
+
         this.onTurn(this.turn.bind(this));
+        this.onMembersAdded(this.membersAdded.bind(this));
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
     public async turn(turnContext: TurnContext, next: () => Promise<void>): Promise<any> {
+        super.onTurn(next);
         const dc: DialogContext = await this.dialogs.createContext(turnContext);
-
         if (dc.activeDialog !== undefined) {
             await dc.continueDialog();
         } else {
             await dc.beginDialog(this.rootDialogId);
         }
-
-        await next();
+        // Save any state changes that might have occured during the turn.
+        await this.conversationState.saveChanges(turnContext, false);
+        await this.userState.saveChanges(turnContext, false);
     }
 
-    protected async onTeamsMembersAdded(turnContext: TurnContext): Promise<void> {
+    protected async membersAdded(turnContext: TurnContext): Promise<void> {
         let userProfile = await this.userProfileState.get(turnContext, () => { name: '' })
 
-        if( userProfile.name === '' ) {
+        if (userProfile.name === undefined || userProfile.name.trim().length === 0) {
             // Send new user intro card.
             await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('NewUserIntroCard', userProfile));
         } else {
