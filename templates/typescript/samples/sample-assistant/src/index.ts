@@ -22,7 +22,8 @@ import {
     LocaleTemplateEngineManager,
     SkillDialog,
     SwitchSkillDialog,
-    EnhancedBotFrameworkSkill } from 'botbuilder-solutions';
+    IEnhancedBotFrameworkSkill, 
+    SkillsConfiguration} from 'botbuilder-solutions';
 import { MicrosoftAppCredentials, SimpleCredentialProvider, AuthenticationConfiguration } from 'botframework-connector';
 import i18next from 'i18next';
 import i18nextNodeFsBackend from 'i18next-node-fs-backend';
@@ -142,9 +143,6 @@ const AuthConfig: AuthenticationConfiguration = new AuthenticationConfiguration(
     undefined,
     //new AllowedCallersClaimsValidator(skillConfiguration); PENDING: Missing ClaimsValidator interface in BotBuilder-JS
 );
-
-//const botFrameworkHTTPAdapter = new BotFrameworkHTTPAdapter(); // PENDING: Missing BotFrameworkHTTPAdapter class in BotBuilder-JS
-
 const telemetryLoggerMiddleware: TelemetryLoggerMiddleware = new TelemetryLoggerMiddleware(telemetryClient);
 const telemetryInitializerMiddleware: TelemetryInitializerMiddleware = new TelemetryInitializerMiddleware(telemetryLoggerMiddleware);
 
