@@ -25,7 +25,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     private readonly dialog: Dialog;
     private dialogStateAccessor: StatePropertyAccessor;
     private userProfileState: StatePropertyAccessor;
-    private engineTemplate: TemplateManager;
+    private templateEngine: LocaleTemplateEngineManager;
 
     public constructor(
         conversationState: ConversationState,
@@ -40,7 +40,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
         this.dialogs.add(this.dialog);
         this.dialogStateAccessor = conversationState.createProperty<DialogState>('DialogState');
         this.userProfileState = userState.createProperty<DialogState>('UserProfileState');
-        this.engineTemplate = templateEngine;
+        this.templateEngine = templateEngine;
         this.onTurn(this.turn.bind(this));
     }
 
@@ -62,10 +62,10 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
 
         if( userProfile.name === '' ) {
             // Send new user intro card.
-            await turnContext.sendActivity(this.engineTemplate.generateActivityForLocale('NewUserIntroCard', userProfile));
+            await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('NewUserIntroCard', userProfile));
         } else {
             // Send returning user intro card.
-            await turnContext.sendActivity(this.engineTemplate.generateActivityForLocale('ReturningUserIntroCard', userProfile));
+            await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('ReturningUserIntroCard', userProfile));
         }
         
         return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
