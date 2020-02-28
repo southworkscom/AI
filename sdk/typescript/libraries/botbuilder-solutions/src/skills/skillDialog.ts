@@ -96,12 +96,12 @@ export class SkillDialog extends Dialog {
      * @param innerDC Inner Dialog Context.
      * @returns DialogTurnResult.
      */
-    protected async onContinueDialog(dc: DialogContext): Promise<DialogTurnResult> {
-        await dc.context.sendTraceActivity(`${ SkillDialog.name }.onContinueDialog()`, undefined, undefined, `ActivityType: ${ dc.context.activity.type }`);
+    public async continueDialog(dc: DialogContext): Promise<DialogTurnResult> {
+        await dc.context.sendTraceActivity(`${ SkillDialog.name }.continueDialog()`, undefined, undefined, `ActivityType: ${ dc.context.activity.type }`);
         
         if (dc.context.activity.type === ActivityTypes.EndOfConversation)
         {
-            await dc.context.sendTraceActivity(`${ SkillDialog.name }.onContinueDialog()`, undefined, undefined, 'Got EndOfConversation');
+            await dc.context.sendTraceActivity(`${ SkillDialog.name }.continueDialog()`, undefined, undefined, 'Got EndOfConversation');
             return await dc.endDialog(dc.context.activity.value);
         }
 
@@ -109,7 +109,7 @@ export class SkillDialog extends Dialog {
         return await this.sendToSkill(dc, dc.context.activity);
     }
 
-    public async  ResumeDialog (dc: DialogContext, reason: DialogReason, result: Object): Promise<DialogTurnResult> {
+    public async resumeDialog (dc: DialogContext, reason: DialogReason, result: Object): Promise<DialogTurnResult> {
         return SkillDialog.EndOfTurn;
     }
 
