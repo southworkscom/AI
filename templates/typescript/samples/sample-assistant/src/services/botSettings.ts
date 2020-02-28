@@ -6,4 +6,5 @@ import { IBotSettingsBase, ISkillManifest } from 'botbuilder-solutions';
 
 export interface IBotSettings extends IBotSettingsBase {
     skills: ISkillManifest[];
+    skillHostEndpoint: string | undefined;
 }
