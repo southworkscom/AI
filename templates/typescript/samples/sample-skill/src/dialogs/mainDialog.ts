@@ -50,7 +50,7 @@ export class MainDialog extends ComponentDialog {
         stateAccessor: StatePropertyAccessor<SkillState>,
         sampleDialog: SampleDialog,
         sampleAction: SampleAction,
-        templateEngine: LocaleTemplateEngineManager,
+        templateEngine: LocaleTemplateEngineManager
     ) {
         super(MainDialog.name);
         this.services = services;
@@ -84,7 +84,7 @@ export class MainDialog extends ComponentDialog {
             // Get cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels();
 
-            // Run LUIS recognition and store result in turn state.
+            // Run LUIS recognition on Skill model and store result in turn state.
             const skillLuis: LuisRecognizer | undefined = localizedServices.luisServices ? localizedServices.luisServices.get("sampleSkill") : undefined;
             if (skillLuis !== undefined) {
                 const skillResult: RecognizerResult = await skillLuis.recognize(innerDc.context);
@@ -99,7 +99,7 @@ export class MainDialog extends ComponentDialog {
             }
 
             // Check for any interruptions
-            var interrupted = await this.interruptDialog(innerDc);
+            const interrupted = await this.interruptDialog(innerDc);
 
             if (interrupted) {
                 // If dialog was interrupted, return EndOfTurn
@@ -125,7 +125,7 @@ export class MainDialog extends ComponentDialog {
             }
         
             // Check for any interruptions
-            var interrupted = await this.interruptDialog(innerDc);
+            const interrupted = await this.interruptDialog(innerDc);
 
             if (interrupted) {
                 // If dialog was interrupted, return EndOfTurn
@@ -203,7 +203,7 @@ export class MainDialog extends ComponentDialog {
         // but it's not in botbuilder-js currently
         const activity: Activity = stepContext.context.activity;
 
-        if (activity !== undefined && activity.text !== undefined && activity.text.trim().length > 0) {
+        if (activity.type === ActivityTypes.Message && activity.text !== undefined && activity.text.trim().length > 0) {
             // Get current cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels();
 
@@ -213,7 +213,6 @@ export class MainDialog extends ComponentDialog {
             if (luisService !== undefined){
                 const result = stepContext.context.turnState.get(StateProperties.skillLuisResult);
                 const intent: string = LuisRecognizer.topIntent(result);
-                
                 switch(intent) {
                     case 'Sample': { 
 
@@ -230,37 +229,37 @@ export class MainDialog extends ComponentDialog {
                 throw new Error("The specified LUIS Model could not be found in your Bot Services configuration.");
             } 
         } else if (activity.type === ActivityTypes.Event) {
-                // PENDING const ev = activity.AsEventActivity();
-                const ev = activity;
-                if (ev.name !== undefined && ev.name.trim().length > 0 ) {
-                    switch (ev.name) {      
-                        case "SampleAction": {
-                            let actionData: Object = '';
+            // PENDING const ev = activity.AsEventActivity();
+            const ev = activity;
+            if (ev.name !== undefined && ev.name.trim().length > 0 ) {
+                switch (ev.name) {      
+                    case "SampleAction": {
+                        let actionData: Object = {};
 
-                            if (ev.value !== undefined) {
-                                actionData = ev.value as SampleActionInput;
-                            }
-
-                            // Invoke the SampleAction dialog passing input data if available
-                            return await stepContext.beginDialog(SampleAction.name, actionData);
+                        if (ev.value !== undefined && actionData !== undefined) {
+                            actionData = ev.value as SampleActionInput;
                         }
 
-                        default: {
-                            await stepContext.context.sendActivity({ 
-                                type: ActivityTypes.Trace, 
-                                text: `Unknown Event ${ev.name ?? 'undefined' } was received but not processed.`                       
-                            });
-                            break;
-                        }  
+                        // Invoke the SampleAction dialog passing input data if available
+                        return await stepContext.beginDialog(SampleAction.name, actionData);
                     }
-                }
-        } else {
-            await stepContext.context.sendActivity({
-                type: ActivityTypes.Trace, 
-                text: 'An event with no name was received but not processed.'
-            });
-        }
 
+                    default: {
+                        await stepContext.context.sendActivity({ 
+                            type: ActivityTypes.Trace, 
+                            text: `Unknown Event ${ev.name ?? 'undefined' } was received but not processed.`                       
+                        });
+                        break;
+                    }  
+                }
+            } else {
+                await stepContext.context.sendActivity({
+                    type: ActivityTypes.Trace, 
+                    text: 'An event with no name was received but not processed.'
+                });
+            }
+        }
+        
         // If activity was unhandled, flow should continue to next step
         return await stepContext.next();
     }
@@ -280,7 +279,7 @@ export class MainDialog extends ComponentDialog {
             return await stepContext.endDialog();
         } else {
             
-            return await stepContext.replaceDialog(this.sampleDialog.id, this.templateEngine.generateActivityForLocale("CompletedMessage"));
+            return await stepContext.replaceDialog(this.id, this.templateEngine.generateActivityForLocale("CompletedMessage"));
         }
     }
 

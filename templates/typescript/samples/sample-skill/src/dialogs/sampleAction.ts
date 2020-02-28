@@ -20,7 +20,7 @@ export class SampleActionInput {
 }
 
 export class SampleActionOutput {
-    customerId: Number = 0;
+    customerId: number = 0;
 }
 
 export class SampleAction extends SkillDialogBase {
@@ -61,8 +61,8 @@ export class SampleAction extends SkillDialogBase {
     }
 
     private async greetUser(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const tokens: Object = { name: stepContext.result as string };
-        const response: Partial<Activity> = this.templateEngine.generateActivityForLocale("HaveNameMessage", tokens);
+        const data: Object = { name: stepContext.result as string };
+        const response: Partial<Activity> = this.templateEngine.generateActivityForLocale("HaveNameMessage", data);
         await stepContext.context.sendActivity(response);
 
         // Pass the response which we'll return to the user onto the next step
