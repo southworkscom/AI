@@ -11,9 +11,8 @@ import {
     StatePropertyAccessor,
     TurnContext,
     UserState,
+    BotFrameworkAdapter,
     TelemetryLoggerMiddleware } from 'botbuilder';
-    BotFrameworkAdapter
-    ChannelServiceHandler} from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
 import { CosmosDbStorage, CosmosDbStorageSettings } from 'botbuilder-azure';
 import { Dialog } from 'botbuilder-dialogs';
@@ -23,9 +22,7 @@ import {
     LocaleTemplateEngineManager,
     SkillDialog,
     SwitchSkillDialog,
-import { MicrosoftAppCredentials } from 'botframework-connector';
-    EnhancedBotFrameworkSkill
-} from 'botbuilder-solutions';
+    EnhancedBotFrameworkSkill } from 'botbuilder-solutions';
 import { MicrosoftAppCredentials, SimpleCredentialProvider, AuthenticationConfiguration } from 'botframework-connector';
 import i18next from 'i18next';
 import i18nextNodeFsBackend from 'i18next-node-fs-backend';
