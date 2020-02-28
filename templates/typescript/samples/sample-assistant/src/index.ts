@@ -219,12 +219,11 @@ server.post('/api/messages', async (req: restify.Request, res: restify.Response)
     });
 });
 
-
 let handler: ChannelServiceHandler = new ChannelServiceHandler(
     new SimpleCredentialProvider(botSettings.microsoftAppId || "",
     botSettings.microsoftAppPassword || ""), new AuthenticationConfiguration());
 
-    server.post('/api/skills/v3/conversations/:conversationId/activities/:activityId', async (req: restify.Request): Promise<ResourceResponse> => {
+server.post('/api/skills/v3/conversations/:conversationId/activities/:activityId', async (req: restify.Request): Promise<ResourceResponse> => {
     const activity: Activity = JSON.parse(req.body);
     return await handler.handleReplyToActivity(req.authorization?.credentials || "", req.params.conversationId, req.params.activityId, activity);
 });
