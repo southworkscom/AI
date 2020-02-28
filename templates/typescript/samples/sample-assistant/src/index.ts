@@ -41,7 +41,7 @@ import { IBotSettings } from './services/botSettings';
 import { Activity, ResourceResponse } from 'botframework-schema';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IUserProfileState } from './models/userProfileState'
-import { allowedCallersClaimsValidator } from './authentication/allowedCallersClaimsValidator';
+import { AllowedCallersClaimsValidator } from './authentication/allowedCallersClaimsValidator';
 
 // Configure internationalization and default locale
 i18next.use(i18nextNodeFsBackend)
@@ -142,7 +142,7 @@ const skillConfiguration: SkillsConfiguration = new SkillsConfiguration(botSetti
 // Create AuthConfiguration to enable custom claim validation.
 const AuthConfig: AuthenticationConfiguration = new AuthenticationConfiguration(
     undefined,
-    //new allowedCallersClaimsValidator(skillConfiguration); PENDING: Missing ClaimsValidator interface in BotBuilder-JS
+    //new AllowedCallersClaimsValidator(skillConfiguration); PENDING: Missing ClaimsValidator interface in BotBuilder-JS
 );
 
 //const botFrameworkHTTPAdapter = new BotFrameworkHTTPAdapter(); // PENDING: Missing BotFrameworkHTTPAdapter class in BotBuilder-JS
