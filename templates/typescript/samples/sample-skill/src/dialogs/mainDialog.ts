@@ -32,8 +32,10 @@ import { SampleDialog } from './sampleDialog';
 import { StateProperties } from '../models';
 import { SampleActionInput, SampleAction } from './sampleAction';
 
+/**
+ * Dialog providing activity routing and message/event processing.
+ */
 export class MainDialog extends ComponentDialog {
-
     // Fields
     private readonly services: BotServices;
     private readonly sampleDialog: SampleDialog;
@@ -108,15 +110,16 @@ export class MainDialog extends ComponentDialog {
         return await super.onBeginDialog(innerDc, options);
     }
 
+    // Runs on every turn of the conversation.
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
         if (innerDc.context.activity.type === ActivityTypes.Message) {
         
             // Get cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels();
-
-            // Run LUIS recognition and store result in turn state.
+            // Run LUIS recognition on Skill model and store result in turn state.
             const skillLuis: LuisRecognizer | undefined = localizedServices.luisServices ? localizedServices.luisServices.get("sampleSkill") : undefined;
             if (skillLuis !== undefined) {
+                // Run LUIS recognition and store result in turn state.
                 const skillResult: RecognizerResult = await skillLuis.recognize(innerDc.context);
                 innerDc.context.turnState.set(StateProperties.skillLuisResult, skillResult);
             }
@@ -135,17 +138,16 @@ export class MainDialog extends ComponentDialog {
 
     // Runs on every turn of the conversation to check if the conversation should be interrupted.
     protected async interruptDialog(innerDc: DialogContext): Promise<Boolean> {
-        let interrupted: Boolean = false;
+        let interrupted: boolean = false;
         const activity: Activity = innerDc.context.activity;
 
-        if (activity.type === ActivityTypes.Message && activity.text.trim().length > 0) {
+        if (activity.type === ActivityTypes.Message && activity.text !== undefined && activity.text.trim().length > 0) {
         
             // Get connected LUIS result from turn state.
             const generalResult: RecognizerResult = innerDc.context.turnState.get(StateProperties.generalLuisResult);
             const intent: string = LuisRecognizer.topIntent(generalResult);
-
             if (generalResult.intents[intent].score > 0.5) {
-                switch(intent.toString()) {
+                switch(intent) {
                     case 'Cancel': { 
 
                         await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('CancelledMessage'));
@@ -156,7 +158,7 @@ export class MainDialog extends ComponentDialog {
                     } 
                     case 'Help': {
 
-                        await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('HelpMessage'));
+                        await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('HelpCard'));
                         await innerDc.repromptDialog();
                         interrupted = true;
                         break;
@@ -194,32 +196,32 @@ export class MainDialog extends ComponentDialog {
         }
     }
 
-    // Runs when the dialog stack is empty, and a new message activity comes in.
+    // Handles routing to additional dialogs logic.
     protected async routeStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         
         //PENDING: This should be const activity: IMessageActivity = innerDc.context.activity.asMessageActivity()
         // but it's not in botbuilder-js currently
         const activity: Activity = stepContext.context.activity;
 
-        if (activity !== undefined && activity.text.trim().length > 0) {
+        if (activity !== undefined && activity.text !== undefined && activity.text.trim().length > 0) {
             // Get current cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels();
 
             // Get skill LUIS model from configuration.
             const luisService: LuisRecognizer | undefined = localizedServices.luisServices? localizedServices.luisServices.get('sampleSkill') : undefined;
 
-            if (luisService !== null){
+            if (luisService !== undefined){
                 const result = stepContext.context.turnState.get(StateProperties.skillLuisResult);
                 const intent: string = LuisRecognizer.topIntent(result);
                 
-                switch(intent.toString()) {
+                switch(intent) {
                     case 'Sample': { 
 
                         await stepContext.beginDialog(this.sampleDialog.id);
-                        break;
                     } 
-                    case 'None': {
-
+                    case 'None': 
+                    default: {
+                        // intent was identified but not yet implemented
                         await stepContext.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage'));
                         return await stepContext.next();
                     }
@@ -228,35 +230,36 @@ export class MainDialog extends ComponentDialog {
                 throw new Error("The specified LUIS Model could not be found in your Bot Services configuration.");
             } 
         } else if (activity.type === ActivityTypes.Event) {
-                
                 // PENDING const ev = activity.AsEventActivity();
                 const ev = activity;
-                switch (ev.name) {      
-                    case "SampleAction": {
-                        let actionData: Object = '';
+                if (ev.name !== undefined && ev.name.trim().length > 0 ) {
+                    switch (ev.name) {      
+                        case "SampleAction": {
+                            let actionData: Object = '';
 
-                        if (ev.value !== undefined) {
-                            actionData = ev.value;
+                            if (ev.value !== undefined) {
+                                actionData = ev.value as SampleActionInput;
+                            }
+
+                            // Invoke the SampleAction dialog passing input data if available
+                            return await stepContext.beginDialog(SampleAction.name, actionData);
                         }
 
-                        // Invoke the SampleAction dialog passing input data if available
-                        return await stepContext.beginDialog(this.sampleAction.name, actionData);
+                        default: {
+                            await stepContext.context.sendActivity({ 
+                                type: ActivityTypes.Trace, 
+                                text: `Unknown Event ${ev.name ?? 'undefined' } was received but not processed.`                       
+                            });
+                            break;
+                        }  
                     }
-
-                    default: {
-                        await stepContext.context.sendActivity({ 
-                            type: ActivityTypes.Trace, 
-                            text: `Unknown Event ${ev.name ?? 'undefined' } was received but not processed.`                       
-                        });
-                        break;
-                    }  
                 }
         } else {
-                await stepContext.context.sendActivity({
-                    type: ActivityTypes.Trace, 
-                    text: 'An event with no name was received but not processed.'
-                });
-            }
+            await stepContext.context.sendActivity({
+                type: ActivityTypes.Trace, 
+                text: 'An event with no name was received but not processed.'
+            });
+        }
 
         // If activity was unhandled, flow should continue to next step
         return await stepContext.next();
