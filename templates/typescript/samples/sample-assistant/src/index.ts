@@ -12,7 +12,9 @@ import {
     TurnContext,
     UserState,
     BotFrameworkAdapter,
-    TelemetryLoggerMiddleware } from 'botbuilder';
+    TelemetryLoggerMiddleware, 
+    SkillHttpClient,
+    ChannelServiceHandler} from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
 import { CosmosDbStorage, CosmosDbStorageSettings } from 'botbuilder-azure';
 import { Dialog } from 'botbuilder-dialogs';
@@ -23,8 +25,9 @@ import {
     SkillDialog,
     SwitchSkillDialog,
     IEnhancedBotFrameworkSkill, 
-    SkillsConfiguration} from 'botbuilder-solutions';
-import { MicrosoftAppCredentials, SimpleCredentialProvider, AuthenticationConfiguration } from 'botframework-connector';
+    SkillsConfiguration,
+    SkillConversationIdFactory} from 'botbuilder-solutions';
+import { SimpleCredentialProvider, AuthenticationConfiguration, Claim } from 'botframework-connector';
 import i18next from 'i18next';
 import i18nextNodeFsBackend from 'i18next-node-fs-backend';
 import * as path from 'path';
@@ -103,16 +106,13 @@ const cosmosDbStorageSettings: CosmosDbStorageSettings = {
     serviceEndpoint: botSettings.cosmosDb.cosmosDBEndpoint
 };
 
+//
+const credentianProvider: SimpleCredentialProvider = new SimpleCredentialProvider(botSettings.microsoftAppId || "", botSettings.microsoftAppPassword || "");
+
 // Configure storage
 const storage: CosmosDbStorage = new CosmosDbStorage(cosmosDbStorageSettings);
 const userState: UserState = new UserState(storage);
 const conversationState: ConversationState = new ConversationState(storage);
-
-// Configure credentials
-const appCredentials: MicrosoftAppCredentials = new MicrosoftAppCredentials(
-    botSettings.microsoftAppId || '',
-    botSettings.microsoftAppPassword || ''
-);
 
 const localizedTemplates: Map<string, string[]> = new Map<string, string[]>();
 const templateFiles: string[] = ['MainResponses', 'OnboardingResponses'];
@@ -136,13 +136,20 @@ supportedLocales.forEach((locale: string) => {
 const localeTemplateEngine: LocaleTemplateEngineManager = new LocaleTemplateEngineManager(localizedTemplates, botSettings.defaultLocale || 'en-us')
 
 // Create the skills configuration class
-const skillConfiguration: SkillsConfiguration = new SkillsConfiguration(botSettings.skills, botSettings.skillHostEndpoint);
+let authConfig: AuthenticationConfiguration;
+let skillConfiguration: SkillsConfiguration;
+if ((botSettings.skills !== undefined && botSettings.skills.length > 0) &&
+    (botSettings.skillHostEndpoint !== undefined && botSettings.skillHostEndpoint !== "")) {
+        skillConfiguration = new SkillsConfiguration(botSettings.skills, botSettings.skillHostEndpoint);
+        const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillConfiguration);
 
-// Create AuthConfiguration to enable custom claim validation.
-const AuthConfig: AuthenticationConfiguration = new AuthenticationConfiguration(
-    undefined,
-    //new AllowedCallersClaimsValidator(skillConfiguration); PENDING: Missing ClaimsValidator interface in BotBuilder-JS
-);
+        // Create AuthConfiguration to enable custom claim validation.
+        authConfig = new AuthenticationConfiguration(
+            undefined,
+            (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
+        );
+}
+
 const telemetryLoggerMiddleware: TelemetryLoggerMiddleware = new TelemetryLoggerMiddleware(telemetryClient);
 const telemetryInitializerMiddleware: TelemetryInitializerMiddleware = new TelemetryInitializerMiddleware(telemetryLoggerMiddleware);
 
@@ -160,34 +167,40 @@ try {
     // Configure bot services
     const botServices: BotServices = new BotServices(botSettings, telemetryClient);
 
-    const skillContextAccessor: StatePropertyAccessor<SkillContext> = userState.createProperty<SkillContext>(SkillContext.name);
     const userProfileStateAccesor: StatePropertyAccessor<IUserProfileState> = userState.createProperty<IUserProfileState>('IUserProfileState');
     const onboardingDialog: OnboardingDialog = new OnboardingDialog(userProfileStateAccesor, botServices, localeTemplateEngine, telemetryClient);
     const switchSkillDialog: SwitchSkillDialog = new SwitchSkillDialog(conversationState);
     const previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]> =
         userState.createProperty<Partial<Activity>[]>('Activity');
 
-    let skillDialogs: EnhancedBotFrameworkSkill[] = [];
+
+    let skillHttpClient: SkillHttpClient = new SkillHttpClient(
+        credentianProvider,
+        new SkillConversationIdFactory(storage),
+        undefined
+    );
+
+    let skillDialogs: SkillDialog[] = [];
     if (botSettings.skills !== undefined && botSettings.skills.length > 0) {
         if (botSettings.skillHostEndpoint === undefined) {
-            throw new Error("$'skillHostEndpoint' is not in the configuration");
+            throw new Error("'skillHostEndpoint' is not in the configuration");
         }
         
-        skillDialogs = botSettings.skills.map((skill: EnhancedBotFrameworkSkill): EnhancedBotFrameworkSkill => {
-            new SkillDialog(skill, credentials, telemetryClient, skillContextAccessor, authDialog);
+        skillDialogs = botSettings.skills.map((skill: IEnhancedBotFrameworkSkill): SkillDialog => {
+            return new SkillDialog(conversationState, skillHttpClient, skill, <IBotSettings> botSettings, botSettings.skillHostEndpoint || "");
         });
     }
-        
+
     const mainDialog: MainDialog = new MainDialog(
         botSettings as IBotSettings,
         botServices,
         localeTemplateEngine,
         userProfileStateAccesor,
-        skillContextAccessor,
         previousResponseAccesor,
         onboardingDialog,
         switchSkillDialog,
         skillDialogs,
+        SkillsConfiguration,
         telemetryClient,
     );
 
@@ -221,9 +234,7 @@ server.post('/api/messages', async (req: restify.Request, res: restify.Response)
     });
 });
 
-let handler: ChannelServiceHandler = new ChannelServiceHandler(
-    new SimpleCredentialProvider(botSettings.microsoftAppId || "",
-    botSettings.microsoftAppPassword || ""), new AuthenticationConfiguration());
+let handler: ChannelServiceHandler = new ChannelServiceHandler(credentianProvider, new AuthenticationConfiguration());
 
 server.post('/api/skills/v3/conversations/:conversationId/activities/:activityId', async (req: restify.Request): Promise<ResourceResponse> => {
     const activity: Activity = JSON.parse(req.body);
