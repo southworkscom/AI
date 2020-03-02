@@ -13,16 +13,14 @@ import {
     DialogState, 
     DialogContext,
     DialogSet } from 'botbuilder-dialogs';
-
 import { LocaleTemplateEngineManager, DialogEx } from 'botbuilder-solutions';
 
 export class DefaultActivityHandler<T extends Dialog> extends ActivityHandler {
+    private readonly dialog: Dialog;
     private readonly conversationState: BotState;
     private readonly userState: BotState;
     private dialogStateAccessor: StatePropertyAccessor<DialogState>;
-    private readonly dialog: Dialog;
     private templateEngine: LocaleTemplateEngineManager;
-
     private readonly dialogs: DialogSet;
     private readonly rootDialogId: string;
 
@@ -66,17 +64,18 @@ export class DefaultActivityHandler<T extends Dialog> extends ActivityHandler {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    protected async membersAdded(turnContext: TurnContext, next: () => Promise<void>): Promise<any> {
+    protected async membersAdded(turnContext: TurnContext, next: () => Promise<void>): Promise<void> {
+        await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('IntroMessage'));
+        await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    protected async onMessageActivity(turnContext: TurnContext): Promise<void> {
         return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    protected async onMessageActivity(turnContext: TurnContext): Promise<any> {
-        return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    protected async onEventActivity(turnContext: TurnContext): Promise<any> {
+    protected async onEventActivity(turnContext: TurnContext): Promise<void> {
         return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
     
