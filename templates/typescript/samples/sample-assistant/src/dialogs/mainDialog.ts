@@ -2,7 +2,6 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-
 import {
     BotFrameworkAdapter,
     BotTelemetryClient,
@@ -28,6 +27,7 @@ import {
     SwitchSkillDialog,
     SwitchSkillDialogOptions, 
     SkillsConfiguration,
+    SkillDialogArgs,
     EnhancedBotFrameworkSkill } from 'botbuilder-solutions';
 import { TokenStatus } from 'botframework-connector';
 import { Activity, ActivityTypes, ResourceResponse, IMessageActivity } from 'botframework-schema';
@@ -36,7 +36,9 @@ import { BotServices } from '../services/botServices';
 import { IBotSettings } from '../services/botSettings';
 import { OnboardingDialog, StateProperties } from './onboardingDialog';
 
-// Dialog providing activity routing and message/event processing.
+/**
+ * Dialog providing activity routing and message/event processing.
+ */
 export class MainDialog extends ComponentDialog {
     private readonly services: BotServices;
     private readonly settings: IBotSettings;
@@ -45,7 +47,7 @@ export class MainDialog extends ComponentDialog {
     private skillsConfig: SkillsConfiguration;
     private templateEngine: LocaleTemplateEngineManager;
     private userProfileState: StatePropertyAccessor<IUserProfileState>;
-    private previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]>
+    private previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]>;
     
     public constructor(
         settings: IBotSettings,
@@ -67,10 +69,7 @@ export class MainDialog extends ComponentDialog {
         this.skillsConfig = skillsConfig,
         this.telemetryClient = telemetryClient
         
-        // Create user state properties
         this.userProfileState = userProfileState;
-
-        // Create conversation state properties
         this.previousResponseAccesor = previousResponseAccessor;
 
         const steps: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
@@ -82,16 +81,13 @@ export class MainDialog extends ComponentDialog {
 
         this.addDialog(new WaterfallDialog (MainDialog.name, steps));
         this.addDialog(new TextPrompt(TextPrompt.name));
-        const initialDialogId: string = MainDialog.name;
+        this.initialDialogId = MainDialog.name;
 
         // Register dialogs
-        this.onboardingDialog = onboardingDialog
-        this.switchSkillDialog = switchSkillDialog
+        this.onboardingDialog = onboardingDialog;
+        this.switchSkillDialog = switchSkillDialog;
         this.addDialog(this.onboardingDialog);
         this.addDialog(this.switchSkillDialog);
-
-        // Register a QnAMakerDialog for each registered knowledgebase and ensure localised responses are provided.
-        let localizedServices = services.getCognitiveModels();
 
         // Register skill dialogs
         skillDialogs.forEach((skillDialog: SkillDialog): void => {
@@ -99,9 +95,8 @@ export class MainDialog extends ComponentDialog {
         });
     }
 
-    // Runs on every turn of the conversation.
     protected async onBeginDialog(innerDc: DialogContext, options: Object): Promise<DialogTurnResult> {
-        if (innerDc.context.activity.type == ActivityTypes.Message) {
+        if (innerDc.context.activity.type === ActivityTypes.Message) {
             // Get cognitive models for the current locale.
             const localizedServices = this.services.getCognitiveModels();
 
@@ -110,7 +105,7 @@ export class MainDialog extends ComponentDialog {
             innerDc.context.turnState.set(StateProperties.dispatchResult, dispatchResult);
 
             const intent: string = LuisRecognizer.topIntent(dispatchResult);
-            if(intent == 'l_general') {
+            if (intent === 'l_general') {
                 // Run LUIS recognition on General model and store result in turn state.
                 const generalLuis: LuisRecognizer | undefined = localizedServices.luisServices.get("general");
                 if (generalLuis !== undefined) {
@@ -120,9 +115,9 @@ export class MainDialog extends ComponentDialog {
             }
 
             // Check for any interruptions
-            var interrupted: Boolean = await this.onInterruptDialog(innerDc);
+            const interrupted: Boolean = await this.interruptDialog(innerDc);
 
-            if (interrupted) {
+            if (interrupted !== undefined) {
                 // If dialog was interrupted, return EndOfTurn
                 return MainDialog.EndOfTurn;
             }
@@ -135,7 +130,7 @@ export class MainDialog extends ComponentDialog {
     }
 
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
-        if (innerDc.context.activity.type == ActivityTypes.Message) {
+        if (innerDc.context.activity.type === ActivityTypes.Message) {
             // Get cognitive models for the current locale.
             const localizedServices = this.services.getCognitiveModels();
 
@@ -144,7 +139,7 @@ export class MainDialog extends ComponentDialog {
             innerDc.context.turnState.set(StateProperties.dispatchResult, dispatchResult);
 
             const intent: string = LuisRecognizer.topIntent(dispatchResult);
-            if(intent == 'l_general') {
+            if (intent === 'l_general') {
                 // Run LUIS recognition on General model and store result in turn state.
                 const generalLuis: LuisRecognizer | undefined = localizedServices.luisServices.get("general");
                 if (generalLuis !== undefined) {
@@ -154,7 +149,7 @@ export class MainDialog extends ComponentDialog {
             }
 
             // Check for any interruptions
-            const interrupted: Boolean = await this.onInterruptDialog(innerDc);
+            const interrupted: Boolean = await this.interruptDialog(innerDc);
 
             if (interrupted) {
                 // If dialog was interrupted, return EndOfTurn
@@ -168,9 +163,8 @@ export class MainDialog extends ComponentDialog {
         return await super.onContinueDialog(innerDc);
     }
 
-    // Runs on every turn of the conversation to check if the conversation should be interrupted.
-    protected async onInterruptDialog(innerDc: DialogContext): Promise<Boolean> {
-        let interrupted: Boolean = false;
+    private async interruptDialog(innerDc: DialogContext): Promise<Boolean> {
+        let interrupted: boolean = false;
         const activity: Activity = innerDc.context.activity;
         const userProfile: IUserProfileState = await this.userProfileState.get(innerDc.context, { name: '' });
         const dialog: Dialog | undefined = innerDc.activeDialog !== undefined ? innerDc.findDialog(innerDc.activeDialog.id) : undefined;
@@ -184,31 +178,28 @@ export class MainDialog extends ComponentDialog {
             const intent: string = LuisRecognizer.topIntent(dispatchResult);
             
             // Check if we need to switch skills.
-            if (isSkill) {
+            if (isSkill !== undefined) {
                 if (dialog !== undefined) {
                     if (intent !== dialog.id && dispatchResult.intents[intent].score > 0.9) {
                         const identifiedSkill: EnhancedBotFrameworkSkill;
-
-                        if (this.skillsConfig.skills.get(intent.toString())) {
+                        if (this.skillsConfig.skills.get(intent)) {
                             const prompt: Partial<Activity> = this.templateEngine.generateActivityForLocale('SkillSwitchPrompt', { skill: identifiedSkill.name });
                             await innerDc.beginDialog(this.switchSkillDialog.id, new SwitchSkillDialogOptions(prompt as Activity, identifiedSkill));
                             interrupted = true;
-                        }
-                        else
-                        {
-                            throw new Error(`${intent.toString()} is not in the skills configuration`);
+                        } else {
+                            throw new Error(`${intent} is not in the skills configuration`);
                         }
                     }
                 }
             }
 
-            if(intent == 'l_general') {
+            if (intent === 'l_general') {
                 // Get connected LUIS result from turn state.
                 const generalResult: RecognizerResult = innerDc.context.turnState.get(StateProperties.GeneralResult);
                 const intent: string = LuisRecognizer.topIntent(generalResult);
 
-                 if(generalResult.intents[intent].score > 0.5) {
-                    switch(intent.toString()) {
+                 if (generalResult.intents[intent].score > 0.5) {
+                    switch(intent) {
                         case 'Cancel': { 
 
                             await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('CancelledMessage', userProfile));
@@ -271,8 +262,8 @@ export class MainDialog extends ComponentDialog {
                         }
 
                         case 'Stop': {
-                             // Use this intent to send an event to your device that can turn off the microphone in speech scenarios.
-                             break;
+                            // Use this intent to send an event to your device that can turn off the microphone in speech scenarios.
+                            break;
                         }
                     }
                 }
@@ -282,8 +273,7 @@ export class MainDialog extends ComponentDialog {
         return interrupted;
     }
 
-    // Runs when the dialog stack is empty, and a new member is added to the conversation. Can be used to send an introduction activity.
-    protected async onBoardingStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+    private async onBoardingStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const userProfile: IUserProfileState = await this.userProfileState.get(stepContext.context, { name: '' });
 
         if (userProfile === undefined || userProfile.name.trim().length === 0) {
@@ -293,21 +283,21 @@ export class MainDialog extends ComponentDialog {
         return await stepContext.next();
     }
     
-    protected async introStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+    private async introStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
     // Use the text provided in FinalStepAsync or the default if it is the first time.
         let promptOptions: PromptOptions = {
-            prompt: stepContext.options as Activity || this.templateEngine.generateActivityForLocale("")
+            prompt: stepContext.options as Activity || this.templateEngine.generateActivityForLocale("FirstPromptMessage")
         };
+
         return await stepContext.prompt(TextPrompt.name, promptOptions);
     }
 
-    // Runs when the dialog stack is empty, and a new message activity comes in.
-    protected async routeStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+    private async routeStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         //PENDING: This should be const activity: IMessageActivity = innerDc.context.activity.asMessageActivity()
         const activity: IMessageActivity = stepContext.context.activity;
         const userProfile: IUserProfileState = await this.userProfileState.get(stepContext.context, { name: '' });
 
-        if (activity !== undefined && activity.text.trim().length > 0) {
+        if (activity.text !== undefined && activity.text.trim().length > 0) {
             // Get current cognitive models for the current locale.
             const localizedServices: ICognitiveModelSet = this.services.getCognitiveModels();
 
@@ -315,7 +305,7 @@ export class MainDialog extends ComponentDialog {
             const dispatchResult: RecognizerResult = stepContext.context.turnState.get(StateProperties.dispatchResult);
             const dispatch: string = LuisRecognizer.topIntent(dispatchResult);
 
-            if (this.IsSkillIntent !== undefined) {
+            if (this.isSkillIntent !== undefined) {
                 const dispatchIntentSkill = dispatch.toString();
                 const skillDialogArgs: SkillDialogArgs = skillDialogArgs{ skillId = dispatchIntentSkill };
                 
@@ -330,7 +320,7 @@ export class MainDialog extends ComponentDialog {
             } else if (dispatch === 'q_chitchat') {
                 DialogContextEx.suppressCompletionMessage(stepContext, true);
                 const qnaMaker: QnAMaker | undefined = localizedServices.qnaServices.get('chitchat');
-                if (qnaMaker !== undefined){
+                if (qnaMaker !== undefined) {
                     return await this.callQnaMaker(stepContext, qnaMaker);
                 }
             } else {
@@ -351,9 +341,9 @@ export class MainDialog extends ComponentDialog {
 
     private async logUserOut(dc: DialogContext): Promise<void> {
         const tokenProvider: BotFrameworkAdapter = dc.context.adapter as BotFrameworkAdapter;
-        if (tokenProvider !== undefined){
+        if (tokenProvider !== undefined) {
             // Sign out user
-            const tokens: TokenStatus[] = await tokenProvider.getTokenStatus(dc.context, dc.context.activity.from.id)
+            const tokens: TokenStatus[] = await tokenProvider.getTokenStatus(dc.context, dc.context.activity.from.id);
             tokens.forEach(async (token: TokenStatus) => {
                 if (token.connectionName !== undefined) {
                     await tokenProvider.signOutUser(dc.context, token.connectionName);
@@ -364,7 +354,7 @@ export class MainDialog extends ComponentDialog {
             await dc.cancelAllDialogs();
 
         } else {
-            throw new Error('OAuthPrompt.SignOutUser(): not supported by the current adapter')
+            throw new Error('OAuthPrompt.SignOutUser(): not supported by the current adapter');
         }
     }
 
@@ -373,7 +363,7 @@ export class MainDialog extends ComponentDialog {
 
         const answer: QnAMakerResult[] = await qnaMaker.getAnswers(innerDc.context);
 
-        if (answer !== undefined && answer.length > 0){
+        if (answer !== undefined && answer.length > 0) {
             await innerDc.context.sendActivity(answer[0].answer, answer[0].answer);
         } else {
             await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage', userProfile));
@@ -399,12 +389,11 @@ export class MainDialog extends ComponentDialog {
         return await next();
     }
 
-    private IsSkillIntent(dispatchIntent: string) {
+    private isSkillIntent(dispatchIntent: string): Boolean {
         if (dispatchIntent.toLowerCase() === 'l_general' || dispatchIntent.toLowerCase() === 'q_chichat' || dispatchIntent.toLowerCase() === 'q_faq' || dispatchIntent.toLowerCase() === 'none') {
             return false;
         }
 
         return true;
-    }
-    
+    } 
 }
