@@ -43,12 +43,9 @@ export class DefaultActivityHandler<T extends Dialog> extends ActivityHandler {
         this.dialogs.add(dialog);
         this.onTurn(this.turn.bind(this));
         this.onMembersAdded(this.membersAdded.bind(this));
-        
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public async turn(turnContext: TurnContext, next: () => Promise<void>): Promise<any> {
-
+    public async turn(turnContext: TurnContext, next: () => Promise<void>): Promise<void> {
         super.onTurn(next);
 
         const dc: DialogContext = await this.dialogs.createContext(turnContext);
@@ -63,20 +60,16 @@ export class DefaultActivityHandler<T extends Dialog> extends ActivityHandler {
         await this.userState.saveChanges(turnContext, false);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     protected async membersAdded(turnContext: TurnContext, next: () => Promise<void>): Promise<void> {
         await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('IntroMessage'));
         await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     protected async onMessageActivity(turnContext: TurnContext): Promise<void> {
         return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     protected async onEventActivity(turnContext: TurnContext): Promise<void> {
         return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
-    
 }
