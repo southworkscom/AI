@@ -11,8 +11,7 @@ import {
     StatePropertyAccessor,
     TurnContext,
     UserState,
-    BotFrameworkAdapter,
-    TelemetryLoggerMiddleware, 
+    TelemetryLoggerMiddleware,
     SkillHttpClient,
     ChannelServiceHandler} from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
@@ -65,6 +64,8 @@ cognitiveModelMap.forEach((value: Object, key: string): void => {
     cognitiveModels.set(key, value as ICognitiveModelConfiguration);
 });
 
+const skills: IEnhancedBotFrameworkSkill[] = appsettings.botFrameworkSkills;
+const skillHostEndpoint: string = appsettings.skillHostEndpoint;
 const botSettings: Partial<IBotSettings> = {
     appInsights: appsettings.appInsights,
     blobStorage: appsettings.blobStorage,
@@ -72,9 +73,7 @@ const botSettings: Partial<IBotSettings> = {
     cosmosDb: appsettings.cosmosDb,
     defaultLocale: cognitiveModelsRaw.defaultLocale,
     microsoftAppId: appsettings.microsoftAppId,
-    microsoftAppPassword: appsettings.microsoftAppPassword,
-    skills: appsettings.botFrameworkSkills,
-    skillHostEndpoint: appsettings.skillHostEndpoint
+    microsoftAppPassword: appsettings.microsoftAppPassword
 };
 
 function getTelemetryClient(settings: Partial<IBotSettings>): BotTelemetryClient {
@@ -139,9 +138,8 @@ const localeTemplateEngine: LocaleTemplateEngineManager = new LocaleTemplateEngi
 // Create the skills configuration class
 let authConfig: AuthenticationConfiguration;
 let skillConfiguration: SkillsConfiguration;
-if ((botSettings.skills !== undefined && botSettings.skills.length > 0) &&
-    (botSettings.skillHostEndpoint !== undefined && botSettings.skillHostEndpoint !== "")) {
-        skillConfiguration = new SkillsConfiguration(botSettings.skills, botSettings.skillHostEndpoint);
+if ((skills !== undefined && skills.length > 0) && (skillHostEndpoint !== undefined && skillHostEndpoint !== "")) {
+        skillConfiguration = new SkillsConfiguration(skills, skillHostEndpoint);
         const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillConfiguration);
 
         // Create AuthConfiguration to enable custom claim validation.
@@ -182,14 +180,13 @@ try {
     );
 
     let skillDialogs: SkillDialog[] = [];
-    if (botSettings.skills !== undefined && botSettings.skills.length > 0) {
-        if (botSettings.skillHostEndpoint === undefined) {
+    if (skills !== undefined && skills.length > 0) {
+        if (skillHostEndpoint === undefined) {
             throw new Error("'skillHostEndpoint' is not in the configuration");
         }
         
-        const endpoint: string = botSettings.skillHostEndpoint;
-        skillDialogs = botSettings.skills.map((skill: IEnhancedBotFrameworkSkill): SkillDialog => {
-            return new SkillDialog(conversationState, skillHttpClient, skill, <IBotSettings> botSettings, endpoint);
+        skillDialogs = skills.map((skill: IEnhancedBotFrameworkSkill): SkillDialog => {
+            return new SkillDialog(conversationState, skillHttpClient, skill, <IBotSettings> botSettings, skillHostEndpoint);
         });
     }
 
