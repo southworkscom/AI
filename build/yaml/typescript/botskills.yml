@@ -34,6 +34,7 @@ steps:
 
 - task: Npm@1
   displayName: 'npm test - coverage'
+  continueOnError: true
   inputs:
     command: custom
     workingDir: tools/botskills
