@@ -107,14 +107,14 @@ const cosmosDbStorageSettings: CosmosDbStorageSettings = {
     serviceEndpoint: botSettings.cosmosDb.cosmosDBEndpoint
 };
 
-//
-const credentianProvider: SimpleCredentialProvider = new SimpleCredentialProvider(botSettings.microsoftAppId || "", botSettings.microsoftAppPassword || "");
+const credentialProvider: SimpleCredentialProvider = new SimpleCredentialProvider(botSettings.microsoftAppId || "", botSettings.microsoftAppPassword || "");
 
 // Configure storage
 const storage: CosmosDbStorage = new CosmosDbStorage(cosmosDbStorageSettings);
 const userState: UserState = new UserState(storage);
 const conversationState: ConversationState = new ConversationState(storage);
 
+// Configure localized responses
 const localizedTemplates: Map<string, string[]> = new Map<string, string[]>();
 const templateFiles: string[] = ['MainResponses', 'OnboardingResponses'];
 const supportedLocales: string[] = ['en-us', 'de-de', 'es-es', 'fr-fr', 'it-it', 'zh-cn'];
@@ -176,7 +176,7 @@ try {
 
 
     let skillHttpClient: SkillHttpClient = new SkillHttpClient(
-        credentianProvider,
+        credentialProvider,
         new SkillConversationIdFactory(storage),
         undefined
     );
@@ -235,7 +235,7 @@ server.post('/api/messages', async (req: restify.Request, res: restify.Response)
     });
 });
 
-let handler: ChannelServiceHandler = new ChannelServiceHandler(credentianProvider, new AuthenticationConfiguration());
+let handler: ChannelServiceHandler = new ChannelServiceHandler(credentialProvider, new AuthenticationConfiguration());
 
 server.post('/api/skills/v3/conversations/:conversationId/activities/:activityId', async (req: restify.Request): Promise<ResourceResponse> => {
     const activity: Activity = JSON.parse(req.body);

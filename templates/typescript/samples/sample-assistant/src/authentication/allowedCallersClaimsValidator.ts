@@ -30,6 +30,6 @@ export class AllowedCallersClaimsValidator {
             }
         }
 
-        Promise.resolve;
+        return Promise.resolve();
     }
 }
