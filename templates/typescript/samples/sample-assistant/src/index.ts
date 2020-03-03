@@ -138,7 +138,7 @@ const localeTemplateEngine: LocaleTemplateEngineManager = new LocaleTemplateEngi
 // Create the skills configuration class
 let authConfig: AuthenticationConfiguration;
 let skillConfiguration: SkillsConfiguration;
-if ((skills !== undefined && skills.length > 0) && (skillHostEndpoint !== undefined && skillHostEndpoint !== "")) {
+if (skills !== undefined && skills.length > 0 && skillHostEndpoint.trim().length !== 0) {
         skillConfiguration = new SkillsConfiguration(skills, skillHostEndpoint);
         const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillConfiguration);
 
@@ -173,7 +173,7 @@ try {
         userState.createProperty<Partial<Activity>[]>('Activity');
 
 
-    let skillHttpClient: SkillHttpClient = new SkillHttpClient(
+    const skillHttpClient: SkillHttpClient = new SkillHttpClient(
         credentialProvider,
         new SkillConversationIdFactory(storage)
     );
@@ -198,7 +198,7 @@ try {
         onboardingDialog,
         switchSkillDialog,
         skillDialogs,
-        SkillsConfiguration,
+        skillsConfiguration,
         telemetryClient,
     );
 
