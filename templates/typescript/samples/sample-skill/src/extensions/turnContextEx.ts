@@ -9,7 +9,7 @@ import { SkillValidation, ClaimsIdentity } from 'botframework-connector';
 export namespace TurnContextEx {
 
     export function isSkill(turnContext: TurnContext): boolean {
-        const botIdentity = turnContext.turnState.get('BotIdentity');
+        const botIdentity = turnContext.turnState.get(turnContext.turnState.keys().next().value);
         return botIdentity instanceof ClaimsIdentity && SkillValidation.isSkillClaim(botIdentity.claims) ? true : false;
     }
 
