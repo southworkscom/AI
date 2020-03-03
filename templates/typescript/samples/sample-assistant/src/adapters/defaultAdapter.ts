@@ -20,7 +20,8 @@ import {
     ISkillManifest,
     LocaleTemplateEngineManager,
     SetLocaleMiddleware, 
-    SetSpeakMiddleware} from 'botbuilder-solutions';
+    SetSpeakMiddleware,
+    FeedbackOptions} from 'botbuilder-solutions';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IBotSettings } from '../services/botSettings.js';
 
@@ -64,9 +65,9 @@ export class DefaultAdapter extends BotFrameworkAdapter {
         // Uncomment the following line for local development without Azure Storage
         // this.use(new TranscriptLoggerMiddleware(new MemoryTranscriptStore()));
         this.use(new TranscriptLoggerMiddleware(transcriptStore));
-        this.use(new ShowTypingMiddleware());
-        this.use(new FeedbackMiddleware(conversationState, telemetryClient));
         this.use(new SetLocaleMiddleware(settings.defaultLocale || 'en-us'));
+        this.use(new ShowTypingMiddleware());
+        this.use(new FeedbackMiddleware(conversationState, telemetryClient, new FeedbackOptions()));
         this.use(new EventDebuggerMiddleware());
         this.use(new SetSpeakMiddleware());
     }
