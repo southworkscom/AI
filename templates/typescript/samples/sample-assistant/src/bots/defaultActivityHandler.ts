@@ -51,8 +51,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
         this.onMembersAdded(this.membersAdded.bind(this));
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/tslint/config
-    public async turn(turnContext: TurnContext, next: () => Promise<void>): Promise<any> {
+    public async turn(turnContext: TurnContext, next: () => Promise<void>): Promise<void> {
         super.onTurn(next);
         const dc: DialogContext = await this.dialogs.createContext(turnContext);
         if (dc.activeDialog !== undefined) {
@@ -76,18 +75,18 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
             await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('ReturningUserIntroCard', userProfile));
         }
         
+        await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+    }
+
+    protected async onMessageActivity(turnContext: TurnContext): Promise<void> {
         return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
-    protected async onMessageActivity(turnContext: TurnContext): Promise<any> {
+    protected async onTeamsSigninVerifyState(turnContext: TurnContext): Promise<void> {
         return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
-    protected async onTeamsSigninVerifyState(turnContext: TurnContext): Promise<any> {
-        return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
-    }
-
-    protected async onEventActivity(turnContext: TurnContext): Promise<any> {
+    protected async onEventActivity(turnContext: TurnContext): Promise<void> {
         //PENDING: This should be const ev: IEventActivity = innerDc.context.activity.asEventActivity()
         // but it's not in botbuilder-js currently
         const ev: Activity = turnContext.activity;
@@ -96,10 +95,11 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
         switch (ev.name) {
             case TokenEvents.tokenResponseEventName:
                 // Forward the token response activity to the dialog waiting on the stack.
-                return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
-        
+                await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+                break;
             default:
-                return turnContext.sendActivity({ type: ActivityTypes.Trace, text: `Unknown Event '${ev.name ?? 'undefined' }' was received but not processed.` });
+                await turnContext.sendActivity({ type: ActivityTypes.Trace, text: `Unknown Event '${ev.name ?? 'undefined' }' was received but not processed.` });
+                break;
         }
     }
 }
