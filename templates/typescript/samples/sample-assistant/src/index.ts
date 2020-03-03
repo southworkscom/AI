@@ -175,8 +175,7 @@ try {
 
     let skillHttpClient: SkillHttpClient = new SkillHttpClient(
         credentialProvider,
-        new SkillConversationIdFactory(storage),
-        undefined
+        new SkillConversationIdFactory(storage)
     );
 
     let skillDialogs: SkillDialog[] = [];
