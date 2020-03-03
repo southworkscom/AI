@@ -43,6 +43,7 @@ steps:
     
 - task: PublishTestResults@2
   displayName: 'publish test results'
+  continueOnError: true
   inputs:
     testResultsFiles: 'test-results.xml'
     searchFolder: 'tools/botskills'
