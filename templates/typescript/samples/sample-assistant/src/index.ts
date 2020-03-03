@@ -182,11 +182,11 @@ try {
     if (skills !== undefined && skills.length > 0) {
         if (skillHostEndpoint === undefined) {
             throw new Error("'skillHostEndpoint' is not in the configuration");
+        } else {
+            skillDialogs = skills.map((skill: IEnhancedBotFrameworkSkill): SkillDialog => {
+                return new SkillDialog(conversationState, skillHttpClient, skill, <IBotSettings> botSettings, skillHostEndpoint);
+            });
         }
-        
-        skillDialogs = skills.map((skill: IEnhancedBotFrameworkSkill): SkillDialog => {
-            return new SkillDialog(conversationState, skillHttpClient, skill, <IBotSettings> botSettings, skillHostEndpoint);
-        });
     }
 
     const mainDialog: MainDialog = new MainDialog(
