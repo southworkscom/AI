@@ -92,7 +92,8 @@ const telemetryClient: BotTelemetryClient = getTelemetryClient(botSettings);
 
 const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
     appId: botSettings.microsoftAppId,
-    appPassword: botSettings.microsoftAppPassword
+    appPassword: botSettings.microsoftAppPassword,
+    channelService: ""
 };
 
 if (botSettings.cosmosDb === undefined) {
