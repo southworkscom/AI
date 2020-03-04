@@ -83,7 +83,7 @@ export class MainDialog extends ComponentDialog {
         ];
 
         this.addDialog(new WaterfallDialog (MainDialog.name, steps));
-        this.addDialog(new TextPrompt(TextPrompt.name));
+        this.addDialog(new TextPrompt(TextPrompt.name))
         this.initialDialogId = MainDialog.name;
 
         // Register dialogs
@@ -94,14 +94,14 @@ export class MainDialog extends ComponentDialog {
 
         // Register a QnAMakerDialog for each registered knowledgebase and ensure localised responses are provided.
         const localizedServices: ICognitiveModelSet  = this.services.getCognitiveModels();
-        localizedServices.qnaConfiguration.forEach( (knowledgebase: QnAMakerDialog): void => {
-        const qnaDialog = new QnAMakerDialog(
+        localizedServices.qnaConfiguration.forEach((knowledgebase: QnAMakerDialog): void => {
+        const qnaDialog: QnAMakerDialog = new QnAMakerDialog(
             knowledgeBaseId = knowledgebase.value.knowledgeBaseId,
             endpointKey = knowledgebase.value.endpointKey,
             hostName = knowledgebase.value.host,
             noAnswer = this.templateEngine.generateActivityForLocale("UnsupportedMessage"),
-            activeLearningCardTitle = this.templateEngine.generateActivityForLocale("QnaMakerAdaptiveLearningCardTitle"),
-            cardNoMatchText = this.templateEngine.generateActivityForLocale("QnaMakerNoMatchText")) 
+            activeLearningCardTitle = this.templateEngine.generateActivityForLocale("QnaMakerAdaptiveLearningCardTitle").text,
+            cardNoMatchText = this.templateEngine.generateActivityForLocale("QnaMakerNoMatchText").text) 
         {
             this.id = knowledgebase.key
         };
@@ -207,7 +207,6 @@ export class MainDialog extends ComponentDialog {
                     } else {
                         throw new Error(`${intent} is not in the skills configuration`);
                     }
-
                 }
             } 
         
@@ -219,7 +218,6 @@ export class MainDialog extends ComponentDialog {
                  if (generalResult.intents[intent].score > 0.5) {
                     switch(intent) {
                         case 'Cancel': { 
-
                             await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('CancelledMessage', userProfile));
                             await innerDc.cancelAllDialogs();
                             await innerDc.beginDialog(this.initialDialogId);
@@ -294,7 +292,6 @@ export class MainDialog extends ComponentDialog {
 
     private async onBoardingStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const userProfile: IUserProfileState = await this.userProfileState.get(stepContext.context, { name: '' });
-
         if (userProfile.name === undefined || userProfile.name.trim().length === 0) {
             return await stepContext.beginDialog(this.onBoardingDialog.id);
         } 
@@ -324,7 +321,7 @@ export class MainDialog extends ComponentDialog {
             const dispatchResult: RecognizerResult = stepContext.context.turnState.get(StateProperties.dispatchResult);
             const dispatch: string = LuisRecognizer.topIntent(dispatchResult);
             if (this.isSkillIntent(dispatch)) {
-                const dispatchIntentSkill = dispatch.toString();
+                const dispatchIntentSkill: string = dispatch;
                 const skillDialogArgs: SkillDialogArgs = new SkillDialogArgs().skillId = dispatchIntentSkill ;
                 
                 // Start the skill dialog.
@@ -391,9 +388,9 @@ export class MainDialog extends ComponentDialog {
 
     private isSkillIntent(dispatchIntent: string): boolean {
         if (dispatchIntent.toLowerCase() === 'l_general' || 
-        dispatchIntent.toLowerCase() === 'q_chichat' || 
-        dispatchIntent.toLowerCase() === 'q_faq' || 
-        dispatchIntent.toLowerCase() === 'none') {
+            dispatchIntent.toLowerCase() === 'q_chichat' || 
+            dispatchIntent.toLowerCase() === 'q_faq' || 
+            dispatchIntent.toLowerCase() === 'none') {
 
             return false;
         }
