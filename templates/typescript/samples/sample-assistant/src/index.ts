@@ -232,7 +232,7 @@ server.post('/api/messages', async (req: restify.Request, res: restify.Response)
     });
 });
 
-let handler: ChannelServiceHandler = new ChannelServiceHandler(credentialProvider, new AuthenticationConfiguration());
+const handler: ChannelServiceHandler = new ChannelServiceHandler(credentialProvider, new AuthenticationConfiguration());
 
 server.post('/api/skills/v3/conversations/:conversationId/activities/:activityId', async (req: restify.Request): Promise<ResourceResponse> => {
     const activity: Activity = JSON.parse(req.body);

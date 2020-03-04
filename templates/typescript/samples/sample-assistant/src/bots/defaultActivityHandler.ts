@@ -65,7 +65,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     }
 
     protected async membersAdded(turnContext: TurnContext): Promise<void> {
-        let userProfile = await this.userProfileState.get(turnContext, () => { name: '' })
+        const userProfile = await this.userProfileState.get(turnContext, () => { name: '' })
 
         if (userProfile.name === undefined || userProfile.name.trim().length === 0) {
             // Send new user intro card.
