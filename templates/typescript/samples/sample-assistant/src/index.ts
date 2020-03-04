@@ -182,7 +182,7 @@ try {
             throw new Error("'skillHostEndpoint' is not in the configuration");
         } else {
             skillDialogs = skills.map((skill: IEnhancedBotFrameworkSkill): SkillDialog => {
-                return new SkillDialog(conversationState, skillHttpClient, skill, <IBotSettings> botSettings, skillHostEndpoint);
+                return new SkillDialog(conversationState, skillHttpClient, skill, botSettings as IBotSettings, skillHostEndpoint);
             });
         }
     }
