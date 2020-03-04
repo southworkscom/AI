@@ -23,10 +23,9 @@ import {
     LocaleTemplateEngineManager,
     SkillDialog,
     SwitchSkillDialog,
-    IEnhancedBotFrameworkSkill, 
-    SkillsConfiguration,
+    IEnhancedBotFrameworkSkill,
     SkillConversationIdFactory} from 'botbuilder-solutions';
-import { SimpleCredentialProvider, AuthenticationConfiguration, Claim } from 'botframework-connector';
+import { SimpleCredentialProvider, AuthenticationConfiguration } from 'botframework-connector';
 import i18next from 'i18next';
 import i18nextNodeFsBackend from 'i18next-node-fs-backend';
 import * as path from 'path';
@@ -42,7 +41,6 @@ import { IBotSettings } from './services/botSettings';
 import { Activity, ResourceResponse } from 'botframework-schema';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IUserProfileState } from './models/userProfileState'
-import { AllowedCallersClaimsValidator } from './authentication/allowedCallersClaimsValidator';
 
 // Configure internationalization and default locale
 i18next.use(i18nextNodeFsBackend)
@@ -136,18 +134,18 @@ supportedLocales.forEach((locale: string) => {
 const localeTemplateEngine: LocaleTemplateEngineManager = new LocaleTemplateEngineManager(localizedTemplates, botSettings.defaultLocale || 'en-us')
 
 // Create the skills configuration class
-let authConfig: AuthenticationConfiguration;
-let skillConfiguration: SkillsConfiguration;
-if (skills !== undefined && skills.length > 0 && skillHostEndpoint.trim().length !== 0) {
-        skillConfiguration = new SkillsConfiguration(skills, skillHostEndpoint);
-        const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillConfiguration);
+// let authConfig: AuthenticationConfiguration;
+// let skillConfiguration: SkillsConfiguration;
+// if (skills !== undefined && skills.length > 0 && skillHostEndpoint.trim().length !== 0) {
+//         skillConfiguration = new SkillsConfiguration(skills, skillHostEndpoint);
+//         const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillConfiguration);
 
-        // Create AuthConfiguration to enable custom claim validation.
-        authConfig = new AuthenticationConfiguration(
-            undefined,
-            (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
-        );
-}
+//         // Create AuthConfiguration to enable custom claim validation.
+//         authConfig = new AuthenticationConfiguration(
+//             undefined,
+//             (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
+//         );
+//}
 
 const telemetryLoggerMiddleware: TelemetryLoggerMiddleware = new TelemetryLoggerMiddleware(telemetryClient);
 const telemetryInitializerMiddleware: TelemetryInitializerMiddleware = new TelemetryInitializerMiddleware(telemetryLoggerMiddleware);

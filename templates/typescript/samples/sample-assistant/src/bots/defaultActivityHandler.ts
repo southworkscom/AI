@@ -90,7 +90,6 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
         //PENDING: This should be const ev: IEventActivity = innerDc.context.activity.asEventActivity()
         // but it's not in botbuilder-js currently
         const ev: Activity = turnContext.activity;
-        const value: string = ev.value?.toString();
 
         switch (ev.name) {
             case TokenEvents.tokenResponseEventName:
