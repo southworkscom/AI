@@ -23,8 +23,8 @@ export class DefaultActivityHandler<T extends Dialog> extends ActivityHandler {
     public constructor(
         conversationState: BotState,
         userState: BotState,
-        dialog: T,
-        templateEngine: LocaleTemplateEngineManager
+        templateEngine: LocaleTemplateEngineManager,
+        dialog: T
     ) {
         super();
         this.dialog = dialog;
@@ -38,8 +38,6 @@ export class DefaultActivityHandler<T extends Dialog> extends ActivityHandler {
     public async onTurnActivity(turnContext: TurnContext): Promise<void> {
         await super.onTurnActivity(turnContext);
 
-        //await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
-
         // Save any state changes that might have occured during the turn.
         await this.conversationState.saveChanges(turnContext, false);
         await this.userState.saveChanges(turnContext, false);
@@ -50,11 +48,11 @@ export class DefaultActivityHandler<T extends Dialog> extends ActivityHandler {
         await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
-    protected async onMessageActivity(turnContext: TurnContext): Promise<void> {
-        return await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+    protected onMessageActivity(turnContext: TurnContext): Promise<void> {
+        return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
-    protected async onEventActivity(turnContext: TurnContext): Promise<void> {
-        return await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+    protected onEventActivity(turnContext: TurnContext): Promise<void> {
+        return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 }
