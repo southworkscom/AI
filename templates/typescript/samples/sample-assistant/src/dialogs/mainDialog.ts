@@ -83,7 +83,7 @@ export class MainDialog extends ComponentDialog {
         ];
 
         this.addDialog(new WaterfallDialog (MainDialog.name, steps));
-        this.addDialog(new TextPrompt(TextPrompt.name))
+        this.addDialog(new TextPrompt(TextPrompt.name));
         this.initialDialogId = MainDialog.name;
 
         // Register dialogs
