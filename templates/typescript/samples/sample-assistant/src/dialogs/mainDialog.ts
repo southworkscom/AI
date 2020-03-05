@@ -99,9 +99,9 @@ export class MainDialog extends ComponentDialog {
                 value.endpointKey,
                 value.host,
                 this.templateEngine.generateActivityForLocale("UnsupportedMessage") as Activity,
-                +(this.templateEngine.generateActivityForLocale("QnaMakerAdaptiveLearningCardTitle").text || 0),
-                this.templateEngine.generateActivityForLocale("QnaMakerNoMatchText").text);
-            
+                0.3,
+                this.templateEngine.generateActivityForLocale("QnaMakerAdaptiveLearningCardTitle").text,
+                this.templateEngine.generateActivityForLocale("QnaMakerNoMatchText").text)
             this.id = key;
             this.addDialog(qnaDialog);
         });
@@ -317,9 +317,8 @@ export class MainDialog extends ComponentDialog {
             const dispatch: string = LuisRecognizer.topIntent(dispatchResult);
             if (this.isSkillIntent(dispatch)) {
                 const dispatchIntentSkill: string = dispatch;
-                const skillDialog = new SkillDialogArgs();
-                skillDialog.skillId = dispatchIntentSkill;
-                const skillDialogArgs: SkillDialogArgs = skillDialog;
+                const skillDialogArgs: SkillDialogArgs = new SkillDialogArgs();
+                skillDialogArgs.skillId = dispatchIntentSkill;
                 
                 // Start the skill dialog.
                 return await stepContext.beginDialog(dispatchIntentSkill, skillDialogArgs);      
