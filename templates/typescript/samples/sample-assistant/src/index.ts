@@ -134,18 +134,20 @@ supportedLocales.forEach((locale: string) => {
 const localeTemplateEngine: LocaleTemplateEngineManager = new LocaleTemplateEngineManager(localizedTemplates, botSettings.defaultLocale || 'en-us')
 
 // Create the skills configuration class
-// let authConfig: AuthenticationConfiguration;
-// let skillConfiguration: SkillsConfiguration;
-// if (skills !== undefined && skills.length > 0 && skillHostEndpoint.trim().length !== 0) {
-//         skillConfiguration = new SkillsConfiguration(skills, skillHostEndpoint);
-//         const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillConfiguration);
+// We disabled the eslint rule to follow the parity with C#, however this is not used in both languages currently
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let authConfig: AuthenticationConfiguration;
+let skillConfiguration: SkillsConfiguration;
+if (skills !== undefined && skills.length > 0 && skillHostEndpoint.trim().length !== 0) {
+        skillConfiguration = new SkillsConfiguration(skills, skillHostEndpoint);
+        const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillConfiguration);
 
-//         // Create AuthConfiguration to enable custom claim validation.
-//         authConfig = new AuthenticationConfiguration(
-//             undefined,
-//             (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
-//         );
-//}
+        // Create AuthConfiguration to enable custom claim validation.
+        authConfig = new AuthenticationConfiguration(
+            undefined,
+            (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
+        );
+}
 
 const telemetryLoggerMiddleware: TelemetryLoggerMiddleware = new TelemetryLoggerMiddleware(telemetryClient);
 const telemetryInitializerMiddleware: TelemetryInitializerMiddleware = new TelemetryInitializerMiddleware(telemetryLoggerMiddleware);
