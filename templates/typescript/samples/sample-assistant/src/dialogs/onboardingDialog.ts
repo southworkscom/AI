@@ -101,5 +101,6 @@ enum DialogIds {
 }
 
 export enum StateProperties {
+    DispatchResult = "dispatchResult",
     GeneralResult = "generalResult",
 }
