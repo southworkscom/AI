@@ -102,7 +102,7 @@ export class MainDialog extends ComponentDialog {
                 0.3,
                 this.templateEngine.generateActivityForLocale("QnaMakerAdaptiveLearningCardTitle").text,
                 this.templateEngine.generateActivityForLocale("QnaMakerNoMatchText").text)
-            this.id = key;
+            qnaDialog.id = key;
             this.addDialog(qnaDialog);
         });
 
