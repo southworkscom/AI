@@ -384,7 +384,7 @@ export class MainDialog extends ComponentDialog {
 
     private isSkillIntent(dispatchIntent: string): boolean {
         if (dispatchIntent.toLowerCase() === 'l_general' || 
-            dispatchIntent.toLowerCase() === 'q_chichat' || 
+            dispatchIntent.toLowerCase() === 'q_chitchat' || 
             dispatchIntent.toLowerCase() === 'q_faq' || 
             dispatchIntent.toLowerCase() === 'none') {
 
