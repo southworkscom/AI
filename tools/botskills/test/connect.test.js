@@ -22,9 +22,32 @@ const filledSkills = normalizeContent(JSON.stringify(
         ]
     },
     null, 4));
-
+const emptyAppsettings = normalizeContent(JSON.stringify(
+    {
+        "microsoftAppId": "",
+        "microsoftAppPassword": "",
+        "appInsights": {
+            "appId": "",
+            "instrumentationKey": ""
+        },
+        "blobStorage": {
+            "connectionString": "",
+            "container": ""
+        },
+        "cosmosDb": {
+            "authkey": "",
+            "collectionId": "",
+            "cosmosDBEndpoint": "",
+            "databaseId": ""
+        },
+        "contentModerator": {
+            "key": ""
+        }
+    },
+    null, 4));
 function undoChangesInTemporalFiles() {
     writeFileSync(resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")), filledSkills);
+    writeFileSync(resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")), emptyAppsettings);
 }
 
 describe("The connect command", function () {
@@ -139,10 +162,10 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
 
             const errorMessages = [
                 `Missing property 'name' of the manifest`,
-                `Missing property 'id' of the manifest`,
                 `Missing property 'endpoint' of the manifest`,
                 `Missing property 'authenticationConnections' of the manifest`,
-                `Missing property 'actions' of the manifest`
+                `Missing property 'actions' of the manifest`,
+                `There was an error while connecting the Skill to the Assistant:\nError: Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`
             ]
 
             this.connector.configuration = configuration;
@@ -172,11 +195,18 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
                 logger: this.logger
             };
 
+            const errorMessages = [
+                `The 'id' of the manifest contains some characters not allowed. Make sure the 'id' contains only letters, numbers and underscores, but doesn't start with number.`,
+                `There was an error while connecting the Skill to the Assistant:\nError: Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`
+            ]
+
             this.connector.configuration = configuration;
             await this.connector.connectSkill();
             const errorList = this.logger.getError();
 
-            strictEqual(errorList[errorList.length - 1], `The 'id' of the manifest contains some characters not allowed. Make sure the 'id' contains only letters, numbers and underscores, but doesn't start with number.`);
+            errorList.forEach((errorMessage, index) => {
+                strictEqual(errorMessage, errorMessages[index]);
+            });
         });
 
         it("when the remoteManifest points to a nonexisting Skill manifest URL", async function() {
@@ -217,7 +247,7 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -245,7 +275,7 @@ Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -273,7 +303,7 @@ Make sure your Skill's .lu file's name matches your Skill's manifest id`);
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -301,7 +331,7 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithNoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -331,7 +361,7 @@ Error: Path to the nonExistenceen-usDispatch.dispatch file leads to a nonexisten
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -366,7 +396,7 @@ Error: Path to connectableSkill.luis (${join(configuration.luisFolder, configura
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -395,7 +425,7 @@ Error: Mocked function throws an Error`);
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -425,7 +455,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -461,7 +491,7 @@ Error: Mocked function throws an Error`);
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -490,7 +520,7 @@ Error: Mocked function throws an Error`);
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -505,9 +535,6 @@ Error: Mocked function throws an Error`);
 
         it("when the noRefresh argument is present", async function () {
             sandbox.replace(this.connector.childProcessUtils, "execute", (command, args) => {
-                return Promise.resolve("Mocked function successfully");
-            });
-            sandbox.replace(this.connector.authenticationUtils, "authenticate", (configuration, manifest, logger) => {
                 return Promise.resolve("Mocked function successfully");
             });
             sandbox.replace(this.connector, "executeRefresh", (command, args) => {
@@ -525,7 +552,7 @@ Error: Mocked function throws an Error`);
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -544,9 +571,6 @@ Error: Mocked function throws an Error`);
             sandbox.replace(this.connector.childProcessUtils, "execute", (command, args) => {
                 return Promise.resolve("Mocked function successfully");
             });
-            sandbox.replace(this.connector.authenticationUtils, "authenticate", (configuration, manifest, logger) => {
-                return Promise.resolve("Mocked function successfully");
-            });
             sandbox.replace(this.connector, "executeRefresh", (command, args) => {
                 return Promise.resolve("Mocked function successfully");
             });
@@ -561,7 +585,7 @@ Error: Mocked function throws an Error`);
                 lgOutFolder: "",
                 skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "",
                 logger: this.logger
@@ -571,7 +595,7 @@ Error: Mocked function throws an Error`);
             await this.connector.connectSkill();
             const messageList = this.logger.getMessage();
 
-			strictEqual(messageList[messageList.length - 1], `Configuring bot auth settings`);
+			strictEqual(messageList[messageList.length - 1], `Appending 'Test Skill' manifest to your assistant's skills configuration file.`);
 		});
 	});
 });
