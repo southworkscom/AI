@@ -50,9 +50,8 @@ describe("The update command", function () {
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 cognitiveModelsFile: "",
                 lgLanguage: "ts",
                 logger: this.logger
@@ -80,9 +79,8 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --localM
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 cognitiveModelsFile: "",
                 lgLanguage: "ts",
                 logger: this.logger
@@ -108,7 +106,7 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --remote
                 lgOutFolder: "",
                 skillsFile: "",
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 cognitiveModelsFile: "",
                 lgLanguage: "",
                 logger: this.logger
@@ -135,7 +133,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
                 lgOutFolder: "",
                 skillsFile: "",
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 cognitiveModelsFile: "",
                 lgLanguage: "",
                 logger: this.logger
@@ -168,9 +166,8 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
-                appSettingsFile: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 cognitiveModelsFile: "",
                 lgLanguage: "ts",
                 logger: this.logger
