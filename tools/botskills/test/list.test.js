@@ -30,19 +30,6 @@ describe("The list command", function () {
             strictEqual(errorList[errorList.length - 1], `The 'appSettingsFile' argument is absent or leads to a non-existing file.
 Please make sure to provide a valid path to your Assistant Skills configuration file using the '--appSettingsFile' argument.`);
         });
-
-        xit("when the skillsFile points to a bad formatted Assistant Skills configuration file", async function () {
-            const config = {
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "badSkills.jso"),
-                logger: this.logger
-            };
-
-            await this.lister.listSkill(config);
-            const errorList = this.logger.getError();
-
-            strictEqual(errorList[errorList.length - 1], `There was an error while listing the Skills connected to your assistant:
- SyntaxError: Unexpected token N in JSON at position 0`);
-		});
     });
 
     describe("should show a message", function () {
