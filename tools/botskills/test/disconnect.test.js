@@ -36,12 +36,43 @@ const filledSkills = normalizeContent(JSON.stringify(
         ]
     },
     null, 4));
-
+const appsettingsWithTestSkill = normalizeContent(JSON.stringify(
+    {
+        "microsoftAppId": "",
+        "microsoftAppPassword": "",
+        "appInsights": {
+            "appId": "",
+            "instrumentationKey": ""
+        },
+        "blobStorage": {
+            "connectionString": "",
+            "container": ""
+        },
+        "cosmosDb": {
+            "authkey": "",
+            "collectionId": "",
+            "cosmosDBEndpoint": "",
+            "databaseId": ""
+        },
+        "contentModerator": {
+            "key": ""
+        },
+        "botFrameworkSkills": [{ 
+                "id": "testSkill",
+                "appId": "",
+                "skillEndpoint": "",
+                "name": "",
+                "description": ""
+            
+        }]
+    },
+    null, 4));
 function undoChangesInTemporalFiles() {
     writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "en-us", "filleden-usDispatchNoJson.dispatch")), filledDispatch);
     writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "en-us", "filleden-usDispatch.dispatch")), filledDispatch);
     writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "es-es", "filledes-esDispatch.dispatch")), filledDispatch);
     writeFileSync(resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")), filledSkills);
+    writeFileSync(resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")), appsettingsWithTestSkill);
 }
 
 describe("The disconnect command", function () {
@@ -63,7 +94,6 @@ describe("The disconnect command", function () {
         it("when there is no skills File", async function () {
             const configuration = {
                 skillId : "",
-                skillsFile : "",
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 languages : "",
@@ -104,9 +134,9 @@ SyntaxError: Unexpected token N in JSON at position 0`);
         it("when there is no cognitiveModels file", async function () {
             const configuration = {
                 skillId : "testSkill",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "nonCognitiveModels.json"),
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 languages : "",
                 dispatchFolder : "",
                 lgOutFolder: resolve(__dirname, "mocks", "success", "luis"),
@@ -124,9 +154,9 @@ Error: Could not find the cognitiveModels file (${configuration.cognitiveModelsF
         it("when the dispatchFolder points to a nonexistent path", async function () {
             const configuration = {
                 skillId : "testSkill",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 languages : "",
                 dispatchFolder : resolve(__dirname, "mocks", "success", "nonexistentDispatch"),
                 lgOutFolder: resolve(__dirname, "mocks", "success", "luis"),
@@ -148,10 +178,10 @@ Error: The path to the dispatch file doesn't exists: ${configuration.dispatchFol
                 return Promise.reject(new Error("Mocked function throws an Error"));
             });
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "testSkill",
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 languages : "",
                 dispatchFolder : resolve(__dirname, "mocks", "success", "dispatch"),
                 lgOutFolder: resolve(__dirname, "mocks", "success", "luis"),
@@ -170,10 +200,10 @@ Error: Mocked function throws an Error`);
 
         it("when the lgOutFolder argument is invalid ", async function () {
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "testSkill",
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 languages : "",
                 dispatchFolder : resolve(__dirname, "mocks", "success", "dispatch"),
                 lgOutFolder: resolve(__dirname, "mocks", "success", "nonexistentLuis"),
@@ -191,10 +221,10 @@ Please make sure to provide a valid path to your LUISGen output folder using the
 
         it("when the lgLanguage argument is invalid", async function () {
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "testSkill",
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 languages : "",
                 dispatchFolder : resolve(__dirname, "mocks", "success", "dispatch"),
                 lgOutFolder : resolve(__dirname, "mocks", "success", "luis"),
@@ -235,10 +265,10 @@ Run 'botskills list --skillsFile "<YOUR-ASSISTANT-SKILLS-FILE-PATH>"' in order t
 
         it("when the noRefresh flag is applied", async function () {
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "testSkill",
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 languages : "",
                 luisFolder : "",
                 dispatchFolder : resolve(__dirname, "mocks", "success", "dispatch"),
@@ -259,10 +289,10 @@ Run 'botskills list --skillsFile "<YOUR-ASSISTANT-SKILLS-FILE-PATH>"' in order t
     describe("should show a success message", function () {
         it("when the skill is successfully disconnected", async function () {
             const configuration = {
-                skillId : "testDispatch",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "filledSkills.json"),
+                skillId : "testSkill",
                 outFolder : "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 languages : "",
                 dispatchFolder : resolve(__dirname, "mocks", "success", "dispatch"),
                 lgOutFolder : resolve(__dirname, "mocks", "success", "luis"),
