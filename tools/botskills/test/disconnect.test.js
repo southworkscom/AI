@@ -91,46 +91,6 @@ describe("The disconnect command", function () {
     });
 
 	describe("should show an error", function () {
-        it("when there is no skills File", async function () {
-            const configuration = {
-                skillId : "",
-                outFolder : "",
-                cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
-                languages : "",
-                dispatchFolder : "",
-                lgOutFolder: resolve(__dirname, "mocks", "success", "luis"),
-                lgLanguage : "cs",
-                logger : this.logger
-            };
-            this.disconnector.configuration = configuration;
-            await this.disconnector.disconnectSkill();
-            const errorList = this.logger.getError();
-
-            strictEqual(errorList[errorList.length - 1], `The 'skillsFile' argument is absent or leads to a non-existing file.
-Please make sure to provide a valid path to your Assistant Skills configuration file using the '--skillsFile' argument.`);
-        });
-
-        it("when the skillsFile points to a bad formatted Assistant Skills configuration file", async function () {
-            const configuration = {
-                skillId : "testSkill",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "badSkills.jso"),
-                outFolder : "",
-                cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
-                languages : "",
-                dispatchFolder : "",
-                lgOutFolder: resolve(__dirname, "mocks", "success", "luis"),
-                lgLanguage : "cs",
-                logger : this.logger
-            };
-
-            this.disconnector.configuration = configuration;
-            await this.disconnector.disconnectSkill();
-            const errorList = this.logger.getError();
-
-            strictEqual(errorList[errorList.length - 1], `There was an error while disconnecting the Skill ${configuration.skillId} from the Assistant:
-SyntaxError: Unexpected token N in JSON at position 0`);
-        });
-
         it("when there is no cognitiveModels file", async function () {
             const configuration = {
                 skillId : "testSkill",
@@ -242,27 +202,6 @@ It should be either 'cs' or 'ts' depending on your assistant's language. Please 
     });
 
     describe("should show a warning", function () {
-        it("when the skillsFile points to a bad formatted Assistant Skills configuration file", async function () {
-            const configuration = {
-                skillId : "testSkill",
-                skillsFile: resolve(__dirname, "mocks", "virtualAssistant", "emptySkills.json"),
-                outFolder : "",
-                cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
-                languages : "",
-                dispatchFolder : "",
-                lgOutFolder : resolve(__dirname, "mocks", "success", "luis"),
-                lgLanguage : "cs",
-                logger : this.logger
-            };
-
-            this.disconnector.configuration = configuration;
-            await this.disconnector.disconnectSkill();
-            const warningList = this.logger.getWarning();
-
-            strictEqual(warningList[warningList.length - 1], `The skill 'testSkill' is not present in the assistant Skills configuration file.
-Run 'botskills list --skillsFile "<YOUR-ASSISTANT-SKILLS-FILE-PATH>"' in order to list all the skills connected to your assistant`);
-        });
-
         it("when the noRefresh flag is applied", async function () {
             const configuration = {
                 skillId : "testSkill",
