@@ -93,7 +93,7 @@ describe("The authentication util", function() {
         it("when the skill manifest doesn't contain any authentication connection", async function() {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "invalidManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "invalidManifest.json")),
                 remoteManifest: "",
                 dispatchName: "",
                 language: "",
@@ -118,7 +118,7 @@ describe("The authentication util", function() {
         it("when the skill manifest doesn't contain an Azure Active Directory v2 as authentication connection", async function() {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "googleAuthenticationManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "googleAuthenticationManifest.json")),
                 remoteManifest: "",
                 dispatchName: "",
                 language: "",
@@ -146,7 +146,7 @@ https://aka.ms/vamanualauthsteps`);
         it("when any of the external commands fails", async function() {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "azureActiveDirectoryV2AuthenticationManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "azureActiveDirectoryV2AuthenticationManifest.json")),
                 remoteManifest: "",
                 dispatchName: "",
                 language: "",
@@ -181,7 +181,7 @@ https://aka.ms/vamanualauthsteps`);
         it("when the scopes are not configured automatically", async function() {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "azureActiveDirectoryV2AuthenticationManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "azureActiveDirectoryV2AuthenticationManifest.json")),
                 remoteManifest: "",
                 dispatchName: "",
                 language: "",
@@ -215,7 +215,7 @@ https://aka.ms/vamanualauthsteps`);
             const warningMessage = `${unrecognizedWarningPrefix} ${scopeNotRecognized.join(',')}`;
             const configuration = {
                 botName: "testScope",
-                localManifest: resolve(__dirname, join("mocks", "skills", "unrecognizedScopesManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "unrecognizedScopesManifest.json")),
                 remoteManifest: "",
                 dispatchName: "",
                 language: "",
@@ -245,7 +245,7 @@ https://aka.ms/vamanualauthsteps`);
         it("when the scopes property doesn't exist in the authenticationConnections", async function () {
             const configuration = {
                 botName: "testScope",
-                localManifest: resolve(__dirname, join("mocks", "skills", "noScopesPropertyManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "noScopesPropertyManifest.json")),
                 remoteManifest: "",
                 dispatchName: "",
                 language: "",
@@ -277,7 +277,7 @@ https://aka.ms/vamanualauthsteps`);
         it("when the scopes property contains empty strings", async function () {
             const configuration = {
                 botName: "testScope",
-                localManifest: resolve(__dirname, join("mocks", "skills", "emptyScopesManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "emptyScopesManifest.json")),
                 remoteManifest: "",
                 dispatchName: "",
                 language: "",
@@ -309,7 +309,7 @@ https://aka.ms/vamanualauthsteps`);
         it("when all the scopes are recognized", async function () {
             const configuration = {
                 botName: "testScope",
-                localManifest: resolve(__dirname, join("mocks", "skills", "recognizedScopesManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "recognizedScopesManifest.json")),
                 remoteManifest: "",
                 dispatchName: "",
                 language: "",
@@ -344,7 +344,7 @@ https://aka.ms/vamanualauthsteps`);
             it("without an aadConnection", async function () {
                 const configuration = {
                     botName: "",
-                    localManifest: resolve(__dirname, join("mocks", "skills", "azureActiveDirectoryV2AuthenticationManifest.json")),
+                    localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "azureActiveDirectoryV2AuthenticationManifest.json")),
                     remoteManifest: "",
                     dispatchName: "",
                     language: "",
@@ -379,7 +379,7 @@ https://aka.ms/vamanualauthsteps`);
             it("with an aadConnection", async function() {
                 const configuration = {
                     botName: "",
-                    localManifest: resolve(__dirname, join("mocks", "skills", "azureActiveDirectoryV2AuthenticationManifest.json")),
+                    localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "azureActiveDirectoryV2AuthenticationManifest.json")),
                     remoteManifest: "",
                     dispatchName: "",
                     language: "",

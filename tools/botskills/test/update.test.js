@@ -20,7 +20,7 @@ describe("The update command", function () {
         it("when the local skill to update is not present in the assistant manifest", async function() {
             const configuration = {
                 botName: "mock-assistant",
-                localManifest: resolve(__dirname, join("mocks", "skills", "absentManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "absentManifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
@@ -50,7 +50,7 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --localM
             const configuration = {
                 botName: "mock-assistant",
                 localManifest: "",
-                remoteManifest: resolve(__dirname, join("mocks", "skills", "absentManifest.json")),
+                remoteManifest: resolve(__dirname, join("mocks", "manifests", "v1", "absentManifest.json")),
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
                 dispatchFolder: "",
@@ -74,7 +74,7 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --remote
         it("when the localManifest points to a nonexisting Skill manifest file", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "nonexistentSkill.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "nonexistentSkill.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -134,7 +134,7 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
             const configuration = {
                 skillId: "testSkill",
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "repeatedManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "repeatedManifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),

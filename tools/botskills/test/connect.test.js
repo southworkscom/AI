@@ -79,7 +79,7 @@ Error: Either the 'localManifest' or 'remoteManifest' argument should be passed.
         it("when there is no cognitiveModels file", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifestWithTwoLanguages.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifestWithTwoLanguages.json")),
                 remoteManifest: "",
                 languages: ["en-us", "es-es"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
@@ -103,7 +103,7 @@ Error: Could not find the cognitiveModels file (${configuration.cognitiveModelsF
         it("when the localManifest points to a nonexisting Skill manifest file", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "nonexistentSkill.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "nonexistentSkill.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -129,7 +129,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         it("when the Skill is missing all mandatory fields", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "invalidManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "invalidManifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -163,7 +163,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         it("when the Skill has an invalid id field", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "invalidIdManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "invalidIdManifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -219,7 +219,7 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
         it("when the luisFolder leads to a nonexistent folder", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifest.json")),
                 remoteManifest: "",
                 languages: ["en-us"],
                 luisFolder: resolve(__dirname, join("mocks", "fail", "nonexistentLuis")),
@@ -246,7 +246,7 @@ Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
         it("when the .lu file path leads to a nonexistent file", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifest.json")),
                 remoteManifest: "",
                 languages: ["en-us"],
                 luisFolder: resolve(__dirname, join("mocks", "success")),
@@ -273,7 +273,7 @@ Make sure your Skill's .lu file's name matches your Skill's manifest id`);
         it("when the dispatch folder path leads to a nonexistent folder", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifest.json")),
                 remoteManifest: "",
                 languages: ["en-us"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
@@ -300,7 +300,7 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
         it("when the path to dispatch file doesn't exist", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifest.json")),
                 remoteManifest: "",
                 languages: ["en-us"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "lu")),
@@ -329,7 +329,7 @@ Error: Path to the nonExistenceen-usDispatch.dispatch file leads to a nonexisten
             });
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifest.json")),
                 remoteManifest: "",
                 languages: ["en-us"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "lu")),
@@ -363,7 +363,7 @@ Error: Path to connectableSkill.luis (${join(configuration.luisFolder, configura
             });
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifestWithTwoLanguages.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifestWithTwoLanguages.json")),
                 remoteManifest: "",
                 languages: ["en-us", "es-es"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
@@ -391,7 +391,7 @@ Error: Mocked function throws an Error`);
         it("when languages argument contains non-supported cultures for the VA", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifest.json")),
                 remoteManifest: "",
                 languages: ["zh-hk"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
@@ -420,7 +420,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             });
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifestWithTwoLanguages.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifestWithTwoLanguages.json")),
                 remoteManifest: "",
                 languages: ["en-us", "es-es"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
@@ -455,7 +455,7 @@ Error: Mocked function throws an Error`);
             });
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifest.json")),
                 remoteManifest: "",
                 languages: ["en-us"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
@@ -483,7 +483,7 @@ Error: Mocked function throws an Error`);
         it("when the Skill is already connected", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "repeatedManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "repeatedManifest.json")),
                 remoteManifest: "",
                 languages: ["en-us"],
                 luisFolder: "",
@@ -513,7 +513,7 @@ Error: Mocked function throws an Error`);
             });
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifest.json")),
                 remoteManifest: "",
                 noRefresh: true,
                 languages: ["en-us"],
@@ -546,7 +546,7 @@ Error: Mocked function throws an Error`);
             });
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "connectableManifestWithTwoLanguages.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifestWithTwoLanguages.json")),
                 remoteManifest: "",
                 languages: ["en-us", "es-es"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
