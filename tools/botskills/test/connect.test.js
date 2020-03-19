@@ -10,18 +10,6 @@ const sandbox = require("sinon").createSandbox();
 const testLogger = require("./helpers/testLogger");
 const { normalizeContent } = require("./helpers/normalizeUtils");
 const botskills = require("../lib/index");
-const filledSkills = normalizeContent(JSON.stringify(
-    {
-        "skills": [
-            {
-                "id": "testSkill"
-            },
-            {
-                "id": "testDispatch"
-            }
-        ]
-    },
-    null, 4));
 const emptyAppsettings = normalizeContent(JSON.stringify(
     {
         "microsoftAppId": "",
@@ -46,7 +34,6 @@ const emptyAppsettings = normalizeContent(JSON.stringify(
     },
     null, 4));
 function undoChangesInTemporalFiles() {
-    writeFileSync(resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")), filledSkills);
     writeFileSync(resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")), emptyAppsettings);
 }
 
@@ -74,7 +61,6 @@ describe("The connect command", function () {
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: "",
                 resourceGroup: "",
                 appSettingsFile: "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -100,7 +86,6 @@ Error: Either the 'localManifest' or 'remoteManifest' argument should be passed.
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "nonCognitiveModels.json"),
@@ -125,7 +110,6 @@ Error: Could not find the cognitiveModels file (${configuration.cognitiveModelsF
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: "",
                 resourceGroup: "",
                 appSettingsFile: "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -152,7 +136,6 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: "",
                 resourceGroup: "",
                 appSettingsFile: "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -187,7 +170,6 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: "",
                 resourceGroup: "",
                 appSettingsFile: "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -219,7 +201,6 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: "",
                 resourceGroup: "",
                 appSettingsFile: "",
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -272,7 +253,6 @@ Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -300,7 +280,6 @@ Make sure your Skill's .lu file's name matches your Skill's manifest id`);
                 dispatchFolder: resolve(__dirname, join("mocks", "fail", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -328,7 +307,6 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
                 dispatchFolder : resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithNoDispatch.json"),
@@ -358,7 +336,6 @@ Error: Path to the nonExistenceen-usDispatch.dispatch file leads to a nonexisten
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -393,7 +370,6 @@ Error: Path to connectableSkill.luis (${join(configuration.luisFolder, configura
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -422,7 +398,6 @@ Error: Mocked function throws an Error`);
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -452,7 +427,6 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -488,7 +462,6 @@ Error: Mocked function throws an Error`);
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -517,7 +490,6 @@ Error: Mocked function throws an Error`);
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -549,7 +521,6 @@ Error: Mocked function throws an Error`);
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
@@ -582,7 +553,6 @@ Error: Mocked function throws an Error`);
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
