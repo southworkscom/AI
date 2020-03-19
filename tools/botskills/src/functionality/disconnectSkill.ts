@@ -88,10 +88,10 @@ export class DisconnectSkill {
 
     public async disconnectSkill(): Promise<boolean> {
         try {
-            // Validate configuration.skillsFile
+            // Validate configuration.appSettingsFile
             if (!existsSync(this.configuration.appSettingsFile)) {
-                this.logger.error(`The 'skillsFile' argument is absent or leads to a non-existing file.
-Please make sure to provide a valid path to your Assistant Skills configuration file using the '--skillsFile' argument.`);
+                this.logger.error(`The 'appSettingsFile' argument is absent or leads to a non-existing file.
+Please make sure to provide a valid path to your Assistant Skills configuration file using the '--appSettingsFile' argument.`);
 
                 return false;
             }
@@ -107,7 +107,7 @@ Please make sure to provide a valid path to your Assistant Skills configuration 
 
             if (!skillToRemove) {
                 this.logger.warning(`The skill '${ this.configuration.skillId }' is not present in the assistant Skills configuration file.
-Run 'botskills list --skillsFile "<YOUR-ASSISTANT-SKILLS-FILE-PATH>"' in order to list all the skills connected to your assistant`);
+Run 'botskills list --appSettingsFile "<YOUR-APPSETTINGS-FILE-PATH>"' in order to list all the skills connected to your assistant`);
 
                 return false;
             } else if (!this.configuration.lgLanguage || !(['cs', 'ts'].includes(this.configuration.lgLanguage))) {

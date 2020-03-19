@@ -24,18 +24,6 @@ const filledDispatch = normalizeContent(JSON.stringify(
     },
     null, 4));
 
-const filledSkills = normalizeContent(JSON.stringify(
-    {
-        "skills": [
-            {
-                "id": "testSkill"
-            },
-            {
-                "id": "testDispatch"
-            }
-        ]
-    },
-    null, 4));
 const appsettingsWithTestSkill = normalizeContent(JSON.stringify(
     {
         "microsoftAppId": "",
@@ -71,7 +59,6 @@ function undoChangesInTemporalFiles() {
     writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "en-us", "filleden-usDispatchNoJson.dispatch")), filledDispatch);
     writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "en-us", "filleden-usDispatch.dispatch")), filledDispatch);
     writeFileSync(resolve(__dirname, join("mocks", "success", "dispatch", "es-es", "filledes-esDispatch.dispatch")), filledDispatch);
-    writeFileSync(resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")), filledSkills);
     writeFileSync(resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")), appsettingsWithTestSkill);
 }
 
