@@ -4,11 +4,9 @@
  */
 
 const { strictEqual } = require("assert");
-const { writeFileSync } = require("fs");
 const { join, resolve } = require("path");
 const sandbox = require("sinon").createSandbox();
 const testLogger = require("./helpers/testLogger");
-const { normalizeContent } = require("./helpers/normalizeUtils");
 const botskills = require("../lib/index");
 
 describe("The update command", function () {
