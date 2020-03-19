@@ -165,7 +165,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
                 `Missing property 'endpoint' of the manifest`,
                 `Missing property 'authenticationConnections' of the manifest`,
                 `Missing property 'actions' of the manifest`,
-                `There was an error while connecting the Skill to the Assistant:\nError: Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`
+                `There was an error while connecting the Skill to the Assistant:\nError: One or more properties are missing from your Skill Manifest`
             ]
 
             this.connector.configuration = configuration;
@@ -197,7 +197,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
 
             const errorMessages = [
                 `The 'id' of the manifest contains some characters not allowed. Make sure the 'id' contains only letters, numbers and underscores, but doesn't start with number.`,
-                `There was an error while connecting the Skill to the Assistant:\nError: Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`
+                `There was an error while connecting the Skill to the Assistant:\nError: One or more properties are missing from your Skill Manifest`
             ]
 
             this.connector.configuration = configuration;
@@ -245,7 +245,6 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
                 dispatchFolder: "",
                 outFolder: "",
                 lgOutFolder: "",
-                skillsFile: resolve(__dirname, join("mocks", "virtualAssistant", "filledSkills.json")),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
                 cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),

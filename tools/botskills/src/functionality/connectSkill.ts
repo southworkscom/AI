@@ -164,24 +164,20 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
         
         let validVersion: manifestVersion = manifestVersion.none;
         switch (skillManifestVersion) {
-            case manifestVersion.V1: {
+            case manifestVersion.V1:
                 manifestV1Validation(skillManifest as ISkillManifestV1, this.logger);
-                if (!this.logger.isError)
-                {
-                    validVersion = manifestVersion.V1;
-                    break;
+                if (this.logger.isError) {
+                    throw new Error('One or more properties are missing from your Skill Manifest');
                 }
-                throw new Error('Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.');
-            }
-            case manifestVersion.V2: {
+                validVersion = manifestVersion.V1;
+                break;
+            case manifestVersion.V2:
                 manifestV2Validation(skillManifest as ISkillManifestV2, this.logger, this.configuration.endpointName);
-                if (!this.logger.isError)
-                {
-                    validVersion = manifestVersion.V2;
-                    break;
+                if (this.logger.isError) {
+                    throw new Error('One or more properties are missing from your Skill Manifest');
                 }
-                throw new Error('Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.');
-            }
+                validVersion = manifestVersion.V2;
+                break;
             case undefined: {
                 throw new Error('Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.');
             }
