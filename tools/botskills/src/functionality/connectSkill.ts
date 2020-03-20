@@ -49,6 +49,11 @@ export class ConnectSkill {
         intentName: string,
         dispatchName: string): Promise<Map<string, string>> {
 
+        if (!existsSync(this.configuration.luisFolder)) {
+            throw new Error(`Path to the LUIS folder (${ this.configuration.luisFolder }) leads to a nonexistent folder.
+Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
+        }
+
         let luFile: string = '';
         let luisFile: string = '';
         let luFilePath: string = '';
@@ -118,13 +123,10 @@ export class ConnectSkill {
         }
 
         // Validate 'ludown' arguments
-        if (!existsSync(this.configuration.luisFolder)) {
-            throw new Error(`Path to the LUIS folder (${ this.configuration.luisFolder }) leads to a nonexistent folder.
-Remember to use the argument '--luisFolder' for your Skill's LUIS folder.`);
-            } else if (!existsSync(luFilePath)) {
-                throw new Error(`Path to the ${ luFile } file leads to a nonexistent file.
+        if (!existsSync(luFilePath)) {
+            throw new Error(`Path to the ${ luFile } file leads to a nonexistent file.
 Make sure your Skill's .lu file's name matches your Skill's manifest id`);
-            }
+        }
         
         // Validate 'dispatch add' arguments
         if (!existsSync(dispatchFolderPath)) {
@@ -158,8 +160,8 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
         const skillManifestV1Validation = skillManifest as ISkillManifestV1;
         const skillManifestV2Validation = skillManifest as ISkillManifestV2;
 
-        const skillManifestVersion: string | undefined = skillManifestV1Validation.id ? 
-            manifestVersion.V1 : skillManifestV2Validation.$id ?
+        const skillManifestVersion: string | undefined = skillManifestV1Validation.id !== undefined ? 
+            manifestVersion.V1 : skillManifestV2Validation.$id !== undefined ?
                 manifestVersion.V2 : undefined;
         
         let validVersion: manifestVersion = manifestVersion.none;
