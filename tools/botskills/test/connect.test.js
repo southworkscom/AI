@@ -159,6 +159,41 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
             });
         });
 
+        it("when the manifest v2 is missing all mandatory fields", async function () {
+            const configuration = {
+                botName: "",
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "invalidManifest.json")),
+                remoteManifest: "",
+                languages: "",
+                luisFolder: "",
+                dispatchFolder: "",
+                outFolder: "",
+                lgOutFolder: "",
+                resourceGroup: "",
+                appSettingsFile: "",
+                cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
+                lgLanguage: "",
+                logger: this.logger
+            };
+
+            const errorMessages = [
+                `Missing property '$schema' of the manifest`,
+                `Missing property '$id' of the manifest`,
+                `Missing property 'endpoints' of the manifest`,
+                `Missing property 'dispatchModels' of the manifest`,
+                `Missing property 'activities' of the manifest`,
+                `There was an error while connecting the Skill to the Assistant:\nError: One or more properties are missing from your Skill Manifest`
+            ]
+
+            this.connector.configuration = configuration;
+            await this.connector.connectSkill();
+            const errorList = this.logger.getError();
+
+            errorList.forEach((errorMessage, index) => {
+                strictEqual(errorMessage, errorMessages[index]);
+            });
+        });
+
         it("when the Skill has an invalid id field", async function () {
             const configuration = {
                 botName: "",
@@ -562,7 +597,7 @@ Error: Mocked function throws an Error`);
     });
 
     describe("should show a message", function () {
-        it("when the skill is successfully connected to the Assistant", async function () {
+        it("when the skill is successfully connected to the Assistant with schema v2", async function () {
             sandbox.replace(this.connector.childProcessUtils, "execute", (command, args) => {
                 return Promise.resolve("Mocked function successfully");
             });
@@ -572,6 +607,36 @@ Error: Mocked function throws an Error`);
             const configuration = {
                 botName: "",
                 localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "manifest.json")),
+                remoteManifest: "",
+                languages: ["en-us", "es-es"],
+                luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
+                dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
+                outFolder: "",
+                lgOutFolder: "",
+                resourceGroup: "",
+                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
+                cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
+                lgLanguage: "",
+                logger: this.logger
+            };
+
+            this.connector.configuration = configuration;
+            await this.connector.connectSkill();
+            const messageList = this.logger.getMessage();
+
+			strictEqual(messageList[messageList.length - 1], `Appending 'Test Skill' manifest to your assistant's skills configuration file.`);
+		});
+
+        it("when the skill is successfully connected to the Assistant with schema v1", async function () {
+            sandbox.replace(this.connector.childProcessUtils, "execute", (command, args) => {
+                return Promise.resolve("Mocked function successfully");
+            });
+            sandbox.replace(this.connector, "executeRefresh", (command, args) => {
+                return Promise.resolve("Mocked function successfully");
+            });
+            const configuration = {
+                botName: "",
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifestWithTwoLanguages.json")),
                 remoteManifest: "",
                 languages: ["en-us", "es-es"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
