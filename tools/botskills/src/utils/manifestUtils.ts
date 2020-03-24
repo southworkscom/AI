@@ -9,16 +9,12 @@ import { manifestV2Validation, manifestV1Validation } from './validationUtils';
 import { IConnectConfiguration } from '../models';
 
 export class ManifestUtils {
-    public static async getManifest(configuration: IConnectConfiguration, logger: ILogger): Promise<IManifest> {
-        const rawManifest: string = configuration.localManifest
-            ? this.getLocalManifest(configuration.localManifest)
-            : await this.getRemoteManifest(configuration.remoteManifest);
-    
+    public static async getManifest(rawManifest: string, logger: ILogger, endpointName?: string): Promise<IManifest> {
         const tempManifest = JSON.parse(rawManifest);
         const manifest: IManifest | undefined = tempManifest.id !== undefined
             ? await this.getManifestFromV1(tempManifest, logger)
             : tempManifest.$id !== undefined
-                ? await this.getManifestFromV2(tempManifest, configuration.endpointName, logger)
+                ? await this.getManifestFromV2(tempManifest, logger, endpointName)
                 : undefined;
     
         if (manifest === undefined) {
@@ -26,6 +22,12 @@ export class ManifestUtils {
         }
         
         return manifest;
+    }
+
+    public static async getRawManifestFromResource(configuration: IConnectConfiguration): Promise<string> {
+        return configuration.localManifest
+            ? this.getLocalManifest(configuration.localManifest)
+            : await this.getRemoteManifest(configuration.remoteManifest);
     }
 
     private static async getRemoteManifest(manifestURI: string): Promise<string> {
@@ -69,7 +71,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         }
     }
 
-    private static async getManifestFromV2(manifest: ISkillManifestV2, endpointName: string, logger: ILogger): Promise<IManifest> {
+    private static async getManifestFromV2(manifest: ISkillManifestV2, logger: ILogger, endpointName?: string): Promise<IManifest> {
         manifestV2Validation(manifest, logger);
         if (logger.isError) {
             throw new Error(`One or more properties are missing from your Skill Manifest`);

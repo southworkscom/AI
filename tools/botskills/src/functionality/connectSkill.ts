@@ -278,7 +278,8 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             // Take cognitiveModels
             const cognitiveModelsFile: ICognitiveModel = JSON.parse(readFileSync(this.configuration.cognitiveModelsFile, 'UTF8'));
             // Take skillManifest
-            this.manifest = await ManifestUtils.getManifest(this.configuration, this.logger);
+            const rawManifest: string = await ManifestUtils.getRawManifestFromResource(this.configuration);
+            this.manifest = await ManifestUtils.getManifest(rawManifest, this.logger);
             await this.connectSkillManifest(cognitiveModelsFile, this.manifest);
 
             return true;
