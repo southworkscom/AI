@@ -4,41 +4,21 @@
  */
 
 const { strictEqual } = require("assert");
-const { writeFileSync } = require("fs");
+const { writeFileSync, readFileSync } = require("fs");
 const { join, resolve } = require("path");
 const sandbox = require("sinon").createSandbox();
 const testLogger = require("./helpers/testLogger");
-const { normalizeContent } = require("./helpers/normalizeUtils");
+const { getNormalizedFile } = require("./helpers/normalizeUtils");
 const botskills = require("../lib/index");
-const emptyAppsettings = normalizeContent(JSON.stringify(
-    {
-        "microsoftAppId": "",
-        "microsoftAppPassword": "",
-        "appInsights": {
-            "appId": "",
-            "instrumentationKey": ""
-        },
-        "blobStorage": {
-            "connectionString": "",
-            "container": ""
-        },
-        "cosmosDb": {
-            "authkey": "",
-            "collectionId": "",
-            "cosmosDBEndpoint": "",
-            "databaseId": ""
-        },
-        "contentModerator": {
-            "key": ""
-        }
-    },
-    null, 4));
+const emptyAppsettings = getNormalizedFile(resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")));
+const appsettingsWithTestSkill = getNormalizedFile(resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")));
+
 function undoChangesInTemporalFiles() {
     writeFileSync(resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")), emptyAppsettings);
+    writeFileSync(resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")), appsettingsWithTestSkill);
 }
 
 describe("The connect command", function () {
-    
     beforeEach(function() {
         undoChangesInTemporalFiles();
         this.logger = new testLogger.TestLogger();

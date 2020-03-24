@@ -5,15 +5,29 @@
 
 const { strictEqual } = require("assert");
 const { join, resolve } = require("path");
+const { writeFileSync, readFileSync } = require("fs");
 const sandbox = require("sinon").createSandbox();
 const testLogger = require("./helpers/testLogger");
 const botskills = require("../lib/index");
+const { getNormalizedFile } = require("./helpers/normalizeUtils");
+const emptyAppsettings = getNormalizedFile(resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")));
+const appsettingsWithTestSkill = getNormalizedFile(resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")));
+
+function undoChangesInTemporalFiles() {
+    writeFileSync(resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")), emptyAppsettings);
+    writeFileSync(resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")), appsettingsWithTestSkill);
+}
 
 describe("The update command", function () {
     beforeEach(function () {
+        undoChangesInTemporalFiles();
         this.logger = new testLogger.TestLogger();
         this.updater = new botskills.UpdateSkill();
         this.updater.logger = this.logger;
+    });
+
+    this.afterAll(function () {
+        undoChangesInTemporalFiles();
     });
     
     describe("should show an error", function () {
@@ -134,10 +148,10 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
                 dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
                 outFolder: "",
-                lgOutFolder: "",
+                lgOutFolder : resolve(__dirname, "mocks", "success", "luis"),
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
-                cognitiveModelsFile: "",
+                cognitiveModelsFile: resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "ts",
                 logger: this.logger
             };

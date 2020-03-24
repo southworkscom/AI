@@ -8,67 +8,15 @@ const { writeFileSync } = require("fs");
 const { join, resolve } = require("path");
 const sandbox = require("sinon").createSandbox();
 const { TestLogger } = require("./helpers/testLogger");
-const { normalizeContent } = require("./helpers/normalizeUtils");
+const { getNormalizedFile } = require("./helpers/normalizeUtils");
 const { AuthenticationUtils } = require("../lib/utils");
 const authenticationUtils = new AuthenticationUtils();
 const emptyAzureAuthSettings = JSON.stringify(require(resolve(__dirname, join("mocks", "azureAuthSettings", "emptyAuthSettings.json"))));
 const filledAzureAuthSettings = JSON.stringify(require(resolve(__dirname, join("mocks", "azureAuthSettings", "filledAuthSettings.json"))));
 const appShowReplyUrl = JSON.stringify(require(resolve(__dirname, join("mocks", "appShowReplyUrl", "emptyAppShowReplyUrl.json"))));
 const unrecognizedWarningPrefix = 'The following scopes were not recognized:';
-
-const noAuthConnectionAppsettings = normalizeContent(JSON.stringify(
-    {
-        "microsoftAppId": "",
-        "microsoftAppPassword": "",
-        "appInsights": {
-            "appId": "",
-            "instrumentationKey": ""
-        },
-        "blobStorage": {
-            "connectionString": "",
-            "container": ""
-        },
-        "cosmosDb": {
-            "authkey": "",
-            "collectionId": "",
-            "cosmosDBEndpoint": "",
-            "databaseId": ""
-        },
-        "contentModerator": {
-            "key": ""
-        }
-    },
-    null, 4));
-
-const authConnectionAppsettings = normalizeContent(JSON.stringify(
-    {
-        "microsoftAppId": "",
-        "microsoftAppPassword": "",
-        "appInsights": {
-            "appId": "",
-            "instrumentationKey": ""
-        },
-        "blobStorage": {
-            "connectionString": "",
-            "container": ""
-        },
-        "cosmosDb": {
-            "authkey": "",
-            "collectionId": "",
-            "cosmosDBEndpoint": "",
-            "databaseId": ""
-        },
-        "contentModerator": {
-            "key": ""
-        },
-        "oauthConnections": [
-            {
-                "name": "Outlook",
-                "provider": "Azure Active Directory v2"
-            }
-        ]
-    },
-    null,4));
+const authConnectionAppsettings = getNormalizedFile(resolve(__dirname, join("mocks", "appsettings", "authConnectionAppsettings.json")));
+const noAuthConnectionAppsettings = getNormalizedFile(resolve(__dirname, join("mocks", "appsettings", "noAuthConnectionAppsettings.json")));
 
 function undoChangesInTemporalFiles() {
     writeFileSync(resolve(__dirname, join("mocks", "appsettings", "noAuthConnectionAppsettings.json")), noAuthConnectionAppsettings);
