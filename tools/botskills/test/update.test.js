@@ -20,7 +20,7 @@ describe("The update command", function () {
         it("when the local skill to update is not present in the assistant manifest", async function() {
             const configuration = {
                 botName: "mock-assistant",
-                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "absentManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "absentSkillManifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
@@ -29,7 +29,7 @@ describe("The update command", function () {
                 lgOutFolder: "",
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
-                cognitiveModelsFile: "",
+                cognitiveModelsFile: resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "ts",
                 logger: this.logger
             };
@@ -50,7 +50,7 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --localM
             const configuration = {
                 botName: "mock-assistant",
                 localManifest: "",
-                remoteManifest: resolve(__dirname, join("mocks", "manifests", "v1", "absentManifest.json")),
+                remoteManifest: resolve(__dirname, join("mocks", "manifests", "v2", "absentManifest.json")),
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
                 dispatchFolder: "",
@@ -58,7 +58,7 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --localM
                 lgOutFolder: "",
                 resourceGroup: "",
                 appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "appsettingsWithTestSkill.json")),
-                cognitiveModelsFile: "",
+                cognitiveModelsFile: resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
                 lgLanguage: "ts",
                 logger: this.logger
             };
@@ -74,7 +74,7 @@ Error: The Skill doesn't exist in the Assistant, run 'botskills connect --remote
         it("when the localManifest points to a nonexisting Skill manifest file", async function () {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "nonexistentSkill.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "nonexistentSkill.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -134,7 +134,7 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
             const configuration = {
                 skillId: "testSkill",
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "repeatedManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "manifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
