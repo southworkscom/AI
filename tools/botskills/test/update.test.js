@@ -125,12 +125,6 @@ RequestError: Error: getaddrinfo ENOTFOUND nonexistentskill.azurewebsites.net no
 
     describe("should show a success message", function () {
         it("when the skill is successfully updated to the Assistant", async function () {
-            sandbox.replace(this.updater, "executeDisconnectSkill", () => {
-                return Promise.resolve("Mocked function successfully");
-            })
-            sandbox.replace(this.updater, "executeConnectSkill", () => {
-                return Promise.resolve("Mocked function successfully");
-            })
             const configuration = {
                 skillId: "testSkill",
                 botName: "",
