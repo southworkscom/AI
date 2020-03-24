@@ -4,31 +4,20 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { isAbsolute, join, resolve, basename } from 'path';
+import { join, basename } from 'path';
 import { get } from 'request-promise-native';
 import { ConsoleLogger, ILogger } from '../logger';
 import {
-    IAction,
     ICognitiveModel,
     IConnectConfiguration,
     IRefreshConfiguration,
-    ISkillManifestV1,
-    IUtteranceSource,
-    ISkillManifestV2,
     IAppSetting,
     ISkill,
-    IModel,
-    IEndpoint
+    IModel
 } from '../models';
-import { ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes, manifestV1Validation, manifestV2Validation, isCloudGovernment } from '../utils';
+import { ChildProcessUtils, getDispatchNames, isValidCultures, wrapPathWithQuotes, isCloudGovernment, ManifestUtils } from '../utils';
 import { RefreshSkill } from './refreshSkill';
 import { IManifest } from '../models/manifest';
-
-enum manifestVersion {
-    V1 = 'V1',
-    V2 = 'V2',
-    none = 'none'
-}
 
 export class ConnectSkill {
     private readonly childProcessUtils: ChildProcessUtils;
@@ -169,88 +158,6 @@ Make sure your Skill's .lu file's name matches your Skill's manifest id`);
         }
     }
 
-    private async getManifest(): Promise<IManifest> {
-
-        const rawManifest: string = this.configuration.localManifest
-            ? this.getLocalManifest()
-            : await this.getRemoteManifest();
-
-        const tempManifest = JSON.parse(rawManifest);
-        const manifest: IManifest | undefined = tempManifest.id !== undefined
-            ? await this.getManifestFromV1(tempManifest)
-            : tempManifest.$id !== undefined
-                ? await this.getManifestFromV2(tempManifest)
-                : undefined;
-
-        if (manifest === undefined) {
-            throw new Error('Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.');
-        }
-        
-        return manifest;
-    }
-
-    private async getRemoteManifest(): Promise<string> {
-        try {
-            return get({
-                uri: this.configuration.remoteManifest,
-                json: true
-            });
-        } catch (err) {
-            throw new Error(`There was a problem while getting the remote manifest:\n${ err }`);
-        }
-    }
-
-    private getLocalManifest(): string {
-        const manifestPath: string = this.configuration.localManifest;
-        const skillManifestPath: string = isAbsolute(manifestPath) ? manifestPath : join(resolve('./'), manifestPath);
-
-        if (!existsSync(skillManifestPath)) {
-            throw new Error(`The 'localManifest' argument leads to a non-existing file.
-Please make sure to provide a valid path to your Skill manifest using the '--localManifest' argument.`);
-        }
-
-        return readFileSync(skillManifestPath, 'UTF8');
-    }
-
-    private async getManifestFromV1(manifest: ISkillManifestV1): Promise<IManifest> {
-        manifestV1Validation(manifest, this.logger);
-        if (this.logger.isError) {
-            throw new Error(`One or more properties are missing from your Skill Manifest`);
-        }
-
-        return {
-            id: manifest.id,
-            name: manifest.name,
-            description: manifest.description,
-            msaAppId: manifest.msaAppId,
-            endpoint: manifest.endpoint,
-            luisDictionary: await this.processManifestV1(manifest),
-            version: '',
-            schema: ''
-        }
-    }
-
-    private async getManifestFromV2(manifest: ISkillManifestV2): Promise<IManifest> {
-        manifestV2Validation(manifest, this.logger);
-        if (this.logger.isError) {
-            throw new Error(`One or more properties are missing from your Skill Manifest`);
-        }
-        const endpoint: IEndpoint = manifest.endpoints.find((endpoint: IEndpoint): boolean => endpoint.name === this.configuration.endpointName) 
-        || manifest.endpoints[0];
-
-        return {
-            id: manifest.$id,
-            name: manifest.name,
-            description: manifest.description,
-            msaAppId: endpoint.msAppId,
-            endpoint: endpoint.endpointUrl,
-            luisDictionary: await this.processManifestV2(manifest),
-            version: manifest.version,
-            schema: manifest.$schema,
-            entries: Object.entries(manifest?.dispatchModels.languages)
-        }
-    }
-
     private verifyLuisFolder(culture: string): void {
         if (!existsSync(this.configuration.luisFolder)){
             mkdirSync(this.configuration.luisFolder);
@@ -371,7 +278,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             // Take cognitiveModels
             const cognitiveModelsFile: ICognitiveModel = JSON.parse(readFileSync(this.configuration.cognitiveModelsFile, 'UTF8'));
             // Take skillManifest
-            this.manifest = await this.getManifest();
+            this.manifest = await ManifestUtils.getManifest(this.configuration, this.logger);
             await this.connectSkillManifest(cognitiveModelsFile, this.manifest);
 
             return true;
@@ -427,42 +334,5 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
         } catch (error) {
             this.logger.error(`There was an error while connecting the Skill to the Assistant:\n${error}`);
         }
-    }
-
-    private async processManifestV1(manifest: ISkillManifestV1): Promise<Map<string, string[]>> {
-
-        return manifest.actions.filter((action: IAction): IUtteranceSource[] =>
-            action.definition.triggers.utteranceSources).reduce((acc: IUtteranceSource[], val: IAction): IUtteranceSource[] => acc.concat(val.definition.triggers.utteranceSources), [])
-            .reduce((acc: Map<string, string[]>, val: IUtteranceSource): Map<string, string[]> => {
-                const luisApps: string[] = val.source.map((v: string): string => v.split('#')[0]);
-                if (acc.has(val.locale)) {
-                    const previous: string[] = acc.get(val.locale) || [];
-                    const filteredluisApps: string[] = [...new Set(luisApps.concat(previous))];
-                    acc.set(val.locale, filteredluisApps);
-                } else {
-                    const filteredluisApps: string[] = [...new Set(luisApps)];
-                    acc.set(val.locale, filteredluisApps);
-                }
-
-                return acc;
-            },
-            new Map());
-    }
-
-    private async processManifestV2(manifest: ISkillManifestV2): Promise<Map<string, string[]>> {
-        const acc: Map<string, string[]> = new Map();
-        const entries = Object.entries(manifest.dispatchModels.languages);
-
-        entries.forEach(([locale, value]): void => {
-            const luisApps: string[] = [];
-            value.forEach((model: IModel): void => {
-                luisApps.push(model.id);
-            });
-        
-            const filteredluisApps: string[] = [...new Set(luisApps)]
-            acc.set(locale, filteredluisApps);
-        });
-
-        return acc;
     }
 }
