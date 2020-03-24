@@ -21,6 +21,7 @@ import { IManifest } from '../models/manifest';
 
 export class ConnectSkill {
     private readonly childProcessUtils: ChildProcessUtils;
+    private readonly manifestUtils: ManifestUtils;
     private readonly configuration: IConnectConfiguration;
     private readonly logger: ILogger;
     private manifest: IManifest | undefined;
@@ -29,6 +30,7 @@ export class ConnectSkill {
         this.configuration = configuration;
         this.logger = logger || new ConsoleLogger();
         this.childProcessUtils = new ChildProcessUtils();
+        this.manifestUtils = new ManifestUtils();
     }
 
     private async getExecutionModel(
@@ -278,8 +280,8 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             // Take cognitiveModels
             const cognitiveModelsFile: ICognitiveModel = JSON.parse(readFileSync(this.configuration.cognitiveModelsFile, 'UTF8'));
             // Take skillManifest
-            const rawManifest: string = await ManifestUtils.getRawManifestFromResource(this.configuration);
-            this.manifest = await ManifestUtils.getManifest(rawManifest, this.logger);
+            const rawManifest: string = await this.manifestUtils.getRawManifestFromResource(this.configuration);
+            this.manifest = await this.manifestUtils.getManifest(rawManifest, this.logger);
             await this.connectSkillManifest(cognitiveModelsFile, this.manifest);
 
             return true;

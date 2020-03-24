@@ -9,7 +9,7 @@ import { manifestV2Validation, manifestV1Validation } from './validationUtils';
 import { IConnectConfiguration } from '../models';
 
 export class ManifestUtils {
-    public static async getManifest(rawManifest: string, logger: ILogger, endpointName?: string): Promise<IManifest> {
+    public async getManifest(rawManifest: string, logger: ILogger, endpointName?: string): Promise<IManifest> {
         const tempManifest = JSON.parse(rawManifest);
         const manifest: IManifest | undefined = tempManifest.id !== undefined
             ? await this.getManifestFromV1(tempManifest, logger)
@@ -24,13 +24,13 @@ export class ManifestUtils {
         return manifest;
     }
 
-    public static async getRawManifestFromResource(configuration: IConnectConfiguration): Promise<string> {
+    public async getRawManifestFromResource(configuration: IConnectConfiguration): Promise<string> {
         return configuration.localManifest
             ? this.getLocalManifest(configuration.localManifest)
             : await this.getRemoteManifest(configuration.remoteManifest);
     }
 
-    private static async getRemoteManifest(manifestURI: string): Promise<string> {
+    private async getRemoteManifest(manifestURI: string): Promise<string> {
         try {
             return get({
                 uri: manifestURI,
@@ -41,7 +41,7 @@ export class ManifestUtils {
         }
     }
     
-    private static getLocalManifest(manifestFilepath: string): string {
+    private getLocalManifest(manifestFilepath: string): string {
         const manifestPath: string = manifestFilepath;
         const skillManifestPath: string = isAbsolute(manifestPath) ? manifestPath : join(resolve('./'), manifestPath);
     
@@ -53,7 +53,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         return readFileSync(skillManifestPath, 'UTF8');
     }
     
-    private static async getManifestFromV1(manifest: ISkillManifestV1, logger: ILogger): Promise<IManifest> {
+    private async getManifestFromV1(manifest: ISkillManifestV1, logger: ILogger): Promise<IManifest> {
         manifestV1Validation(manifest, logger);
         if (logger.isError) {
             throw new Error(`One or more properties are missing from your Skill Manifest`);
@@ -71,7 +71,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         }
     }
 
-    private static async getManifestFromV2(manifest: ISkillManifestV2, logger: ILogger, endpointName?: string): Promise<IManifest> {
+    private async getManifestFromV2(manifest: ISkillManifestV2, logger: ILogger, endpointName?: string): Promise<IManifest> {
         manifestV2Validation(manifest, logger);
         if (logger.isError) {
             throw new Error(`One or more properties are missing from your Skill Manifest`);
@@ -92,7 +92,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         }
     }
 
-    private static async processManifestV1(manifest: ISkillManifestV1): Promise<Map<string, string[]>> {
+    private async processManifestV1(manifest: ISkillManifestV1): Promise<Map<string, string[]>> {
 
         return manifest.actions.filter((action: IAction): IUtteranceSource[] =>
             action.definition.triggers.utteranceSources).reduce((acc: IUtteranceSource[], val: IAction): IUtteranceSource[] => acc.concat(val.definition.triggers.utteranceSources), [])
@@ -112,7 +112,7 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
             new Map());
     }
 
-    private static async processManifestV2(manifest: ISkillManifestV2): Promise<Map<string, string[]>> {
+    private async processManifestV2(manifest: ISkillManifestV2): Promise<Map<string, string[]>> {
         const acc: Map<string, string[]> = new Map();
         const entries = Object.entries(manifest.dispatchModels.languages);
 
