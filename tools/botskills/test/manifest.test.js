@@ -25,8 +25,8 @@ describe("The Manifest Util", function () {
             };
 
             try {
-                const est = await manifestUtil.getRawManifestFromResource(configuration);
-                await manifestUtil.getManifest(est, this.logger)
+                const invalidManifest = await manifestUtil.getRawManifestFromResource(configuration);
+                await manifestUtil.getManifest(invalidManifest, this.logger)
             } catch (error) {
                 strictEqual(error.message, `One or more properties are missing from your Skill Manifest`);
             }
@@ -40,8 +40,8 @@ describe("The Manifest Util", function () {
             };
 
             try {
-                const est = await manifestUtil.getRawManifestFromResource(configuration);
-                await manifestUtil.getManifest(est, this.logger)
+                const invalidManifest = await manifestUtil.getRawManifestFromResource(configuration);
+                await manifestUtil.getManifest(invalidManifest, this.logger)
             } catch (error) {
                 strictEqual(error.message, `One or more properties are missing from your Skill Manifest`);
             }
