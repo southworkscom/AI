@@ -16,6 +16,53 @@ describe("The Manifest Util", function () {
         this.logger = new testLogger.TestLogger();
     });
 
+    describe("should show an error when", function () {
+        it("a manifest v1 has missing properties", async function () {
+            const configuration = {
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "invalidManifest.json")),
+                remoteManifest: "",
+                logger: this.logger
+            };
+
+            try {
+                const est = await manifestUtil.getRawManifestFromResource(configuration);
+                await manifestUtil.getManifest(est, this.logger)
+            } catch (error) {
+                strictEqual(error.message, `One or more properties are missing from your Skill Manifest`);
+            }
+        });
+
+        it("a manifest v2 has missing properties", async function () {
+            const configuration = {
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "invalidManifest.json")),
+                remoteManifest: "",
+                logger: this.logger
+            };
+
+            try {
+                const est = await manifestUtil.getRawManifestFromResource(configuration);
+                await manifestUtil.getManifest(est, this.logger)
+            } catch (error) {
+                strictEqual(error.message, `One or more properties are missing from your Skill Manifest`);
+            }
+        });
+
+        it("it can't determine the schema version", async function () {
+            const undeterminedManifest = JSON.stringify({
+                "$schema": "",
+                "endpoints": [ ],
+                "dispatchModels": { },
+                "activities": { }
+            });
+
+            try {
+                await manifestUtil.getManifest(undeterminedManifest, this.logger)
+            } catch (error) {
+                strictEqual(error.message, `Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`);
+            }
+        });
+    });
+
     describe("should be able to read", function () {
         it("a local manifest with absolute path", async function () {
             const configuration = {
