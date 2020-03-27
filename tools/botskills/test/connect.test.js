@@ -477,7 +477,7 @@ Error: Mocked function throws an Error`);
     });
 
     describe("should show a message", function () {
-        it("when the skill is successfully connected to the Assistant with schema v2", async function () {
+        it("when the skill is successfully connected to the Assistant", async function () {
             sandbox.replace(this.connector.childProcessUtils, "execute", (command, args) => {
                 return Promise.resolve("Mocked function successfully");
             });
@@ -487,36 +487,6 @@ Error: Mocked function throws an Error`);
             const configuration = {
                 botName: "",
                 localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "manifest.json")),
-                remoteManifest: "",
-                languages: ["en-us", "es-es"],
-                luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
-                dispatchFolder: resolve(__dirname, join("mocks", "success", "dispatch")),
-                outFolder: "",
-                lgOutFolder: "",
-                resourceGroup: "",
-                appSettingsFile: resolve(__dirname, join("mocks", "appsettings", "emptyAppsettings.json")),
-                cognitiveModelsFile : resolve(__dirname, "mocks", "cognitivemodels", "cognitivemodelsWithTwoDispatch.json"),
-                lgLanguage: "",
-                logger: this.logger
-            };
-
-            this.connector.configuration = configuration;
-            await this.connector.connectSkill();
-            const messageList = this.logger.getMessage();
-
-			strictEqual(messageList[messageList.length - 1], `Appending 'Test Skill' manifest to your assistant's skills configuration file.`);
-		});
-
-        it("when the skill is successfully connected to the Assistant with schema v1", async function () {
-            sandbox.replace(this.connector.childProcessUtils, "execute", (command, args) => {
-                return Promise.resolve("Mocked function successfully");
-            });
-            sandbox.replace(this.connector, "executeRefresh", (command, args) => {
-                return Promise.resolve("Mocked function successfully");
-            });
-            const configuration = {
-                botName: "",
-                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "connectableManifestWithTwoLanguages.json")),
                 remoteManifest: "",
                 languages: ["en-us", "es-es"],
                 luisFolder: resolve(__dirname, join("mocks", "success", "luis")),
