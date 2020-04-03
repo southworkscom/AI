@@ -34,7 +34,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
         userState: UserState,
         templateEngine: LocaleTemplateEngineManager,
         dialog: T
-        ) {
+    ) {
         super();
         this.dialog = dialog;
         this.rootDialogId = this.dialog.id;
@@ -63,7 +63,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     }
 
     protected async membersAdded(turnContext: TurnContext): Promise<void> {
-        const userProfile = await this.userProfileState.get(turnContext, () => { name: '' })
+        const userProfile = await this.userProfileState.get(turnContext, () => { name: ''; });
 
         if (userProfile.name === undefined || userProfile.name.trim().length === 0) {
             // Send new user intro card.
@@ -95,7 +95,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
                 await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
                 break;
             default:
-                await turnContext.sendActivity({ type: ActivityTypes.Trace, text: `Unknown Event '${ev.name ?? 'undefined' }' was received but not processed.` });
+                await turnContext.sendActivity({ type: ActivityTypes.Trace, text: `Unknown Event '${ ev.name ?? 'undefined' }' was received but not processed.` });
                 break;
         }
     }

@@ -20,8 +20,8 @@ enum DialogIds {
 }
 
 export enum StateProperties {
-    DispatchResult = "dispatchResult",
-    GeneralResult = "generalResult",
+    DispatchResult = 'dispatchResult',
+    GeneralResult = 'generalResult',
 }
 
 // Example onboarding dialog to initial user profile information.
@@ -46,11 +46,11 @@ export class OnboardingDialog extends ComponentDialog {
             this.finishOnboardingDialog.bind(this)
         ];
 
-         // To capture built-in waterfall dialog telemetry, set the telemetry client
-         // to the new waterfall dialog and add it to the component dialog
-         this.telemetryClient = telemetryClient
-         this.addDialog(new WaterfallDialog(OnboardingDialog.name, onboarding));
-         this.addDialog(new TextPrompt(DialogIds.NamePrompt));
+        // To capture built-in waterfall dialog telemetry, set the telemetry client
+        // to the new waterfall dialog and add it to the component dialog
+        this.telemetryClient = telemetryClient;
+        this.addDialog(new WaterfallDialog(OnboardingDialog.name, onboarding));
+        this.addDialog(new TextPrompt(DialogIds.NamePrompt));
     }
 
     public async askForName(sc: WaterfallStepContext): Promise<DialogTurnResult> {
