@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Skills;
-using Microsoft.Bot.Builder.Solutions.Util;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.Skills;
+using Microsoft.Bot.Solutions.Util;
 using ToDoSkill.Models;
 using ToDoSkill.Responses.MarkToDo;
 using ToDoSkill.Responses.Shared;
@@ -387,8 +387,7 @@ namespace ToDoSkill.Dialogs
                 }
                 else
                 {
-                    var activity = TemplateEngine.GenerateActivityForLocale(ToDoSharedResponses.ActionEnded);
-                    await sc.Context.SendActivityAsync(activity);
+                    await SendActionEnded(sc.Context);
                     return await sc.EndDialogAsync(true);
                 }
             }

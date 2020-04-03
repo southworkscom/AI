@@ -1,25 +1,26 @@
 {
+  "defaultLocale": "en-us",
   "cognitiveModels": {
     "en-us": {
       "dispatchModel": {
-        "authoringKey": "<--MOCK-VALUE-->",
-        "type": "dispatch",
-        "subscriptionKey": "<--MOCK-VALUE-->",
-        "region": "westus",
         "appId": "f7c2ee78-8679-4a3e-b384-0cd10c67e554",
+        "type": "dispatch",
+        "region": "westus",
+        "authoringKey": "<--MOCK-VALUE-->",
         "authoringRegion": "westus",
-        "name": "assistant_Dispatch"
+        "name": "assistant_Dispatch",
+        "subscriptionKey": "<--MOCK-VALUE-->"
       },
       "languageModels": [
         {
-          "region": "westus",
-          "appId": "f7c2ee78-8679-4a3e-b384-0cd10c67e554",
           "authoringRegion": "westus",
-          "id": "general",
+          "appId": "f7c2ee78-8679-4a3e-b384-0cd10c67e554",
           "name": "assistant_general",
-          "authoringKey": "<--MOCK-VALUE-->",
+          "id": "general",
           "version": "0.1",
-          "subscriptionKey": "<--MOCK-VALUE-->"
+          "authoringKey": "<--MOCK-VALUE-->",
+          "subscriptionKey": "<--MOCK-VALUE-->",
+          "region": "westus"
         }
       ],
       "knowledgeBases": [
@@ -41,6 +42,5 @@
         }
       ]
     }
-  },
-  "defaultLocale": "en-us"
+  }
 }

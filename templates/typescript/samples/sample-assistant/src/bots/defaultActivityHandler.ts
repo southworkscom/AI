@@ -22,7 +22,6 @@ import { DialogEx, LocaleTemplateEngineManager, TokenEvents } from 'botbuilder-s
 export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandler {
     private readonly conversationState: BotState;
     private readonly userState: BotState;
-    private readonly solutionName: string = 'sampleAssistant';
     private readonly rootDialogId: string;
     private readonly dialogs: DialogSet;
     private readonly dialog: Dialog;

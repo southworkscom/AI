@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using AdaptiveCards;
 using AutomotiveSkill.Models;
+using AutomotiveSkill.Responses.Main;
 using Microsoft.Bot.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using Newtonsoft.Json;
 namespace AutomotiveSkill.Tests.Flow
 {
     [TestClass]
+    [TestCategory("UnitTests")]
     public class VehicleSettingsTests : AutomotiveSkillTestBase
     {
         [TestInitialize]
@@ -24,6 +26,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_SettingTemperature()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("set temperature to 21 degrees")
                 .AssertReply(this.CheckForSettingEvent(new SettingChange()
                 {
@@ -43,6 +47,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_IncreaseTemperatureByRelativeAmount()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("increase temperature by 2")
                 .AssertReply(this.CheckForSettingEvent(new SettingChange()
                 {
@@ -62,6 +68,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_IncreaseTemperatureToAbsoluteAmount()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("increase temperature to 24")
                 .AssertReply(this.CheckForSettingEvent(new SettingChange()
                 {
@@ -80,6 +88,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_SettingTemperatureMissingValue()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("change the temperature")
                  .AssertReply(this.CheckReply("Here are the possible values for Temperature. Which one? (1) Decrease(2) Increase"))
                 .Send("Increase")
@@ -96,6 +106,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_LaneAssistOffConfirmYes()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("turn lane assist off")
                 .AssertReply(this.CheckReply("So, you want to change Lane Change Detection to Off. Is that correct? (1) Yes or (2) No"))
                 .Send("yes")
@@ -106,7 +118,6 @@ namespace AutomotiveSkill.Tests.Flow
                     IsConfirmed = true,
                 }))
                 .AssertReply(this.CheckReply("Ok."))
-                .AssertReply(this.CheckForHandoff())
                 .StartTestAsync();
         }
 
@@ -114,11 +125,12 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_LaneAssistOffConfirmNo()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("turn lane assist off")
                 .AssertReply(this.CheckReply("So, you want to change Lane Change Detection to Off. Is that correct? (1) Yes or (2) No"))
                 .Send("no")
                 .AssertReply(this.CheckReply("Ok, not making any changes."))
-                .AssertReply(this.CheckForHandoff())
                 .StartTestAsync();
         }
 
@@ -126,6 +138,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_WarmUpBackOfCar()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("warm up the back of the car")
                 .AssertReply(this.CheckForSettingEvent(new SettingChange()
                 {
@@ -140,6 +154,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_DefogWindscreen()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("defog my windshield")
                 .AssertReply(this.CheckForSettingEvent(new SettingChange()
                 {
@@ -154,6 +170,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_AirOnFeet()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("put the air on my feet")
                 .AssertReply(this.CheckReply("Here are the matching settings. Which one?\n\n   1. Front Combined Air Delivery Mode Control\n   2. Rear Combined Air Delivery Mode Control"))
                 .Send("front combined air delivery mode control")
@@ -170,6 +188,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_ACOff()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("turn off the ac")
                 .AssertReply(this.CheckForSettingEvent(new SettingChange()
                 {
@@ -184,6 +204,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_FeelingCold()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("I'm feeling cold")
                 .AssertReply(this.CheckForSettingEvent(new SettingChange()
                 {
@@ -198,6 +220,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_FeelingColdInTheBack()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("it's feeling cold in the back")
                 .AssertReply(this.CheckForSettingEvent(new SettingChange()
                 {
@@ -212,6 +236,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_AdjustEqualizer()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("adjust equalizer")
                 .AssertReply(this.CheckReply("Here are the matching settings. Which one?\n\n   1. Equalizer (Bass)\n   2. Equalizer (Midrange)\n   3. Equalizer (Treble)\n   4. Equalizer (Surround)"))
                 .Send("Equalizer (Bass)")
@@ -230,6 +256,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_SettingAndValueSelectionWithPartialMatches()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("change pedestrian detection")
                 .AssertReply(this.CheckReply("Here are the matching settings. Which one?\n\n   1. Front Pedestrian Safety Detection\n   2. Rear Pedestrian Safety Detection"))
                 .Send("front")
@@ -248,6 +276,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_SettingAndValueSelectionWithSynonyms()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("change pedestrian detection")
                 .AssertReply(this.CheckReply("Here are the matching settings. Which one?\n\n   1. Front Pedestrian Safety Detection\n   2. Rear Pedestrian Safety Detection"))
                 .Send("alerts for people in the back")
@@ -266,6 +296,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_SettingAndValueSelectionWithOrdinals()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("adjust equalizer")
                 .AssertReply(this.CheckReply("Here are the matching settings. Which one?\n\n   1. Equalizer (Bass)\n   2. Equalizer (Midrange)\n   3. Equalizer (Treble)\n   4. Equalizer (Surround)"))
                 .Send("first one")
@@ -284,6 +316,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_SettingAndValueSelectionWithIncorrectChoices()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("adjust equalizer")
                 .AssertReply(this.CheckReply("Here are the matching settings. Which one?\n\n   1. Equalizer (Bass)\n   2. Equalizer (Midrange)\n   3. Equalizer (Treble)\n   4. Equalizer (Surround)"))
                 .Send("blah blah")
@@ -306,6 +340,8 @@ namespace AutomotiveSkill.Tests.Flow
         public async Task Test_VerifyImagePathConfigurationUsedOnAdaptiveCard()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(ParseReplies(AutomotiveSkillMainResponses.FirstPromptMessage))
                 .Send("adjust equalizer")
                 .AssertReply(this.CheckImagePathOnAdaptiveCard())
                 .Send("first one")
@@ -334,11 +370,11 @@ namespace AutomotiveSkill.Tests.Flow
             };
         }
 
-        private Action<IActivity> CheckForHandoff()
+        private Action<IActivity> CheckForEndOfConversation()
         {
             return activity =>
             {
-                Assert.AreEqual(activity.Type, ActivityTypes.Handoff, "End of Conversation Activity not received.");
+                Assert.AreEqual(activity.Type, ActivityTypes.EndOfConversation, "End of Conversation Activity not received.");
             };
         }
 

@@ -21,84 +21,33 @@ Apart from some minor differences that enable this special invocation pattern, a
 The following Skill samples are available out of the box, each with deployment steps required to deploy and configure Skills for your use.
 
 <div class="card-deck">
-    <a href="{{site.baseurl}}/skills/samples/calendar/" class="card">
-        <div class="card-body">
-        <img src="{{site.baseurl}}/assets/images/icons/calendar-skill.png" alt="Calendar icon" width="48px">
-            <h4 class="card-title no_toc">Calendar Skill</h4>
-            <p class="card-text">Get up and running with the Calendar Skill sample.</p>
-        </div>
-        <div class="card-footer">
-            <div class="btn btn-primary">Learn more</div>
-        </div>
-    </a>
-    <a href="{{site.baseurl}}/skills/samples/email/"  class="card">
-        <div class="card-body">
-        <img src="{{site.baseurl}}/assets/images/icons/email-skill.png" alt="Email icon" width="48px">
-            <h4 class="card-title no_toc">Email Skill</h4>
-            <p class="card-text">Get up and running with the Email Skill sample.</p>
-        </div>
-        <div class="card-footer">
-            <div class="btn btn-primary">Learn more</div>
-        </div>
-    </a>
-    <a href="{{site.baseurl}}/skills/samples/to-do/" class="card">
-        <div class="card-body">
-        <img src="{{site.baseurl}}/assets/images/icons/todo-skill.png" alt="To Do icon" width="48px">
-            <h4 class="card-title no_toc">To Do Skill</h4>
-            <p class="card-text">Get up and running with the To Do Skill sample.</p>
-        </div>
-        <div class="card-footer">
-            <div class="btn btn-primary">Learn more</div>
-        </div>
-    </a>
+    {% include button.html params=site.data.button.calendar_skill %}
+    {% include button.html params=site.data.button.email_skill %}
 </div>
 <br/>
 <div class="card-deck">
-    <a href="{{site.baseurl}}/skills/samples/point-of-interest/" class="card">
-        <div class="card-body">
-        <img src="{{site.baseurl}}/assets/images/icons/point-of-interest-skill.png" alt="Point of Interest icon" width="48px">
-            <h4 class="card-title no_toc">Point of Interest Skill</h4>
-            <p class="card-text">Get up and running with the Point of Interest Skill sample.</p>
-        </div>
-        <div class="card-footer">
-            <div class="btn btn-primary">Learn more</div>
-        </div>
-    </a>
-    <a href="{{site.baseurl}}/skills/samples/experimental" class="card">
-        <div class="card-body">
-            <img src="{{site.baseurl}}/assets/images/icons/experimental-skill.png" alt="Experimental icon" width="48px">
-            <h4 class="card-title no_toc">Experimental Skills</h4>
-            <p class="card-text">Get up and running with the additional experimental Skill samples.</p>
-        </div>
-        <div class="card-footer">
-            <div class="btn btn-primary">Learn more</div>
-        </div>
-    </a>
+    {% include button.html params=site.data.button.todo_skill %}
+    {% include button.html params=site.data.button.poi_skill %}
 </div>
 
+### Experimental Skills
 
+These experimental Bot Framework Skills are early prototypes to help bring Skill concepts to life for demonstrations and proof-of-concepts.
+By their very nature these Skill are not complete, with only English support. If you have any feedback on these Skills, please [open a new issue](https://github.com/microsoft/botframework-solutions/issues/new/choose) on the Bot Framework Solutions repository.
+
+- [Automotive]({{site.baseurl}}/skills/samples/automotive)
+- [Bing Search]({{site.baseurl}}/skills/samples/bing-search)
+- [Hospitality]({{site.baseurl}}/skills/samples/hospitality/)
+- [IT Service Management (ITSM)]({{site.baseurl}}/skills/samples/itsm)
+- [Music]({{site.baseurl}}/skills/samples/music)
+- [News]({{site.baseurl}}/skills/samples/news)
+- [Phone]({{site.baseurl}}/skills/samples/phone)
+- [Restaurant Booking]({{site.baseurl}}/skills/samples/restaurant-booking)
+- [Weather]({{site.baseurl}}/skills/samples/weather)
 
 ## Next steps
 
 <div class="card-deck">
-    <a href="{{site.baseurl}}/tutorials/csharp/create-skill/1-intro/"  class="card">
-        <div class="card-body">
-            <img src="{{site.baseurl}}/assets/images/icons/csharp.png" alt="C# icon" width="48px">
-            <h4 class="card-title no_toc">Create a Skill</h4>
-            <p class="card-text">Get up and running with the solution accelerator.</p>
-        </div>
-        <div class="card-footer">
-            <div class="btn btn-primary">Get started</div>
-        </div>
-    </a>
-    <a href="{{site.baseurl}}/skills/tutorials/create-skill/typescript/1-intro/" class="card">
-        <div class="card-body">
-            <img src="{{site.baseurl}}/assets/images/icons/typescript.png" alt="Typescript icon" width="48px">
-            <h4 class="card-title no_toc">Create a Skill</h4>
-            <p class="card-text">Personalize your experience for your brand and customers.</p>
-        </div>
-        <div class="card-footer">
-            <div class="btn btn-primary">Get started</div>
-        </div>
-    </a>
+    {% include button.html params=site.data.button.create_skill_cs %}
+    {% include button.html params=site.data.button.create_skill_ts %}
 </div>

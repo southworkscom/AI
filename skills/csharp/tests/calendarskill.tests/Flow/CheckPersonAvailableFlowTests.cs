@@ -3,22 +3,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Threading.Tasks;
-using CalendarSkill.Responses.ChangeEventStatus;
 using CalendarSkill.Responses.CheckPersonAvailable;
+using CalendarSkill.Responses.Main;
 using CalendarSkill.Services;
 using CalendarSkill.Test.Flow.Fakes;
 using CalendarSkill.Test.Flow.Utterances;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.Solutions;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CalendarSkill.Test.Flow
 {
     [TestClass]
+    [TestCategory("UnitTests")]
     public class CheckPersonAvailableFlowTests : CalendarSkillTestBase
     {
         [TestInitialize]
@@ -39,11 +39,12 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_CalendarBaseCheckAvailable()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(CheckPersonAvailableTestUtterances.BaseCheckAvailable)
                 .AssertReplyOneOf(this.AvailableResponse())
                 .AssertReplyOneOf(this.AskForCreateNewMeeting())
                 .Send(Strings.Strings.ConfirmNo)
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -52,6 +53,8 @@ namespace CalendarSkill.Test.Flow
         {
             this.ServiceManager = MockServiceManager.SetAllToDefault();
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(CheckPersonAvailableTestUtterances.CheckAvailableSlotFilling)
                 .AssertReplyOneOf(this.AskForCollectContact())
                 .Send(Strings.Strings.DefaultUserName)
@@ -60,7 +63,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(this.AvailableResponse())
                 .AssertReplyOneOf(this.AskForCreateNewMeeting())
                 .Send(Strings.Strings.ConfirmNo)
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -69,6 +71,8 @@ namespace CalendarSkill.Test.Flow
         {
             this.ServiceManager = MockServiceManager.SetParticipantNotAvailable();
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(CheckPersonAvailableTestUtterances.BaseCheckAvailable)
                 .AssertReplyOneOf(this.NotAvailableResponse())
                 .AssertReplyOneOf(this.AskForFindNextAvailableTimeResponse())
@@ -76,7 +80,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(this.BothAvailableResponse())
                 .AssertReplyOneOf(this.AskForCreateNewMeeting())
                 .Send(Strings.Strings.ConfirmNo)
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -85,11 +88,12 @@ namespace CalendarSkill.Test.Flow
         {
             this.ServiceManager = MockServiceManager.SetOrgnizerNotAvailable();
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(CheckPersonAvailableTestUtterances.BaseCheckAvailable)
                 .AssertReplyOneOf(this.OrgnizerNotAvailableResponse())
                 .AssertReplyOneOf(this.AskForCreateNewMeetingAnyway())
                 .Send(Strings.Strings.ConfirmNo)
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -169,14 +173,6 @@ namespace CalendarSkill.Test.Flow
         private string[] AskForCollectTime()
         {
             return GetTemplates(CheckPersonAvailableResponses.AskForCheckAvailableTime);
-        }
-
-        private Action<IActivity> ActionEndMessage()
-        {
-            return activity =>
-            {
-                Assert.AreEqual(activity.Type, ActivityTypes.Handoff);
-            };
         }
     }
 }

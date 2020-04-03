@@ -532,6 +532,8 @@
 
 @ prebuilt personName
 
+$PREBUILT:personName
+
 
 > # Phrase list definitions
 

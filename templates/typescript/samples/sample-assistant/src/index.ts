@@ -214,6 +214,8 @@ try {
     throw err;
 }
 
+const oAuthPromptSettings: OAuthPromptSettings[] = [];
+
 // Create server
 const server: restify.Server = restify.createServer();
 

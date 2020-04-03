@@ -4,9 +4,8 @@
  */
 
 export { AuthenticationUtils } from './authenticationUtils';
-export { isAzPreviewMessage, isValidAzVersion } from './azUtils';
+export { isAzPreviewMessage, isCloudGovernment, isValidAzVersion } from './azUtils';
 export { ChildProcessUtils } from './childProcessUtils';
 export { getDispatchNames } from './dispatchUtils';
-export { sanitizePath, wrapPathWithQuotes, sanitizeInlineUtterancesEndpoint } from './sanitizationUtils';
-export { isValidCultures, validatePairOfArgs } from './validationUtils';
-export { deleteFiles } from './filesUtils';
+export { sanitizePath, wrapPathWithQuotes } from './sanitizationUtils';
+export { isValidCultures, validatePairOfArgs, manifestV1Validation, manifestV2Validation } from './validationUtils';

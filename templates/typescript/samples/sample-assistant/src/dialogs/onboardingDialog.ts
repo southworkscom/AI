@@ -15,6 +15,15 @@ import { BotServices } from '../services/botServices';
 import { LocaleTemplateEngineManager, DialogContextEx } from 'botbuilder-solutions';
 import { LuisRecognizer } from 'botbuilder-ai';
 
+enum DialogIds {
+    NamePrompt = 'namePrompt',
+}
+
+export enum StateProperties {
+    DispatchResult = "dispatchResult",
+    GeneralResult = "generalResult",
+}
+
 // Example onboarding dialog to initial user profile information.
 export class OnboardingDialog extends ComponentDialog {
     private services: BotServices;
@@ -58,7 +67,7 @@ export class OnboardingDialog extends ComponentDialog {
     }
 
     public async finishOnboardingDialog(sc: WaterfallStepContext): Promise<DialogTurnResult> {
-        const userProfile: IUserProfileState = await this.accessor.get(sc.context, { name: ''});
+        const userProfile: IUserProfileState = await this.accessor.get(sc.context, { name: '' });
         let name: string = sc.result as string;
 
         let generalResult: RecognizerResult = sc.context.turnState.get(StateProperties.GeneralResult);
@@ -80,10 +89,10 @@ export class OnboardingDialog extends ComponentDialog {
 
         // Captialize name
         userProfile.name = name.toLowerCase()
-                                .split(' ')
-                                .map(word => word.charAt(0)
-                                                 .toUpperCase() + word.substring(1))
-                                .join(' ');
+            .split(' ')
+            .map((word: string): string => word.charAt(0)
+                .toUpperCase() + word.substring(1))
+            .join(' ');
 
         await this.accessor.set(sc.context, userProfile);
 
@@ -94,13 +103,4 @@ export class OnboardingDialog extends ComponentDialog {
 
         return await sc.endDialog();
     }
-}
-
-enum DialogIds {
-    NamePrompt = 'namePrompt',
-}
-
-export enum StateProperties {
-    DispatchResult = "dispatchResult",
-    GeneralResult = "generalResult",
 }

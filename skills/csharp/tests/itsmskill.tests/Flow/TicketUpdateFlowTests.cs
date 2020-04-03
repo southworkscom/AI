@@ -4,6 +4,7 @@
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using ITSMSkill.Responses.Knowledge;
+using ITSMSkill.Responses.Main;
 using ITSMSkill.Responses.Shared;
 using ITSMSkill.Responses.Ticket;
 using ITSMSkill.Tests.API.Fakes;
@@ -15,6 +16,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ITSMSkill.Tests.Flow
 {
     [TestClass]
+    [TestCategory("UnitTests")]
     public class TicketUpdateFlowTests : SkillTestBase
     {
         [TestMethod]
@@ -26,6 +28,8 @@ namespace ITSMSkill.Tests.Flow
             };
 
             await this.GetTestFlow()
+                .Send(StartActivity)
+                .AssertReply(AssertContains(MainResponses.WelcomeMessage))
                 .Send(TicketUpdateUtterances.Update)
                 .AssertReply(ShowAuth())
                 .Send(MagicCode)
@@ -53,6 +57,8 @@ namespace ITSMSkill.Tests.Flow
             };
 
             await this.GetTestFlow()
+                .Send(StartActivity)
+                .AssertReply(AssertContains(MainResponses.WelcomeMessage))
                 .Send(TicketUpdateUtterances.UpdateWithNumberUrgency)
                 .AssertReply(ShowAuth())
                 .Send(MagicCode)

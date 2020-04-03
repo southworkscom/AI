@@ -54,8 +54,6 @@ The following scenarios are currently supported by the Skill:
   - *How long until my next meeting?*
   - *How many minutes free do I have before next scheduled appointment?*
 
-**However**, if you wish to use the Skill directly without using a Virtual Assistant please use the following steps to manually configure Authentication for the Calendar Skill. This is **not** required when using the Skill with a Virtual Assistant.
-
 ## Language Understanding
 {:.toc}
 
@@ -139,7 +137,25 @@ Learn how to [provision your Azure resources]({{site.baseurl}}/skills/tutorials/
 
 > Office 365 and Outlook.com through the Microsoft Graph is supported along with support for Google accounts.
 
-To use Google account skill you need follow these steps:
+### Authentication connection settings
+{:.no_toc}
+
+#### Office 365
+
+This skill uses the following authentication scopes:
+
+- **User.ReadBasic.All**  
+- **Calendars.ReadWrite**
+- **People.Read**    
+- **Contacts.Read**
+
+You must use [these steps]({{site.baseurl}}/{{site.data.urls.SkillManualAuth}}) to manually configure Authentication for the Calendar Skill. Due to a change in the Skill architecture this is not currently automated.
+
+> Ensure you configure all of the scopes detailed above.
+
+#### Google Account
+
+To use a Google account follow these steps:
 1. Enable Calendar API in [Google API library](https://console.developers.google.com/apis/library)
 1. Create your calendar API credential in [Google developers console](https://console.developers.google.com/apis/credentials).
     1. Choose "Create credential" - "OAuth Client ID"
@@ -152,22 +168,13 @@ To use Google account skill you need follow these steps:
     - Scopes: **https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/contacts**.
 1. Add the connection name, client id, secret and scopes in the **appsetting.json** file.
 
-### Authentication connection settings
-{:.no_toc}
+## Meeting Room Booking Support
 
-If you plan to use the skill as part of a Virtual Assistant the process of registering a skill with your Virtual Assistant will create the supporting authentication connection information automatically for your Virtual Assistant. This skill uses the following authentication scopes which are registered automatically:
+The Calendar skill provides additional support to search and book meeting rooms. Due to search limitations in Microsoft Graph limiting the experience we leverage Azure Search to provide fuzzy meeting room name matching, floor level, etc. 
 
-- **User.ReadBasic.All**  
-- **Calendars.ReadWrite**
-- **People.Read**    
-- **Contacts.Read**
+1. To simplify the process of extracting your meeting room data and inserting into Azure Search we have provided an example PowerShell script. However, you should ensure that `displayName`, `emailAddress`, `building` and `floorNumber` are populated within your Office 365 tenant (example below)). You can do this through the [Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer/preview) using the query shown below, this information is required for the Meeting Room booking experience.
 
-**However**, if you wish to use the Skill directly without using a Virtual Assistant please use the following steps to manually configure Authentication for the Calendar Skill. This is **not** required when using the Skill with a Virtual Assistant.
-
-### Support of search and book a meeting room
-Calendar skill provided additional support to search and book a meeting room in the conversation. You can get the meeting room data from the msgraph API and deploy the data to Azure Search Index to provide better search experience.
-
-1. Make sure your meeting room data is complaint with the sample schema
+`https://graph.microsoft.com/beta/places/microsoft.graph.room`
 ```json
 {
     "value": [
@@ -189,27 +196,38 @@ Calendar skill provided additional support to search and book a meeting room in 
 }
 ```
 
-2. Configure the setting of your registered app in Azure App Registration portal 
-    - Make sure your account have the admin privileges to access your tenant's meeting room data. 
-    - In Authentication, set "Treat application as a public client" as "Yes"
-    - In API Permissions, add Scope: **Place.Read.All** 
-3. Run the following command:
+2. Configure the settings of your registered app in the Azure App Registration portal
+    - This app will request the permission for **Place.Read.All** scope. There are two ways to grant the consent:
+      1. In API permissions, add a permission for **Place.Read.All** scope, and grant admin consent for your organization.
+      2. Make sure your account has permission to access your tenant's meeting room data so that you can consent on behalf of your organization in the login step, testing the previous query will validate this.
+    - In Authentication
+      - Set "Treat application as a public client" as "Yes"
+      - Set "Supported account types" according to your requirements
+
+3. Run the following command to install the module:
+```powershell
+  Install-Module -Name CosmosDB
+```
+    
+4. Run the following command:
 ```powershell
  ./Deployment/Scripts/enable_findmeetingroom.ps1
 ```
 
 ### What do these parameters mean? 
-| Parameter | Description | Required |
-|  ----   | ----   | ---- |
-|resourceGroup  | An existing resource group where the Azure Search Service will be deployed.  | Yes |
-|cosmosDbAccount  | An existing CosmosDb Account where the meeting room data will be stored and then it will be used as a Data Source for Azure Search.  | Yes |
-|primaryKey  | The primaryKey of the given CosmosDb Account  | Yes |
-|appId  | A registed app in Azure App registrations Service | Yes |
 
-You can access all the required parameters from the [Deployment](#Deployment) step. <br>
+|Parameter|Description|Required|
+|----|----|----|
+|resourceGroup  | An existing resource group where the Azure Search Service will be deployed.  | Yes |
+|cosmosDbAccount  | The account name of an existing CosmosDb deployment where the meeting room data will be stored, this will then be used as a data source by Azure Search.  | Yes |
+|primaryKey  | The primary key of the CosmosDB deployment  | Yes |
+|appId  | AppId of an authorised Azure AD application which can access Meeting room data  | Yes |
+|tenantId  | The tenantId corresponding to the application. If you have set "Supported account types" as "Multitenant" and your account has a differet tenant, please use "common"| Yes|
+
+You can access all the required parameters from the [Deployment](#deployment) step. <br>
 **Note:** When running the script, you will be asked to sign in with your account which can access the meeting room data in the MSGraph.
 
-Follow the general instructions [here]({{site.baseurl}}/skills/handbook/authentication#manual-authentication) to configure this using the scopes shown above.
+Follow the general instructions [here]({{site.baseurl}}/{{site.data.urls.SkillManualAuth}}) to configure this using the scopes shown above.
 
 ## Events
 {:.toc}

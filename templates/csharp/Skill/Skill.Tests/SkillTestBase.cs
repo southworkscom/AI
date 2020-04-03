@@ -1,17 +1,21 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Testing;
+using Microsoft.Bot.Builder.LanguageGeneration;
 using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Bot.Solutions;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using $ext_safeprojectname$.Bots;
@@ -25,7 +29,7 @@ namespace $safeprojectname$
     {
         public IServiceCollection Services { get; set; }
 
-        public LocaleTemplateEngineManager TemplateEngine { get; set; }
+        public LocaleTemplateManager TemplateEngine { get; set; }
 
         [TestInitialize]
         public virtual void InitializeSkill()
@@ -60,41 +64,28 @@ namespace $safeprojectname$
                 return new BotStateSet(userState, conversationState);
             });
 
-            var localizedTemplates = new Dictionary<string, List<string>>();
-            var templateFiles = new List<string>() { "MainResponses", "SampleResponses" };
+            var localizedTemplates = new Dictionary<string, string>();
+            var templateFile = "AllResponses";
             var supportedLocales = new List<string>() { "en-us", "de-de", "es-es", "fr-fr", "it-it", "zh-cn" };
 
             foreach (var locale in supportedLocales)
             {
-                var localeTemplateFiles = new List<string>();
-                foreach (var template in templateFiles)
-                {
-                    // LG template for default locale should not include locale in file extension.
-                    if (locale.Equals("en-us"))
-                    {
-                        localeTemplateFiles.Add(Path.Combine(".", "Responses", $"{template}.lg"));
-                    }
-                    else
-                    {
-                        localeTemplateFiles.Add(Path.Combine(".", "Responses", $"{template}.{locale}.lg"));
-                    }
-                }
+                // LG template for en-us does not include locale in file extension.
+                var localeTemplateFile = locale.Equals("en-us")
+                    ? Path.Combine(".", "Responses", $"{templateFile}.lg")
+                    : Path.Combine(".", "Responses", $"{templateFile}.{locale}.lg");
 
-                localizedTemplates.Add(locale, localeTemplateFiles);
+                localizedTemplates.Add(locale, localeTemplateFile);
             }
 
-            TemplateEngine = new LocaleTemplateEngineManager(localizedTemplates, "en-us");
-            System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-us");
-
+            TemplateEngine = new LocaleTemplateManager(localizedTemplates, "en-us");
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-us");
             Services.AddSingleton(TemplateEngine);
             Services.AddTransient<MainDialog>();
             Services.AddTransient<SampleDialog>();
             Services.AddTransient<SampleAction>();
-
             Services.AddSingleton<TestAdapter, DefaultTestAdapter>();
             Services.AddTransient<IBot, DefaultActivityHandler<MainDialog>>();
-
-
         }
 
         public TestFlow GetTestFlow()
@@ -111,9 +102,34 @@ namespace $safeprojectname$
             return testFlow;
         }
 
+        public TestFlow GetSkillTestFlow()
+        {
+            var sp = Services.BuildServiceProvider();
+            var adapter = sp.GetService<TestAdapter>();
+
+            var testFlow = new TestFlow(adapter, async (context, token) =>
+            {
+                // Set claims in turn state to simulate skill mode
+                var claims = new List<Claim>();
+                claims.Add(new Claim(AuthenticationConstants.VersionClaim, "1.0"));
+                claims.Add(new Claim(AuthenticationConstants.AudienceClaim, Guid.NewGuid().ToString()));
+                claims.Add(new Claim(AuthenticationConstants.AppIdClaim, Guid.NewGuid().ToString()));
+                context.TurnState.Add("BotIdentity", new ClaimsIdentity(claims));
+
+                var bot = sp.GetService<IBot>();
+                await bot.OnTurnAsync(context, CancellationToken.None);
+            });
+
+            return testFlow;
+        }
+
         public string[] GetTemplates(string name, object data = null)
         {
-            return TemplateEngine.TemplateEnginesPerLocale[CultureInfo.CurrentUICulture.Name].ExpandTemplate(name, data).ToArray();
+            var path = CultureInfo.CurrentCulture.Name.ToLower() == "en-us" ?
+                       Path.Combine(".", "Responses", $"AllResponses.lg") :
+                       Path.Combine(".", "Responses", $"AllResponses.{CultureInfo.CurrentUICulture.Name.ToLower()}.lg");
+
+            return Templates.ParseFile(path).ExpandTemplate(name, data).ToArray();
         }
     }
 }

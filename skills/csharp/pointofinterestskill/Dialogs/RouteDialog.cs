@@ -11,11 +11,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Util;
-using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.Util;
 using PointOfInterestSkill.Models;
 using PointOfInterestSkill.Responses.Route;
 using PointOfInterestSkill.Responses.Shared;
@@ -222,11 +220,25 @@ namespace PointOfInterestSkill.Dialogs
                 }
                 else if (cards.Count() == 1)
                 {
-                    return await sc.PromptAsync(Actions.StartNavigationPrompt, new PromptOptions { Prompt = ResponseManager.GetCardResponse(cards[0]) });
+                    var options = new PromptOptions { Prompt = ResponseManager.GetCardResponse(cards[0]) };
+
+                    if (state.DestinationActionType == DestinationActionType.ShowDirectionsThenStartNavigation)
+                    {
+                        await sc.Context.SendActivityAsync(options.Prompt);
+                        return await sc.NextAsync(true);
+                    }
+
+                    return await sc.PromptAsync(Actions.StartNavigationPrompt, options);
                 }
                 else
                 {
                     var options = GetRoutesPrompt(POISharedResponses.MultipleRoutesFound, cards);
+
+                    if (state.DestinationActionType == DestinationActionType.ShowDirectionsThenStartNavigation)
+                    {
+                        await sc.Context.SendActivityAsync(options.Prompt);
+                        return await sc.NextAsync(true);
+                    }
 
                     return await sc.PromptAsync(Actions.StartNavigationPrompt, options);
                 }
@@ -244,6 +256,8 @@ namespace PointOfInterestSkill.Dialogs
             {
                 var state = await Accessor.GetAsync(sc.Context);
 
+                SingleDestinationResponse response = null;
+
                 if (sc.Result is bool && (bool)sc.Result)
                 {
                     // TODO do not care multiple routes
@@ -259,6 +273,8 @@ namespace PointOfInterestSkill.Dialogs
                     {
                         await sc.Context.SendActivityAsync(CreateOpenDefaultAppReply(sc.Context.Activity, state.Destination, OpenDefaultAppType.Map));
                     }
+
+                    response = ConvertToResponse(state.Destination);
                 }
                 else
                 {
@@ -266,7 +282,7 @@ namespace PointOfInterestSkill.Dialogs
                     await sc.Context.SendActivityAsync(replyMessage);
                 }
 
-                return await sc.EndDialogAsync();
+                return await sc.EndDialogAsync(response);
             }
             catch (Exception ex)
             {

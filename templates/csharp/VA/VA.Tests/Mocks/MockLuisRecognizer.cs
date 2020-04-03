@@ -1,13 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.Dialogs;
 
 namespace $safeprojectname$.Mocks
 {
@@ -21,7 +19,7 @@ namespace $safeprojectname$.Mocks
         };
 
         public MockLuisRecognizer(IRecognizerConvert defaultIntent)
-            : base(application: mockApplication)
+            : base(new LuisRecognizerOptionsV3(mockApplication))
         {
             TestUtterances = new Dictionary<string, IRecognizerConvert>();
             DefaultIntent = defaultIntent;

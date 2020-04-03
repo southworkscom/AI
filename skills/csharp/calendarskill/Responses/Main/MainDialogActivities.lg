@@ -1,6 +1,4 @@
-﻿[import](MainDialogTexts.lg)
-
-# CalendarWelcomeMessage
+﻿# CalendarWelcomeMessage
 [Activity
     Text = @{CalendarWelcomeMessage.Text()}
     Speak = @{CalendarWelcomeMessage.Text()}
@@ -34,5 +32,19 @@
 [Activity
     Text = @{LogOut.Text()}
     Speak = @{LogOut.Text()}
+    InputHint = acceptingInput
+]
+
+# FirstPromptMessage
+[Activity
+    Text = @{FirstPromptMessage.Text()}
+    Speak = @{FirstPromptMessage.Text()}
+    InputHint = acceptingInput
+]
+
+# CompletedMessage
+[Activity
+    Text = @{CompletedMessage.Text()}
+    Speak = @{CompletedMessage.Text()}
     InputHint = acceptingInput
 ]

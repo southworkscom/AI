@@ -15,12 +15,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Builder.Solutions.Models;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Util;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions;
+using Microsoft.Bot.Solutions.Models;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.Util;
 using PointOfInterestSkill.Models;
 using PointOfInterestSkill.Responses.FindPointOfInterest;
 using PointOfInterestSkill.Responses.Shared;
@@ -28,6 +28,7 @@ using PointOfInterestSkill.Services;
 using PointOfInterestSkill.Utilities;
 using SkillServiceLibrary.Models;
 using SkillServiceLibrary.Services;
+using SkillServiceLibrary.Utilities;
 using static Microsoft.Recognizers.Text.Culture;
 
 namespace PointOfInterestSkill.Dialogs
@@ -443,7 +444,8 @@ namespace PointOfInterestSkill.Dialogs
                         Choices = new List<Choice>()
                     };
 
-                    if (!string.IsNullOrEmpty(state.Destination.Phone))
+                    bool hasCall = !string.IsNullOrEmpty(state.Destination.Phone);
+                    if (hasCall)
                     {
                         options.Choices.Add(new Choice { Value = PointOfInterestSharedStrings.CALL });
                     }
@@ -476,6 +478,30 @@ namespace PointOfInterestSkill.Dialogs
                         options.Prompt = ResponseManager.GetCardResponse(promptResponse, card, null);
                     }
 
+                    // If DestinationActionType is provided, skip the SelectActionPrompt with appropriate choice index
+                    if (state.DestinationActionType != DestinationActionType.None)
+                    {
+                        int choiceIndex = -1;
+                        if (state.DestinationActionType == DestinationActionType.Call)
+                        {
+                            choiceIndex = hasCall ? 0 : -1;
+                        }
+                        else if (state.DestinationActionType == DestinationActionType.ShowDirectionsThenStartNavigation)
+                        {
+                            choiceIndex = hasCall ? 1 : 0;
+                        }
+                        else if (state.DestinationActionType == DestinationActionType.StartNavigation)
+                        {
+                            choiceIndex = hasCall ? 2 : 1;
+                        }
+
+                        if (choiceIndex >= 0)
+                        {
+                            await sc.Context.SendActivityAsync(options.Prompt);
+                            return await sc.NextAsync(new FoundChoice() { Index = choiceIndex });
+                        }
+                    }
+
                     return await sc.PromptAsync(Actions.SelectActionPrompt, options);
                 }
 
@@ -502,6 +528,8 @@ namespace PointOfInterestSkill.Dialogs
             var choice = sc.Result as FoundChoice;
             int choiceIndex = choice.Index;
 
+            SingleDestinationResponse response = null;
+
             // TODO skip call button
             if (string.IsNullOrEmpty(state.Destination.Phone))
             {
@@ -514,6 +542,8 @@ namespace PointOfInterestSkill.Dialogs
                 {
                     await sc.Context.SendActivityAsync(CreateOpenDefaultAppReply(sc.Context.Activity, state.Destination, OpenDefaultAppType.Telephone));
                 }
+
+                response = ConvertToResponse(state.Destination);
             }
             else if (choiceIndex == 1)
             {
@@ -525,9 +555,11 @@ namespace PointOfInterestSkill.Dialogs
                 {
                     await sc.Context.SendActivityAsync(CreateOpenDefaultAppReply(sc.Context.Activity, state.Destination, OpenDefaultAppType.Map));
                 }
+
+                response = ConvertToResponse(state.Destination);
             }
 
-            return await sc.NextAsync();
+            return await sc.NextAsync(response);
         }
 
         protected async Task<Card> GetContainerCard(ITurnContext context, string name, LatLng currentCoordinates, List<PointOfInterestModel> pointOfInterestList, IGeoSpatialService service)
@@ -605,17 +637,6 @@ namespace PointOfInterestSkill.Dialogs
             }
 
             return options;
-        }
-
-        // Validators
-        protected async Task<List<PointOfInterestModel>> CurrentLocationValidator(PromptValidatorContext<string> promptContext, CancellationToken cancellationToken)
-        {
-            var result = promptContext.Recognized.Value;
-            var service = ServiceManager.InitMapsService(Settings);
-
-            var pointOfInterestList = await service.GetPointOfInterestListByQueryAsync(double.NaN, double.NaN, result);
-
-            return await Task.FromResult(pointOfInterestList);
         }
 
         // service: for details. the one generates pointOfInterestList
@@ -913,7 +934,18 @@ namespace PointOfInterestSkill.Dialogs
         // workaround. if connect skill directly to teams, the following response does not work.
         protected bool SupportOpenDefaultAppReply(ITurnContext turnContext)
         {
-            return turnContext.Adapter is IRemoteUserTokenProvider || Channel.GetChannelId(turnContext) != Channels.Msteams;
+            return turnContext.IsSkill() || Channel.GetChannelId(turnContext) != Channels.Msteams;
+        }
+
+        protected SingleDestinationResponse ConvertToResponse(PointOfInterestModel model)
+        {
+            var response = new SingleDestinationResponse();
+            response.Name = model.Name;
+            response.Latitude = model.Geolocation.Latitude;
+            response.Longitude = model.Geolocation.Longitude;
+            response.Telephone = model.Phone;
+            response.Address = model.Address;
+            return response;
         }
 
         private string GetCardImageUri(string imagePath)
@@ -930,9 +962,7 @@ namespace PointOfInterestSkill.Dialogs
             }
             else
             {
-                var localeConfig = Services.GetCognitiveModels();
-                localeConfig.LuisServices.TryGetValue("PointOfInterest", out var poiService);
-                var poiResult = await poiService.RecognizeAsync<PointOfInterestLuis>(promptContext.Context, CancellationToken.None);
+                var poiResult = promptContext.Context.TurnState.Get<PointOfInterestLuis>(StateProperties.POILuisResultKey);
                 var topIntent = poiResult.TopIntent();
 
                 if (topIntent.score > 0.5 && topIntent.intent != PointOfInterestLuis.Intent.None)

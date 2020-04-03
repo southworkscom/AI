@@ -3,21 +3,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Threading.Tasks;
 using EmailSkill.Responses.FindContact;
+using EmailSkill.Responses.Main;
 using EmailSkill.Responses.Shared;
 using EmailSkill.Tests.Flow.Fakes;
 using EmailSkill.Tests.Flow.Strings;
 using EmailSkill.Tests.Flow.Utterances;
 using EmailSkill.Utilities;
-using Microsoft.Bot.Builder.Solutions.Util;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EmailSkill.Tests.Flow
 {
     [TestClass]
+    [TestCategory("UnitTests")]
     public class ForwardEmailFlowTests : EmailSkillTestBase
     {
         [TestMethod]
@@ -38,6 +39,8 @@ namespace EmailSkill.Tests.Flow
             };
 
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(EmailMainResponses.FirstPromptMessage))
                 .Send(ForwardEmailUtterances.ForwardEmails)
                 .AssertReply(ShowEmailList())
                 .AssertReply(AssertSelectOneOfTheMessage())
@@ -53,7 +56,6 @@ namespace EmailSkill.Tests.Flow
                 .AssertReply(AssertComfirmBeforeSendingPrompt())
                 .Send(GeneralTestUtterances.No)
                 .AssertReplyOneOf(NotSendingMessage())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -75,6 +77,8 @@ namespace EmailSkill.Tests.Flow
             };
 
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(EmailMainResponses.FirstPromptMessage))
                 .Send(ForwardEmailUtterances.ForwardEmails)
                 .AssertReply(ShowEmailList())
                 .AssertReply(AssertSelectOneOfTheMessage())
@@ -90,7 +94,6 @@ namespace EmailSkill.Tests.Flow
                 .AssertReply(AssertComfirmBeforeSendingPrompt())
                 .Send(GeneralTestUtterances.Yes)
                 .AssertReply(AfterSendingMessage(string.Format(EmailCommonStrings.ForwardReplyFormat, ContextStrings.TestSubject + "0")))
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -112,6 +115,8 @@ namespace EmailSkill.Tests.Flow
             };
 
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(EmailMainResponses.FirstPromptMessage))
                 .Send(ForwardEmailUtterances.ForwardEmailsToRecipient)
                 .AssertReply(ShowEmailList())
                 .AssertReply(AssertSelectOneOfTheMessage())
@@ -125,7 +130,6 @@ namespace EmailSkill.Tests.Flow
                 .AssertReply(AssertComfirmBeforeSendingPrompt())
                 .Send(GeneralTestUtterances.Yes)
                 .AssertReply(AfterSendingMessage(string.Format(EmailCommonStrings.ForwardReplyFormat, ContextStrings.TestSubject + "0")))
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -147,6 +151,8 @@ namespace EmailSkill.Tests.Flow
             };
 
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(EmailMainResponses.FirstPromptMessage))
                 .Send(ForwardEmailUtterances.ForwardEmailsToRecipientWithContent)
                 .AssertReply(ShowEmailList())
                 .AssertReply(AssertSelectOneOfTheMessage())
@@ -158,7 +164,6 @@ namespace EmailSkill.Tests.Flow
                 .AssertReply(AssertComfirmBeforeSendingPrompt())
                 .Send(GeneralTestUtterances.Yes)
                 .AssertReply(AfterSendingMessage(string.Format(EmailCommonStrings.ForwardReplyFormat, ContextStrings.TestSubject + "0")))
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -170,18 +175,11 @@ namespace EmailSkill.Tests.Flow
             serviceManager.MailService.MyMessages = serviceManager.MailService.FakeMyMessages(0);
 
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(EmailMainResponses.FirstPromptMessage))
                 .Send(ForwardEmailUtterances.ForwardEmails)
                 .AssertReplyOneOf(EmailNotFoundPrompt())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
-        }
-
-        private Action<IActivity> ActionEndMessage()
-        {
-            return activity =>
-            {
-                Assert.AreEqual(activity.Type, ActivityTypes.Handoff);
-            };
         }
 
         private string[] ConfirmOneNameOneAddress(object recipientDict)

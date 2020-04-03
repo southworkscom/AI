@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Threading;
 using System.Threading.Tasks;
 using Luis;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Skills;
-using Microsoft.Bot.Builder.Solutions.Util;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.Skills;
+using Microsoft.Bot.Solutions.Util;
 using ToDoSkill.Models;
 using ToDoSkill.Responses.Shared;
 using ToDoSkill.Responses.ShowToDo;
@@ -285,8 +284,7 @@ namespace ToDoSkill.Dialogs
                 }
                 else
                 {
-                    var activity = TemplateEngine.GenerateActivityForLocale(ToDoSharedResponses.ActionEnded);
-                    await sc.Context.SendActivityAsync(activity);
+                    await SendActionEnded(sc.Context);
                     return await sc.CancelAllDialogsAsync();
                 }
             }
@@ -376,8 +374,7 @@ namespace ToDoSkill.Dialogs
                 }
                 else
                 {
-                    var activity = TemplateEngine.GenerateActivityForLocale(ToDoSharedResponses.ActionEnded);
-                    await sc.Context.SendActivityAsync(activity);
+                    await SendActionEnded(sc.Context);
                     return await sc.CancelAllDialogsAsync();
                 }
             }
@@ -488,8 +485,7 @@ namespace ToDoSkill.Dialogs
             else
             {
                 state.GoBackToStart = false;
-                var activity = TemplateEngine.GenerateActivityForLocale(ToDoSharedResponses.ActionEnded);
-                await sc.Context.SendActivityAsync(activity);
+                await SendActionEnded(sc.Context);
                 return await sc.EndDialogAsync(true);
             }
         }
@@ -533,8 +529,7 @@ namespace ToDoSkill.Dialogs
             else
             {
                 state.GoBackToStart = false;
-                var activity = TemplateEngine.GenerateActivityForLocale(ToDoSharedResponses.ActionEnded);
-                await sc.Context.SendActivityAsync(activity);
+                await SendActionEnded(sc.Context);
                 return await sc.EndDialogAsync(true);
             }
         }

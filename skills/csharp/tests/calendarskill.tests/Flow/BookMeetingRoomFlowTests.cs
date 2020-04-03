@@ -3,9 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Threading.Tasks;
-using CalendarSkill.Models;
 using CalendarSkill.Responses.CreateEvent;
 using CalendarSkill.Responses.FindContact;
 using CalendarSkill.Responses.FindMeetingRoom;
@@ -14,18 +12,16 @@ using CalendarSkill.Responses.Shared;
 using CalendarSkill.Services;
 using CalendarSkill.Test.Flow.Fakes;
 using CalendarSkill.Test.Flow.Utterances;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Bot.Solutions;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Graph;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CalendarSkill.Test.Flow
 {
     [TestClass]
+    [TestCategory("UnitTests")]
     public class BookMeetingRoomFlowTests : CalendarSkillTestBase
     {
         [TestInitialize]
@@ -46,6 +42,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -69,7 +67,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -78,6 +75,8 @@ namespace CalendarSkill.Test.Flow
         {
             string buildingNonexistent = string.Format(Strings.Strings.Building, 0);
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -103,7 +102,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -112,6 +110,8 @@ namespace CalendarSkill.Test.Flow
         {
             string buildingNonexistent = string.Format(Strings.Strings.Building, 0);
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -124,7 +124,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(AskForBuildingRetryPrompt())
                 .Send(buildingNonexistent)
                 .AssertReplyOneOf(ReplyRetryTooManyResponse())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -133,6 +132,8 @@ namespace CalendarSkill.Test.Flow
         {
             string floorNumberNonexistent = string.Format(Strings.Strings.FloorNumber, "no number");
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -158,7 +159,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -167,6 +167,8 @@ namespace CalendarSkill.Test.Flow
         {
             string floorNumberNonexistent = string.Format(Strings.Strings.FloorNumber, "no number");
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -181,7 +183,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(AskForFloorNumberRetryPrompt())
                 .Send(floorNumberNonexistent)
                 .AssertReplyOneOf(ReplyRetryTooManyResponse())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -190,6 +191,8 @@ namespace CalendarSkill.Test.Flow
         {
             var floorNumberNonexistent = 10;
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -220,7 +223,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -230,6 +232,8 @@ namespace CalendarSkill.Test.Flow
             var floorNumberBusy = 2;
             ServiceManager = MockServiceManager.SetFloor2NotAvailable();
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -260,7 +264,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -269,6 +272,8 @@ namespace CalendarSkill.Test.Flow
         {
             ServiceManager = MockServiceManager.SetFloor2NotAvailable();
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -297,7 +302,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -305,6 +309,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_MeetingRoomRejectedAndNoOtherRooms()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -326,7 +332,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(AskForRecreateMeetingRoomPrompt())
                 .Send(BookMeetingRoomTestUtterances.CancelRequest)
                 .AssertReplyOneOf(ReplyCancelRequest())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -335,6 +340,8 @@ namespace CalendarSkill.Test.Flow
         {
             MockSearchClient.SetSingleMeetingRoom();
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -356,7 +363,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -364,6 +370,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_ChangeRoom()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -392,7 +400,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -401,6 +408,8 @@ namespace CalendarSkill.Test.Flow
         {
             MockSearchClient.SetSingleMeetingRoom();
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -415,7 +424,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(AskForRecreateMeetingRoomPrompt())
                 .Send(BookMeetingRoomTestUtterances.CancelRequest)
                 .AssertReplyOneOf(ReplyCancelRequest())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -423,6 +431,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_ChangeRoomWithFloorNumber()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -449,7 +459,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -457,6 +466,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_ChangeRoomWithBuilding()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -487,7 +498,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -495,6 +505,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_ChangeRoomWithRoomName()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -523,7 +535,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -531,6 +542,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_ChangeTime()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -565,7 +578,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -573,6 +585,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_ChangeTimeWithDate()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -603,7 +617,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -611,6 +624,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_ChangeTimeWithTime()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -639,7 +654,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -647,6 +661,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_ChangeTimeWithDateAndTime()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BaseBookMeetingRoom)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -675,7 +691,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -683,6 +698,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_WithRoomName()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BookMeetingRoomWithMeetingRoomEntity)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -702,7 +719,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -710,6 +726,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_WithBuilding()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BookMeetingRoomWithBuildingEntity)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -731,7 +749,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -739,6 +756,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_WithBuildingAndFloorNumber()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BookMeetingRoomWithBuildingAndFloorNumberEntity)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -758,7 +777,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -766,6 +784,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_WithDateTime()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BookMeetingRoomWithDateTimeEntity)
                 .AssertReplyOneOf(AskForBuildingPrompt())
                 .Send(Strings.Strings.DefaultBuilding)
@@ -787,7 +807,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -795,6 +814,8 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_BookMeetingRoom_WithStartDateTime()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(BookMeetingRoomTestUtterances.BookMeetingRoomWithStartDateTimeEntity)
                 .AssertReplyOneOf(AskForDurationPrompt())
                 .Send(Strings.Strings.DefaultDuration)
@@ -818,7 +839,6 @@ namespace CalendarSkill.Test.Flow
                 .AssertReplyOneOf(ConfirmPrompt())
                 .Send(Strings.Strings.ConfirmYes)
                 .AssertReplyOneOf(BookedMeeting())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -914,11 +934,28 @@ namespace CalendarSkill.Test.Flow
 
         private string[] AskForConfirmMeetingRoomPrompt(int roomNumber = 1, string dateTime = "right now")
         {
-            return GetTemplates(FindMeetingRoomResponses.ConfirmMeetingRoomPrompt, new
+            // check for both passed dateTime (if it exists) AND "right now" date time to support dateTime difference on CI machines
+            string[] acceptableResponseOne = GetTemplates(FindMeetingRoomResponses.ConfirmMeetingRoomPrompt, new
             {
                 MeetingRoom = string.Format(Strings.Strings.MeetingRoomName, roomNumber),
                 DateTime = dateTime
             });
+
+            if (dateTime == "right now")
+            {
+                return acceptableResponseOne;
+            }
+
+            string[] acceptableResponseTwo = GetTemplates(FindMeetingRoomResponses.ConfirmMeetingRoomPrompt, new
+            {
+                MeetingRoom = string.Format(Strings.Strings.MeetingRoomName, roomNumber),
+                DateTime = "right now"
+            });
+
+            string[] combined = new string[acceptableResponseOne.Length + acceptableResponseTwo.Length];
+            Array.Copy(acceptableResponseOne, combined, acceptableResponseOne.Length);
+            Array.Copy(acceptableResponseTwo, 0, combined, acceptableResponseOne.Length, acceptableResponseTwo.Length);
+            return combined;
         }
 
         private string[] AskForRecreateMeetingRoomPrompt()
@@ -996,14 +1033,6 @@ namespace CalendarSkill.Test.Flow
         private string[] ReplyCancelRequest()
         {
             return GetTemplates(FindMeetingRoomResponses.CancelRequest);
-        }
-
-        private Action<IActivity> ActionEndMessage()
-        {
-            return activity =>
-            {
-                Assert.AreEqual(activity.Type, ActivityTypes.Handoff);
-            };
         }
     }
 }

@@ -2,26 +2,29 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
+using EmailSkill.Responses.Main;
 using EmailSkill.Responses.Shared;
 using EmailSkill.Tests.Flow.Strings;
 using EmailSkill.Tests.Flow.Utterances;
 using EmailSkill.Utilities;
-using Microsoft.Bot.Builder.Solutions.Util;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EmailSkill.Tests.Flow
 {
     [TestClass]
+    [TestCategory("UnitTests")]
     public class ReplyFlowTests : EmailSkillTestBase
     {
         [TestMethod]
         public async Task Test_NotSendingEmail()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(EmailMainResponses.FirstPromptMessage))
                 .Send(ReplyEmailUtterances.ReplyEmails)
                 .AssertReply(ShowEmailList())
                 .AssertReplyOneOf(NoFocusMessage())
@@ -31,7 +34,6 @@ namespace EmailSkill.Tests.Flow
                 .AssertReply(AssertComfirmBeforeSendingPrompt())
                 .Send(GeneralTestUtterances.No)
                 .AssertReplyOneOf(NotSendingMessage())
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -39,6 +41,8 @@ namespace EmailSkill.Tests.Flow
         public async Task Test_SendingEmail()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(EmailMainResponses.FirstPromptMessage))
                 .Send(ReplyEmailUtterances.ReplyEmails)
                 .AssertReply(ShowEmailList())
                 .AssertReplyOneOf(NoFocusMessage())
@@ -48,7 +52,6 @@ namespace EmailSkill.Tests.Flow
                 .AssertReply(AssertComfirmBeforeSendingPrompt())
                 .Send(GeneralTestUtterances.Yes)
                 .AssertReply(AfterSendingMessage(string.Format(EmailCommonStrings.ReplyReplyFormat, ContextStrings.TestSubject + "0")))
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -56,6 +59,8 @@ namespace EmailSkill.Tests.Flow
         public async Task Test_ReplyEmailWithContent()
         {
             await GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(EmailMainResponses.FirstPromptMessage))
                 .Send(ReplyEmailUtterances.ReplyEmailsWithContent)
                 .AssertReply(ShowEmailList())
                 .AssertReplyOneOf(NoFocusMessage())
@@ -63,16 +68,7 @@ namespace EmailSkill.Tests.Flow
                 .AssertReply(AssertComfirmBeforeSendingPrompt())
                 .Send(GeneralTestUtterances.Yes)
                 .AssertReply(AfterSendingMessage(string.Format(EmailCommonStrings.ReplyReplyFormat, ContextStrings.TestSubject + "0")))
-                .AssertReply(ActionEndMessage())
                 .StartTestAsync();
-        }
-
-        private Action<IActivity> ActionEndMessage()
-        {
-            return activity =>
-            {
-                Assert.AreEqual(activity.Type, ActivityTypes.Handoff);
-            };
         }
 
         private string[] NotSendingMessage()

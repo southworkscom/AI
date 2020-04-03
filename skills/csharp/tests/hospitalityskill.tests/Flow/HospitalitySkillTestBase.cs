@@ -24,21 +24,24 @@ using Luis;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Skills.Auth;
-using Microsoft.Bot.Builder.Solutions.TaskExtensions;
-using Microsoft.Bot.Builder.Solutions.Testing;
+using Microsoft.Bot.Solutions;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.TaskExtensions;
+using Microsoft.Bot.Solutions.Testing;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using System.Security.Claims;
+using Microsoft.Bot.Connector.Authentication;
 
 namespace HospitalitySkill.Tests.Flow
 {
     public class HospitalitySkillTestBase : BotTestBase
     {
         public static readonly DateTime CheckInDate = DateTime.Now;
+
+        public IConversationUpdateActivity StartActivity { get; set; }
 
         public IServiceCollection Services { get; set; }
 
@@ -128,9 +131,6 @@ namespace HospitalitySkill.Tests.Flow
             // Configure adapters
             Services.AddSingleton<TestAdapter, DefaultTestAdapter>();
 
-            // Register WhiteListAuthProvider
-            Services.AddSingleton<IWhitelistAuthenticationProvider, WhitelistAuthenticationProvider>();
-
             // Configure bot
             Services.AddTransient<IBot, DefaultActivityHandler<MainDialog>>();
         }
@@ -139,6 +139,9 @@ namespace HospitalitySkill.Tests.Flow
         {
             var sp = Services.BuildServiceProvider();
             var adapter = sp.GetService<TestAdapter>();
+
+            StartActivity = Activity.CreateConversationUpdateActivity();
+            StartActivity.MembersAdded = new ChannelAccount[] { adapter.Conversation.User, adapter.Conversation.Bot };
 
             var testFlow = new TestFlow(adapter, async (context, token) =>
             {
@@ -149,11 +152,40 @@ namespace HospitalitySkill.Tests.Flow
             return testFlow;
         }
 
+        protected TestFlow GetSkillTestFlow()
+        {
+            var sp = Services.BuildServiceProvider();
+            var adapter = sp.GetService<TestAdapter>();
+
+            StartActivity = Activity.CreateConversationUpdateActivity();
+            StartActivity.MembersAdded = new ChannelAccount[] { adapter.Conversation.User, adapter.Conversation.Bot };
+
+            var testFlow = new TestFlow(adapter, async (context, token) =>
+            {
+                // Set claims in turn state to simulate skill mode
+                var claims = new List<Claim>();
+                claims.Add(new Claim(AuthenticationConstants.VersionClaim, "1.0"));
+                claims.Add(new Claim(AuthenticationConstants.AudienceClaim, Guid.NewGuid().ToString()));
+                claims.Add(new Claim(AuthenticationConstants.AppIdClaim, Guid.NewGuid().ToString()));
+                context.TurnState.Add("BotIdentity", new ClaimsIdentity(claims));
+
+                var bot = sp.GetService<IBot>();
+                await bot.OnTurnAsync(context, CancellationToken.None);
+            });
+
+            return testFlow;
+        }
+
         protected Action<IActivity> ActionEndMessage()
+        {
+            return AssertContains(MainResponses.WelcomeMessage);
+        }
+
+        protected Action<IActivity> SkillActionEndMessage()
         {
             return activity =>
             {
-                Assert.AreEqual(activity.Type, ActivityTypes.Handoff);
+                Assert.AreEqual(activity.Type, ActivityTypes.EndOfConversation);
             };
         }
 

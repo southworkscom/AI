@@ -1,3 +1,5 @@
+[import](MainDialogActivities.lg)
+
 # EmailWelcomeMessage.Text
 - ¡Hola! Puedo ayudarte a administrar tu correo electrónico en Office 365, incluida la presentación de tu correo electrónico no leído y responder o reenviar el correo electrónico por ti.
 
@@ -28,3 +30,14 @@
 # LogOut.Text
 - Te han cerrado la sesión.
 
+# FirstPromptMessage.Text
+- ¿En qué puedo ayudarte hoy?
+- ¿Qué puedo hacer por usted?
+- ¿Hay algo que pueda hacer por ti?
+- ¿Cómo puedo ayudarle?
+
+# CompletedMessage.Text
+- Estoy aquí si necesitas algo más.
+- Avísame si necesitas algo más.
+- Avísame si puedo ayudarte con cualquier otra cosa.
+- Ya está. Avísame si puedo hacer algo más.

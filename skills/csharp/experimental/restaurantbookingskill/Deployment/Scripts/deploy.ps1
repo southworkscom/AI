@@ -7,6 +7,7 @@ Param(
 	[string] $appId,
     [string] $appPassword,
     [string] $parametersFile,
+	[switch] $createLuisAuthoring,
     [string] $luisAuthoringKey,
     [string] $luisAuthoringRegion,
     [string] $armLuisAuthoringRegion,
@@ -77,18 +78,20 @@ if (-not $appPassword) {
 }
 
 if (-not $luisAuthoringKey) {
-    $confirmCreateKey = Read-Host "? Create a new LUIS Authoring Resource? [y/n]"
+    if (-not $PSBoundParameters.ContainsKey("createLuisAuthoring")) {
+        $confirmCreateKey = Read-Host "? Create a new LUIS Authoring Resource? [y/n]"
 
-    if ($confirmCreateKey -ne 'y') {
-        $luisAuthoringKey = Read-Host "? LUIS Authoring Key"
-        $createLuisAuthoring = "false"
-    }
-    else {
-        $createLuisAuthoring = "true"
-    }
+        if ($confirmCreateKey -ne 'y') {
+            $luisAuthoringKey = Read-Host "? LUIS Authoring Key"
+            $createLuisAuthoring = $false
+        }
+        else {
+            $createLuisAuthoring = $true
+        }
+    } 
 }
 else {
-    $createLuisAuthoring = "false"
+    $createLuisAuthoring = $false
 }
 
 if (-not $luisAuthoringRegion) {
@@ -215,6 +218,10 @@ if ($outputs)
 	$outputMap = @{}
 	$outputs.PSObject.Properties | Foreach-Object { $outputMap[$_.Name] = $_.Value }
 
+	# Update AD app with homepage
+	$botWebAppUrl = "https://$($outputs.botWebAppName.value).azurewebsites.net"
+	az ad app update --id $appId --homepage $botWebAppUrl
+
 	# Update appsettings.json
 	Write-Host "> Updating appsettings.json ..." -NoNewline
 	if (Test-Path $(Join-Path $projDir appsettings.json)) {
@@ -264,6 +271,8 @@ if ($outputs)
 	Write-Host "    - Microsoft App Password: $($appPassword)" -ForegroundColor Magenta
 
 	Write-Host "> Deployment complete." -ForegroundColor Green
+	Write-Host "Test your deployed bot on the bot framework emulator with the following link (copy and paste link into windows -> run to open the emulator with your deployed bot configured)" -ForegroundColor Green
+	Write-Host "bfemulator://livechat.open?botUrl=$($botWebAppUrl)/api/messages&msaAppId=$($appId)&msaAppPassword=$($appPassword)" -ForegroundColor Green
 }
 else
 {

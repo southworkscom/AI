@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -13,30 +12,29 @@ using CalendarSkill.Models.DialogOptions;
 using CalendarSkill.Options;
 using CalendarSkill.Prompts;
 using CalendarSkill.Prompts.Options;
-using CalendarSkill.Responses.Shared;
 using CalendarSkill.Responses.CreateEvent;
+using CalendarSkill.Responses.Shared;
 using CalendarSkill.Responses.Summary;
 using CalendarSkill.Services;
 using CalendarSkill.Utilities;
-using Google.Apis.Calendar.v3.Data;
 using Luis;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
-using Microsoft.Bot.Builder.Solutions.Authentication;
-using Microsoft.Bot.Builder.Solutions.Resources;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Skills;
-using Microsoft.Bot.Builder.Solutions.Util;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions.Authentication;
+using Microsoft.Bot.Solutions.Resources;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.Skills;
+using Microsoft.Bot.Solutions.Util;
 using Microsoft.Recognizers.Text;
 using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
 using Microsoft.Recognizers.Text.DateTime;
 using Microsoft.Recognizers.Text.Number;
+using SkillServiceLibrary.Utilities;
 using static CalendarSkill.Models.CreateEventStateModel;
 using static Microsoft.Recognizers.Text.Culture;
 using Constants = Microsoft.Recognizers.Text.DataTypes.TimexExpression.Constants;
@@ -66,7 +64,7 @@ namespace CalendarSkill.Dialogs
             TelemetryClient = telemetryClient;
             TemplateEngine = localeTemplateEngineManager;
 
-            AddDialog(new MultiProviderAuthDialog(settings.OAuthConnections, appCredentials));
+            AddDialog(new MultiProviderAuthDialog(settings.OAuthConnections));
             AddDialog(new TextPrompt(Actions.Prompt));
             AddDialog(new ConfirmPrompt(Actions.TakeFurtherAction, null, Culture.English) { Style = ListStyle.SuggestedAction });
             AddDialog(new ChoicePrompt(Actions.Choice, ChoiceValidator, Culture.English) { Style = ListStyle.None, });
@@ -147,7 +145,7 @@ namespace CalendarSkill.Dialogs
                     }
                     else
                     {
-                        sc.Context.TurnState.Add(StateProperties.APITokenKey, providerTokenResponse.TokenResponse.Token);
+                        sc.Context.TurnState[StateProperties.APITokenKey] = providerTokenResponse.TokenResponse.Token;
                     }
 
                     var provider = providerTokenResponse.AuthenticationProvider;
@@ -1982,7 +1980,7 @@ namespace CalendarSkill.Dialogs
         protected override Task<DialogTurnResult> EndComponentAsync(DialogContext outerDc, object result, CancellationToken cancellationToken)
         {
             var resultString = result?.ToString();
-            if (!string.IsNullOrWhiteSpace(resultString) && resultString.Equals(CommonUtil.DialogTurnResultCancelAllDialogs, StringComparison.InvariantCultureIgnoreCase))
+            if (!string.IsNullOrWhiteSpace(resultString) && resultString.Equals(CommonUtil.DialogTurnResultCancelAllDialogs, StringComparison.InvariantCultureIgnoreCase) && outerDc.Parent.ActiveDialog.Id != nameof(MainDialog))
             {
                 return outerDc.CancelAllDialogsAsync();
             }
@@ -2299,6 +2297,19 @@ namespace CalendarSkill.Dialogs
             }
 
             return dateTimeResults;
+        }
+
+        protected Task SendActionEnded(ITurnContext turnContext)
+        {
+            if (turnContext.IsSkill())
+            {
+                return Task.CompletedTask;
+            }
+            else
+            {
+                var activity = TemplateEngine.GenerateActivityForLocale(CalendarSharedResponses.ActionEnded);
+                return turnContext.SendActivityAsync(activity);
+            }
         }
 
         private async Task<List<object>> GetMeetingCardListAsync(DialogContext dc, List<EventModel> events)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDoSkill.Responses.DeleteToDo;
+using ToDoSkill.Responses.Main;
 using ToDoSkill.Responses.Shared;
 using ToDoSkill.Tests.Flow.Fakes;
 using ToDoSkill.Tests.Flow.Utterances;
@@ -14,6 +15,7 @@ using ToDoSkill.Tests.Flow.Utterances;
 namespace ToDoSkill.Tests.Flow
 {
     [TestClass]
+    [TestCategory("UnitTests")]
     public class DeleteToDoFlowTests : ToDoSkillTestBase
     {
         [TestMethod]
@@ -21,6 +23,8 @@ namespace ToDoSkill.Tests.Flow
         {
             ServiceManager.MockTaskService.ChangeData(DataOperationType.OperationType.ResetAllData);
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(ToDoMainResponses.FirstPromptMessage))
                 .Send(DeleteToDoFlowTestUtterances.BaseDeleteTask)
                 .AssertReplyOneOf(this.CollectListType())
                 .Send(DeleteToDoFlowTestUtterances.ConfirmListType)
@@ -40,6 +44,8 @@ namespace ToDoSkill.Tests.Flow
         {
             ServiceManager.MockTaskService.ChangeData(DataOperationType.OperationType.ResetAllData);
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(ToDoMainResponses.FirstPromptMessage))
                 .Send(DeleteToDoFlowTestUtterances.DeleteSpecificTask)
                 .AssertReplyOneOf(this.CollectListType())
                 .Send(DeleteToDoFlowTestUtterances.ConfirmListType)
@@ -57,6 +63,8 @@ namespace ToDoSkill.Tests.Flow
         {
             ServiceManager.MockTaskService.ChangeData(DataOperationType.OperationType.ResetAllData);
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(ToDoMainResponses.FirstPromptMessage))
                 .Send(DeleteToDoFlowTestUtterances.DeleteSpecificTaskWithListType)
                 .AssertReplyOneOf(this.SettingUpOneNote())
                 .AssertReplyOneOf(this.AfterSettingUpOneNote())
@@ -72,6 +80,8 @@ namespace ToDoSkill.Tests.Flow
         {
             ServiceManager.MockTaskService.ChangeData(DataOperationType.OperationType.ResetAllData);
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(ToDoMainResponses.FirstPromptMessage))
                 .Send(DeleteToDoFlowTestUtterances.DeleteTaskByContent)
                 .AssertReplyOneOf(this.CollectListType())
                 .Send(DeleteToDoFlowTestUtterances.ConfirmListType)

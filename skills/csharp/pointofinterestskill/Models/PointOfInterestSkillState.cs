@@ -13,7 +13,7 @@ namespace PointOfInterestSkill.Models
         public PointOfInterestSkillState()
         {
             UserInfo = null;
-            CurrentCoordinates = null;
+            CurrentCoordinates = new LatLng { Latitude = double.NaN, Longitude = double.NaN };
             Clear();
         }
 
@@ -41,6 +41,8 @@ namespace PointOfInterestSkill.Models
 
         public string PoiType { get; set; }
 
+        public DestinationActionType DestinationActionType { get; set; }
+
         public int UserSelectIndex { get; set; }
 
         public void Clear()
@@ -49,6 +51,7 @@ namespace PointOfInterestSkill.Models
             LastFoundPointOfInterests = null;
             ActiveRoute = null;
             FoundRoutes = null;
+            DestinationActionType = DestinationActionType.None;
             ClearLuisResults();
         }
 
@@ -64,7 +67,7 @@ namespace PointOfInterestSkill.Models
 
         public bool CheckForValidCurrentCoordinates()
         {
-            if (CurrentCoordinates == null)
+            if (double.IsNaN(CurrentCoordinates.Latitude) || double.IsNaN(CurrentCoordinates.Longitude))
             {
                 return false;
 

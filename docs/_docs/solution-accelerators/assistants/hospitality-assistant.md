@@ -19,13 +19,19 @@ The Hospitality Sample builds off of the [Virtual Assistant Template]({{site.bas
 
 ## Supported scenarios
 
-The majority of the skills connected to this sample are [experimental skills]({{site.baseurl}}/skills/samples/experimental), which means they are early prototypes of Skills and are likely to have rudimentary language models, limited language support and limited testing. These skills demonstrate a variety of skill concepts and provide great examples to get you started. This sample demonstrates the following scenarios:
+The majority of the skills connected to this sample are [experimental skills]({{site.baseurl}}/overview/skills/#experimental-skills), which means they are early prototypes of Skills and are likely to have rudimentary language models, limited language support and limited testing. These skills demonstrate a variety of skill concepts and provide great examples to get you started. This sample demonstrates the following scenarios:
 
 #### Hotel FAQ
 {:.no_toc}
 - *Where is the gym?*
 - *What time is breakfast?*
 - *Do you allow pets?*
+
+#### [Caring Chitchat](https://github.com/Microsoft/BotBuilder-PersonalityChat/tree/master/CSharp/Datasets)
+{:.no_toc}
+- *What can you help me with?*
+- *That's great, thanks*
+- *That didn't make any sense*
 
 #### [Bing Search Skill]({{site.baseurl}}/skills/samples/bing-search)
 {:.no_toc}
@@ -61,7 +67,7 @@ The majority of the skills connected to this sample are [experimental skills]({{
 {:.no_toc}
 - *Make a dinner reservation for tonight*
 
-#### [Point of Interest Skill]({{site.baseurl}}/reference/skills/point-of-interest)
+#### [Point of Interest Skill]({{site.baseurl}}/skills/samples/point-of-interest)
 {:.no_toc}
 ##### Find points of interest nearby
 {:.no_toc}
@@ -89,7 +95,7 @@ To configure this sample follow the steps below:
 
 ## Download transcripts
 
-View sample conversations Hospitality Assistant solution by downloading a transcript and opening with the [Bot Framework Emulator](https://aka.ms/botframework-emulator). For more flows of specific skills see [transcripts]({{site.baseurl}}/reference/skills/transcripts).
+View sample conversations Hospitality Assistant solution by downloading a transcript and opening with the [Bot Framework Emulator](https://aka.ms/botframework-emulator). For more flows of specific skills see [transcripts]({{site.baseurl}}/skills/samples/transcripts).
 
 <a class="btn btn-primary" href="{{site.baseurl}}/assets/transcripts/hospitalitysample-faqs.transcript">Frequently asked questions</a>
 <a class="btn btn-primary" href="{{site.baseurl}}/assets/transcripts/hospitalitysample-localinfo.transcript">Local info</a>

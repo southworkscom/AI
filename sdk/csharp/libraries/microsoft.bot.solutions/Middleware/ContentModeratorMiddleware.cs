@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Microsoft.Azure.CognitiveServices.ContentModerator;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
-using Microsoft.CognitiveServices.ContentModerator;
 
 namespace Microsoft.Bot.Solutions.Middleware
 {
@@ -70,7 +69,6 @@ namespace Microsoft.Bot.Solutions.Middleware
                 client.Endpoint = $"{region}.api.cognitive.microsoft.com";
 
                 var screenResult = client.TextModeration.ScreenText(
-                    language: "eng",
                     textContentType: "text/plain",
                     textContent: textStream,
                     autocorrect: true,

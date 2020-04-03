@@ -4,8 +4,7 @@
  */
 
 import * as program from 'commander';
-import { existsSync } from 'fs';
-import { extname, isAbsolute, join, resolve } from 'path';
+import { join, resolve } from 'path';
 import { DisconnectSkill } from './functionality';
 import { ConsoleLogger, ILogger} from './logger';
 import { IDisconnectConfiguration } from './models';
@@ -35,10 +34,10 @@ program
     .option('--ts', 'Determine your assistant project structure to be a TypeScript-like structure')
     .option('--noRefresh', '[OPTIONAL] Determine whether the model of your skills connected are not going to be refreshed (by default they are refreshed)')
     .option('--languages [languages]', '[OPTIONAL] Comma separated list of locales used for LUIS culture (defaults to \'en-us\')')
-    .option('--dispatchFolder [path]', '[OPTIONAL] Path to the folder containing your assistant\'s \'.dispatch\' file (defaults to \'./deployment/resources/dispatch/en\' inside your assistant folder)')
+    .option('--dispatchFolder [path]', '[OPTIONAL] Path to the folder containing your assistant\'s \'.dispatch\' file (defaults to \'./deployment/resources/dispatch\' inside your assistant folder)')
     .option('--outFolder [path]', '[OPTIONAL] Path for any output file that may be generated (defaults to your assistant\'s root folder)')
-    .option('--lgOutFolder [path]', '[OPTIONAL] Path for the LuisGen output (defaults to a \'service\' folder inside your assistant\'s folder)')
-    .option('--skillsFile [path]', '[OPTIONAL] Path to your assistant Skills configuration file (defaults to the \'skills.json\' inside your assistant\'s folder)')
+    .option('--lgOutFolder [path]', '[OPTIONAL] Path for the Luis Generate output (defaults to a \'service\' folder inside your assistant\'s folder)')
+    .option('--appSettingsFile [path]', '[OPTIONAL] Path to your app settings file (defaults to \'appsettings.json\' inside your assistant\'s folder)')
     .option('--cognitiveModelsFile [path]', '[OPTIONAL] Path to your Cognitive Models file (defaults to \'cognitivemodels.json\' inside your assistant\'s folder)')
     .option('--verbose', '[OPTIONAL] Output detailed information about the processing of the tool')
     .action((cmd: program.Command, actions: program.Command): undefined => undefined);
@@ -51,7 +50,6 @@ if (process.argv.length < 3) {
 }
 
 let skillId = '';
-let skillsFile = '';
 let outFolder: string;
 let noRefresh = false;
 let cognitiveModelsFile: string;
@@ -59,6 +57,7 @@ let languages: string[];
 let dispatchFolder: string;
 let lgOutFolder: string;
 let lgLanguage: string;
+let appSettingsFile: string;
 
 logger.isVerbose = args.verbose;
 
@@ -89,20 +88,13 @@ skillId = args.skillId;
 // outFolder validation -- the var is needed for reassuring 'configuration.outFolder' is not undefined
 outFolder = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');
 
-// skillsFile validation
-if (!args.skillsFile) {
-    skillsFile = join(outFolder, (args.ts ? join('src', 'skills.json') : 'skills.json'));
-} else if (extname(args.skillsFile) !== '.json') {
-    logger.error(`The 'skillsFile' argument should be a JSON file.`);
+// appSettingsFile validation
+appSettingsFile = args.appSettingsFile || join(outFolder, (args.ts ? join('src', 'appsettings.json') : 'appsettings.json'));
+
+// validate the existence of the appsettings file
+if (appSettingsFile === undefined) {
+    logger.error(`The 'appSettings' file doesn't exist`);
     process.exit(1);
-} else {
-    const skillsFilePath: string = isAbsolute(args.skillsFile) ? args.skillsFile : join(resolve('./'), args.skillsFile);
-    if (!existsSync(skillsFilePath)) {
-        logger.error(`The 'skillsFile' argument leads to a non-existing file.
-            Please make sure to provide a valid path to your Assistant Skills configuration file using the '--skillsFile' argument.`);
-        process.exit(1);
-    }
-    skillsFile = skillsFilePath;
 }
 
 // cognitiveModelsFile validation
@@ -125,7 +117,6 @@ lgOutFolder = args.lgOutFolder ?
 // Initialize an instance of IDisconnectConfiguration to send the needed arguments to the disconnectSkill function
 const configuration: IDisconnectConfiguration = {
     skillId: skillId,
-    skillsFile: skillsFile,
     outFolder: outFolder,
     noRefresh: noRefresh,
     cognitiveModelsFile: cognitiveModelsFile,
@@ -133,6 +124,7 @@ const configuration: IDisconnectConfiguration = {
     dispatchFolder: dispatchFolder,
     lgOutFolder: lgOutFolder,
     lgLanguage: lgLanguage,
-    logger: logger
+    logger: logger,
+    appSettingsFile: appSettingsFile
 };
 new DisconnectSkill(configuration as IDisconnectConfiguration, logger).disconnectSkill();

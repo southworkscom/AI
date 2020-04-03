@@ -3,33 +3,27 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Security.Claims;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.LanguageGeneration;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Builder.Solutions.Authentication;
-using Microsoft.Bot.Builder.Solutions.Proactive;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.TaskExtensions;
-using Microsoft.Bot.Builder.Solutions.Testing;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Authentication;
-using Microsoft.Bot.Schema;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Bot.Solutions;
+using Microsoft.Bot.Solutions.Authentication;
+using Microsoft.Bot.Solutions.Proactive;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.TaskExtensions;
+using Microsoft.Bot.Solutions.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDoSkill.Bots;
 using ToDoSkill.Dialogs;
-using ToDoSkill.Responses.AddToDo;
-using ToDoSkill.Responses.DeleteToDo;
-using ToDoSkill.Responses.Main;
-using ToDoSkill.Responses.MarkToDo;
-using ToDoSkill.Responses.Shared;
-using ToDoSkill.Responses.ShowToDo;
 using ToDoSkill.Services;
 using ToDoSkill.Tests.Flow.Fakes;
 using ToDoSkill.Tests.Flow.Utterances;
@@ -43,6 +37,8 @@ namespace ToDoSkill.Tests.Flow
         public IServiceCollection Services { get; set; }
 
         public MockServiceManager ServiceManager { get; set; }
+
+        public LocaleTemplateEngineManager TemplateEngine { get; set; }
 
         [TestInitialize]
         public override void Initialize()
@@ -118,12 +114,7 @@ namespace ToDoSkill.Tests.Flow
             var supportedLocales = new List<string>() { "en-us", "de-de", "es-es", "fr-fr", "it-it", "zh-cn" };
             var templateFiles = new Dictionary<string, string>
             {
-                { "AddToDo", "AddToDoActivities" },
-                { "DeleteToDo", "DeleteToDoActivities" },
-                { "Main", "ToDoMainActivities" },
-                { "MarkToDo", "MarkToDoActivities" },
-                { "Shared", "ToDoSharedActivities" },
-                { "ShowToDo", "ShowToDoActivities" }
+                { "Shared", "ResponsesAndTexts" },
             };
 
             var localizedTemplates = new Dictionary<string, List<string>>();
@@ -146,22 +137,11 @@ namespace ToDoSkill.Tests.Flow
                 localizedTemplates.Add(locale, localeTemplateFiles);
             }
 
-            Services.AddSingleton(new LocaleTemplateEngineManager(localizedTemplates, "en-us"));
+            TemplateEngine = new LocaleTemplateEngineManager(localizedTemplates, "en-us");
+            Services.AddSingleton(TemplateEngine);
 
             // Configure files for generating all responses. Response from bot should equal one of them.
-            var templateFilesAll = new List<string>()
-            {
-                @"AddToDo/AddToDoTexts.lg",
-                @"DeleteToDo/DeleteToDoTexts.lg",
-                @"Main/ToDoMainTexts.lg",
-                @"MarkToDo/MarkToDoTexts.lg",
-                @"Shared/ToDoSharedTexts.lg",
-                @"ShowToDo/ShowToDoTexts.lg",
-            };
-
-            var templatesAll = new List<string>();
-            templateFilesAll.ForEach(s => templatesAll.Add(Path.Combine(".", "Responses", s)));
-            var engineAll = new TemplateEngine().AddFiles(templatesAll);
+            var engineAll = new TemplateEngine().AddFile(Path.Combine("Responses", "Shared", "ResponsesAndTexts.lg"));
             Services.AddSingleton(engineAll);
 
             Services.AddSingleton<IStorage>(new MemoryStorage());
@@ -182,6 +162,27 @@ namespace ToDoSkill.Tests.Flow
 
             var testFlow = new TestFlow(adapter, async (context, token) =>
             {
+                var bot = sp.GetService<IBot>();
+                await bot.OnTurnAsync(context, CancellationToken.None);
+            });
+
+            return testFlow;
+        }
+
+        public TestFlow GetSkillTestFlow()
+        {
+            var sp = Services.BuildServiceProvider();
+            var adapter = sp.GetService<TestAdapter>();
+
+            var testFlow = new TestFlow(adapter, async (context, token) =>
+            {
+                // Set claims in turn state to simulate skill mode
+                var claims = new List<Claim>();
+                claims.Add(new Claim(AuthenticationConstants.VersionClaim, "1.0"));
+                claims.Add(new Claim(AuthenticationConstants.AudienceClaim, Guid.NewGuid().ToString()));
+                claims.Add(new Claim(AuthenticationConstants.AppIdClaim, Guid.NewGuid().ToString()));
+                context.TurnState.Add("BotIdentity", new ClaimsIdentity(claims));
+
                 var bot = sp.GetService<IBot>();
                 await bot.OnTurnAsync(context, CancellationToken.None);
             });

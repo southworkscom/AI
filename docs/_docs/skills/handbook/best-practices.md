@@ -3,7 +3,7 @@ category: Skills
 subcategory: Handbook
 title: Best practices
 description: Best practices when developing a Bot Framework Skill
-order: 6
+order: 7
 toc: true
 ---
 
@@ -68,59 +68,72 @@ Consider the multiple layers of communication a user may have with a Skill on th
 #### Speech & Text
 {:.no_toc}
 
-Speech & Text responses are stored in **.json** files, and offer the ability to provide a variety of responses and set the input hint on each Activity.
+Speech & Text responses are stored as part of the provided LG files for each provided Skill. These offer the ability to provide a variety of responses and set the input hint on each Activity as required.
 
-```json
-{
-  "NamePrompt": {
-    "replies": [
-      {
-        "text": "What is your name?",
-        "speak": "What is your name?"
-      }
-    ],
-    "inputHint": "expectingInput"
-  },
-  "HaveNameMessage": {
-    "replies": [
-      {
-        "text": "Hi, {Name}!",
-        "speak": "Hi, {Name}!"
-      },
-      {
-        "text": "Nice to meet you, {Name}!",
-        "speak": "Nice to meet you, {Name}!"
-      }
-    ],
-    "inputHint": "acceptingInput"
-  }
-}
+```markdown
+# NoTitle
+[Activity
+    Text = @{NoTitle.Text}
+    Speak = @{NoTitle.Text}
+    InputHint = expectingInput
+]
+
+# NoTitle.Text
+- What's the subject of the meeting?
+- What is the subject of the meeting?
+- Let me know what subject you want to provide for the meeting?
 ```
 
-Vary your responses. By providing additional utterances to the **replies** array, your Skill will sound more natural and provide a dynamic conversation.
+Vary your responses, by providing additional responses to each LG element, your Skill will sound more natural and provide a dynamic conversation. This is shown above.
 
 Write how people speak. A skill should only provide relevant context when read aloud. Use visual aids to offer more data to a user.
-
-#### Common string
-{:.no_toc}
-
-Some common strings shouldn't save in response file. Suggest you to save them in **.resx** file. It is easy to be localized.
 
 #### Visual
 {:.no_toc}
 
-Use [Adaptive Cards](https://adaptivecards.io/) to deliver rich cards as visual clues to a Skill's content.
+Use [Adaptive Cards](https://adaptivecards.io/) to deliver rich cards as visual clues to a Skill's content. These can be added to your Skill's LG files through additional LG elements as shown below.
 
-You can use variables to map data to a card's content. For example, the JSON below describes an Adaptive Card showing points of interest.
+The example below shows two key concepts:
+- Text blocks in the Card can reference other LG elements to provide a variety of responses, in the example below one of two responses will be randomly selected.
+- Data can be passed in to the LG rendering, in this case the `title` parameter is used within the second `TextBlock` element. When generating an activity you can pass data items - e.g. `var response = TemplateEngine.GenerateActivityForLocale("HaveNameMessage", data);`
 
+# ExampleAdaptiveCard.Text
+- Hello World
+- Hello There
+
+# ExampleAdaptiveCard(title)
 ```json
 {
-	"type": "AdaptiveCard",
-	"id": "PointOfInterestViewCard",
+    "type": "AdaptiveCard",
+    "id":"ExampleAdaptiveCard",
+    "body": [
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "@{ExampleAdaptiveCard.Text}",
+                    "size": "Medium",
+                    "wrap": true
+                }
+            ],
+            "style": "good",
+            "bleed": true
+        },
+        {
+            "type": "TextBlock",
+            "size": "Medium",
+            "weight": "Bolder",
+            "text": "{title}"
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
 }
 ```
 
 ## Support skill fallback
+
 Currently if you want to support skill switching scenarios like this in Virtual Assistant:
 ```
 - User: What's my meetings today?
@@ -420,7 +433,7 @@ Learn more on how you can [gather user input using a dialog prompt](https://docs
 #### Custom prompt dialog
 {:.no_toc}
 
-One of approach to create a custom prompt dialog is add a validator. In Calendar Skill, there is a choice validator to handle next/previous page intent.
+One of the approaches to create a custom prompt dialog is through a validator. In the Calendar Skill, there is a choice validator to handle next/previous page intent.
 
 ```csharp
 protected async Task<bool> ChoiceValidator(PromptValidatorContext<FoundChoice> pc, CancellationToken cancellationToken)
@@ -452,15 +465,14 @@ protected async Task<bool> ChoiceValidator(PromptValidatorContext<FoundChoice> p
 }
 ```
 
-If you need a more complex prompt you can implement it by inheriting **Microsoft.Bot.Builder.Dialogs.Prompt<T>**. Or read [Create your own prompts to gather user input](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-primitive-prompts?view=azure-bot-service-4.0&tabs=csharp) to learn more about custom prompt.
+If you need a more complex prompt you can implement it through inheriting **Microsoft.Bot.Builder.Dialogs.Prompt<T>**. Or read [Create your own prompts to gather user input](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-primitive-prompts?view=azure-bot-service-4.0&tabs=csharp) to learn more about custom prompt.
 
 ### Enable long running tasks
 {:.no_toc}
 
-[Proactive scenarios]({{site.baseurl}}/howto/virtual-assistant/proactivemessaging) are a key part of ensuring a Skill Assistant can provide more intelligent and helpful capabilities to end users.
-This enables a Skill to have more intelligent interactions with a user, triggered by external events.
+[Proactive scenarios]({{site.baseurl}}/solution-accelerators/tutorials/enable-proactive-notifications/1-intro/) are a key part of ensuring a Skill Assistant can provide more intelligent and helpful capabilities to end users. This enables a Skill to have more intelligent interactions with a user, triggered by external events.
 
-### Handle and log errors
+### Error handling
 {:.no_toc}
 
 Use the **HandleDialogExceptions** method in [SkillDialogBase.cs]({{site.repo}}/blob/master/templates/Skill-Template/csharp/Sample/SkillSample/Dialogs/SkillDialogBase.cs) to send a trace back to the [Bot Framework Emulator](https://aka.ms/botframework-emulator), logging the exception, and sending a friendly error response to the user.
@@ -484,19 +496,19 @@ protected async Task HandleDialogExceptions(WaterfallStepContext sc, Exception e
 }
 ```
 
-### Manage the states
+### Manage State
 {:.no_toc}
 
 Save your data in different scope of states. Read [Save user and conversation data](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-v4-state?view=azure-bot-service-4.0&tabs=csharp) to learn about user and conversation state.
 
 For dialog state, you can save your data in **stepContext.State.Dialog[YOUR_DIALOG_STATE_KEY]**.
 
-### Manage the dialogs
+### Manage Dialogs
 {:.no_toc}
 
 Use dialog options to transfer data among dialogs. Read [Create advanced conversation flow using branches and loops](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-dialog-manage-complex-conversation-flow?view=azure-bot-service-4.0&tabs=csharp) to learn more about dialog management.
 
-## Skill switching in a Virtual Assistant
+## Skill switching within a Virtual Assistant
 A commonly asked scenario is how to enable a Virtual Assistant to appropriately switch Skills if a user's utterances require it, like in the following example:
 ```
 - User: What meetings do I have today?
@@ -540,4 +552,4 @@ protected async Task<DialogTurnResult> SendFallback(WaterfallStepContext sc, Can
 }
 ```
 
-If it can be routed to another Skill, the Virtual Assistant will cancel the current Skill and pass user input to the proper one. Otherwise, the Virtual Assistant returns a FallbackHandledEVent to the current Skill in order to continue.
+If it can be routed to another Skill, the Virtual Assistant will cancel the current Skill and pass user input to the newly activated Skill. Otherwise, the Virtual Assistant returns a FallbackHandledEVent to the current Skill in order for it to continue.

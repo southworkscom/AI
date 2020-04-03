@@ -1,21 +1,30 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Builder.Solutions.Proactive;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.TaskExtensions;
-using Microsoft.Bot.Builder.Solutions.Testing;
+using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions;
+using Microsoft.Bot.Solutions.Models;
+using Microsoft.Bot.Solutions.Proactive;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.TaskExtensions;
+using Microsoft.Bot.Solutions.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 using PointOfInterestSkill.Bots;
 using PointOfInterestSkill.Dialogs;
+using PointOfInterestSkill.Models;
 using PointOfInterestSkill.Responses.CancelRoute;
 using PointOfInterestSkill.Responses.FindPointOfInterest;
 using PointOfInterestSkill.Responses.Main;
@@ -114,6 +123,118 @@ namespace PointOfInterestSkill.Tests.Flow
             });
 
             return testFlow;
+        }
+
+        public TestFlow GetSkillTestFlow()
+        {
+            var sp = Services.BuildServiceProvider();
+            var adapter = sp.GetService<TestAdapter>();
+
+            var testFlow = new TestFlow(adapter, async (context, token) =>
+            {
+                // Set claims in turn state to simulate skill mode
+                var claims = new List<Claim>();
+                claims.Add(new Claim(AuthenticationConstants.VersionClaim, "1.0"));
+                claims.Add(new Claim(AuthenticationConstants.AudienceClaim, Guid.NewGuid().ToString()));
+                claims.Add(new Claim(AuthenticationConstants.AppIdClaim, Guid.NewGuid().ToString()));
+                context.TurnState.Add("BotIdentity", new ClaimsIdentity(claims));
+
+                var bot = sp.GetService<IBot>();
+                await bot.OnTurnAsync(context, CancellationToken.None);
+            });
+
+            return testFlow;
+        }
+
+        protected Action<IActivity> AssertStartsWith(string response, IList<string> cardIds)
+        {
+            return activity =>
+            {
+                var messageActivity = activity.AsMessageActivity();
+
+                if (response == null)
+                {
+                    Assert.IsTrue(string.IsNullOrEmpty(messageActivity.Text));
+                }
+                else
+                {
+                    Assert.IsTrue(ParseReplies(response, new StringDictionary()).Any((reply) =>
+                    {
+                        return messageActivity.Text.StartsWith(reply);
+                    }));
+                }
+
+                AssertSameId(messageActivity, cardIds);
+            };
+        }
+
+        protected Action<IActivity> AssertContains(string response, IList<string> cardIds)
+        {
+            return activity =>
+            {
+                var messageActivity = activity.AsMessageActivity();
+
+                if (response == null)
+                {
+                    Assert.IsTrue(string.IsNullOrEmpty(messageActivity.Text));
+                }
+                else
+                {
+                    CollectionAssert.Contains(ParseReplies(response, new StringDictionary()), messageActivity.Text);
+                }
+
+                AssertSameId(messageActivity, cardIds);
+            };
+        }
+
+        protected void AssertSameId(IMessageActivity activity, IList<string> cardIds = null)
+        {
+            if (cardIds == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < cardIds.Count; ++i)
+            {
+                var card = activity.Attachments[i].Content as JObject;
+                Assert.AreEqual(card["id"], cardIds[i]);
+            }
+        }
+
+        /// <summary>
+        /// Asserts bot response of Event Activity.
+        /// </summary>
+        /// <returns>Returns an Action with IActivity object.</returns>
+        protected Action<IActivity> CheckForEvent(PointOfInterestDialogBase.OpenDefaultAppType openDefaultAppType = PointOfInterestDialogBase.OpenDefaultAppType.Map)
+        {
+            return activity =>
+            {
+                var eventReceived = activity.AsEventActivity()?.Value as OpenDefaultApp;
+                Assert.IsNotNull(eventReceived, "Activity received is not an Event as expected");
+                if (openDefaultAppType == PointOfInterestDialogBase.OpenDefaultAppType.Map)
+                {
+                    Assert.IsFalse(string.IsNullOrEmpty(eventReceived.MapsUri));
+                }
+                else if (openDefaultAppType == PointOfInterestDialogBase.OpenDefaultAppType.Telephone)
+                {
+                    Assert.IsFalse(string.IsNullOrEmpty(eventReceived.TelephoneUri));
+                }
+            };
+        }
+
+        protected Action<IActivity> CheckForEoC(bool value = false)
+        {
+            return activity =>
+            {
+                var eoc = (Activity)activity;
+                Assert.AreEqual(ActivityTypes.EndOfConversation, eoc.Type);
+                if (value)
+                {
+                    var dest = eoc.Value as SingleDestinationResponse;
+                    Assert.IsNotNull(dest);
+                    Assert.IsTrue(!string.IsNullOrEmpty(dest.Name));
+                }
+            };
         }
     }
 }

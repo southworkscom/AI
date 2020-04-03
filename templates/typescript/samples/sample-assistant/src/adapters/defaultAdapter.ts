@@ -17,11 +17,11 @@ import { AzureBlobTranscriptStore } from 'botbuilder-azure';
 import {
     EventDebuggerMiddleware,
     FeedbackMiddleware,
+    FeedbackOptions,
     ISkillManifest,
     LocaleTemplateEngineManager,
     SetLocaleMiddleware, 
-    SetSpeakMiddleware,
-    FeedbackOptions} from 'botbuilder-solutions';
+    SetSpeakMiddleware } from 'botbuilder-solutions';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IBotSettings } from '../services/botSettings.js';
 

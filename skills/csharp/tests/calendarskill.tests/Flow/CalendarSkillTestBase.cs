@@ -4,37 +4,24 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Claims;
 using System.Threading;
 using CalendarSkill.Bots;
 using CalendarSkill.Dialogs;
 using CalendarSkill.Models;
-using CalendarSkill.Responses.ChangeEventStatus;
-using CalendarSkill.Responses.CheckPersonAvailable;
-using CalendarSkill.Responses.CreateEvent;
-using CalendarSkill.Responses.FindContact;
-using CalendarSkill.Responses.JoinEvent;
-using CalendarSkill.Responses.Main;
-using CalendarSkill.Responses.Shared;
-using CalendarSkill.Responses.Summary;
-using CalendarSkill.Responses.TimeRemaining;
-using CalendarSkill.Responses.UpcomingEvent;
-using CalendarSkill.Responses.UpdateEvent;
 using CalendarSkill.Services;
 using CalendarSkill.Test.Flow.Fakes;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
-using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
 using Microsoft.Bot.Builder.LanguageGeneration;
-using Microsoft.Bot.Builder.Solutions.Authentication;
-using Microsoft.Bot.Builder.Solutions.Proactive;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.TaskExtensions;
-using Microsoft.Bot.Builder.Solutions.Testing;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Bot.Solutions.Authentication;
+using Microsoft.Bot.Solutions.Proactive;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.TaskExtensions;
+using Microsoft.Bot.Solutions.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -99,18 +86,7 @@ namespace CalendarSkill.Test.Flow
             var supportedLocales = new List<string>() { "en-us", "de-de", "es-es", "fr-fr", "it-it", "zh-cn" };
             var templateFiles = new Dictionary<string, string>
             {
-                { "ChangeEventStatus", "ChangeEventStatusDialogActivities" },
-                { "CheckPersonAvailable", "CheckPersonAvailableActivities" },
-                { "CreateEvent", "CreateEventDialogActivities" },
-                { "FindContact", "FindContactDialogActivities" },
-                { "JoinEvent", "JoinEventDialogActivities" },
-                { "Main", "MainDialogActivities" },
-                { "Shared", "SharedActivities" },
-                { "Summary", "SummaryDialogActivities" },
-                { "TimeRemaining", "TimeRemainingDialogActivities" },
-                { "UpcomingEvent", "UpcomingEventDialogActivities" },
-                { "UpdateEvent", "UpdateEventDialogActivities" },
-                { "FindMeetingRoom", "FindMeetingRoomDialogActivities" },
+                { "Shared", "ResponsesAndTexts" },
             };
 
             var localizedTemplates = new Dictionary<string, List<string>>();
@@ -137,25 +113,7 @@ namespace CalendarSkill.Test.Flow
             Services.AddSingleton(SearchService);
 
             // Configure files for generating all responses. Response from bot should equal one of them.
-            var templateFilesAll = new List<string>()
-            {
-                @"ChangeEventStatus/ChangeEventStatusDialogTexts.lg",
-                @"CheckPersonAvailable/CheckPersonAvailableTexts.lg",
-                @"CreateEvent/CreateEventDialogTexts.lg",
-                @"FindContact/FindContactDialogTexts.lg",
-                @"JoinEvent/JoinEventDialogTexts.lg",
-                @"Main/MainDialogTexts.lg",
-                @"Shared/SharedTexts.lg",
-                @"Summary/SummaryDialogTexts.lg",
-                @"TimeRemaining/TimeRemainingDialogTexts.lg",
-                @"UpcomingEvent/UpcomingEventDialogTexts.lg",
-                @"UpdateEvent/UpdateEventDialogTexts.lg",
-                @"FindMeetingRoom/FindMeetingRoomDialogTexts.lg",
-            };
-
-            var templatesAll = new List<string>();
-            templateFilesAll.ForEach(s => templatesAll.Add(Path.Combine(".", "Responses", s)));
-            var engineAll = new TemplateEngine().AddFiles(templatesAll);
+            var engineAll = new TemplateEngine().AddFile(Path.Combine("Responses", "Shared", "ResponsesAndTexts.lg"));
             Services.AddSingleton(engineAll);
 
             Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
@@ -207,6 +165,27 @@ namespace CalendarSkill.Test.Flow
                 var bot = sp.GetService<IBot>();
                 var state = await CalendarStateAccessor.GetAsync(context, () => new CalendarSkillState());
                 state.EventSource = EventSource.Microsoft;
+                await bot.OnTurnAsync(context, CancellationToken.None);
+            });
+
+            return testFlow;
+        }
+
+        public TestFlow GetSkillTestFlow()
+        {
+            var sp = Services.BuildServiceProvider();
+            var adapter = sp.GetService<TestAdapter>();
+
+            var testFlow = new TestFlow(adapter, async (context, token) =>
+            {
+                // Set claims in turn state to simulate skill mode
+                var claims = new List<Claim>();
+                claims.Add(new Claim(AuthenticationConstants.VersionClaim, "1.0"));
+                claims.Add(new Claim(AuthenticationConstants.AudienceClaim, Guid.NewGuid().ToString()));
+                claims.Add(new Claim(AuthenticationConstants.AppIdClaim, Guid.NewGuid().ToString()));
+                context.TurnState.Add("BotIdentity", new ClaimsIdentity(claims));
+
+                var bot = sp.GetService<IBot>();
                 await bot.OnTurnAsync(context, CancellationToken.None);
             });
 

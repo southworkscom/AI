@@ -89,15 +89,15 @@ Learn how to [provision your Azure resources]({{site.baseurl}}/skills/tutorials/
 ### Authentication connection settings
 {:.no_toc}
 
-If you plan to use the skill as part of a Virtual Assistant the process of registering a skill with your Virtual Assistant will create the supporting authentication connection information automatically for your Virtual Assistant. This skill uses the following authentication scopes which are registered automatically:
+This skill uses the following authentication scopes:
 - **Notes.ReadWrite** 
 - **User.Read**
 - **User.ReadBasic.All**
 - **Tasks.ReadWrite**
 
-**However**, if you wish to use the Skill directly without using a Virtual Assistant please use the following steps to manually configure Authentication for the Calendar Skill. This is **not** required when using the Skill with a Virtual Assistant.
+You must use [these steps]({{site.baseurl}}/{{site.data.urls.SkillManualAuth}}) to manually configure Authentication for the ToDo Skill. Due to a change in the Skill architecture this is not currently automated.
 
-Follow the general instructions [here]({{site.baseurl}}/skills/handbook/authentication/#manual-authentication) to configure this using the scopes shown above.
+> Ensure you configure all of the scopes detailed above.
 
 ### Add customized to do lists
 {:.no_toc}
@@ -112,14 +112,14 @@ If you want to add your customized list types, for example, your homework list o
 	  "Movie"
 	]
 	```
-2. Add your list type name and its synonym in `Responses/Shared/ToDoString.resx`
+1. Add your list type name and its synonym in `Responses/Shared/ToDoString.resx`
 
 	Name | Value 
 	---- | ----- 
 	Homework | Homework 
 	HomeworkSynonym | homework, home work 
 
-3. Modify your LUIS file. Modify `Deployment/Resources/LU/en/todo.lu` so that your LUIS app can tell these new ListType entities. You can provide more utterance to make your LUIS model perform better.
+1. Modify your LUIS file. Modify `Deployment/Resources/LU/en/todo.lu` so that your LUIS app can tell these new ListType entities. You can provide more utterance to make your LUIS model perform better.
 
 	```diff
 	## AddToDo
@@ -146,7 +146,7 @@ If you want to add your customized list types, for example, your homework list o
 	    ]
 	```
 
-4. Redeploy your To Do Skill.
+1. Redeploy your To Do Skill.
 
 ## Download a transcript
 {:.toc}

@@ -3,21 +3,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Threading.Tasks;
+using CalendarSkill.Responses.Main;
 using CalendarSkill.Responses.Summary;
 using CalendarSkill.Services;
 using CalendarSkill.Test.Flow.Fakes;
 using CalendarSkill.Test.Flow.Utterances;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.Solutions;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Solutions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CalendarSkill.Test.Flow
 {
     [TestClass]
+    [TestCategory("UnitTests")]
     public class NextCalendarFlowTests : CalendarSkillTestBase
     {
         [TestInitialize]
@@ -38,10 +39,11 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_CalendarOneNextMeeting()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(FindMeetingTestUtterances.BaseNextMeeting)
                 .AssertReplyOneOf(this.NextMeetingPrompt())
                 .AssertReply(this.ShowCalendarList())
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -49,12 +51,13 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_CalendarOneNextMeeting_AskHowLong()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(FindMeetingTestUtterances.HowLongNextMeetingMeeting)
                 .AssertReplyOneOf(this.BeforeShowEventDetailsPrompt())
                 .AssertReplyOneOf(this.ReadDurationPrompt())
                 .AssertReplyOneOf(this.NextMeetingPrompt())
                 .AssertReply(this.ShowCalendarList())
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -62,12 +65,13 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_CalendarOneNextMeeting_AskWhere()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(FindMeetingTestUtterances.WhereNextMeetingMeeting)
                 .AssertReplyOneOf(this.BeforeShowEventDetailsPrompt())
                 .AssertReplyOneOf(this.ReadLocationPrompt())
                 .AssertReplyOneOf(this.NextMeetingPrompt())
                 .AssertReply(this.ShowCalendarList())
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -75,12 +79,13 @@ namespace CalendarSkill.Test.Flow
         public async Task Test_CalendarOneNextMeeting_AskWhen()
         {
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(FindMeetingTestUtterances.WhenNextMeetingMeeting)
                 .AssertReplyOneOf(this.BeforeShowEventDetailsPrompt())
                 .AssertReplyOneOf(this.ReadTimePrompt())
                 .AssertReplyOneOf(this.NextMeetingPrompt())
                 .AssertReply(this.ShowCalendarList())
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -89,9 +94,10 @@ namespace CalendarSkill.Test.Flow
         {
             this.ServiceManager = MockServiceManager.SetMeetingsToNull();
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(FindMeetingTestUtterances.BaseNextMeeting)
                 .AssertReplyOneOf(this.NoMeetingResponse())
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -101,10 +107,11 @@ namespace CalendarSkill.Test.Flow
             int eventCount = 3;
             this.ServiceManager = MockServiceManager.SetMeetingsToMultiple(eventCount);
             await this.GetTestFlow()
+                .Send(string.Empty)
+                .AssertReplyOneOf(GetTemplates(CalendarMainResponses.FirstPromptMessage))
                 .Send(FindMeetingTestUtterances.BaseNextMeeting)
                 .AssertReplyOneOf(this.NextMeetingPrompt())
                 .AssertReply(this.ShowCalendarList())
-                .AssertReply(this.ActionEndMessage())
                 .StartTestAsync();
         }
 
@@ -164,7 +171,7 @@ namespace CalendarSkill.Test.Flow
         {
             return activity =>
             {
-                Assert.AreEqual(activity.Type, ActivityTypes.Handoff);
+                Assert.AreEqual(activity.Type, ActivityTypes.EndOfConversation);
             };
         }
     }

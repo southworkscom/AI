@@ -7,9 +7,16 @@ import { existsSync, readFileSync } from 'fs';
 import { isAbsolute, join, resolve } from 'path';
 import { get } from 'request-promise-native';
 import { ConsoleLogger, ILogger } from '../logger';
-import { IConnectConfiguration, IDisconnectConfiguration, ISkillFile, ISkillManifest, IUpdateConfiguration } from '../models';
+import { IConnectConfiguration, IDisconnectConfiguration, ISkillManifestV2, ISkillManifestV1, IUpdateConfiguration, ISkill, IAppSetting } from '../models';
 import { ConnectSkill } from './connectSkill';
 import { DisconnectSkill } from './disconnectSkill';
+import { manifestV1Validation, manifestV2Validation } from '../utils';
+
+enum manifestVersion {
+    V1 = 'V1',
+    V2 = 'V2',
+    none = 'none'
+}
 
 export class UpdateSkill {
     private readonly configuration: IUpdateConfiguration;
@@ -20,7 +27,7 @@ export class UpdateSkill {
         this.logger = logger || new ConsoleLogger();
     }
 
-    private async getRemoteManifest(manifestUrl: string): Promise<ISkillManifest> {
+    private async getRemoteManifest(manifestUrl: string): Promise<ISkillManifestV1 | ISkillManifestV2> {
         try {
             return get({
                 uri: manifestUrl,
@@ -31,7 +38,7 @@ export class UpdateSkill {
         }
     }
 
-    private getLocalManifest(manifestPath: string): ISkillManifest {
+    private getLocalManifest(manifestPath: string): ISkillManifestV1 | ISkillManifestV2 {
         const skillManifestPath: string = isAbsolute(manifestPath) ? manifestPath : join(resolve('./'), manifestPath);
 
         if (!existsSync(skillManifestPath)) {
@@ -42,22 +49,81 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
         return JSON.parse(readFileSync(skillManifestPath, 'UTF8'));
     }
 
+    private validateManifestSchema(skillManifest: ISkillManifestV1 | ISkillManifestV2): manifestVersion {
+
+        const skillManifestV1Validation = skillManifest as ISkillManifestV1;
+        const skillManifestV2Validation = skillManifest as ISkillManifestV2;
+
+        const skillManifestVersion: string | undefined = skillManifestV1Validation.id ? 
+            manifestVersion.V1 : skillManifestV2Validation.$id ?
+                manifestVersion.V2 : undefined;
+        
+        let validVersion: manifestVersion = manifestVersion.none;
+        switch (skillManifestVersion) {
+            case manifestVersion.V1: {
+                manifestV1Validation(skillManifest as ISkillManifestV1, this.logger);
+                if (!this.logger.isError)
+                {
+                    validVersion = manifestVersion.V1;
+                    break;
+                }
+                throw new Error('Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.');
+            }
+            case manifestVersion.V2: {
+                manifestV2Validation(skillManifest as ISkillManifestV2, this.logger, this.configuration.endpointName);
+                if (!this.logger.isError)
+                {
+                    validVersion = manifestVersion.V2;
+                    break;
+                }
+                throw new Error('Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.');
+            }
+            case undefined: {
+                throw new Error('Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.');
+            }
+        }
+
+        return validVersion;
+        
+    }
+
+    private async getManifest(): Promise<ISkillManifestV1 | ISkillManifestV2> {
+
+        return this.configuration.localManifest
+            ? this.getLocalManifest(this.configuration.localManifest)
+            : this.getRemoteManifest(this.configuration.remoteManifest);
+    }
+
     private async existSkill(): Promise<boolean> {
         try {
             // Take skillManifest
-            const skillManifest: ISkillManifest = this.configuration.localManifest
-                ? this.getLocalManifest(this.configuration.localManifest)
-                : await this.getRemoteManifest(this.configuration.remoteManifest);
-            const assistantSkillsFile: ISkillFile = JSON.parse(readFileSync(this.configuration.skillsFile, 'UTF8'));
-            const assistantSkills: ISkillManifest[] = assistantSkillsFile.skills !== undefined ? assistantSkillsFile.skills : [];
+            const skillManifest: ISkillManifestV1 | ISkillManifestV2 = await this.getManifest();
+
+            // Manifest schema validation
+            const validVersion: manifestVersion = this.validateManifestSchema(skillManifest);
+
+            let skillId = '';
+            if(validVersion === manifestVersion.V1) {
+                const skillManifestV1 = skillManifest as ISkillManifestV1;
+                skillId = skillManifestV1.id;
+            } else if (validVersion === manifestVersion.V2) {
+                const skillManifestV2 = skillManifest as ISkillManifestV2;
+                skillId = skillManifestV2.$id;
+            } else {
+                return false;
+            }
+
+            const assistantSkillsFile: IAppSetting = JSON.parse(readFileSync(this.configuration.appSettingsFile, 'UTF8'));
+            const assistantSkills: ISkill[] = assistantSkillsFile.BotFrameworkSkills !== undefined ? assistantSkillsFile.BotFrameworkSkills : [];
             // Check if the skill is already connected to the assistant
-            if (assistantSkills.find((assistantSkill: ISkillManifest): boolean => assistantSkill.id === skillManifest.id)) {
-                this.configuration.skillId = skillManifest.id;
+            if (assistantSkills.find((assistantSkill: ISkill): boolean => assistantSkill.Id === skillId)) {
+                this.configuration.skillId = skillId;
 
                 return true;
             }
-
-            return false;
+            else {
+                return false;
+            }
         } catch (err) {
             throw err;
         }
@@ -72,7 +138,6 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
     private async executeConnectSkill(): Promise<void> {
         const connectConfiguration: IConnectConfiguration = {...{}, ...this.configuration};
         connectConfiguration.noRefresh = this.configuration.noRefresh;
-        connectConfiguration.inlineUtterances = this.configuration.inlineUtterances;
         await new ConnectSkill(connectConfiguration, this.logger).connectSkill();
     }
 

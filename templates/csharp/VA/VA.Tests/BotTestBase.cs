@@ -8,13 +8,14 @@ using System.Threading;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.AI.Luis;
-using Microsoft.Bot.Builder.Solutions;
-using Microsoft.Bot.Builder.Solutions.Feedback;
-using Microsoft.Bot.Builder.Solutions.Responses;
-using Microsoft.Bot.Builder.Solutions.Skills;
-using Microsoft.Bot.Builder.Solutions.Skills.Dialogs;
-using Microsoft.Bot.Builder.Solutions.Testing;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.LanguageGeneration;
 using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Bot.Solutions;
+using Microsoft.Bot.Solutions.Feedback;
+using Microsoft.Bot.Solutions.Responses;
+using Microsoft.Bot.Solutions.Skills.Dialogs;
+using Microsoft.Bot.Solutions.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using $ext_safeprojectname$.Bots;
@@ -29,9 +30,20 @@ namespace $safeprojectname$
     {
         public IServiceCollection Services { get; set; }
 
-        public LocaleTemplateEngineManager TemplateEngine { get; set; }
+        public LocaleTemplateManager TestLocaleTemplateManager { get; set; }
 
         public UserProfileState TestUserProfileState { get; set; }
+
+        protected Templates AllResponsesTemplates
+        {
+            get
+            {
+                var path = CultureInfo.CurrentCulture.Name.ToLower() == "en-us" ?
+                    Path.Combine(".", "Responses", $"AllResponses.lg") :
+                    Path.Combine(".", "Responses", $"AllResponses.{CultureInfo.CurrentUICulture.Name.ToLower()}.lg");
+                return Templates.ParseFile(path);
+            }
+        }
 
         [TestInitialize]
         public virtual void Initialize()
@@ -40,6 +52,7 @@ namespace $safeprojectname$
             Services.AddSingleton(new BotSettings());
             Services.AddSingleton(new BotServices()
             {
+                // Non US languages are empty as Dispatch/LUIS not required for localization tests.
                 CognitiveModelSets = new Dictionary<string, CognitiveModelSet>
                 {
                     {
@@ -51,6 +64,21 @@ namespace $safeprojectname$
                                 { "General", GeneralTestUtil.CreateRecognizer() }
                             },
                         }
+                    },
+                    {
+                        "zh-cn", new CognitiveModelSet { }
+                    },
+                    {
+                        "fr-fr", new CognitiveModelSet { }
+                    },
+                    {
+                        "es-es", new CognitiveModelSet { }
+                    },
+                    {
+                        "de-de", new CognitiveModelSet { }
+                    },
+                    {
+                        "it-it", new CognitiveModelSet { }
                     }
                 }
             });
@@ -69,31 +97,22 @@ namespace $safeprojectname$
             // For localization testing
             CultureInfo.CurrentUICulture = new CultureInfo("en-us");
 
-            var localizedTemplates = new Dictionary<string, List<string>>();
-            var templateFiles = new List<string>() { "MainResponses", "OnboardingResponses" };
+            var localizedTemplates = new Dictionary<string, string>();
+            var templateFile = "AllResponses";
             var supportedLocales = new List<string>() { "en-us", "de-de", "es-es", "fr-fr", "it-it", "zh-cn" };
 
             foreach (var locale in supportedLocales)
             {
-                var localeTemplateFiles = new List<string>();
-                foreach (var template in templateFiles)
-                {
-                    // LG template for default locale should not include locale in file extension.
-                    if (locale.Equals("en-us"))
-                    {
-                        localeTemplateFiles.Add(Path.Combine(".", "Responses", $"{template}.lg"));
-                    }
-                    else
-                    {
-                        localeTemplateFiles.Add(Path.Combine(".", "Responses", $"{template}.{locale}.lg"));
-                    }
-                }
+                // LG template for en-us does not include locale in file extension.
+                var localeTemplateFile = locale.Equals("en-us")
+                    ? Path.Combine(".", "Responses", $"{templateFile}.lg")
+                    : Path.Combine(".", "Responses", $"{templateFile}.{locale}.lg");
 
-                localizedTemplates.Add(locale, localeTemplateFiles);
+                localizedTemplates.Add(locale, localeTemplateFile);
             }
 
-            TemplateEngine = new LocaleTemplateEngineManager(localizedTemplates, "en-us");
-            Services.AddSingleton(TemplateEngine);
+            TestLocaleTemplateManager = new LocaleTemplateManager(localizedTemplates, "en-us");
+            Services.AddSingleton(TestLocaleTemplateManager);
 
             Services.AddTransient<MainDialog>();
             Services.AddTransient<OnboardingDialog>();
@@ -106,14 +125,22 @@ namespace $safeprojectname$
             TestUserProfileState.Name = "Bot";
         }
 
-        public TestFlow GetTestFlow()
+        public TestFlow GetTestFlow(bool includeUserProfile = true)
         {
             var sp = Services.BuildServiceProvider();
             var adapter = sp.GetService<TestAdapter>()
                 .Use(new FeedbackMiddleware(sp.GetService<ConversationState>(), sp.GetService<IBotTelemetryClient>()));
+            var userState = sp.GetService<UserState>();
+            var userProfileState = userState.CreateProperty<UserProfileState>(nameof(UserProfileState));
 
             var testFlow = new TestFlow(adapter, async (context, token) =>
             {
+                if (includeUserProfile)
+                {
+                    await userProfileState.SetAsync(context, TestUserProfileState);
+                    await userState.SaveChangesAsync(context);
+                }
+
                 var bot = sp.GetService<IBot>();
                 await bot.OnTurnAsync(context, CancellationToken.None);
             });

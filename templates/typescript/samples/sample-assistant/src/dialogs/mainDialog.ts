@@ -284,8 +284,9 @@ export class MainDialog extends ComponentDialog {
                         }
                     }
                 }
+
+                break;
             }
-        }
 
         return interrupted;
     }
@@ -381,6 +382,7 @@ export class MainDialog extends ComponentDialog {
 
             await this.previousResponseAccesor.set(turnContext, botResponse);
         }
+    }
 
         return await next();
     }
