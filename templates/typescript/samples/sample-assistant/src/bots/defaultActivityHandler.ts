@@ -94,4 +94,8 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
                 break;
         }
     }
+
+    protected async onEndOfConversationActivity(turnContext: TurnContext): Promise<void>{
+        return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+    }
 }
