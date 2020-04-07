@@ -96,6 +96,6 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     }
 
     protected async onEndOfConversationActivity(turnContext: TurnContext): Promise<void>{
-        return DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+        await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 }
