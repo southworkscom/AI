@@ -4,4 +4,3 @@
  */
 
 export * from './skillEvents';
-export * from './manifest';
