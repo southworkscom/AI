@@ -4,3 +4,4 @@
  */
 
 export * from './skillEvents';
+export * from './enhancedBotFrameworkSkill';
