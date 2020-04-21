@@ -7,12 +7,10 @@ import { BotFrameworkAdapter, TurnContext } from 'botbuilder';
 import { Choice, ChoicePrompt, ComponentDialog, DialogTurnResult, DialogTurnStatus, FoundChoice,
     OAuthPrompt, PromptValidatorContext, WaterfallDialog, WaterfallStep, WaterfallStepContext,
     OAuthPromptSettings } from 'botbuilder-dialogs';
-import { MicrosoftAppCredentials } from 'botframework-connector';
 import { TokenStatus } from 'botframework-connector/lib/tokenApi/models';
 import { ActionTypes, Activity, ActivityTypes, TokenResponse } from 'botframework-schema';
 import i18next from 'i18next';
 import { IOAuthConnection } from '../authentication';
-import { ActivityEx } from '../extensions';
 import { ResponseManager } from '../responses';
 import { TokenEvents } from '../tokenEvents';
 import { AuthenticationResponses } from './authenticationResponses';
@@ -32,18 +30,15 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     private selectedAuthType: string = '';
     private readonly authenticationConnections: IOAuthConnection[];
     private readonly responseManager: ResponseManager;
-    private readonly appCredentials: MicrosoftAppCredentials;
 
     public constructor(
         authenticationConnections: IOAuthConnection[],
-        appCredentials: MicrosoftAppCredentials,
         promptSettings: OAuthPromptSettings[]
     ) {
         super(MultiProviderAuthDialog.name);
 
         if (authenticationConnections === undefined) { throw new Error('The value of authenticationConnections cannot be undefined'); }
         this.authenticationConnections = authenticationConnections;
-        this.appCredentials = appCredentials;
 
         this.responseManager = new ResponseManager(
             ['en', 'de', 'es', 'fr', 'it', 'zh'],
@@ -62,8 +57,6 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
         this.addDialog(new WaterfallDialog(DialogIds.firstStepPrompt, firstStep));
 
-        // If authentication connections are provided locally then we enable "local auth"
-        // otherwise we only enable remote auth where the calling Bot handles this for us.
         if (this.authenticationConnections !== undefined && this.authenticationConnections.length > 0) {
             for (var i = 0; i < this.authenticationConnections.length; ++i) {
                 let connection = this.authenticationConnections[i];
@@ -104,59 +97,8 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     }
 
     private async firstStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        if (stepContext.context.activity.channelId !== undefined &&
-            stepContext.context.activity.channelId.trim().length > 0 &&
-            stepContext.context.activity.channelId === 'directlinespeech') {
-            // Speech channel doesn't support OAuthPrompt./OAuthCards so we rely on tokens being set by the Linked Accounts technique
-            // Therefore we don't use OAuthPrompt and instead attempt to directly retrieve the token from the store.
-            if (stepContext.context.activity.from === undefined || stepContext.context.activity.from.id === '') {
-                throw new Error('Missing From or From.Id which is required for token retrieval.');
-            }
 
-            if (this.appCredentials === undefined) {
-                throw new Error('AppCredentials were not passed which are required for speech enabled authentication scenarios.');
-            }
-
-            // PENDING OAuthClient in botbuilder-connector // NOT IMPLEMENTED
-            const connectionName: string = this.authenticationConnections[0].name;
-
-            try {
-                // Attempt to retrieve the token directly, we can't prompt the user for which Token to use so go with the first
-                // Moving forward we expect to have a "default" choice as part of Linked Accounts.
-                // PENDING get tokenResponse from OAuthClient
-                throw new Error('Not implemented');
-            } catch (error) {
-                this.telemetryClient.trackEvent({
-                    name: 'DirectLineSpeechTokenRetrievalFailure',
-                    properties: {
-                        Exception: error.message
-                    }
-                });
-            }
-
-            const noLinkedAccountResponse: Partial<Activity> = this.responseManager.getResponse(
-                AuthenticationResponses.noLinkedAccount,
-                new Map([['authType', connectionName]])
-            );
-
-            await stepContext.context.sendActivity(noLinkedAccountResponse);
-
-            // Enable Direct Line Speech clients to receive an event that will tell them
-            // to trigger a sign-in flow when a token isn't present
-            const requestOAuthFlowEvent: Activity = ActivityEx.createReply(stepContext.context.activity);
-            requestOAuthFlowEvent.type = ActivityTypes.Event;
-            requestOAuthFlowEvent.name = 'RequestOAuthFlow';
-
-            await stepContext.context.sendActivity(requestOAuthFlowEvent);
-
-            return {
-                status: DialogTurnStatus.cancelled
-            };
-        }
-
-        return stepContext.beginDialog(DialogIds.authPrompt);
-
-        throw new Error('Local authentication is not configured, please check the auth connection section in your configuration file.');
+        return await stepContext.beginDialog(DialogIds.authPrompt);
     }
 
     private async promptForProvider(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
@@ -278,22 +220,11 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             throw new Error('"userId" undefined');
         }
 
-        if (context.activity.channelId !== undefined &&
-            context.activity.channelId.trim().length > 0 &&
-            context.activity.channelId === 'directlinespeech') {
-            if (this.appCredentials === undefined) {
-                throw new Error('AppCredentials were not passed which are required for speech enabled authentication scenarios.');
-            }
-
-            // PENDING OAuthClient // DELTA
-            return [];
+        const tokenProvider: BotFrameworkAdapter = context.adapter as BotFrameworkAdapter;
+        if (tokenProvider !== undefined) {
+            return tokenProvider.getTokenStatus(context, userId, includeFilter);
         } else {
-            const tokenProvider: BotFrameworkAdapter = context.adapter as BotFrameworkAdapter;
-            if (tokenProvider !== undefined) {
-                return tokenProvider.getTokenStatus(context, userId, includeFilter);
-            } else {
-                throw new Error('Adapter does not support IUserTokenProvider');
-            }
+            throw new Error('Adapter does not support IUserTokenProvider');
         }
     }
 
