@@ -16,6 +16,7 @@ import { TokenEvents } from '../tokenEvents';
 import { AuthenticationResponses } from './authenticationResponses';
 import { OAuthProviderExtensions } from './oAuthProviderExtensions';
 import { IProviderTokenResponse } from './providerTokenResponse';
+import { OAuthProvider } from './oAuthProvider';
 
 enum DialogIds {
     providerPrompt = 'ProviderPrompt',
@@ -28,8 +29,8 @@ enum DialogIds {
  */
 export class MultiProviderAuthDialog extends ComponentDialog {
     private selectedAuthType: string = '';
-    private readonly authenticationConnections: IOAuthConnection[];
-    private readonly responseManager: ResponseManager;
+    private authenticationConnections: IOAuthConnection[];
+    private responseManager: ResponseManager;
 
     public constructor(
         authenticationConnections: IOAuthConnection[],
@@ -57,7 +58,10 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
         this.addDialog(new WaterfallDialog(DialogIds.firstStepPrompt, firstStep));
 
-        if (this.authenticationConnections !== undefined && this.authenticationConnections.length > 0) {
+        if (this.authenticationConnections !== undefined && 
+            this.authenticationConnections.length > 0 && 
+            this.authenticationConnections.some((c: IOAuthConnection): boolean => c.name !== undefined && c.name.trim().length > 0)) {
+                
             for (var i = 0; i < this.authenticationConnections.length; ++i) {
                 let connection = this.authenticationConnections[i];
 
@@ -88,7 +92,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     protected async tokenResponseValidator(promptContext: PromptValidatorContext<Activity>): Promise<boolean> {
         const activity: Activity | undefined = promptContext.recognized.value;
         if (activity !== undefined && 
-            ((activity.type === ActivityTypes.Event && activity.name === 'token/response') || 
+            ((activity.type === ActivityTypes.Event && activity.name === TokenEvents.tokenRequestEventName) || 
             (activity.type === ActivityTypes.Invoke && activity.name === 'signin/verifyState'))) {
             return Promise.resolve(true);
         }
@@ -222,7 +226,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
         const tokenProvider: BotFrameworkAdapter = context.adapter as BotFrameworkAdapter;
         if (tokenProvider !== undefined) {
-            return tokenProvider.getTokenStatus(context, userId, includeFilter);
+            return await tokenProvider.getTokenStatus(context, userId, includeFilter);
         } else {
             throw new Error('Adapter does not support IUserTokenProvider');
         }
