@@ -32,7 +32,7 @@ describe("language generation", function() {
             let response = localeTemplateManager.generateActivityForLocale("HaveNameMessage", data);
 
             // Retrieve possible responses directly from the correct template to validate logic
-            let possibleResponses = localeTemplateManager.lgPerLocale.get('').expandTemplate("HaveNameMessage", data);
+            let possibleResponses = localeTemplateManager.lgPerLocale.get('en-us').expandTemplate("HaveNameMessage", data);
 
             ok(possibleResponses.includes(response.text));
         });
@@ -47,7 +47,7 @@ describe("language generation", function() {
             let response = localeTemplateManager.generateActivityForLocale("HaveNameMessage", data);
 
             // Retrieve possible responses directly from the correct template to validate logic
-            var possibleResponses = localeTemplateManager.lgPerLocale.get('').expandTemplate("HaveNameMessage", data);
+            var possibleResponses = localeTemplateManager.lgPerLocale.get('es-es').expandTemplate("HaveNameMessage", data);
 
             ok(possibleResponses.includes(response.text));
         });

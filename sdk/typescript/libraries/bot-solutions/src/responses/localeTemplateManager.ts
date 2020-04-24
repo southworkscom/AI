@@ -21,7 +21,7 @@ export class LocaleTemplateManager extends MultiLanguageLG {
      * @param fallbackLocale The default fallback locale to use.
      */
     public constructor(localeTemplateFiles: Map<string, string>, fallbackLocale: string | undefined) {
-        super(fallbackLocale === undefined ? localeTemplateFiles : new Map<string, string>([['', localeTemplateFiles.get(fallbackLocale) || '' ]]));
+        super(fallbackLocale === undefined ? localeTemplateFiles : new Map<string, string>([...localeTemplateFiles, ['', localeTemplateFiles.get(fallbackLocale) || '' ]]));
         // only throw when fallbackLocale is empty string
         if (fallbackLocale !== undefined && fallbackLocale.trim().length === 0) {
             throw new Error(`'fallbackLocale' shouldn't be empty string. If you don't want to set it, please set it to undefined.`);
