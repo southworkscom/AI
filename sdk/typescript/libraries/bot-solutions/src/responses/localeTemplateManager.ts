@@ -13,14 +13,14 @@ import i18next from 'i18next';
  */
 export class LocaleTemplateManager extends MultiLanguageLG {
     
-    private readonly fallbackLocale: string;
+    private readonly fallbackLocale: string | undefined;
 
     /**
      * Initializes a new instance of the LocaleTemplateEngineManager.
      * @param localeTemplateFiles - A dictionary of locale and LG file.
      * @param fallbackLocale The default fallback locale to use.
      */
-    public constructor(localeTemplateFiles: Map<string, string>, fallbackLocale: string) {
+    public constructor(localeTemplateFiles: Map<string, string>, fallbackLocale: string | undefined) {
         super(fallbackLocale === undefined ? localeTemplateFiles : new Map<string, string>([['', localeTemplateFiles.get(fallbackLocale) || '' ]]));
         // only throw when fallbackLocale is empty string
         if (fallbackLocale !== undefined && fallbackLocale.trim().length === 0) {
