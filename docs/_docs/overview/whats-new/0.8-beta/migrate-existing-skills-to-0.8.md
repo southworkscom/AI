@@ -279,7 +279,7 @@ One migration step will be to create a new Skill project and migrate your custom
     The existing `MultiProviderAuthDialog` if used will automatically adapt to this change and no changes are required. As required you can switch to using the `OAuthPrompt` directly.
 
 
-## LocaleTemplateEngineManager
+## LocaleTemplateManager
 ### TypeScript
 
 The class `LocaleTemplateEngineManager` has been remamed to `LocaleTemplateManager` and its constructor has been slightly modified.
