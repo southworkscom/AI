@@ -4,7 +4,7 @@
  */
 
 const assert = require('assert');
-const { getTestAdapterDefault, templateEngine, testUserProfileState } = require('./helpers/botTestBase');
+const { getTestAdapterDefault, templateManager, testUserProfileState } = require('./helpers/botTestBase');
 const { MemoryStorage } = require('botbuilder-core')
 const testNock = require("./helpers/testBase");
 let testStorage = new MemoryStorage();
@@ -29,7 +29,7 @@ describe("Interruption", function() {
         });
 
         it("send help and check that there is a attachment of the response file", function(done) {
-            const allNamePromptVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
+            const allNamePromptVariations = templateManager.lgPerLocale.get("en-us").expandTemplate("NamePrompt");
 
             getTestAdapterDefault({ storage: testStorage }).then((testAdapter) => {
                 const flow = testAdapter
@@ -59,7 +59,7 @@ describe("Interruption", function() {
 
     describe ("cancel interruption", function(done) {
         it("send cancel and check the response is one of the file", function(done) {
-            const allResponseVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("CancelledMessage", testUserProfileState);
+            const allResponseVariations = templateManager.lgPerLocale.get("en-us").expandTemplate("CancelledMessage", testUserProfileState);
 
             getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
@@ -71,8 +71,8 @@ describe("Interruption", function() {
         });
 
         it("send cancel during a flow and check the response is one of the file", function(done) {
-            const allNamePromptVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
-            const allCancelledVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("CancelledMessage", testUserProfileState);
+            const allNamePromptVariations = templateManager.lgPerLocale.get("en-us").expandTemplate("NamePrompt");
+            const allCancelledVariations = templateManager.lgPerLocale.get("en-us").expandTemplate("CancelledMessage", testUserProfileState);
 
             getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
@@ -96,7 +96,7 @@ describe("Interruption", function() {
         });
 
         it("send repeat during a flow and check the response is one of the file", function(done) {
-            const allNamePromptVariations = templateEngine.templateEnginesPerLocale.get("en-us").expandTemplate("NamePrompt");
+            const allNamePromptVariations = templateManager.lgPerLocale.get("en-us").expandTemplate("NamePrompt");
 
             getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
