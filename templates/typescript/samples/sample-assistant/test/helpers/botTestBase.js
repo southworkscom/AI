@@ -38,7 +38,7 @@ supportedLocales.forEach((locale) => {
     localizedTemplates.set(locale, localTemplateFile);
 });
 
-const templateManager = new LocaleTemplateManager(localizedTemplates);
+const templateManager = new LocaleTemplateManager(localizedTemplates, 'en-us');
 const testUserProfileState = { name: 'Bot' };
 
 async function initConfiguration() {
