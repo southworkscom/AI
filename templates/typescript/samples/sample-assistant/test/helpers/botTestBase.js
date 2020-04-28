@@ -14,6 +14,7 @@ const { BotServices } = require('../../lib/services/botServices');
 const { DefaultActivityHandler } = require('../../lib/bots/defaultActivityHandler');
 const { OnboardingDialog } = require('../../lib/dialogs/onboardingDialog');
 const { MainDialog } = require('../../lib/dialogs/mainDialog');
+const { Templates } = require('botbuilder-lg');
 
 const TEST_MODE = require('./testBase').testMode;
 const resourcesDir = TEST_MODE === 'lockdown' ? join('..', 'mocks', 'resources') : join('..', '..', 'src');
@@ -29,6 +30,13 @@ cognitiveModelMap.forEach((value, key) => {
 const localizedTemplates = new Map();
 const templateFile = 'AllResponses';
 const supportedLocales = ['en-us', 'de-de', 'es-es', 'fr-fr', 'it-it', 'zh-cn'];
+
+function getAllResponsesTemplates(locale) {
+    const path = locale === 'en-us'
+        ? join(__dirname, '..', '..', 'lib', 'responses', `AllResponses.lg`)
+        : join(__dirname, '..', '..', 'lib', 'responses', `AllResponses.${ locale }.lg`);
+    return Templates.parseFile(path);
+}
 
 supportedLocales.forEach((locale) => {
     // LG template for en-us does not include locale in file extension.
@@ -127,6 +135,7 @@ async function getTestAdapterDefault(settings) {
 }
 
 module.exports = {
+    getAllResponsesTemplates: getAllResponsesTemplates,
     getTestAdapterDefault: getTestAdapterDefault,
     templateManager: templateManager,
     testUserProfileState: testUserProfileState
