@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -333,7 +334,7 @@ namespace VirtualAssistantSample.Dialogs
                 {
                     stepContext.SuppressCompletionMessage(true);
 
-                    var knowledgebaseId = "Faq";
+                    var knowledgebaseId = $"Faq{CultureInfo.CurrentUICulture.Name.ToLower()}";
                     RegisterQnADialog(knowledgebaseId, localizedServices);
                     return await stepContext.BeginDialogAsync(knowledgebaseId, cancellationToken: cancellationToken);
                 }
@@ -342,7 +343,7 @@ namespace VirtualAssistantSample.Dialogs
                 {
                     stepContext.SuppressCompletionMessage(true);
 
-                    var knowledgebaseId = "Chitchat";
+                    var knowledgebaseId = $"Chitchat{CultureInfo.CurrentUICulture.Name.ToLower()}";
                     RegisterQnADialog(knowledgebaseId, localizedServices);
                     return await stepContext.BeginDialogAsync(knowledgebaseId, cancellationToken: cancellationToken);
                 }

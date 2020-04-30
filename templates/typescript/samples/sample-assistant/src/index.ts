@@ -14,7 +14,8 @@ import {
     UserState,
     TelemetryLoggerMiddleware,
     SkillHttpClient,
-    SkillHandler } from 'botbuilder';
+    SkillHandler, 
+    BotFrameworkSkill} from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
 import { CosmosDbPartitionedStorage, CosmosDbPartitionedStorageOptions } from 'botbuilder-azure';
 import { Dialog, SkillDialog, SkillDialogOptions } from 'botbuilder-dialogs';
@@ -75,7 +76,6 @@ const botSettings: Partial<IBotSettings> = {
     microsoftAppId: appsettings.microsoftAppId,
     microsoftAppPassword: appsettings.microsoftAppPassword
 };
-
 function getTelemetryClient(settings: Partial<IBotSettings>): BotTelemetryClient {
     if (settings !== undefined && settings.appInsights !== undefined && settings.appInsights.instrumentationKey !== undefined) {
         const instrumentationKey: string = settings.appInsights.instrumentationKey;
@@ -127,7 +127,7 @@ supportedLocales.forEach((locale: string) => {
     localizedTemplates.set(locale, localTemplateFile);
 });
 
-const localeTemplateManager: LocaleTemplateManager = new LocaleTemplateManager(localizedTemplates, botSettings.defaultLocale || 'en-us');
+const localeTemplateManager: LocaleTemplateManager = new LocaleTemplateManager(localizedTemplates, undefined);
 
 // Register the Bot Framework Adapter with error handling enabled.
 // Note: some classes use the base BotAdapter so we add an extra registration that pulls the same instance.
@@ -159,7 +159,7 @@ try {
     const onboardingDialog: OnboardingDialog = new OnboardingDialog(userProfileStateAccesor, botServices, localeTemplateManager, telemetryClient);
     const switchSkillDialog: SwitchSkillDialog = new SwitchSkillDialog(conversationState);
     const previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]> = userState.createProperty<Partial<Activity>[]>('Activity');
-
+    const activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill> = conversationState.createProperty<BotFrameworkSkill>(MainDialog.activeSkillPropertyName);
     let skillDialogs: SkillDialog[] = [];
     // Register the SkillDialogs (remote skills).
     const skills: IEnhancedBotFrameworkSkill[] = appsettings.botFrameworkSkills;
@@ -192,7 +192,6 @@ try {
     }
 
     const mainDialog: MainDialog = new MainDialog(
-        botSettings as IBotSettings,
         botServices,
         localeTemplateManager,
         userProfileStateAccesor,
@@ -201,7 +200,7 @@ try {
         switchSkillDialog,
         skillDialogs,
         skillsConfiguration,
-        telemetryClient,
+        activeSkillProperty
     );
 
     bot = new DefaultActivityHandler(conversationState, userState, localeTemplateManager, mainDialog);
