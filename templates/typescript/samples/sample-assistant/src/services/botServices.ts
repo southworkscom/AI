@@ -8,12 +8,15 @@ import { LuisApplication, LuisPredictionOptions, LuisRecognizer, QnAMakerEndpoin
 import { ICognitiveModelConfiguration, ICognitiveModelSet } from 'bot-solutions';
 import { DispatchService, LuisService, QnaMakerService } from 'botframework-config';
 import { IBotSettings } from '../services/botSettings';
+import { inject } from 'inversify';
+import { TYPES } from '../types/constants';
 
 export class BotServices {
-
     public cognitiveModelSets: Map<string, ICognitiveModelSet> = new Map();
 
-    public constructor(settings: Partial<IBotSettings>, telemetryClient: BotTelemetryClient) {
+    public constructor(
+    @inject(TYPES.BotSettings) settings: Partial<IBotSettings>,
+        @inject(TYPES.BotTelemetryClient) telemetryClient: BotTelemetryClient) {
         const luisPredictionOptions: LuisPredictionOptions = {
             telemetryClient: telemetryClient,
             logPersonalInformation: true

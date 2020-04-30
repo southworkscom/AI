@@ -2,7 +2,7 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-import { BotTelemetryClient, StatePropertyAccessor, RecognizerResult } from 'botbuilder';
+import { BotTelemetryClient, StatePropertyAccessor, RecognizerResult, UserState } from 'botbuilder';
 import {
     ComponentDialog,
     DialogTurnResult,
@@ -14,6 +14,8 @@ import { IUserProfileState } from '../models/userProfileState';
 import { BotServices } from '../services/botServices';
 import { LocaleTemplateManager, DialogContextEx } from 'bot-solutions';
 import { LuisRecognizer } from 'botbuilder-ai';
+import { inject } from 'inversify';
+import { TYPES } from '../types/constants';
 
 enum DialogIds {
     NamePrompt = 'namePrompt',
@@ -31,14 +33,14 @@ export class OnboardingDialog extends ComponentDialog {
     private accessor: StatePropertyAccessor<IUserProfileState>;
 
     public constructor(
-        accessor: StatePropertyAccessor<IUserProfileState>,
-        services: BotServices,
-        templateManager: LocaleTemplateManager,
-        telemetryClient: BotTelemetryClient) {
+    @inject(TYPES.BotServices) services: BotServices,
+        @inject(TYPES.UserState) userState: UserState,
+        @inject(TYPES.LocaleTemplateEngineManager) templateManager: LocaleTemplateManager,
+        @inject(TYPES.BotTelemetryClient) telemetryClient: BotTelemetryClient) {
         super(OnboardingDialog.name);
         this.templateManager = templateManager;
 
-        this.accessor = accessor;
+        this.accessor = userState.createProperty<IUserProfileState>('IUserProfileState');
         this.services = services;
 
         const onboarding: WaterfallStep[] = [

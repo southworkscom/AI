@@ -8,7 +8,9 @@ import {
     RecognizerResult,
     StatePropertyAccessor, 
     TurnContext, 
-    BotFrameworkSkill} from 'botbuilder';
+    BotFrameworkSkill,    
+    UserState,
+    ConversationState} from 'botbuilder';
 import {
     LuisRecognizer,
     QnAMakerDialog, 
@@ -37,6 +39,9 @@ import { Activity, ActivityTypes, ResourceResponse, IMessageActivity } from 'bot
 import { IUserProfileState } from '../models/userProfileState';
 import { BotServices } from '../services/botServices';
 import { OnboardingDialog, StateProperties } from './onboardingDialog';
+import { inject } from 'inversify';
+import { TYPES } from '../types/constants';
+import { IBotSettings } from '../services/botSettings';
 
 /**
  * Dialog providing activity routing and message/event processing.
@@ -56,15 +61,16 @@ export class MainDialog extends ComponentDialog {
     private activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill>;
     
     public constructor(
-        services: BotServices,
-        templateManager: LocaleTemplateManager,
-        userProfileState: StatePropertyAccessor<IUserProfileState>,
-        previousResponseAccessor: StatePropertyAccessor<Partial<Activity>[]>,
-        onBoardingDialog: OnboardingDialog,
-        switchSkillDialog: SwitchSkillDialog,
-        skillDialogs: SkillDialog[],
-        skillsConfig: SkillsConfiguration,
-        activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill>
+    @inject(TYPES.BotSettings) settings: IBotSettings,
+        @inject(TYPES.BotServices) services: BotServices,
+        @inject(TYPES.LocaleTemplateEngineManager) templateManager: LocaleTemplateManager,
+        @inject(TYPES.UserState) userState: UserState,
+        @inject(TYPES.ConversationState) conversationState: ConversationState,
+        @inject(TYPES.OnboardingDialog) onBoardingDialog: OnboardingDialog,
+        @inject(TYPES.SwitchSkillDialog) switchSkillDialog: SwitchSkillDialog,
+        @inject(TYPES.SkillDialogs) skillDialogs: SkillDialog[],
+        @inject(TYPES.SkillsConfiguration) skillsConfig: SkillsConfiguration,
+        @inject(TYPES.BotTelemetryClient) telemetryClient: BotTelemetryClient
     ) {
         super(MainDialog.name);
 
@@ -72,11 +78,11 @@ export class MainDialog extends ComponentDialog {
         this.templateManager = templateManager,
         this.skillsConfig = skillsConfig,
         
-        this.userProfileState = userProfileState;
-        this.previousResponseAccesor = previousResponseAccessor;
+        this.userProfileState = userState.createProperty<IUserProfileState>('IUserProfileState');;
+        this.previousResponseAccesor = conversationState.createProperty<Partial<Activity>[]>('Activity');
 
         // Create state property to track the active skillCreate state property to track the active skill
-        this.activeSkillProperty = activeSkillProperty;
+        this.activeSkillProperty = conversationState.createProperty<BotFrameworkSkill>(MainDialog.activeSkillPropertyName);
 
         const steps: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             this.onBoardingStep.bind(this),
