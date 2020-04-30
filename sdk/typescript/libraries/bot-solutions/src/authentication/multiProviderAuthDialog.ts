@@ -136,6 +136,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
             const noLinkedAccountResponse: Partial<Activity> = this.responseManager.getResponse(
                 AuthenticationResponses.noLinkedAccount,
+                stepContext.context.activity.locale as string,
                 new Map([['authType', connectionName]])
             );
 
@@ -199,7 +200,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
                 });
 
                 return stepContext.prompt(DialogIds.providerPrompt, {
-                    prompt: this.responseManager.getResponse(AuthenticationResponses.configuredAuthProvidersPrompt),
+                    prompt: this.responseManager.getResponse(AuthenticationResponses.configuredAuthProvidersPrompt, stepContext.context.activity.locale as string),
                     choices: choices
                 });
             } else {
@@ -215,7 +216,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
                 });
 
                 return stepContext.prompt(DialogIds.providerPrompt, {
-                    prompt: this.responseManager.getResponse(AuthenticationResponses.authProvidersPrompt),
+                    prompt: this.responseManager.getResponse(AuthenticationResponses.authProvidersPrompt, stepContext.context.activity.locale as string),
                     choices: choices
                 });
             }

@@ -7,7 +7,8 @@ import {
     BotTelemetryClient,
     RecognizerResult,
     StatePropertyAccessor, 
-    TurnContext } from 'botbuilder';
+    TurnContext, 
+    BotFrameworkSkill} from 'botbuilder';
 import {
     LuisRecognizer,
     QnAMakerDialog, 
@@ -35,24 +36,26 @@ import { TokenStatus } from 'botframework-connector';
 import { Activity, ActivityTypes, ResourceResponse, IMessageActivity } from 'botframework-schema';
 import { IUserProfileState } from '../models/userProfileState';
 import { BotServices } from '../services/botServices';
-import { IBotSettings } from '../services/botSettings';
 import { OnboardingDialog, StateProperties } from './onboardingDialog';
 
 /**
  * Dialog providing activity routing and message/event processing.
  */
 export class MainDialog extends ComponentDialog {
+
+    // Conversation state property with the active skill (if any).
+    public static readonly activeSkillPropertyName: string = `${ typeof(MainDialog).name }.ActiveSkillProperty`;
+
     private readonly services: BotServices;
-    private readonly settings: IBotSettings;
     private onBoardingDialog: OnboardingDialog;
     private switchSkillDialog: SwitchSkillDialog;
     private skillsConfig: SkillsConfiguration;
     private templateManager: LocaleTemplateManager;
     private userProfileState: StatePropertyAccessor<IUserProfileState>;
     private previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]>;
+    private activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill>;
     
     public constructor(
-        settings: IBotSettings,
         services: BotServices,
         templateManager: LocaleTemplateManager,
         userProfileState: StatePropertyAccessor<IUserProfileState>,
@@ -61,18 +64,19 @@ export class MainDialog extends ComponentDialog {
         switchSkillDialog: SwitchSkillDialog,
         skillDialogs: SkillDialog[],
         skillsConfig: SkillsConfiguration,
-        telemetryClient: BotTelemetryClient
+        activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill>
     ) {
         super(MainDialog.name);
 
         this.services = services,
-        this.settings = settings,
         this.templateManager = templateManager,
         this.skillsConfig = skillsConfig,
-        this.telemetryClient = telemetryClient;
         
         this.userProfileState = userProfileState;
         this.previousResponseAccesor = previousResponseAccessor;
+
+        // Create state property to track the active skillCreate state property to track the active skill
+        this.activeSkillProperty = activeSkillProperty;
 
         const steps: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             this.onBoardingStep.bind(this),
@@ -91,23 +95,6 @@ export class MainDialog extends ComponentDialog {
         this.addDialog(this.onBoardingDialog);
         this.addDialog(this.switchSkillDialog);
 
-        // Register a QnAMakerDialog for each registered knowledgebase and ensure localised responses are provided.
-        const localizedServices: ICognitiveModelSet  = this.services.getCognitiveModels();
-        localizedServices.qnaConfiguration.forEach((value: QnAMakerEndpoint, key: string) => {
-            const qnaDialog: QnAMakerDialog = new QnAMakerDialog(
-                value.knowledgeBaseId,
-                value.endpointKey,
-                // The following line is a workaround until the method getQnAClient of QnAMakerDialog is fixed
-                // as per issue https://github.com/microsoft/botbuilder-js/issues/1885
-                new URL(value.host).hostname.split('.')[0],
-                this.templateManager.generateActivityForLocale('UnsupportedMessage') as Activity,
-                0.3,
-                this.templateManager.generateActivityForLocale('QnaMakerAdaptiveLearningCardTitle').text,
-                this.templateManager.generateActivityForLocale('QnaMakerNoMatchText').text);
-            qnaDialog.id = key;
-            this.addDialog(qnaDialog);
-        });
-
         // Register skill dialogs
         skillDialogs.forEach((skillDialog: SkillDialog): void => {
             this.addDialog(skillDialog);
@@ -117,7 +104,7 @@ export class MainDialog extends ComponentDialog {
     protected async onBeginDialog(innerDc: DialogContext, options: Object): Promise<DialogTurnResult> {
         if (innerDc.context.activity.type === ActivityTypes.Message) {
             // Get cognitive models for the current locale.
-            const localizedServices = this.services.getCognitiveModels();
+            const localizedServices = this.services.getCognitiveModels(innerDc.context.activity.locale as string);
 
             // Run LUIS recognition and store result in turn state.
             const dispatchResult: RecognizerResult = await localizedServices.dispatchService.recognize(innerDc.context);
@@ -151,7 +138,7 @@ export class MainDialog extends ComponentDialog {
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
         if (innerDc.context.activity.type === ActivityTypes.Message) {
             // Get cognitive models for the current locale.
-            const localizedServices = this.services.getCognitiveModels();
+            const localizedServices = this.services.getCognitiveModels(innerDc.context.activity.locale as string);
 
             // Run LUIS recognition and store result in turn state.
             const dispatchResult: RecognizerResult = await localizedServices.dispatchService.recognize(innerDc.context);
@@ -201,7 +188,7 @@ export class MainDialog extends ComponentDialog {
                 if (isSkill && this.isSkillIntent(intent) && intent !== dialog.id && dispatchResult.intents[intent].score > 0.9) {
                     const identifiedSkill: IEnhancedBotFrameworkSkill | undefined = this.skillsConfig.skills.get(intent);
                     if (identifiedSkill !== undefined) {
-                        const prompt: Partial<Activity> = this.templateManager.generateActivityForLocale('SkillSwitchPrompt', { skill: identifiedSkill.name });
+                        const prompt: Partial<Activity> = this.templateManager.generateActivityForLocale('SkillSwitchPrompt', innerDc.context.activity.locale as string, { skill: identifiedSkill.name });
                         await innerDc.beginDialog(this.switchSkillDialog.id, new SwitchSkillDialogOptions(prompt as Activity, identifiedSkill));
                         interrupted = true;
                     } else {
@@ -218,7 +205,7 @@ export class MainDialog extends ComponentDialog {
                 if (generalResult.intents[intent].score > 0.5) {
                     switch(intent) {
                         case 'Cancel': { 
-                            await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('CancelledMessage', userProfile));
+                            await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('CancelledMessage', innerDc.context.activity.locale as string, userProfile));
                             await innerDc.cancelAllDialogs();
                             await innerDc.beginDialog(this.initialDialogId);
                             interrupted = true;
@@ -226,7 +213,7 @@ export class MainDialog extends ComponentDialog {
                         } 
 
                         case 'Escalate': {
-                            await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('EscalateMessage', userProfile));
+                            await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('EscalateMessage', innerDc.context.activity.locale as string, userProfile));
                             await innerDc.repromptDialog();
                             interrupted = true;
                             break;
@@ -235,7 +222,7 @@ export class MainDialog extends ComponentDialog {
                         case 'Help': {
                             if (!isSkill) {
                                 // If current dialog is a skill, allow it to handle its own help intent.
-                                await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('HelpCard', userProfile));
+                                await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('HelpCard', innerDc.context.activity.locale as string, userProfile));
                                 await innerDc.repromptDialog();
                                 interrupted = true;
                             }
@@ -247,7 +234,7 @@ export class MainDialog extends ComponentDialog {
                             // Log user out of all accounts.
                             await this.logUserOut(innerDc);
                             
-                            await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('LogoutMessage', userProfile));
+                            await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('LogoutMessage', innerDc.context.activity.locale as string, userProfile));
                             await innerDc.cancelAllDialogs();
                             await innerDc.beginDialog(this.initialDialogId);
                             interrupted = true;
@@ -269,7 +256,7 @@ export class MainDialog extends ComponentDialog {
                         }
 
                         case 'StartOver': {
-                            await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('StartOverMessage', userProfile));
+                            await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('StartOverMessage', innerDc.context.activity.locale as string, userProfile));
 
                             // Cancel all dialogs on the stack.
                             await innerDc.cancelAllDialogs();
@@ -300,9 +287,14 @@ export class MainDialog extends ComponentDialog {
     }
     
     private async introStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+        
+        if (DialogContextEx.suppressCompletionMessageValidation(stepContext)){
+            return await stepContext.prompt(TextPrompt.name, {});
+        }
+        
         // Use the text provided in FinalStepAsync or the default if it is the first time.
         const promptOptions: PromptOptions = {
-            prompt: stepContext.options as Activity || this.templateManager.generateActivityForLocale('FirstPromptMessage')
+            prompt: stepContext.options as Activity || this.templateManager.generateActivityForLocale('FirstPromptMessage', stepContext.context.activity.locale as string, {})
         };
 
         return await stepContext.prompt(TextPrompt.name, promptOptions);
@@ -314,6 +306,10 @@ export class MainDialog extends ComponentDialog {
         const userProfile: IUserProfileState = await this.userProfileState.get(stepContext.context, { name: '' });
 
         if (activity.text !== undefined && activity.text.trim().length > 0) {
+
+            // Get current cognitive models for the current locale.
+            const localizedServices = this.services.getCognitiveModels(stepContext.context.activity.locale as string);
+
             // Get dispatch result from turn state.
             const dispatchResult: RecognizerResult = stepContext.context.turnState.get(StateProperties.DispatchResult);
             const dispatch: string = LuisRecognizer.topIntent(dispatchResult);
@@ -322,32 +318,52 @@ export class MainDialog extends ComponentDialog {
                 const skillDialogArgs: BeginSkillDialogOptions = {
                     activity: activity as Activity
                 };
+
+                // Save active skill in state.
+                const selectedSkill: IEnhancedBotFrameworkSkill | undefined = this.skillsConfig.skills.get(dispatchIntentSkill);
+                if (selectedSkill){
+                    await this.activeSkillProperty.set(stepContext.context, selectedSkill);
+                }
                 
                 // Start the skill dialog.
                 return await stepContext.beginDialog(dispatchIntentSkill, skillDialogArgs);      
-            } else if (dispatch === 'q_faq') {
+            }
+            
+            if (dispatch === 'q_faq') {
+
                 DialogContextEx.suppressCompletionMessage(stepContext, true);
-                
-                return await stepContext.beginDialog('faq');
-            } else if (dispatch === 'q_chitchat') {
+                const knowledgebaseId = `faq${ stepContext.context.activity.locale }`;
+                this.registerQnADialog(knowledgebaseId, localizedServices, stepContext.context.activity.locale as string);
+
+                return await stepContext.beginDialog(knowledgebaseId);
+            }
+            
+            if (this.shouldBeginChitChatDialog(stepContext, dispatch, dispatchResult.intents[dispatch].score)) {
+
                 DialogContextEx.suppressCompletionMessage(stepContext, true);
-                
-                return await stepContext.beginDialog('chitchat');
-            } else {
-                DialogContextEx.suppressCompletionMessage(stepContext, true);
-                await stepContext.context.sendActivity(this.templateManager.generateActivityForLocale('UnsupportedMessage', userProfile));
-                
-                return await stepContext.next();
-            } 
-        } else {
+                const knowledgebaseId = `chitchat${ stepContext.context.activity.locale }`;
+                this.registerQnADialog(knowledgebaseId, localizedServices, stepContext.context.activity.locale as string);
+
+                return await stepContext.beginDialog(knowledgebaseId);
+            }
+
+            DialogContextEx.suppressCompletionMessage(stepContext, true);
+            await stepContext.context.sendActivity(this.templateManager.generateActivityForLocale('UnsupportedMessage', stepContext.context.activity.locale as string, userProfile));
             
             return await stepContext.next();
-        }
+            
+        } 
+            
+        return await stepContext.next();
+        
     }
 
     private async finalStep(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+        // Clear active skill in state.
+        await this.activeSkillProperty.delete(stepContext.context);
+        
         // Restart the main dialog with a different message the second time around
-        return await stepContext.replaceDialog(this.initialDialogId, this.templateManager.generateActivityForLocale('CompletedMessage'));
+        return await stepContext.replaceDialog(this.initialDialogId, this.templateManager.generateActivityForLocale('CompletedMessage', stepContext.context.activity.locale as string, {}));
     }
 
     private async logUserOut(dc: DialogContext): Promise<void> {
@@ -385,9 +401,35 @@ export class MainDialog extends ComponentDialog {
         return await next();
     }
 
+    private registerQnADialog(knowledgebaseId: string, cognitiveModels: ICognitiveModelSet, locale: string): void {
+        const qnaEndpoint: QnAMakerEndpoint | undefined = cognitiveModels.qnaConfiguration.get(knowledgebaseId);
+        if (qnaEndpoint == undefined){
+            throw new Error(`Could not find QnA Maker knowledge base configuration with id: ${ knowledgebaseId }.`);
+        }
+
+        if (this.dialogs.find(knowledgebaseId) == undefined) {
+            const qnaDialog: QnAMakerDialog = new QnAMakerDialog(
+                qnaEndpoint.knowledgeBaseId,
+                qnaEndpoint.endpointKey,
+                // The following line is a workaround until the method getQnAClient of QnAMakerDialog is fixed
+                // as per issue https://github.com/microsoft/botbuilder-js/issues/1885
+                new URL(qnaEndpoint.host).hostname.split('.')[0],
+                this.templateManager.generateActivityForLocale('UnsupportedMessage', locale as string, {}) as Activity,
+                // Before, instead of 'undefined' a '0.3' value was used in the following line
+                undefined,
+                this.templateManager.generateActivityForLocale('QnaMakerAdaptiveLearningCardTitle', locale as string, {}).text,
+                this.templateManager.generateActivityForLocale('QnaMakerNoMatchText', locale as string, {}).text
+            );
+
+            qnaDialog.id = knowledgebaseId;
+
+            this.addDialog(qnaDialog);
+        }
+    }
+    
+
     private isSkillIntent(dispatchIntent: string): boolean {
         if (dispatchIntent.toLowerCase() === 'l_general' || 
-            dispatchIntent.toLowerCase() === 'q_chitchat' || 
             dispatchIntent.toLowerCase() === 'q_faq' || 
             dispatchIntent.toLowerCase() === 'none') {
 
@@ -396,4 +438,31 @@ export class MainDialog extends ComponentDialog {
 
         return true;
     } 
+
+    private shouldBeginChitChatDialog(stepContext: WaterfallStepContext, dispatchIntent: string, dispatchScore: number, threshold = 0.5): boolean{
+        
+        if(threshold < 0.0 || threshold > 1.0){
+            throw new Error('ArgumentOutOfRangeException: threshold');
+        }
+
+        if(dispatchIntent.toLocaleLowerCase() === 'none'){
+            return true;
+        }
+
+        if(dispatchIntent.toLocaleLowerCase() === 'l_general'){
+            // If dispatch classifies user query as general, we should check against the cached general Luis score instead.
+            const generalResult: RecognizerResult = stepContext.context.turnState.get(StateProperties.GeneralResult);
+            const intent: string = LuisRecognizer.topIntent(generalResult);
+            if (intent !== undefined){
+                return generalResult.intents[intent].score < threshold;
+            }
+        }
+
+        else if (dispatchScore < threshold){
+            return true;
+        }
+
+        return false;
+
+    }
 }

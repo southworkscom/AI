@@ -61,7 +61,7 @@ export class OnboardingDialog extends ComponentDialog {
         }
         else {
             return await sc.prompt(DialogIds.NamePrompt, {
-                prompt: this.templateManager.generateActivityForLocale('NamePrompt'),
+                prompt: this.templateManager.generateActivityForLocale('NamePrompt', sc.context.activity.locale as string, {}),
             });
         }
     }
@@ -72,7 +72,7 @@ export class OnboardingDialog extends ComponentDialog {
 
         let generalResult: RecognizerResult = sc.context.turnState.get(StateProperties.GeneralResult);
         if (generalResult) {
-            const localizedServices = this.services.getCognitiveModels();
+            const localizedServices = this.services.getCognitiveModels(sc.context.activity.locale as string);
             const generalLuisService: LuisRecognizer | undefined = await localizedServices.luisServices.get('General');
             if (generalLuisService) {
                 generalResult = await generalLuisService.recognize(sc.context);
@@ -96,7 +96,7 @@ export class OnboardingDialog extends ComponentDialog {
 
         await this.accessor.set(sc.context, userProfile);
 
-        await sc.context.sendActivity(this.templateManager.generateActivityForLocale('HaveNameMessage', userProfile));
+        await sc.context.sendActivity(this.templateManager.generateActivityForLocale('HaveNameMessage', sc.context.activity.locale as string, userProfile));
 
         DialogContextEx.suppressCompletionMessage(sc, true);
 

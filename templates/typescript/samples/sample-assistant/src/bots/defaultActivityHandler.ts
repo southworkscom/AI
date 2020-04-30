@@ -63,10 +63,10 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
 
         if (userProfile.name === undefined || userProfile.name.trim().length === 0) {
             // Send new user intro card.
-            await turnContext.sendActivity(this.templateManager.generateActivityForLocale('NewUserIntroCard', userProfile));
+            await turnContext.sendActivity(this.templateManager.generateActivityForLocale('NewUserIntroCard', turnContext.activity.locale as string, userProfile));
         } else {
             // Send returning user intro card.
-            await turnContext.sendActivity(this.templateManager.generateActivityForLocale('ReturningUserIntroCard', userProfile));
+            await turnContext.sendActivity(this.templateManager.generateActivityForLocale('ReturningUserIntroCard', turnContext.activity.locale as string, userProfile));
         }
         
         await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);

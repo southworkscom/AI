@@ -10,7 +10,6 @@ import { ActivityTypes } from 'botbuilder';
 import { Activity, CardFactory, MessageFactory } from 'botbuilder-core';
 import { ActionTypes, Attachment } from 'botframework-schema';
 import { readFileSync } from 'fs';
-import i18next from 'i18next';
 import { join } from 'path';
 import { Card } from './card';
 import { ICardData } from './cardData';
@@ -48,8 +47,7 @@ export class ResponseManager {
      * @param tokens string map of tokens to replace in the response.
      * @returns An Activity.
      */
-    public getResponse(templateId: string, tokens?: Map<string, string>): Partial<Activity> {
-        const locale: string = i18next.language;
+    public getResponse(templateId: string, locale: string, tokens?: Map<string, string>): Partial<Activity> {
         const template: ResponseTemplate = this.getResponseTemplate(templateId, locale);
 
         // create the response the data items
@@ -62,8 +60,8 @@ export class ResponseManager {
      * @param tokens string map of tokens to replace in the response.
      * @returns The response text.
      */
-    public getResponseText(templateId: string, tokens?: Map<string, string>): string {
-        const text: string | undefined = this.getResponse(templateId, tokens).text;
+    public getResponseText(templateId: string, locale: string, tokens?: Map<string, string>): string {
+        const text: string | undefined = this.getResponse(templateId, locale, tokens).text;
 
         return text !== undefined ? text : '';
     }
@@ -73,8 +71,7 @@ export class ResponseManager {
      * @param cards The card(s) to add to the response.
      * @returns An Activity.
      */
-    public getCardResponse(cards: Card | Card[]): Partial<Activity> {
-        const locale: string = i18next.language;
+    public getCardResponse(cards: Card | Card[], locale: string): Partial<Activity> {
         const resourcePath: string = join(__dirname, '..', 'resources', 'cards');
 
         if (cards instanceof Card) {
@@ -100,9 +97,8 @@ export class ResponseManager {
      * @param cards The card(s) object to add to the response.
      * @param tokens Optional string map of tokens to replace in the response.
      */
-    public getCardResponseWithTemplateId(templateId: string, cards: Card | Card[], tokens?: Map<string, string>): Partial<Activity> {
-        const response: Partial<Activity> = this.getResponse(templateId, tokens);
-        const locale: string = i18next.language;
+    public getCardResponseWithTemplateId(templateId: string, cards: Card | Card[], locale: string, tokens?: Map<string, string>): Partial<Activity> {
+        const response: Partial<Activity> = this.getResponse(templateId, locale, tokens);
         const resourcePath: string = join(__dirname, '..', 'resources', 'cards');
 
         if (cards instanceof Card) {
@@ -133,11 +129,11 @@ export class ResponseManager {
      */
     public getCardResponseWithContainer(
         templateId: string,
-        card: Card,
+        card: Card, 
+        locale: string,
         tokens?: Map<string, string>,
         containerName?: string,
         containerItems?: Card[]): Partial<Activity> {
-        const locale: string = i18next.language;
         const resourcePath: string = join(__dirname, '..', 'resources', 'cards');
         const json: string = this.loadCardJson(card.name, locale, resourcePath);
 
@@ -166,7 +162,7 @@ export class ResponseManager {
 
         const attachment: Attachment = CardFactory.adaptiveCard(mainCard);
         if (templateId) {
-            const response: Partial<Activity> = this.getResponse(templateId, tokens);
+            const response: Partial<Activity> = this.getResponse(templateId, locale, tokens);
 
             return MessageFactory.attachment(attachment, response.text, response.speak, response.inputHint);
         }
@@ -174,8 +170,8 @@ export class ResponseManager {
         return MessageFactory.attachment(attachment);
     }
 
-    public getResponseTemplate(templateId: string, locale?: string): ResponseTemplate {
-        let localeKey: string = locale !== undefined ? locale : i18next.language;
+    public getResponseTemplate(templateId: string, locale: string): ResponseTemplate {
+        let localeKey: string = locale;
 
         // warm up the JsonResponses loading to see if it actually exist.
         // If not, throw with the loading time exception that's actually helpful
