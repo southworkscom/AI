@@ -1,12 +1,12 @@
 import 'reflect-metadata';
-import { decorate, injectable, Container } from 'inversify';
+import { decorate, injectable, Container, inject } from 'inversify';
 import { TYPES } from './types/constants';
 import { IBotSettings } from './services/botSettings';
 import * as appsettings from './appsettings.json';
 import * as cognitiveModelsRaw from './cognitivemodels.json';
 import { ICognitiveModelConfiguration, LocaleTemplateManager, SkillConversationIdFactory, SwitchSkillDialog, IEnhancedBotFrameworkSkill, SkillsConfiguration } from 'bot-solutions';
 import { SimpleCredentialProvider, AuthenticationConfiguration, Claim } from 'botframework-connector';
-import { BotTelemetryClient, NullTelemetryClient, TelemetryLoggerMiddleware, UserState, ConversationState, BotFrameworkAdapterSettings, BotFrameworkAdapter, SkillConversationIdFactoryBase, SkillHttpClient, TeamsActivityHandler, ActivityHandler, ActivityHandlerBase } from 'botbuilder';
+import { BotTelemetryClient, NullTelemetryClient, TelemetryLoggerMiddleware, UserState, ConversationState, BotFrameworkAdapterSettings, BotFrameworkAdapter, SkillConversationIdFactoryBase, SkillHttpClient, TeamsActivityHandler, ActivityHandler, ActivityHandlerBase, SkillHandler, ChannelServiceHandler } from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { BotServices } from './services/botServices';
 import { CosmosDbPartitionedStorage } from 'botbuilder-azure';
@@ -41,14 +41,24 @@ container.bind<Partial<IBotSettings>>(TYPES.BotSettings).toConstantValue(botSett
 
 // Configure configuration provider
 decorate(injectable(), SimpleCredentialProvider);
-container.bind<SimpleCredentialProvider>(TYPES.SimpleCredentialProvider).toConstantValue(new SimpleCredentialProvider(appsettings.microsoftAppId, appsettings.microsoftAppPassword));
+container.bind<SimpleCredentialProvider>(TYPES.SimpleCredentialProvider).toConstantValue(
+    new SimpleCredentialProvider(appsettings.microsoftAppId, appsettings.microsoftAppPassword)
+);
 
 // Configure telemetry
-container.bind<BotTelemetryClient>(TYPES.BotTelemetryClient).toConstantValue(getTelemetryClient(container.get<IBotSettings>(TYPES.BotSettings)));
+container.bind<BotTelemetryClient>(TYPES.BotTelemetryClient).toConstantValue(
+    getTelemetryClient(container.get<IBotSettings>(TYPES.BotSettings))
+);
 decorate(injectable(), TelemetryLoggerMiddleware);
-container.bind<TelemetryLoggerMiddleware>(TYPES.TelemetryLoggerMiddleware).toConstantValue(new TelemetryLoggerMiddleware(container.get<BotTelemetryClient>(TYPES.BotTelemetryClient)));
+container.bind<TelemetryLoggerMiddleware>(TYPES.TelemetryLoggerMiddleware).toConstantValue(
+    new TelemetryLoggerMiddleware(container.get<BotTelemetryClient>(TYPES.BotTelemetryClient))
+);
 decorate(injectable(), TelemetryInitializerMiddleware);
-container.bind<TelemetryInitializerMiddleware>(TYPES.TelemetryInitializerMiddleware).toConstantValue(new TelemetryInitializerMiddleware(container.get<TelemetryLoggerMiddleware>(TYPES.TelemetryLoggerMiddleware)));
+container.bind<TelemetryInitializerMiddleware>(TYPES.TelemetryInitializerMiddleware).toConstantValue(
+    new TelemetryInitializerMiddleware(
+        container.get<TelemetryLoggerMiddleware>(TYPES.TelemetryLoggerMiddleware)
+    )
+);
 
 // Configure bot services
 decorate(injectable(), BotServices);
@@ -59,11 +69,23 @@ container.bind<BotServices>(TYPES.BotServices).to(BotServices).inSingletonScope(
 // decorate(injectable(), MemoryStorage);
 // container.bind<Partial<MemoryStorage>>(TYPES.MemoryStorage).toConstantValue(new MemoryStorage());
 decorate(injectable(), CosmosDbPartitionedStorage);
-container.bind<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage).toConstantValue(new CosmosDbPartitionedStorage(container.get<IBotSettings>(TYPES.BotSettings).cosmosDb));
+container.bind<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage).toConstantValue(
+    new CosmosDbPartitionedStorage(
+        container.get<IBotSettings>(TYPES.BotSettings).cosmosDb
+    )
+);
 decorate(injectable(), UserState);
-container.bind<UserState>(TYPES.UserState).toConstantValue(new UserState(container.get<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage)));
+container.bind<UserState>(TYPES.UserState).toConstantValue(
+    new UserState(
+        container.get<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage)
+    )
+);
 decorate(injectable(), ConversationState);
-container.bind<ConversationState>(TYPES.ConversationState).toConstantValue(new ConversationState(container.get<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage)));
+container.bind<ConversationState>(TYPES.ConversationState).toConstantValue(
+    new ConversationState(
+        container.get<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage)
+    )
+);
 
 // Configure localized responses
 const supportedLocales: string[] = ['en-us', 'de-de', 'es-es', 'fr-fr', 'it-it', 'zh-cn'];
@@ -78,7 +100,9 @@ supportedLocales.forEach((locale: string) => {
 });
 
 decorate(injectable(), LocaleTemplateManager);
-container.bind<LocaleTemplateManager>(TYPES.LocaleTemplateManager).toConstantValue(new LocaleTemplateManager(localizedTemplates, undefined));
+container.bind<LocaleTemplateManager>(TYPES.LocaleTemplateManager).toConstantValue(
+    new LocaleTemplateManager(localizedTemplates, undefined)
+);
 
 // Register the Bot Framework Adapter with error handling enabled.
 // Note: some classes use the base BotAdapter so we add an extra registration that pulls the same instance.
@@ -86,7 +110,9 @@ const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
     appId: botSettings.microsoftAppId,
     appPassword: botSettings.microsoftAppPassword
 };
-container.bind<Partial<BotFrameworkAdapterSettings>>(TYPES.BotFrameworkAdapterSettings).toConstantValue(adapterSettings);
+container.bind<Partial<BotFrameworkAdapterSettings>>(TYPES.BotFrameworkAdapterSettings).toConstantValue(
+    adapterSettings
+);
 
 decorate(injectable(), DefaultAdapter);
 decorate(injectable(), BotFrameworkAdapter);
@@ -94,10 +120,19 @@ container.bind<DefaultAdapter>(TYPES.DefaultAdapter).to(DefaultAdapter).inSingle
 
 // Register the skills conversation ID factory, the client and the request handler
 decorate(injectable(), SkillConversationIdFactory);
-container.bind<SkillConversationIdFactoryBase>(TYPES.SkillConversationIdFactory).toConstantValue(new SkillConversationIdFactory(container.get<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage)));
+container.bind<SkillConversationIdFactoryBase>(TYPES.SkillConversationIdFactory).toConstantValue(
+    new SkillConversationIdFactory(
+        container.get<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage)
+    )
+);
 
 decorate(injectable(), SkillHttpClient);
-container.bind<SkillHttpClient>(TYPES.SkillHttpClient).toConstantValue(new SkillHttpClient(container.get<SimpleCredentialProvider>(TYPES.SimpleCredentialProvider), container.get<SkillConversationIdFactoryBase>(TYPES.SkillConversationIdFactory)));
+container.bind<SkillHttpClient>(TYPES.SkillHttpClient).toConstantValue(
+    new SkillHttpClient(
+        container.get<SimpleCredentialProvider>(TYPES.SimpleCredentialProvider),
+        container.get<SkillConversationIdFactoryBase>(TYPES.SkillConversationIdFactory)
+    )
+);
 
 // Register dialogs
 decorate(injectable(), Dialog);
@@ -108,7 +143,11 @@ container.bind<MainDialog>(TYPES.MainDialog).to(MainDialog).inTransientScope();
 
 decorate(injectable(), SwitchSkillDialog);
 //VALIDATE.. BOT-SOLUTIONS SHOULD HAVE INVERSIFY ALSO??
-container.bind<SwitchSkillDialog>(TYPES.SwitchSkillDialog).toConstantValue(new SwitchSkillDialog(container.get<ConversationState>(TYPES.ConversationState)));
+container.bind<SwitchSkillDialog>(TYPES.SwitchSkillDialog).toConstantValue(
+    new SwitchSkillDialog(
+        container.get<ConversationState>(TYPES.ConversationState)
+    )
+);
 
 decorate(injectable(), OnboardingDialog);
 container.bind<OnboardingDialog>(TYPES.OnboardingDialog).to(OnboardingDialog).inTransientScope();
@@ -121,15 +160,16 @@ if (skills !== undefined && skills.length > 0) {
         throw new Error('\'skillHostEndpoint\' is not in the configuration');
     } else {
         decorate(injectable(), SkillsConfiguration);
-        container.bind<SkillsConfiguration>(TYPES.SkillsConfiguration).toConstantValue(new SkillsConfiguration(skills, hostEndpoint));
+        container.bind<SkillsConfiguration>(TYPES.SkillsConfiguration).toConstantValue(
+            new SkillsConfiguration(skills, hostEndpoint)
+        );
         const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(container.get<SkillsConfiguration>(TYPES.SkillsConfiguration));
 
         // Register AuthConfiguration to enable custom claim validation.
         decorate(injectable(), AuthenticationConfiguration);
-        container.bind<AuthenticationConfiguration>(TYPES.AuthenticationConfiguration).toConstantValue(new AuthenticationConfiguration(
-            undefined,
-            (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
-        ));
+        container.bind<AuthenticationConfiguration>(TYPES.AuthenticationConfiguration).toConstantValue(
+            new AuthenticationConfiguration(undefined,(claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims))
+        );
 
         const skillDialogs: SkillDialog[] = skills.map((skill: IEnhancedBotFrameworkSkill): SkillDialog => {
             const skillDialogOptions: SkillDialogOptions = {
@@ -154,6 +194,18 @@ decorate(injectable(), ActivityHandler);
 decorate(injectable(), TeamsActivityHandler);
 decorate(injectable(), DefaultActivityHandler);
 container.bind<DefaultActivityHandler<MainDialog>>(TYPES.DefaultActivityHandler).to(DefaultActivityHandler).inTransientScope();
+
+// Configure SkillHandler
+decorate(injectable(), ChannelServiceHandler);
+decorate(injectable(), SkillHandler);
+
+container.bind<SkillHandler>(TYPES.SkillHandler).toConstantValue(new SkillHandler(
+    container.get<DefaultAdapter>(TYPES.DefaultAdapter),
+    container.get<DefaultActivityHandler<MainDialog>>(TYPES.DefaultActivityHandler),
+    container.get<SkillConversationIdFactoryBase>(TYPES.SkillConversationIdFactory),
+    container.get<SimpleCredentialProvider>(TYPES.SimpleCredentialProvider),
+    container.get<AuthenticationConfiguration>(TYPES.AuthenticationConfiguration)
+));
 
 export default container;
 

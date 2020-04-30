@@ -23,5 +23,6 @@ export const TYPES = {
     SkillConversationIdFactory: Symbol('SkillConversationIdFactory'),
     SkillHttpClient: Symbol('SkillHttpClient'),
     EnhancedBotFrameworkSkill: Symbol('EnhancedBotFrameworkSkill'),
-    SkillDialogs: Symbol('SkillDialogs')
+    SkillDialogs: Symbol('SkillDialogs'),
+    SkillHandler: Symbol('SkillHandler')
 };

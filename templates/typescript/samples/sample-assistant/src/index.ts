@@ -3,8 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import {
-    TurnContext } from 'botbuilder';
+import { TurnContext, SkillHandler, ChannelServiceRoutes } from 'botbuilder';
 import { ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
 import * as restify from 'restify';
 import { DefaultAdapter } from './adapters/defaultAdapter';
@@ -14,6 +13,7 @@ import { MainDialog } from './dialogs/mainDialog';
 import { DefaultActivityHandler } from './bots/defaultActivityHandler';
 
 const adapter: DefaultAdapter = container.get<DefaultAdapter>(TYPES.DefaultAdapter);
+const handler: SkillHandler = container.get<SkillHandler>(TYPES.SkillHandler);
 
 // Create server
 const server: restify.Server = restify.createServer();
@@ -41,7 +41,6 @@ server.post('/api/messages', async (req: restify.Request, res: restify.Response)
     });
 });
 
-// // Register the request handler.
-// const handler: SkillHandler = new SkillHandler(adapter, bot, skillConversationIdFactory, credentialProvider, authenticationConfiguration);
-// const skillEndpoint = new ChannelServiceRoutes(handler);
-// skillEndpoint.register(server, '/api/skills');
+// Register the request handler.
+const skillEndpoint = new ChannelServiceRoutes(handler);
+skillEndpoint.register(server, '/api/skills');
