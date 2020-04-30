@@ -10,7 +10,7 @@ import {
     TurnContext, 
     BotFrameworkSkill,    
     UserState,
-    ConversationState} from 'botbuilder';
+    ConversationState } from 'botbuilder';
 import {
     LuisRecognizer,
     QnAMakerDialog, 
@@ -63,7 +63,7 @@ export class MainDialog extends ComponentDialog {
     public constructor(
     @inject(TYPES.BotSettings) settings: IBotSettings,
         @inject(TYPES.BotServices) services: BotServices,
-        @inject(TYPES.LocaleTemplateEngineManager) templateManager: LocaleTemplateManager,
+        @inject(TYPES.LocaleTemplateManager) templateManager: LocaleTemplateManager,
         @inject(TYPES.UserState) userState: UserState,
         @inject(TYPES.ConversationState) conversationState: ConversationState,
         @inject(TYPES.OnboardingDialog) onBoardingDialog: OnboardingDialog,
@@ -338,7 +338,7 @@ export class MainDialog extends ComponentDialog {
             if (dispatch === 'q_faq') {
 
                 DialogContextEx.suppressCompletionMessage(stepContext, true);
-                const knowledgebaseId = `faq${ stepContext.context.activity.locale }`;
+                const knowledgebaseId = `faq`;
                 this.registerQnADialog(knowledgebaseId, localizedServices, stepContext.context.activity.locale as string);
 
                 return await stepContext.beginDialog(knowledgebaseId);
@@ -347,7 +347,7 @@ export class MainDialog extends ComponentDialog {
             if (this.shouldBeginChitChatDialog(stepContext, dispatch, dispatchResult.intents[dispatch].score)) {
 
                 DialogContextEx.suppressCompletionMessage(stepContext, true);
-                const knowledgebaseId = `chitchat${ stepContext.context.activity.locale }`;
+                const knowledgebaseId = `chitchat`;
                 this.registerQnADialog(knowledgebaseId, localizedServices, stepContext.context.activity.locale as string);
 
                 return await stepContext.beginDialog(knowledgebaseId);

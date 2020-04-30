@@ -334,7 +334,7 @@ namespace VirtualAssistantSample.Dialogs
                 {
                     stepContext.SuppressCompletionMessage(true);
 
-                    var knowledgebaseId = $"Faq{CultureInfo.CurrentUICulture.Name.ToLower()}";
+                    var knowledgebaseId = $"Faq";
                     RegisterQnADialog(knowledgebaseId, localizedServices);
                     return await stepContext.BeginDialogAsync(knowledgebaseId, cancellationToken: cancellationToken);
                 }
@@ -343,7 +343,7 @@ namespace VirtualAssistantSample.Dialogs
                 {
                     stepContext.SuppressCompletionMessage(true);
 
-                    var knowledgebaseId = $"Chitchat{CultureInfo.CurrentUICulture.Name.ToLower()}";
+                    var knowledgebaseId = $"Chitchat";
                     RegisterQnADialog(knowledgebaseId, localizedServices);
                     return await stepContext.BeginDialogAsync(knowledgebaseId, cancellationToken: cancellationToken);
                 }

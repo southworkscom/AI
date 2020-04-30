@@ -10,7 +10,7 @@ export const TYPES = {
     CosmosDbPartitionedStorage: Symbol('CosmosDbPartitionedStorage'),
     UserState: Symbol('UserState'),
     ConversationState: Symbol('ConversationState'),
-    LocaleTemplateEngineManager: Symbol('LocaleTemplateEngineManager'),
+    LocaleTemplateManager: Symbol('LocaleTemplateManager'),
     SkillsConfiguration: Symbol('SkillsConfiguration'),
     AuthenticationConfiguration: Symbol('AuthenticationConfiguration'),
     MainDialog: Symbol('MainDialog'),

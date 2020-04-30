@@ -35,7 +35,7 @@ export class OnboardingDialog extends ComponentDialog {
     public constructor(
     @inject(TYPES.BotServices) services: BotServices,
         @inject(TYPES.UserState) userState: UserState,
-        @inject(TYPES.LocaleTemplateEngineManager) templateManager: LocaleTemplateManager,
+        @inject(TYPES.LocaleTemplateManager) templateManager: LocaleTemplateManager,
         @inject(TYPES.BotTelemetryClient) telemetryClient: BotTelemetryClient) {
         super(OnboardingDialog.name);
         this.templateManager = templateManager;

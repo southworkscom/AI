@@ -35,7 +35,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     public constructor(
     @inject(TYPES.ConversationState) conversationState: ConversationState,
         @inject(TYPES.UserState) userState: UserState,
-        @inject(TYPES.LocaleTemplateEngineManager) templateManager: LocaleTemplateManager,
+        @inject(TYPES.LocaleTemplateManager) templateManager: LocaleTemplateManager,
         @inject(TYPES.MainDialog) dialog: T
     ) {
         super();

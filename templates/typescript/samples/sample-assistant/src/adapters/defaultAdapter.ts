@@ -32,7 +32,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
 
     public constructor(
     @inject(TYPES.BotSettings) settings: Partial<IBotSettings>,
-        @inject(TYPES.LocaleTemplateEngineManager) templateManager: LocaleTemplateManager,
+        @inject(TYPES.LocaleTemplateManager) templateManager: LocaleTemplateManager,
         @inject(TYPES.ConversationState) conversationState: ConversationState,
         @inject(TYPES.BotFrameworkAdapterSettings) adapterSettings: Partial<BotFrameworkAdapterSettings>,
         @inject(TYPES.TelemetryInitializerMiddleware) telemetryMiddleware: TelemetryInitializerMiddleware,

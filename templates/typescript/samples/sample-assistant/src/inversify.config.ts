@@ -4,13 +4,13 @@ import { TYPES } from './types/constants';
 import { IBotSettings } from './services/botSettings';
 import * as appsettings from './appsettings.json';
 import * as cognitiveModelsRaw from './cognitivemodels.json';
-import { ICognitiveModelConfiguration, LocaleTemplateEngineManager, SkillConversationIdFactory, SwitchSkillDialog, IEnhancedBotFrameworkSkill, SkillsConfiguration } from 'bot-solutions';
+import { ICognitiveModelConfiguration, LocaleTemplateManager, SkillConversationIdFactory, SwitchSkillDialog, IEnhancedBotFrameworkSkill, SkillsConfiguration } from 'bot-solutions';
 import { SimpleCredentialProvider, AuthenticationConfiguration, Claim } from 'botframework-connector';
 import { BotTelemetryClient, NullTelemetryClient, TelemetryLoggerMiddleware, UserState, ConversationState, BotFrameworkAdapterSettings, BotFrameworkAdapter, SkillConversationIdFactoryBase, SkillHttpClient, TeamsActivityHandler, ActivityHandler, ActivityHandlerBase } from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { BotServices } from './services/botServices';
 import { CosmosDbPartitionedStorage } from 'botbuilder-azure';
-import * as path from 'path';
+import { join } from 'path';
 import { DefaultAdapter } from './adapters/defaultAdapter';
 import { MainDialog } from './dialogs/mainDialog';
 import { OnboardingDialog } from './dialogs/onboardingDialog';
@@ -66,27 +66,19 @@ decorate(injectable(), ConversationState);
 container.bind<ConversationState>(TYPES.ConversationState).toConstantValue(new ConversationState(container.get<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage)));
 
 // Configure localized responses
-const localizedTemplates: Map<string, string[]> = new Map<string, string[]>();
-const templateFiles: string[] = ['MainResponses', 'OnboardingResponses'];
 const supportedLocales: string[] = ['en-us', 'de-de', 'es-es', 'fr-fr', 'it-it', 'zh-cn'];
-
+const localizedTemplates: Map<string, string> = new Map<string, string>();
+const templateFile = 'AllResponses';
 supportedLocales.forEach((locale: string) => {
-    const localeTemplateFiles: string[] = [];
-    templateFiles.forEach(template => {
-        // LG template for en-us does not include locale in file extension.
-        if (locale === 'en-us') {
-            localeTemplateFiles.push(path.join(__dirname, 'responses', `${ template }.lg`));
-        }
-        else {
-            localeTemplateFiles.push(path.join(__dirname, 'responses', `${ template }.${ locale }.lg`));
-        }
-    });
-
-    localizedTemplates.set(locale, localeTemplateFiles);
+    // LG template for en-us does not include locale in file extension.
+    const localTemplateFile = locale === 'en-us'
+        ? join(__dirname, 'responses', `${ templateFile }.lg`)
+        : join(__dirname, 'responses', `${ templateFile }.${ locale }.lg`);
+    localizedTemplates.set(locale, localTemplateFile);
 });
 
-decorate(injectable(), LocaleTemplateEngineManager);
-container.bind<LocaleTemplateEngineManager>(TYPES.LocaleTemplateEngineManager).toConstantValue(new LocaleTemplateEngineManager(localizedTemplates, container.get<IBotSettings>(TYPES.BotSettings).defaultLocale || 'en-us'));
+decorate(injectable(), LocaleTemplateManager);
+container.bind<LocaleTemplateManager>(TYPES.LocaleTemplateManager).toConstantValue(new LocaleTemplateManager(localizedTemplates, undefined));
 
 // Register the Bot Framework Adapter with error handling enabled.
 // Note: some classes use the base BotAdapter so we add an extra registration that pulls the same instance.
