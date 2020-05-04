@@ -72,7 +72,7 @@ export class OnboardingDialog extends ComponentDialog {
 
         if (generalResult !== undefined) {
             const intent: string = LuisRecognizer.topIntent(generalResult);
-            if (intent === 'ExtrackName' && generalResult.intents[intent].score > 0.5) {
+            if (intent === 'ExtractName' && generalResult.intents[intent].score > 0.5) {
                 if (generalResult.entities['PersonName_Any'] !== undefined) {
                     name = generalResult.entities['PersonName_Any'];
                 } else if (generalResult.entities['personName'] !== undefined) {
