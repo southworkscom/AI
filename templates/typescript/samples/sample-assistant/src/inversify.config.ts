@@ -106,7 +106,8 @@ supportedLocales.forEach((locale: string) => {
 
 decorate(injectable(), LocaleTemplateManager);
 container.bind<LocaleTemplateManager>(TYPES.LocaleTemplateManager).toConstantValue(
-    new LocaleTemplateManager(localizedTemplates, undefined)
+    new LocaleTemplateManager(localizedTemplates,
+    container.get<IBotSettings>(TYPES.BotSettings).defaultLocale || 'en-us')
 );
 
 // Register the Bot Framework Adapter with error handling enabled.
