@@ -58,32 +58,6 @@ describe("Interruption", function() {
     });
 
     describe ("cancel interruption", function(done) {
-        // "the LG template 'UnsupportedMessage' has randomly generated response which makes this test unreliable"
-        xit("send cancel during a flow and check the response is one of the file", function(done) {
-            const allNamePromptVariations = getAllResponsesTemplates("en-us").expandTemplate("NamePrompt");
-            const allCancelledVariations = getAllResponsesTemplates("en-us").expandTemplate("CancelledMessage", testUserProfileState);
-
-            getTestAdapterDefault().then((testAdapter) => {
-                const flow = testAdapter
-                    .send({
-                        type: "conversationUpdate",
-                        membersAdded: [
-                            {
-                                id: "1",
-                                name: "user"
-                            }
-                        ],
-                    })
-                    .assertReply((activity, description) => {
-                        assert.strictEqual(1, activity.attachments.length)
-                    })
-                    .assertReplyOneOf(allNamePromptVariations)
-                    .send("Cancel")
-                    .assertReplyOneOf(allCancelledVariations)
-                return testNock.resolveWithMocks("interruption_confirm_cancel_response", done, flow);
-            });
-        });
-
         it("send repeat during a flow and check the response is one of the file", function(done) {
             const allNamePromptVariations = getAllResponsesTemplates("en-us").expandTemplate("NamePrompt");
 
