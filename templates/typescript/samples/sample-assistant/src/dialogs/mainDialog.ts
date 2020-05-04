@@ -318,9 +318,10 @@ export class MainDialog extends ComponentDialog {
 
             // Get dispatch result from turn state.
             const dispatchResult: RecognizerResult = stepContext.context.turnState.get(StateProperties.DispatchResult);
-            const dispatch: string = LuisRecognizer.topIntent(dispatchResult);
-            if (this.isSkillIntent(dispatch)) {
-                const dispatchIntentSkill: string = dispatch;
+            const dispatchIntent: string = LuisRecognizer.topIntent(dispatchResult);
+            const dispatchScore: number = dispatchResult.intents[dispatchIntent].score;
+            if (this.isSkillIntent(dispatchIntent)) {
+                const dispatchIntentSkill: string = dispatchIntent;
                 const skillDialogArgs: BeginSkillDialogOptions = {
                     activity: activity as Activity
                 };

@@ -35,17 +35,19 @@ export class LocaleTemplateManager extends MultiLanguageLG {
      * @param localeOverride Optional override for locale.
      * @returns Activity
      */
-    public generateActivityForLocale(templateName: string, locale: string, data: Object = {}): Partial<Activity> {
+    public generateActivityForLocale(templateName: string, data: Object = {} , localeOverride: string | undefined = undefined): Partial<Activity> {
 
         if (templateName === undefined) {
             throw new Error(`Argument 'templateName' cannot be undefined.`);
         }
 
         // only throw when localeOverride is empty string
-        if (locale !== undefined && locale === '') {
-            throw new Error(`Argument 'locale' cannot be undefined.`);
+        if (localeOverride !== undefined && localeOverride.trim().length === 0) {
+            throw new Error(`'localeOverride' shouldn't be empty string. If you don't want to set it, please set it to undefined.`);
         }
 
-        return ActivityFactory.fromObject(this.generate(`\${${templateName}()}`, data, locale));
+        const locale: string | undefined = localeOverride || this.fallbackLocale;
+        
+        return ActivityFactory.fromObject(this.generate(`\${${ templateName }()}`, data, locale));
     }
 }
