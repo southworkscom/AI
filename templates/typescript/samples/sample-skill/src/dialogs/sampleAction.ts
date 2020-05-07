@@ -13,6 +13,9 @@ import { BotServices } from '../services/botServices';
 import { LocaleTemplateManager } from 'bot-solutions';
 import { SkillState } from '../models/skillState';
 import { IBotSettings } from '../services/botSettings';
+import { inject } from 'inversify';
+import { TYPES } from '../types/constants';
+
 
 export class SampleActionInput {
     public name = '';
@@ -30,11 +33,11 @@ export class SampleAction extends SkillDialogBase {
     private readonly nameKey: string = 'name';
 
     public constructor(
-        settings: Partial<IBotSettings>,
-        services: BotServices,
-        stateAccessor: StatePropertyAccessor<SkillState>,
-        telemetryClient: BotTelemetryClient,
-        templateManager: LocaleTemplateManager
+        @inject(TYPES.BotSettings) settings: Partial<IBotSettings>,
+        @inject(TYPES.BotServices) services: BotServices,
+        @inject(TYPES.StatePropertyAccessor) stateAccessor: StatePropertyAccessor<SkillState>,
+        @inject(TYPES.BotTelemetryClient) telemetryClient: BotTelemetryClient,
+        @inject(TYPES.LocaleTemplateManager) templateManager: LocaleTemplateManager
     ) {
         super(SampleAction.name, settings, services, stateAccessor, telemetryClient, templateManager);
         
@@ -65,7 +68,7 @@ export class SampleAction extends SkillDialogBase {
 
     private async greetUser(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const data: Object = { name: stepContext.result as string };
-        const response: Partial<Activity> = this.templateManager.generateActivityForLocale('HaveNameMessage', stepContext.context.activity.locale as string, data);
+        const response: Partial<Activity> = this.templateManager.generateActivityForLocale('HaveNameMessage', data, stepContext.context.activity.locale as string);
         await stepContext.context.sendActivity(response);
 
         // Pass the response which we'll return to the user onto the next step

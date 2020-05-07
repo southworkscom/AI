@@ -17,6 +17,8 @@ import { BotServices } from '../services/botServices';
 import { IBotSettings } from '../services/botSettings';
 import { SkillDialogBase } from './skillDialogBase';
 import { LocaleTemplateManager } from 'bot-solutions';
+import { inject } from 'inversify';
+import { TYPES } from '../types/constants';
 
 enum DialogIds {
     namePrompt = 'namePrompt'
@@ -28,11 +30,11 @@ export class SampleDialog extends SkillDialogBase {
 
     // Constructor
     public constructor(
-        settings: Partial<IBotSettings>,
-        services: BotServices,
-        stateAccessor: StatePropertyAccessor<SkillState>,
-        telemetryClient: BotTelemetryClient,
-        templateManager: LocaleTemplateManager
+        @inject(TYPES.BotSettings) settings: Partial<IBotSettings>,
+        @inject(TYPES.BotServices) services: BotServices,
+        @inject(TYPES.StatePropertyAccessor) stateAccessor: StatePropertyAccessor<SkillState>,
+        @inject(TYPES.BotTelemetryClient) telemetryClient: BotTelemetryClient,
+        @inject(TYPES.LocaleTemplateManager) templateManager: LocaleTemplateManager
     ) {
         super(SampleDialog.name, settings, services, stateAccessor, telemetryClient, templateManager);
 
@@ -63,7 +65,7 @@ export class SampleDialog extends SkillDialogBase {
         tokens.set(this.nameKey, stepContext.result as string);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const response: any = this.templateManager.generateActivityForLocale('HaveNameMessage', stepContext.context.activity.locale as string, tokens);
+        const response: any = this.templateManager.generateActivityForLocale('HaveNameMessage', tokens, stepContext.context.activity.locale as string);
         await stepContext.context.sendActivity(response);
 
         return await stepContext.next();
