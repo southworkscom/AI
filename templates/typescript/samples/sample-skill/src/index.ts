@@ -7,13 +7,10 @@ import {
     BotFrameworkAdapter,
     TurnContext } from 'botbuilder';
 import { ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
-import { manifestGenerator } from 'bot-solutions';
-import { join } from 'path';
 import * as restify from 'restify';
 import { DefaultAdapter } from './adapters';
 import { DefaultActivityHandler } from './bots/defaultActivityHandler';
 import { MainDialog } from './dialogs/mainDialog';
-import { IBotSettings } from './services/botSettings';
 import container from './inversify.config';
 import { TYPES } from './types/constants';
 const defaultAdapter: DefaultAdapter = container.get<DefaultAdapter>(TYPES.DefaultAdapter);
@@ -25,6 +22,7 @@ const server: restify.Server = restify.createServer();
 // Enable the Application Insights middleware, which helps correlate all activity
 // based on the incoming request.
 server.use(restify.plugins.bodyParser());
+server.use(restify.plugins.queryParser());
 server.use(ApplicationInsightsWebserverMiddleware);
 
 server.listen(process.env.port || process.env.PORT || '3980', (): void => {
@@ -50,23 +48,4 @@ server.get('/api/messages', async (req: restify.Request, res: restify.Response):
         // route to bot activity handler.
         await bot.run(turnContext);
     });
-});
-
-// Listen for incoming assistant requests
-server.post('/api/skill/messages', async (req: restify.Request, res: restify.Response): Promise<void> => {
-    const bot: DefaultActivityHandler<MainDialog> = container.get<DefaultActivityHandler<MainDialog>>(TYPES.DefaultActivityHandler);
-    // Route received a request to adapter for processing
-    await adapter.processActivity(req, res, async (turnContext: TurnContext): Promise<void> => {
-        // route to bot activity handler.
-        await bot.run(turnContext);
-    });
-});
-
-const manifestPath: string = join(__dirname, 'manifestTemplate.json');
-const botSettings: IBotSettings = container.get<IBotSettings>(TYPES.BotSettings);
-server.use(restify.plugins.queryParser());
-server.get('/api/skill/manifest', manifestGenerator(manifestPath, botSettings));
-// PENDING
-server.get('/api/skill/ping', async (req: restify.Request, res: restify.Response): Promise<void> => {
-    // await authentication.authenticate(req, res);
 });

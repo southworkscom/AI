@@ -19,12 +19,9 @@ import {
     BotFrameworkAdapterSettings,
     BotFrameworkAdapter,
     ActivityHandler,
-    ActivityHandlerBase,
-    StatePropertyAccessor, 
-    BotState} from 'botbuilder';
+    ActivityHandlerBase } from 'botbuilder';
 import { ApplicationInsightsTelemetryClient, TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { CosmosDbPartitionedStorage } from 'botbuilder-azure';
-import { SkillState } from './models';
 import { join } from 'path';
 import { DefaultAdapter } from './adapters';
 import { BotServices } from './services/botServices';
@@ -34,6 +31,7 @@ import { SampleDialog } from './dialogs/sampleDialog';
 import { SampleAction } from './dialogs/sampleAction';
 import { MainDialog } from './dialogs/mainDialog';
 import { DefaultActivityHandler } from './bots/defaultActivityHandler';
+import { SimpleCredentialProvider } from 'botframework-connector';
 
 const container = new Container();
 
@@ -52,12 +50,14 @@ const botSettings: Partial<IBotSettings> = {
     microsoftAppId: appsettings.microsoftAppId,
     microsoftAppPassword: appsettings.microsoftAppPassword
 };
-if (botSettings.appInsights === undefined) {
-    throw new Error('There is no appInsights value in appsettings file');
-}
-
 // Load settings
 container.bind<Partial<IBotSettings>>(TYPES.BotSettings).toConstantValue(botSettings);
+
+// Configure configuration provider
+decorate(injectable(), SimpleCredentialProvider);
+container.bind<SimpleCredentialProvider>(TYPES.SimpleCredentialProvider).toConstantValue(
+    new SimpleCredentialProvider(appsettings.microsoftAppId, appsettings.microsoftAppPassword)
+);
 
 // Configure telemetry
 container.bind<BotTelemetryClient>(TYPES.BotTelemetryClient).toConstantValue(
@@ -82,11 +82,6 @@ container.bind<BotServices>(TYPES.BotServices).to(BotServices).inSingletonScope(
 // Uncomment the following line for local development without Cosmos Db
 // decorate(injectable(), MemoryStorage);
 // container.bind<Partial<MemoryStorage>>(TYPES.MemoryStorage).toConstantValue(new MemoryStorage());
-
-if (botSettings.cosmosDb === undefined) {
-    throw new Error();
-}
-
 decorate(injectable(), CosmosDbPartitionedStorage);
 container.bind<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage).toConstantValue(
     new CosmosDbPartitionedStorage(
@@ -123,20 +118,6 @@ container.bind<LocaleTemplateManager>(TYPES.LocaleTemplateManager).toConstantVal
     new LocaleTemplateManager(localizedTemplates, container.get<IBotSettings>(TYPES.BotSettings).defaultLocale || 'en-us')
 );
 
-// Register the Bot Framework Adapter with error handling enabled.
-// Note: some classes use the base BotAdapter so we add an extra registration that pulls the same instance.
-const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
-    appId: botSettings.microsoftAppId,
-    appPassword: botSettings.microsoftAppPassword
-};
-container.bind<Partial<BotFrameworkAdapterSettings>>(TYPES.BotFrameworkAdapterSettings).toConstantValue(
-    adapterSettings
-);
-
-decorate(injectable(), DefaultAdapter);
-decorate(injectable(), BotFrameworkAdapter);
-container.bind<DefaultAdapter>(TYPES.DefaultAdapter).to(DefaultAdapter).inSingletonScope();
-
 // Register dialogs
 decorate(injectable(), Dialog);
 decorate(injectable(), DialogContainer);
@@ -148,6 +129,19 @@ decorate(injectable(), MainDialog);
 container.bind<SampleDialog>(TYPES.SampleDialog).to(SampleDialog).inTransientScope();
 container.bind<SampleAction>(TYPES.SampleAction).to(SampleAction).inTransientScope();
 container.bind<MainDialog>(TYPES.MainDialog).to(MainDialog).inTransientScope();
+
+// Configure adapters
+const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
+    appId: botSettings.microsoftAppId,
+    appPassword: botSettings.microsoftAppPassword
+};
+container.bind<Partial<BotFrameworkAdapterSettings>>(TYPES.BotFrameworkAdapterSettings).toConstantValue(
+    adapterSettings
+);
+
+decorate(injectable(), DefaultAdapter);
+decorate(injectable(), BotFrameworkAdapter);
+container.bind<DefaultAdapter>(TYPES.DefaultAdapter).to(DefaultAdapter).inSingletonScope();
 
 // Configure bot
 decorate(injectable(), ActivityHandlerBase);
