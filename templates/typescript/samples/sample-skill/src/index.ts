@@ -3,9 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import {
-    BotFrameworkAdapter,
-    TurnContext } from 'botbuilder';
+import { TurnContext } from 'botbuilder';
 import { ApplicationInsightsWebserverMiddleware } from 'botbuilder-applicationinsights';
 import * as restify from 'restify';
 import { DefaultAdapter } from './adapters';
@@ -14,7 +12,6 @@ import { MainDialog } from './dialogs/mainDialog';
 import container from './inversify.config';
 import { TYPES } from './types/constants';
 const defaultAdapter: DefaultAdapter = container.get<DefaultAdapter>(TYPES.DefaultAdapter);
-const adapter: BotFrameworkAdapter = container.get<BotFrameworkAdapter>(TYPES.BotFrameworkAdapter);
 
 // Create server
 const server: restify.Server = restify.createServer();
