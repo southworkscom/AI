@@ -8,14 +8,12 @@ import {
     WaterfallDialog,
     TextPrompt } from 'botbuilder-dialogs';
 import { SkillDialogBase } from './skillDialogBase';
-import { BotTelemetryClient, StatePropertyAccessor, Activity } from 'botbuilder';
+import { BotTelemetryClient, StatePropertyAccessor, Activity, ConversationState } from 'botbuilder';
 import { BotServices } from '../services/botServices';
 import { LocaleTemplateManager } from 'bot-solutions';
-import { SkillState } from '../models/skillState';
 import { IBotSettings } from '../services/botSettings';
 import { inject } from 'inversify';
 import { TYPES } from '../types/constants';
-
 
 export class SampleActionInput {
     public name = '';
@@ -33,13 +31,13 @@ export class SampleAction extends SkillDialogBase {
     private readonly nameKey: string = 'name';
 
     public constructor(
-        @inject(TYPES.BotSettings) settings: Partial<IBotSettings>,
+    @inject(TYPES.BotSettings) settings: Partial<IBotSettings>,
         @inject(TYPES.BotServices) services: BotServices,
-        @inject(TYPES.StatePropertyAccessor) stateAccessor: StatePropertyAccessor<SkillState>,
+        @inject(TYPES.ConversationState) conversationState: ConversationState,
         @inject(TYPES.BotTelemetryClient) telemetryClient: BotTelemetryClient,
         @inject(TYPES.LocaleTemplateManager) templateManager: LocaleTemplateManager
     ) {
-        super(SampleAction.name, settings, services, stateAccessor, telemetryClient, templateManager);
+        super(SampleAction.name, settings, services, conversationState, telemetryClient, templateManager);
         
         const sample: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             this.promptForName.bind(this),

@@ -105,9 +105,6 @@ container.bind<ConversationState>(TYPES.ConversationState).toConstantValue(
         container.get<CosmosDbPartitionedStorage>(TYPES.CosmosDbPartitionedStorage)
     )
 );
-container.bind<StatePropertyAccessor<SkillState>>(TYPES.StatePropertyAccessor).toConstantValue(
-    container.get<UserState>(TYPES.UserState).createProperty(SkillState.name)
-);
 
 // Configure localized responses
 const supportedLocales: string[] = ['en-us', 'de-de', 'es-es', 'fr-fr', 'it-it', 'zh-cn'];
