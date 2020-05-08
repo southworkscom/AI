@@ -23,12 +23,12 @@ import { AzureBlobTranscriptStore, BlobStorageSettings } from 'botbuilder-azure'
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { Activity } from 'botframework-schema';
 import { inject } from 'inversify';
-import { TYPES } from '../types/constants.js';
+import { TYPES } from '../types/constants';
 
 export class DefaultAdapter extends BotFrameworkAdapter {
 
     public constructor(
-        @inject(TYPES.BotSettings) settings: Partial<IBotSettings>,
+    @inject(TYPES.BotSettings) settings: Partial<IBotSettings>,
         @inject(TYPES.BotFrameworkAdapterSettings) adapterSettings: Partial<BotFrameworkAdapterSettings>,
         @inject(TYPES.LocaleTemplateManager) templateManager: LocaleTemplateManager,
         @inject(TYPES.TelemetryInitializerMiddleware) telemetryMiddleware: TelemetryInitializerMiddleware,
