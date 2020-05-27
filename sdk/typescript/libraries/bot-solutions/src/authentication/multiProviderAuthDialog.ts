@@ -9,14 +9,13 @@ import { Choice, ChoicePrompt, ComponentDialog, DialogTurnResult, DialogTurnStat
     OAuthPromptSettings } from 'botbuilder-dialogs';
 import { TokenStatus } from 'botframework-connector/lib/tokenApi/models';
 import { ActionTypes, Activity, ActivityTypes, TokenResponse } from 'botframework-schema';
-import i18next from 'i18next';
 import { IOAuthConnection } from '../authentication';
 import { ResponseManager } from '../responses';
 import { TokenEvents } from '../tokenEvents';
 import { AuthenticationResponses } from './authenticationResponses';
 import { OAuthProviderExtensions } from './oAuthProviderExtensions';
 import { IProviderTokenResponse } from './providerTokenResponse';
-import { OAuthProvider } from './oAuthProvider';
+import { AppCredentials } from 'botframework-connector';
 
 enum DialogIds {
     providerPrompt = 'ProviderPrompt',
@@ -31,16 +30,18 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     private selectedAuthType: string = '';
     private authenticationConnections: IOAuthConnection[];
     private responseManager: ResponseManager;
+    private oauthCredentials: AppCredentials | undefined;
 
     public constructor(
         authenticationConnections: IOAuthConnection[],
-        promptSettings: OAuthPromptSettings[]
+        promptSettings?: OAuthPromptSettings[],
+        oauthCredentials?: AppCredentials
     ) {
         super(MultiProviderAuthDialog.name);
 
         if (authenticationConnections === undefined) { throw new Error('The value of authenticationConnections cannot be undefined'); }
         this.authenticationConnections = authenticationConnections;
-
+        this.oauthCredentials = oauthCredentials;
         this.responseManager = new ResponseManager(
             ['en', 'de', 'es', 'fr', 'it', 'zh'],
             [AuthenticationResponses]
@@ -67,11 +68,14 @@ export class MultiProviderAuthDialog extends ComponentDialog {
 
                 // We ignore placeholder connections in config that don't have a Name
                 if (connection.name !== undefined && connection.name.trim().length > 0) {
-                    const settings: OAuthPromptSettings = promptSettings[i] || {
+                    const loginButtonActivity: Partial<Activity> = this.responseManager.getResponse(AuthenticationResponses.loginButton);
+                    const loginPromptActivity: Partial<Activity> = this.responseManager.getResponse(AuthenticationResponses.loginPrompt, new Map());
+                    const settings: OAuthPromptSettings = promptSettings !== undefined ? promptSettings[i] : {
                         connectionName: connection.name,
-                        title: i18next.t('common:login'),
-                        text: i18next.t('common:loginDescription', connection.name)
+                        title: loginButtonActivity.text || '',
+                        text: loginPromptActivity.text  || ''
                     };
+                    settings.oAuthAppCredentials = this.oauthCredentials;
 
                     this.addDialog(new OAuthPrompt(
                         connection.name,
@@ -89,8 +93,8 @@ export class MultiProviderAuthDialog extends ComponentDialog {
     }
 
     // Validators
-    protected async tokenResponseValidator(promptContext: PromptValidatorContext<Activity>): Promise<boolean> {
-        const activity: Activity | undefined = promptContext.recognized.value;
+    protected async tokenResponseValidator(pc: PromptValidatorContext<Activity>): Promise<boolean> {
+        const activity: Activity | undefined = pc.recognized.value;
         if (activity !== undefined && 
             ((activity.type === ActivityTypes.Event && activity.name === TokenEvents.tokenResponseEventName) || 
             (activity.type === ActivityTypes.Invoke && activity.name === 'signin/verifyState'))) {
@@ -112,6 +116,7 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             return await stepContext.next(result);
         }
 
+        //PENDING: adapter could not be parsed to IExtendedUserTokenProvider as C# does
         const adapter: BotFrameworkAdapter = stepContext.context.adapter as BotFrameworkAdapter;
         if (adapter !== undefined) {
             const tokenStatusCollection: TokenStatus[] = await adapter.getTokenStatus(
@@ -224,11 +229,12 @@ export class MultiProviderAuthDialog extends ComponentDialog {
             throw new Error('"userId" undefined');
         }
 
+        //PENDING: adapter could not be parsed to IExtendedUserTokenProvider as C# does
         const tokenProvider: BotFrameworkAdapter = context.adapter as BotFrameworkAdapter;
         if (tokenProvider !== undefined) {
             return await tokenProvider.getTokenStatus(context, userId, includeFilter);
         } else {
-            throw new Error('Adapter does not support IUserTokenProvider');
+            throw new Error('Adapter does not support IExtendedUserTokenProvider');
         }
     }
 
