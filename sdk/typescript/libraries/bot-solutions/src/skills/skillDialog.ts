@@ -16,7 +16,7 @@ import {
     Dialog} from 'botbuilder-dialogs';
 import { IEnhancedBotFrameworkSkill } from './models/enhancedBotFrameworkSkill';
 import { SkillDialogArgs } from './skillDialogArgs';
-import { IBotSettingsBase } from '../botSettings';
+import { BotSettingsBase } from '../botSettingsBase';
 import { Activity, ConversationReference } from 'botframework-schema';
 import { ActivityEx } from '../extensions';
 
@@ -36,7 +36,7 @@ export class SkillDialog extends Dialog {
         conversationState: ConversationState,
         skillClient: SkillHttpClient,
         skill: IEnhancedBotFrameworkSkill,
-        configuration: IBotSettingsBase,
+        configuration: BotSettingsBase,
         skillHostEndpoint: string
     ) {
         super(skill.id);
