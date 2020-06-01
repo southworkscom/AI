@@ -21,7 +21,7 @@
     "dependencies": {
         "@microsoft/microsoft-graph-client": "^1.3.0",
         "@microsoft/microsoft-graph-types": "^1.5.0",
-        "botbuilder": "^4.9.0",
+        "botbuilder": "^4.9.1",
         "botbuilder-ai": "^4.9.0",
         "botbuilder-applicationinsights": "^4.9.0",
         "botbuilder-azure": "^4.9.0",
