@@ -109,7 +109,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
             await turnContext.sendTraceActivity('onTurnError Trace', error.message, 'https://www.botframework.com/schemas/error', 'TurnError');
         }
         catch (err) {
-            console.error(`Exception caught in sendErrorMessage : "${ err }`);
+            console.error(`Exception caught in sendErrorMessage : ${ err }`);
         }
     }
 
