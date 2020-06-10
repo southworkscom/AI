@@ -27,9 +27,9 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     private readonly rootDialogId: string;
     private readonly dialogs: DialogSet;
     private readonly dialog: Dialog;
-    private dialogStateAccessor: StatePropertyAccessor;
-    private userProfileState: StatePropertyAccessor;
-    private templateManager: LocaleTemplateManager;
+    private readonly dialogStateAccessor: StatePropertyAccessor;
+    private readonly userProfileState: StatePropertyAccessor;
+    private readonly templateManager: LocaleTemplateManager;
 
     public constructor(
         conversationState: ConversationState,
@@ -39,6 +39,7 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     ) {
         super();
         this.dialog = dialog;
+        this.dialog.telemetryClient = dialog.telemetryClient;
         this.rootDialogId = this.dialog.id;
         this.conversationState = conversationState;
         this.userState = userState;
