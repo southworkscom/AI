@@ -224,71 +224,93 @@ Write-Host "Done." -ForegroundColor Green
 # Deploy Azure services (deploys LUIS, QnA Maker, Content Moderator, CosmosDB)
 if ($parametersFile) {
 	Write-Host "> Validating Azure deployment ..." -NoNewline
-	$validation = az deployment group validate `
+
+	# To explain the syntax here:
+    # - 'az deployment group validate' is being executed with supplied parameters prefixed with '--'
+    # - 2>&1 merges the stderr output stream into stdout, ensuring all output from the executed command comes through stdout
+    # - stdout is piped into Tee-Object to write the contents of stdout to our log file, and capture the piped contents in a variable, $validation
+    # - The stream is finally piped on into Out-Null so that it does not get rendered to the host
+    #
+	az deployment group validate `
 		--resource-group $resourcegroup `
 		--template-file "$(Join-Path $PSScriptRoot '..' 'Resources' 'template.json')" `
 		--parameters "@$($parametersFile)" `
 		--parameters name=$name microsoftAppId=$appId microsoftAppPassword="`"$($appPassword)`"" luisAuthoringLocation=$armLuisAuthoringRegion useLuisAuthoring=$createLuisAuthoring `
-        --output json
-
-	if ($validation) {    
-		$validation >> $logFile
-		$validation = $validation | ConvertFrom-Json
+		--output json
+		2>&1 `
+        | Tee-Object -FilePath $logFile -OutVariable validation `
+		| Out-Null
 	
-		if (-not $validation.error) {
-            Write-Host "Done." -ForegroundColor Green
-			Write-Host "> Deploying Azure services (this could take a while)..." -ForegroundColor Yellow -NoNewline
-			$deployment = az deployment group create `
-				--name $timestamp `
-				--resource-group $resourceGroup `
-				--template-file "$(Join-Path $PSScriptRoot '..' 'Resources' 'template.json')" `
-				--parameters "@$($parametersFile)" `
-				--parameters name=$name microsoftAppId=$appId microsoftAppPassword="`"$($appPassword)`"" luisAuthoringLocation=$armLuisAuthoringRegion useLuisAuthoring=$createLuisAuthoring `
-                --output json 2>> $logFile | Out-Null
+	# OutVariable always outputs the contents of the piped output stream as System.Collections.ArrayList, so now let's parse into
+    # a format that is a little easier to evaluate.
+    #
+    $validation = ParseValidationResult -ValidationResult $validation
 
-            Write-Host "Done." -ForegroundColor Green
-		}
-		else {
-			Write-Host "! Template is not valid with provided parameters. Review the log for more information." -ForegroundColor Red
-			Write-Host "! Error: $($validation.error.message)"  -ForegroundColor Red
-			Write-Host "! Log: $($logFile)" -ForegroundColor Red
-			Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
-			Break
-		}
-	}
+    if ($validation.error) {
+        Write-Host "! Template is not valid with provided parameters. Review the log for more information." -ForegroundColor Red
+        Write-Host "! Error: $($validation.error.message)"  -ForegroundColor Red
+        Write-Host "! Log: $($logFile)" -ForegroundColor Red
+        Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
+        break
+    }
+
+    Write-Host "Done." -ForegroundColor Green
+
+    Write-Host "> Deploying Azure services (this could take a while)..." -ForegroundColor Yellow -NoNewline
+
+    az deployment group create `
+        --name $timestamp `
+        --resource-group $resourceGroup `
+        --template-file "$(Join-Path $PSScriptRoot '..' 'Resources' 'template.json')" `
+        --parameters "@$($parametersFile)" `
+        --parameters name=$name microsoftAppId=$appId microsoftAppPassword="`"$($appPassword)`"" luisAuthoringLocation=$armLuisAuthoringRegion useLuisAuthoring=$createLuisAuthoring `
+        --output json 2>> $logFile | Out-Null
+
+    Write-Host "Done." -ForegroundColor Green
 }
 else {
 	Write-Host "> Validating Azure deployment ..." -NoNewline
-	$validation = az deployment group validate `
+
+	# To explain the syntax here:
+    # - 'az deployment group validate' is being executed with supplied parameters prefixed with '--'
+    # - 2>&1 merges the stderr output stream into stdout, ensuring all output from the executed command comes through stdout
+    # - stdout is piped into Tee-Object to write the contents of stdout to our log file, and capture the piped contents in a variable, $validation
+    # - The stream is finally piped on into Out-Null so that it does not get rendered to the host
+    #
+	az deployment group validate `
 		--resource-group $resourcegroup `
 		--template-file "$(Join-Path $PSScriptRoot '..' 'Resources' 'template.json')" `
 		--parameters name=$name microsoftAppId=$appId microsoftAppPassword="`"$($appPassword)`"" luisAuthoringLocation=$armLuisAuthoringRegion useLuisAuthoring=$createLuisAuthoring `
-        --output json
+		--output json
+		2>&1 `
+        | Tee-Object -FilePath $logFile -OutVariable validation `
+		| Out-Null
+		
+	# OutVariable always outputs the contents of the piped output stream as System.Collections.ArrayList, so now let's parse into
+    # a format that is a little easier to evaluate.
+    #
+    $validation = ParseValidationResult -ValidationResult $validation
 
-	if ($validation) {
-		$validation >> $logFile
-		$validation = $validation | ConvertFrom-Json
+    if ($validation.error) {
+        Write-Host "! Template is not valid with provided parameters. Review the log for more information." -ForegroundColor Red
+        Write-Host "! Error: $($validation.error.message)"  -ForegroundColor Red
+        Write-Host "! Log: $($logFile)" -ForegroundColor Red
+        Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
+        break
+    }
 
-		if (-not $validation.error) {
-            Write-Host "Done." -ForegroundColor Green
-			Write-Host "> Deploying Azure services (this could take a while)..." -ForegroundColor Yellow -NoNewline
-			$deployment = az deployment group create `
-				--name $timestamp `
-				--resource-group $resourceGroup `
-				--template-file "$(Join-Path $PSScriptRoot '..' 'Resources' 'template.json')" `
-				--parameters name=$name microsoftAppId=$appId microsoftAppPassword="`"$($appPassword)`"" luisAuthoringLocation=$armLuisAuthoringRegion useLuisAuthoring=$createLuisAuthoring `
-                --output json 2>> $logFile | Out-Null
+    Write-Host "Done." -ForegroundColor Green
 
-            Write-Host "Done." -ForegroundColor Green
-		}
-		else {
-			Write-Host "! Template is not valid with provided parameters. Review the log for more information." -ForegroundColor Red
-			Write-Host "! Error: $($validation.error.message)"  -ForegroundColor Red
-			Write-Host "! Log: $($logFile)" -ForegroundColor Red
-			Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
-			Break
-		}
-	}
+    Write-Host "> Deploying Azure services (this could take a while)..." -ForegroundColor Yellow -NoNewline
+
+    az deployment group create `
+        --name $timestamp `
+        --resource-group $resourceGroup `
+        --template-file "$(Join-Path $PSScriptRoot '..' 'Resources' 'template.json')" `
+        --parameters name=$name microsoftAppId=$appId microsoftAppPassword="`"$($appPassword)`"" luisAuthoringLocation=$armLuisAuthoringRegion useLuisAuthoring=$createLuisAuthoring `
+        --output json 2>> $logFile | Out-Null
+
+    Write-Host "Done." -ForegroundColor Green
 }
 
 # Get deployment outputs
