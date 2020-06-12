@@ -53,12 +53,12 @@ function DeployLUIS ($name, $luFile, $endpoint, $subscriptionKey, $culture, $log
     }
 }
 
-function UpdateLUIS ($luFile, $appId, $version, $language, $region, $authoringKey, $subscriptionKey, $gov, $log)
+function UpdateLUIS ($luFile, $appId, $endpoint, $subscriptionKey, $culture, $version, $log)
 {
-    $id = $luFile.BaseName
+   $id = $luFile.BaseName
     $outFile = Join-Path $luFile.DirectoryName "$($id).json"
     $appName = "$($name)$($culture)_$($id)"
-    
+
     Write-Host "> Getting hosted $($culture) $($id) LUIS model settings..." -NoNewline
     $luisApp = bf luis:application:show `
         --appId $appId `

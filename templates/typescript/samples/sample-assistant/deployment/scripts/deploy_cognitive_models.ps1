@@ -3,17 +3,17 @@
 Param(
 	[string] $name,
 	[string] $luisAuthoringRegion,
-	[string] $luisAuthoringKey,
+    [string] $luisAuthoringKey,
 	[string] $luisAccountName,
-	[string] $luisAccountRegion,
+    [string] $luisAccountRegion,
 	[string] $luisSubscriptionKey,
-	[string] $luisEndpoint,
+    [string] $luisEndpoint,
 	[string] $resourceGroup,
-	[string] $qnaSubscriptionKey,
-	[string] $qnaEndpoint = "https://westus.api.cognitive.microsoft.com/qnamaker/v4.0",
+    [string] $qnaSubscriptionKey,
+    [string] $qnaEndpoint = "https://westus.api.cognitive.microsoft.com/qnamaker/v4.0",
     [switch] $useGov,
 	[switch] $useDispatch = $true,
-	[string] $languages = "en-us",
+    [string] $languages = "en-us",
 	[string] $outFolder = $(Join-Path $(Get-Location) "src"),
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_cognitive_models_log.txt"),
 	[string[]] $excludedKbFromDispatch = @("chitchat")
@@ -202,13 +202,13 @@ foreach ($language in $languageArr)
 			if ($luisApp) {
 				# Setting subscription key
 				$addKeyResult = bf luis:application:assignazureaccount `
-							--accountName $luisAccountName `
-							--resourceGroup $resourceGroup `
-							--armToken $azAccessToken.accessToken `
-							--azureSubscriptionId $azAccount.id `
-							--appId $luisApp.id `
-							--endpoint $luisEndpoint `
-							--subscriptionKey $luisAuthoringKey 2>> $logFile
+						--accountName $luisAccountName `
+						--resourceGroup $resourceGroup `
+						--armToken $azAccessToken.accessToken `
+						--azureSubscriptionId $azAccount.id `
+						--appId $luisApp.id `
+						--endpoint $luisEndpoint `
+						--subscriptionKey $luisAuthoringKey 2>> $logFile
 
 				if ($addKeyResult -ne "Account successfully assigned.") {
 					$luisKeySet = $false
@@ -217,9 +217,9 @@ foreach ($language in $languageArr)
 					Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
 					Write-Host "+ Please assign your subscription key manually in the LUIS portal." -ForegroundColor Magenta
 				}
-                else {
-                    Write-Host "Done." -ForegroundColor Green
-                }
+				else {
+					Write-Host "Done." -ForegroundColor Green
+				}
 
 				if ($useDispatch) {
 					# Add luis app to dispatch
@@ -232,7 +232,7 @@ foreach ($language in $languageArr)
 						--intentName "l_$($lu.BaseName)" `
 						--dataFolder $dataFolder `
 						--dispatch "$(Join-Path $dataFolder "$($dispatchName).dispatch")") 2>> $logFile | Out-Null
-                     Write-Host "Done." -ForegroundColor Green
+						Write-Host "Done." -ForegroundColor Green
 				}
 
 				# Add to config 
@@ -283,18 +283,18 @@ foreach ($language in $languageArr)
 							--intentName "q_$($lu.BaseName)" `
 							--dataFolder $dataFolder `
 							--dispatch "$(Join-Path $dataFolder "$($dispatchName).dispatch")") 2>> $logFile | Out-Null
-                        Write-Host "Done." -ForegroundColor Green
+						Write-Host "Done." -ForegroundColor Green
 					}
 
-                    # get qna details
-                    $qnaEndpointKeys = bf qnamaker:endpointkeys:list `
-                        --endpoint $qnaEndpoint `
-                        --subscriptionKey $qnaSubscriptionKey  | ConvertFrom-Json
+					# get qna details
+					$qnaEndpointKeys = bf qnamaker:endpointkeys:list `
+						--endpoint $qnaEndpoint `
+						--subscriptionKey $qnaSubscriptionKey  | ConvertFrom-Json
 
-                    $qnaKbSettings = bf qnamaker:kb:get `
-                        --kbId $qnaKb.kbId `
-                        --endpoint $qnaEndpoint `
-                        --subscriptionKey $qnaSubscriptionKey | ConvertFrom-Json
+					$qnaKbSettings = bf qnamaker:kb:get `
+						--kbId $qnaKb.kbId `
+						--endpoint $qnaEndpoint `
+						--subscriptionKey $qnaSubscriptionKey | ConvertFrom-Json
 
 					# Add to config
 					$config.knowledgeBases += @{
@@ -340,13 +340,13 @@ foreach ($language in $languageArr)
 			# Setting subscription key
 			Write-Host "> Setting LUIS subscription key ..." -NoNewline
 			$addKeyResult = bf luis:application:assignazureaccount `
-						--accountName $luisAccountName `
-						--resourceGroup $resourceGroup `
-						--armToken $azAccessToken.accessToken `
-						--azureSubscriptionId $azAccount.id `
-						--appId $dispatchApp.appId `
-						--endpoint $luisEndpoint `
-						--subscriptionKey $luisAuthoringKey 2>> $logFile
+					--accountName $luisAccountName `
+					--resourceGroup $resourceGroup `
+					--armToken $azAccessToken.accessToken `
+					--azureSubscriptionId $azAccount.id `
+					--appId $dispatchApp.appId `
+					--endpoint $luisEndpoint `
+					--subscriptionKey $luisAuthoringKey 2>> $logFile
 
 			if ($addKeyResult -ne "Account successfully assigned.") {
 				$luisKeySet = $false
