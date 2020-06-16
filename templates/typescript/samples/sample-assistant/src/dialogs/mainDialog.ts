@@ -48,14 +48,15 @@ export class MainDialog extends ComponentDialog {
     // Conversation state property with the active skill (if any).
     public static readonly activeSkillPropertyName: string = `${ typeof(MainDialog).name }.ActiveSkillProperty`;
     private readonly faqDialogId: string = 'faq';
+
+    private readonly templateManager: LocaleTemplateManager;
     private readonly services: BotServices;
-    private onBoardingDialog: OnboardingDialog;
-    private switchSkillDialog: SwitchSkillDialog;
-    private skillsConfig: SkillsConfiguration;
-    private templateManager: LocaleTemplateManager;
-    private userProfileState: StatePropertyAccessor<IUserProfileState>;
-    private previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]>;
-    private activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill>;
+    private readonly onBoardingDialog: OnboardingDialog;
+    private readonly switchSkillDialog: SwitchSkillDialog;
+    private readonly skillsConfig: SkillsConfiguration;
+    private readonly userProfileState: StatePropertyAccessor<IUserProfileState>;
+    private readonly previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]>;
+    private readonly activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill>;
     
     public constructor(
         services: BotServices,
@@ -113,7 +114,8 @@ export class MainDialog extends ComponentDialog {
     }
 
     protected async onBeginDialog(innerDc: DialogContext, options: Object): Promise<DialogTurnResult> {
-        if (innerDc.context.activity.type === ActivityTypes.Message) {
+        const activity:Activity = innerDc.context.activity;
+        if (activity.type === ActivityTypes.Message && activity.text !== "") {
             // Get cognitive models for the current locale.
             const localizedServices = this.services.getCognitiveModels();
 
@@ -147,10 +149,12 @@ export class MainDialog extends ComponentDialog {
     }
 
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
+        const activity:Activity = innerDc.context.activity;
+
         // Get cognitive models for the current locale.
         const localizedServices = this.services.getCognitiveModels();
 
-        if (innerDc.context.activity.type === ActivityTypes.Message) {
+        if (activity.type === ActivityTypes.Message && activity.text !== "") {
             // Run LUIS recognition and store result in turn state.
             const dispatchResult: RecognizerResult = await localizedServices.dispatchService.recognize(innerDc.context);
             innerDc.context.turnState.set(StateProperties.DispatchResult, dispatchResult);
@@ -187,6 +191,13 @@ export class MainDialog extends ComponentDialog {
         return await super.onContinueDialog(innerDc);
     }
 
+    /// <summary>
+    /// Creates a QnAMaker dialog for the correct locale if it's not already present on the dialog stack.
+    /// Virtual method enables test mock scenarios.
+    /// </summary>
+    /// <param name="knowledgebaseId">Knowledgebase Identifier.</param>
+    /// <param name="cognitiveModels">CognitiveModelSet configuration information.</param>
+    /// <returns>QnAMakerDialog instance.</returns>
     protected tryCreateQnADialog(knowledgebaseId: string, cognitiveModels: ICognitiveModelSet): QnAMakerDialog | undefined {
         const qnaEndpoint: QnAMakerEndpoint | undefined = cognitiveModels.qnaConfiguration.get(knowledgebaseId);
         if (qnaEndpoint === undefined) {
