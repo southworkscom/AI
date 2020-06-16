@@ -81,7 +81,7 @@ export class OnboardingDialog extends ComponentDialog {
             }
         }
 
-        // Captialize name
+        // Capitalize name
         userProfile.name = name.toLowerCase()
             .split(' ')
             .map((word: string): string => word.charAt(0)
