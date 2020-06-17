@@ -13,7 +13,7 @@ import {
 import { IUserProfileState } from '../models/userProfileState';
 import { StateProperties } from '../models/stateProperties';
 import { BotServices } from '../services/botServices';
-import { LocaleTemplateManager, DialogContextEx } from 'bot-solutions';
+import { LocaleTemplateManager } from 'bot-solutions';
 import { LuisRecognizer } from 'botbuilder-ai';
 
 enum DialogIds {
