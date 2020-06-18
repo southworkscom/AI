@@ -6,7 +6,6 @@
 import { BotTelemetryClient } from 'botbuilder';
 import {
     LuisApplication,
-    LuisPredictionOptions,
     LuisRecognizer,
     LuisRecognizerOptionsV3,
     QnAMakerEndpoint
@@ -14,7 +13,7 @@ import {
 import { ICognitiveModelConfiguration, ICognitiveModelSet } from 'bot-solutions';
 import { DispatchService, LuisService, QnaMakerService } from 'botframework-config';
 import i18next from 'i18next';
-import { IBotSettings } from '../services/botSettings';
+import { IBotSettings } from './botSettings';
 
 export class BotServices {
 
@@ -28,7 +27,7 @@ export class BotServices {
             const luisOptions: LuisRecognizerOptionsV3 = {
                 telemetryClient: telemetryClient,
                 logPersonalInformation: true,
-                apiVersion: "v3"
+                apiVersion: 'v3'
             };
 
             const cognitiveModelSet: Partial<ICognitiveModelSet> = {};
