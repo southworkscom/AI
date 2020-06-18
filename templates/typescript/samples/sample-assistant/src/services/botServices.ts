@@ -18,8 +18,6 @@ import { IBotSettings } from '../services/botSettings';
 
 export class BotServices {
 
-    public cognitiveModelSets: Map<string, ICognitiveModelSet> = new Map();
-
     public constructor(settings: IBotSettings, client: BotTelemetryClient) {
         settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
             const language: string = key;
@@ -33,12 +31,7 @@ export class BotServices {
                 apiVersion: "v3"
             };
 
-            let cognitiveModelSet: ICognitiveModelSet = {
-                dispatchService: new LuisRecognizer("", luisOptions),
-                luisServices: new Map(),
-                qnaServices: new Map(),
-                qnaConfiguration: new Map()
-            };
+            const cognitiveModelSet: Partial<ICognitiveModelSet> = {};
 
             if (config.dispatchModel !== undefined) {
                 const dispatchModel: DispatchService = new DispatchService(config.dispatchModel);
@@ -58,6 +51,8 @@ export class BotServices {
                         endpointKey: luisService.subscriptionKey,
                         endpoint: luisService.getEndpoint()
                     };
+
+                    cognitiveModelSet.luisServices = new Map();
                     cognitiveModelSet.luisServices.set(luisService.id, new LuisRecognizer(luisApp, luisOptions));
                 });
             }
@@ -70,12 +65,16 @@ export class BotServices {
                         endpointKey: kb.endpointKey,
                         host: kb.hostname
                     };
+                    cognitiveModelSet.qnaConfiguration = new Map();
                     cognitiveModelSet.qnaConfiguration.set(kb.id, qnaEndpoint);
                 });
             }
-            this.cognitiveModelSets.set(language, cognitiveModelSet);
+
+            this.cognitiveModelSets.set(language, cognitiveModelSet as ICognitiveModelSet);
         });
     }
+
+    public cognitiveModelSets: Map<string, ICognitiveModelSet> = new Map();
 
     public getCognitiveModels(): ICognitiveModelSet {
         // Get cognitive models for locale
