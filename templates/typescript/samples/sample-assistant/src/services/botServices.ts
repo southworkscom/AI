@@ -4,7 +4,13 @@
  */
 
 import { BotTelemetryClient } from 'botbuilder';
-import { LuisApplication, LuisPredictionOptions, LuisRecognizer, QnAMakerEndpoint } from 'botbuilder-ai';
+import {
+    LuisApplication,
+    LuisPredictionOptions,
+    LuisRecognizer,
+    LuisRecognizerOptionsV3,
+    QnAMakerEndpoint
+} from 'botbuilder-ai';
 import { ICognitiveModelConfiguration, ICognitiveModelSet } from 'bot-solutions';
 import { DispatchService, LuisService, QnaMakerService } from 'botframework-config';
 import i18next from 'i18next';
@@ -14,56 +20,61 @@ export class BotServices {
 
     public cognitiveModelSets: Map<string, ICognitiveModelSet> = new Map();
 
-    public constructor(settings: Partial<IBotSettings>, telemetryClient: BotTelemetryClient) {
-        const luisPredictionOptions: LuisPredictionOptions = {
-            telemetryClient: telemetryClient,
-            logPersonalInformation: true
-        };
+    public constructor(settings: IBotSettings, client: BotTelemetryClient) {
+        settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
+            const language: string = key;
+            const config: ICognitiveModelConfiguration = value;
 
-        if (settings.cognitiveModels !== undefined) {
-            settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
+            const telemetryClient: BotTelemetryClient = client;
 
-                const language: string = key;
-                const config: ICognitiveModelConfiguration = value;
+            const luisOptions: LuisRecognizerOptionsV3 = {
+                telemetryClient: telemetryClient,
+                logPersonalInformation: true,
+                apiVersion: "v3"
+            };
 
+            let cognitiveModelSet: ICognitiveModelSet = {
+                dispatchService: new LuisRecognizer("", luisOptions),
+                luisServices: new Map(),
+                qnaServices: new Map(),
+                qnaConfiguration: new Map()
+            };
+
+            if (config.dispatchModel !== undefined) {
                 const dispatchModel: DispatchService = new DispatchService(config.dispatchModel);
                 const dispatchApp: LuisApplication = {
                     applicationId: dispatchModel.appId,
                     endpointKey: dispatchModel.subscriptionKey,
                     endpoint: dispatchModel.getEndpoint()
                 };
+                cognitiveModelSet.dispatchService = new LuisRecognizer(dispatchApp, luisOptions);
+            }
 
-                const cognitiveModelSet: ICognitiveModelSet = {
-                    dispatchService: new LuisRecognizer(dispatchApp, luisPredictionOptions),
-                    luisServices: new Map(),
-                    qnaServices: new Map(),
-                    qnaConfiguration: new Map()
-                };
+            if (config.languageModels !== undefined) {
+                config.languageModels.forEach((model: LuisService): void => {
+                    const luisService: LuisService = new LuisService(model);
+                    const luisApp: LuisApplication  = {
+                        applicationId: luisService.appId,
+                        endpointKey: luisService.subscriptionKey,
+                        endpoint: luisService.getEndpoint()
+                    };
+                    cognitiveModelSet.luisServices.set(luisService.id, new LuisRecognizer(luisApp, luisOptions));
+                });
+            }
 
-                if (config.languageModels !== undefined) {
-                    config.languageModels.forEach((model: LuisService): void => {
-                        const luisService: LuisService = new LuisService(model);
-                        const luisApp: LuisApplication  = {
-                            applicationId: luisService.appId,
-                            endpointKey: luisService.subscriptionKey,
-                            endpoint: luisService.getEndpoint()
-                        };
-                        cognitiveModelSet.luisServices.set(luisService.id, new LuisRecognizer(luisApp, luisPredictionOptions));
-                    });
-                }
-                if (config.knowledgeBases !== undefined) {
-                    config.knowledgeBases.forEach((kb: QnaMakerService): void => {
-                        const qnaEndpoint: QnAMakerEndpoint = {
-                            knowledgeBaseId: kb.kbId,
-                            endpointKey: kb.endpointKey,
-                            host: kb.hostname
-                        };
-                        cognitiveModelSet.qnaConfiguration.set(kb.id, qnaEndpoint);
-                    });
-                }
-                this.cognitiveModelSets.set(language, cognitiveModelSet);
-            });
-        }
+            if (config.knowledgeBases !== undefined) {
+
+                config.knowledgeBases.forEach((kb: QnaMakerService): void => {
+                    const qnaEndpoint: QnAMakerEndpoint = {
+                        knowledgeBaseId: kb.kbId,
+                        endpointKey: kb.endpointKey,
+                        host: kb.hostname
+                    };
+                    cognitiveModelSet.qnaConfiguration.set(kb.id, qnaEndpoint);
+                });
+            }
+            this.cognitiveModelSets.set(language, cognitiveModelSet);
+        });
     }
 
     public getCognitiveModels(): ICognitiveModelSet {
