@@ -3,7 +3,9 @@
  * Licensed under the MIT License.
  */
 import { IBotSettingsBase } from 'bot-solutions';
+import {TokenExchangeConfig} from '../tokenExchange/tokenExchangeConfig';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IBotSettings extends IBotSettingsBase {
+    tokenExchangeConfig: TokenExchangeConfig;
 }
