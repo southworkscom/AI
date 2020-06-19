@@ -18,8 +18,9 @@ import {
 import { AuthenticationConfiguration, AppCredentials, ICredentialProvider, ClaimsIdentity, JwtTokenValidation, GovernmentConstants, AuthenticationConstants } from 'botframework-connector';
 import {ITokenExchangeConfig} from "./tokenExchangeConfig";
 import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBotFrameworkSkill} from "bot-solutions/lib";
-import {SkillHandler, SkillHttpClient, BotFrameworkSkill} from "botbuilder";
+import {SkillHandler, SkillHttpClient, BotFrameworkSkill, BotFrameworkAdapter} from "botbuilder";
 import {TokenExchangeInvokeRequest, OAuthCard, Attachment, TokenExchangeRequest} from "botframework-schema"
+import { uuid } from '../utils/index';
 
 export class TokenExchangeSkillHandler extends SkillHandler {
     private readonly adapter: BotAdapter;
@@ -45,7 +46,7 @@ export class TokenExchangeSkillHandler extends SkillHandler {
     ) {
         super(adapter,bot, conversationIdFactory, credentialProvider, authConfig, channelService);
         this.adapter = adapter;
-        this.tokenExchangeProvider = adapter as ExtendedUserTokenProvider;
+        this.tokenExchangeProvider = adapter as BotFrameworkAdapter;
         this.tokenExchangeConfig = tokenExchangeConfig;
         this.skillsConfig = skillsConfig;
         this.skillClient = skillClient;
@@ -55,16 +56,16 @@ export class TokenExchangeSkillHandler extends SkillHandler {
     }
 
     protected async onSendToConversation(claimsIdentity: ClaimsIdentity, conversationId: string, activity: Activity):Promise<ResourceResponse> {
-        if (this.tokenExchangeConfig !== undefined && await this.interceptOAuthCardsAsync(claimsIdentity, activity)) {
-            return new ResourceResponse();
+        if (this.tokenExchangeConfig !== undefined && await this.interceptOAuthCards(claimsIdentity, activity)) {
+            return { id: uuid().toString()};
         }
 
         return await super.onSendToConversation(claimsIdentity, conversationId, activity);
     }
 
     protected async onReplyToActivity(claimsIdentity: ClaimsIdentity, conversationId: string, activityId: string, activity: Activity): Promise<ResourceResponse> {
-        if (this.tokenExchangeConfig !== undefined && await this.interceptOAuthCardsAsync(claimsIdentity, activity)) {
-            return new ResourceResponse();
+        if (this.tokenExchangeConfig !== undefined && await this.interceptOAuthCards(claimsIdentity, activity)) {
+            return { id: uuid().toString()};
         }
 
         return await super.onReplyToActivity(claimsIdentity, conversationId, activityId, activity);
