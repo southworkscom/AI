@@ -10,20 +10,21 @@ import {
     ExtendedUserTokenProvider,
     ResourceResponse,
     TurnContext
-} from 'botbuilder-core'
+} from 'botbuilder-core';
 import {
     AuthenticationConfiguration,
     ClaimsIdentity,
     JwtTokenValidation,
     SimpleCredentialProvider
 } from 'botframework-connector';
-import {ITokenExchangeConfig} from "./tokenExchangeConfig";
-import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBotFrameworkSkill} from "bot-solutions/lib";
-import {SkillHandler, SkillHttpClient, BotFrameworkSkill, BotFrameworkAdapter} from "botbuilder";
-import {TokenExchangeInvokeRequest, OAuthCard, Attachment, TokenExchangeRequest} from "botframework-schema"
+import {ITokenExchangeConfig} from './tokenExchangeConfig';
+import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBotFrameworkSkill} from 'bot-solutions/lib';
+import {SkillHandler, SkillHttpClient, BotFrameworkSkill, BotFrameworkAdapter} from 'botbuilder';
+import {TokenExchangeInvokeRequest, OAuthCard, Attachment, TokenExchangeRequest} from 'botframework-schema'
 import { uuid } from '../utils';
 import * as appsettings from '../appsettings.json';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 //@ts-ignore
 export class TokenExchangeSkillHandler extends SkillHandler {
     private readonly adapter: BotAdapter;
