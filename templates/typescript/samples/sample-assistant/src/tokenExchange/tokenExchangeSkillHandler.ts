@@ -16,20 +16,22 @@ import {
     TurnContext
 } from 'botbuilder-core'
 import { AuthenticationConfiguration, AppCredentials, ICredentialProvider, ClaimsIdentity, JwtTokenValidation, GovernmentConstants, AuthenticationConstants } from 'botframework-connector';
-import {ITokenExchangeConfig} from "./ITokenExchangeConfig";
+import {ITokenExchangeConfig} from "./tokenExchangeConfig";
 import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration} from "bot-solutions/lib";
 import {SkillHandler, SkillHttpClient, BotFrameworkSkill} from "botbuilder";
-import {TokenExchangeInvokeRequest} from "botframework-schema"
+import {TokenExchangeInvokeRequest, OAuthCard, Attachment, TokenExchangeRequest} from "botframework-schema"
 import {conversationId} from "botframework-connector/lib/connectorApi/models/parameters";
+import { TokenExchangeRequest } from 'botframework-connector/lib/tokenApi/models/mappers';
 
 export class TokenExchangeSkillHandler extends SkillHandler {
-    //private readonly adapter: BotAdapter;
+    private readonly adapter: BotAdapter;
     private readonly tokenExchangeProvider: ExtendedUserTokenProvider;
     private readonly tokenExchangeConfig: ITokenExchangeConfig;
     private readonly skillsConfig: SkillsConfiguration;
     private readonly skillClient: SkillHttpClient;
     private readonly botId: string;
     private readonly conversationIdFactory: SkillConversationIdFactory;
+    private readonly oAuthCardContentType: string = 'application/vnd.microsoft.card.oauth'
 
     public constructor(
         adapter: BotAdapter,
@@ -44,7 +46,7 @@ export class TokenExchangeSkillHandler extends SkillHandler {
         channelService: string
     ) {
         super(adapter,bot, conversationIdFactory, credentialProvider, authConfig, channelService);
-        //this.adapter = adapter;
+        this.adapter = adapter;
         this.tokenExchangeProvider = adapter as ExtendedUserTokenProvider;
         this.tokenExchangeConfig = tokenExchangeConfig;
         this.skillsConfig = skillsConfig;
@@ -80,11 +82,43 @@ export class TokenExchangeSkillHandler extends SkillHandler {
         return this.skillsConfig.skills.values()
     }
 
-    private async interceptOAuthCardsAsync(claimsIdentity: ClaimsIdentity, activity: Activity) {
+    private async interceptOAuthCards(claimsIdentity: ClaimsIdentity, activity: Activity): Promise<boolean> {
         if (activity.attachments !== undefined) {
             let targetSkill: BotFrameworkSkill;
+            activity.attachments.filter(a => a.contentType == this.oAuthCardContentType).forEach(async (attachment: Attachment): Promise<boolean> => {
+                if (targetSkill === undefined) {
+                    targetSkill = this.getCallingSkill(claimsIdentity);
+                }
+
+                if (targetSkill === undefined) {
+                    const oauthCard = attachment.content as OAuthCard;
+                    
+                    if (oauthCard !== undefined && oauthCard.tokenExchangeResource !== undefined && this.tokenExchangeConfig !== undefined && this.tokenExchangeConfig.provider !== undefined && this.tokenExchangeConfig.provider !== '' && this.tokenExchangeConfig.provider === oauthCard.tokenExchangeResource.providerId) {
+                        const context = new TurnContext(this.adapter, activity)
+
+                        context.turnState.set(this.adapter.BotIdentityKey, claimsIdentity)
+
+                        // AAD token exchange
+                        const result = await this.tokenExchangeProvider.exchangeToken(
+                            context,
+                            activity.recipient?.id,
+                            this.tokenExchangeConfig.connectionName,
+                            { Uri: oauthCard.tokenExchangeResource.uri } as TokenExchangeRequest);
+
+                        if (result.token !== undefined && result.token !== ''){
+                            // Send an Invoke back to the Skill
+                            return await this.sendTokenExchangeInvokeToSkill(activity, oauthCard.tokenExchangeResource.id as string,result.token, oauthCard.connectionName, targetSkill);
+                        }
+                        return false;
+                    }
+                }
+                
+                return false;
+            });
 
         }
+        
+        return false;
     }
 
     private async sendTokenExchangeInvokeToSkill(incomingActivity:Activity, id: string, token: string, connectionName: string, targetSkill:BotFrameworkSkill) {
