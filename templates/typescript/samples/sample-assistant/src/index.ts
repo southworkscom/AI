@@ -43,6 +43,7 @@ import { Activity } from 'botframework-schema';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IUserProfileState } from './models/userProfileState';
 import { AllowedCallersClaimsValidator } from './authentication/allowedCallersClaimsValidator';
+import { ITokenExchangeConfig } from "./tokenExchange";
 
 // Configure internationalization and default locale
 i18next.use(i18nextNodeFsBackend)
