@@ -7,21 +7,23 @@ import {
     ActivityHandlerBase,
     ActivityTypes,
     BotAdapter,
-    CallerIdConstants,
     ExtendedUserTokenProvider,
     ResourceResponse,
-    SkillConversationIdFactoryBase,
-    SkillConversationReference,
-    SkillConversationReferenceKey,
     TurnContext
 } from 'botbuilder-core'
-import { AuthenticationConfiguration, AppCredentials, ICredentialProvider, ClaimsIdentity, JwtTokenValidation, GovernmentConstants, AuthenticationConstants } from 'botframework-connector';
+import {
+    AuthenticationConfiguration,
+    ClaimsIdentity,
+    JwtTokenValidation,
+    SimpleCredentialProvider
+} from 'botframework-connector';
 import {ITokenExchangeConfig} from "./tokenExchangeConfig";
 import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBotFrameworkSkill} from "bot-solutions/lib";
 import {SkillHandler, SkillHttpClient, BotFrameworkSkill, BotFrameworkAdapter} from "botbuilder";
 import {TokenExchangeInvokeRequest, OAuthCard, Attachment, TokenExchangeRequest} from "botframework-schema"
-import { uuid } from '../utils/index';
+import { uuid } from '../utils';
 
+//@ts-ignore
 export class TokenExchangeSkillHandler extends SkillHandler {
     private readonly adapter: BotAdapter;
     private readonly tokenExchangeProvider: ExtendedUserTokenProvider;
@@ -35,16 +37,14 @@ export class TokenExchangeSkillHandler extends SkillHandler {
     public constructor(
         adapter: BotAdapter,
         bot: ActivityHandlerBase,
-        configuration: IConfiguration ,
         conversationIdFactory: SkillConversationIdFactory,
-        skillsConfig: SkillsConfiguration,
         skillClient: SkillHttpClient,
-        credentialProvider: ICredentialProvider,
+        credentialProvider: SimpleCredentialProvider,
         authConfig: AuthenticationConfiguration,
         tokenExchangeConfig: ITokenExchangeConfig,
-        channelService: string
+        skillsConfig: SkillsConfiguration,
     ) {
-        super(adapter,bot, conversationIdFactory, credentialProvider, authConfig, channelService);
+        super(adapter,bot, conversationIdFactory, credentialProvider, authConfig);
         this.adapter = adapter;
         this.tokenExchangeProvider = adapter as BotFrameworkAdapter;
         this.tokenExchangeConfig = tokenExchangeConfig;
@@ -52,7 +52,7 @@ export class TokenExchangeSkillHandler extends SkillHandler {
         this.skillClient = skillClient;
         this.conversationIdFactory = conversationIdFactory;
 
-        this.botId = configuration.microsoftAppIdKey;
+        this.botId =; //configuration.microsoftAppIdKey;
     }
 
     protected async onSendToConversation(claimsIdentity: ClaimsIdentity, conversationId: string, activity: Activity):Promise<ResourceResponse> {
@@ -71,17 +71,17 @@ export class TokenExchangeSkillHandler extends SkillHandler {
         return await super.onReplyToActivity(claimsIdentity, conversationId, activityId, activity);
     }
 
-    private getCallingSkill(claimsIdentity: ClaimsIdentity): IEnhancedBotFrameworkSkill | undefined {
+    private getCallingSkill(claimsIdentity: ClaimsIdentity): BotFrameworkSkill | undefined {
         const appId = JwtTokenValidation.getAppIdFromClaims(claimsIdentity.claims);
 
         if (appId !== undefined && appId.trim().length > 0) {
             return undefined;
         }
 
-        const botFrameworkSkill = Array.from(this.skillsConfig.skills.values())
-            .find((s: IEnhancedBotFrameworkSkill) => { s.appId.toLowerCase() === appId.toLowerCase(); });
-
-        return botFrameworkSkill;
+        return Array.from(this.skillsConfig.skills.values())
+            .find((s: IEnhancedBotFrameworkSkill) => {
+                s.appId.toLowerCase() === appId.toLowerCase();
+            });
     }
 
     private async interceptOAuthCards(claimsIdentity: ClaimsIdentity, activity: Activity): Promise<boolean> {
