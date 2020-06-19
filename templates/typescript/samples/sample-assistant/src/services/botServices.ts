@@ -11,11 +11,12 @@ import {
     QnAMakerEndpoint
 } from 'botbuilder-ai';
 import { ICognitiveModelConfiguration, ICognitiveModelSet } from 'bot-solutions';
-import { DispatchService, LuisService, QnaMakerService } from 'botframework-config';
+import { LuisService, QnaMakerService } from 'botframework-config';
 import i18next from 'i18next';
 import { IBotSettings } from './botSettings';
 
 export class BotServices {
+    public cognitiveModelSets: Map<string, ICognitiveModelSet> = new Map();
 
     public constructor(settings: IBotSettings, client: BotTelemetryClient) {
         settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
@@ -30,50 +31,41 @@ export class BotServices {
                 apiVersion: 'v3'
             };
 
-            const cognitiveModelSet: Partial<ICognitiveModelSet> = {};
-
-            if (config.dispatchModel !== undefined) {
-                const dispatchModel: DispatchService = new DispatchService(config.dispatchModel);
-                const dispatchApp: LuisApplication = {
-                    applicationId: dispatchModel.appId,
-                    endpointKey: dispatchModel.subscriptionKey,
-                    endpoint: dispatchModel.getEndpoint()
-                };
-                cognitiveModelSet.dispatchService = new LuisRecognizer(dispatchApp, luisOptions);
-            }
+            const dispatchApp: LuisApplication = {
+                applicationId: config.dispatchModel.appId,
+                endpointKey: config.dispatchModel.subscriptionKey,
+                endpoint: config.dispatchModel.getEndpoint()
+            };
+            const set: ICognitiveModelSet = {
+                dispatchService: new LuisRecognizer(dispatchApp, luisOptions),
+                luisServices: new Map(),
+                qnaConfiguration: new Map(),
+                qnaServices: new Map()
+            };
 
             if (config.languageModels !== undefined) {
                 config.languageModels.forEach((model: LuisService): void => {
-                    const luisService: LuisService = new LuisService(model);
                     const luisApp: LuisApplication  = {
-                        applicationId: luisService.appId,
-                        endpointKey: luisService.subscriptionKey,
-                        endpoint: luisService.getEndpoint()
+                        applicationId: model.appId,
+                        endpointKey: model.subscriptionKey,
+                        endpoint: model.getEndpoint()
                     };
-
-                    cognitiveModelSet.luisServices = new Map();
-                    cognitiveModelSet.luisServices.set(luisService.id, new LuisRecognizer(luisApp, luisOptions));
+                    set.luisServices.set(model.id, new LuisRecognizer(luisApp, luisOptions));
                 });
             }
 
-            if (config.knowledgeBases !== undefined) {
+            config.knowledgeBases.forEach((kb: QnaMakerService): void => {
+                const qnaEndpoint: QnAMakerEndpoint = {
+                    knowledgeBaseId: kb.kbId,
+                    endpointKey: kb.endpointKey,
+                    host: kb.hostname
+                };
+                set.qnaConfiguration.set(kb.id, qnaEndpoint);
+            });
 
-                config.knowledgeBases.forEach((kb: QnaMakerService): void => {
-                    const qnaEndpoint: QnAMakerEndpoint = {
-                        knowledgeBaseId: kb.kbId,
-                        endpointKey: kb.endpointKey,
-                        host: kb.hostname
-                    };
-                    cognitiveModelSet.qnaConfiguration = new Map();
-                    cognitiveModelSet.qnaConfiguration.set(kb.id, qnaEndpoint);
-                });
-            }
-
-            this.cognitiveModelSets.set(language, cognitiveModelSet as ICognitiveModelSet);
+            this.cognitiveModelSets.set(language, set as ICognitiveModelSet);
         });
-    }
-
-    public cognitiveModelSets: Map<string, ICognitiveModelSet> = new Map();
+    }    
 
     public getCognitiveModels(): ICognitiveModelSet {
         // Get cognitive models for locale
@@ -82,12 +74,7 @@ export class BotServices {
 
         if (cognitiveModels === undefined) {
             const keyFound: string | undefined = Array.from(this.cognitiveModelSets.keys())
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-                .find((key: string) => {
-                    if (key.substring(0, 2) === locale.substring(0, 2)) {
-                        return key;
-                    }
-                });
+                .find((key: string) => { key.substring(0, 2) === locale.substring(0, 2) });
             if (keyFound !== undefined) {
                 cognitiveModels = this.cognitiveModelSets.get(keyFound);
             }
