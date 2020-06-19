@@ -96,7 +96,7 @@ const credentialProvider: SimpleCredentialProvider = new SimpleCredentialProvide
 const skillsConfig: SkillsConfiguration = new SkillsConfiguration(appsettings.botFrameworkSkills as IEnhancedBotFrameworkSkill[], appsettings.skillHostEndpoint);
 
 // Register the token configuration.
-const tokenExchangeConfig: ITokenExchangeConfig = appsettings.tokenExchangeConfig;
+const tokenExchangeConfig: ITokenExchangeConfig | undefined = settings.tokenExchangeConfig;
 
 // Register AuthConfiguration to enable custom claim validation.
 const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillsConfig);
@@ -205,11 +205,6 @@ try {
         activeSkillProperty
     );
 
-    // Configure TokenExchangeConfig for SSO
-    if (settings.tokenExchangeConfig !== undefined) {
-        const tokenExchangeConfig: ITokenExchangeConfig = settings.tokenExchangeConfig;
-    }
-
     bot = new DefaultActivityHandler(conversationState, userState, localeTemplateManager, mainDialog);
 } catch (err) {
     throw err;
@@ -241,6 +236,6 @@ server.post('/api/messages', async (req: restify.Request, res: restify.Response)
 });
 
 // Register the request handler.
-const handler: TokenExchangeSkillHandler = new TokenExchangeSkillHandler(adapter, bot, skillConversationIdFactory, skillClient, credentialProvider, authenticationConfiguration, tokenExchangeConfig, skillsConfig);
+const handler: TokenExchangeSkillHandler = new TokenExchangeSkillHandler(adapter, bot, skillConversationIdFactory, skillClient, credentialProvider, authenticationConfiguration, tokenExchangeConfig as ITokenExchangeConfig, skillsConfig);
 const skillEndpoint = new ChannelServiceRoutes(handler);
 skillEndpoint.register(server, '/api/skills');
