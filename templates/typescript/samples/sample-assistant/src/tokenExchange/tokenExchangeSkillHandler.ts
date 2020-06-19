@@ -22,6 +22,7 @@ import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBo
 import {SkillHandler, SkillHttpClient, BotFrameworkSkill, BotFrameworkAdapter} from "botbuilder";
 import {TokenExchangeInvokeRequest, OAuthCard, Attachment, TokenExchangeRequest} from "botframework-schema"
 import { uuid } from '../utils';
+import * as appsettings from '../appsettings.json';
 
 //@ts-ignore
 export class TokenExchangeSkillHandler extends SkillHandler {
@@ -51,8 +52,7 @@ export class TokenExchangeSkillHandler extends SkillHandler {
         this.skillsConfig = skillsConfig;
         this.skillClient = skillClient;
         this.conversationIdFactory = conversationIdFactory;
-
-        this.botId =; //configuration.microsoftAppIdKey;
+        this.botId = appsettings.microsoftAppId;
     }
 
     protected async onSendToConversation(claimsIdentity: ClaimsIdentity, conversationId: string, activity: Activity):Promise<ResourceResponse> {
