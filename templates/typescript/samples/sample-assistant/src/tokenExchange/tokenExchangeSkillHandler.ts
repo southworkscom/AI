@@ -20,8 +20,6 @@ import {ITokenExchangeConfig} from "./tokenExchangeConfig";
 import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration} from "bot-solutions/lib";
 import {SkillHandler, SkillHttpClient, BotFrameworkSkill} from "botbuilder";
 import {TokenExchangeInvokeRequest, OAuthCard, Attachment, TokenExchangeRequest} from "botframework-schema"
-import {conversationId} from "botframework-connector/lib/connectorApi/models/parameters";
-import { TokenExchangeRequest } from 'botframework-connector/lib/tokenApi/models/mappers';
 
 export class TokenExchangeSkillHandler extends SkillHandler {
     private readonly adapter: BotAdapter;
@@ -112,7 +110,7 @@ export class TokenExchangeSkillHandler extends SkillHandler {
                         return false;
                     }
                 }
-                
+
                 return false;
             });
 
