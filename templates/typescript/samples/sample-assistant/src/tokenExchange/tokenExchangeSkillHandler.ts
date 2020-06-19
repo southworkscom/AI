@@ -20,7 +20,7 @@ import {
 import {ITokenExchangeConfig} from './tokenExchangeConfig';
 import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBotFrameworkSkill} from 'bot-solutions/lib';
 import {SkillHandler, SkillHttpClient, BotFrameworkSkill, BotFrameworkAdapter} from 'botbuilder';
-import {OAuthCard, Attachment, TokenExchangeRequest} from 'botframework-schema'
+import {OAuthCard, Attachment, TokenExchangeRequest} from 'botframework-schema';
 import { uuid } from '../utils';
 import * as appsettings from '../appsettings.json';
 
