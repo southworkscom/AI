@@ -125,7 +125,7 @@ export class TokenExchangeSkillHandler extends SkillHandler {
     }
 
     private async sendTokenExchangeInvokeToSkill(incomingActivity:Activity, id: string, token: string, connectionName: string, targetSkill:BotFrameworkSkill) {
-        let activity: Activity = ActivityEx.createReply(incomingActivity, )
+        const activity: Activity = ActivityEx.createReply(incomingActivity);
         activity.type = ActivityTypes.Invoke;
         activity.name = 'signin/tokenExchange';
         activity.value = {
