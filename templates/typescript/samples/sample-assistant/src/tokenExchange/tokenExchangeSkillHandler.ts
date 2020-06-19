@@ -17,7 +17,7 @@ import {
 } from 'botbuilder-core'
 import { AuthenticationConfiguration, AppCredentials, ICredentialProvider, ClaimsIdentity, JwtTokenValidation, GovernmentConstants, AuthenticationConstants } from 'botframework-connector';
 import {ITokenExchangeConfig} from "./tokenExchangeConfig";
-import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration} from "bot-solutions/lib";
+import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBotFrameworkSkill} from "bot-solutions/lib";
 import {SkillHandler, SkillHttpClient, BotFrameworkSkill} from "botbuilder";
 import {TokenExchangeInvokeRequest, OAuthCard, Attachment, TokenExchangeRequest} from "botframework-schema"
 
@@ -70,14 +70,17 @@ export class TokenExchangeSkillHandler extends SkillHandler {
         return await super.onReplyToActivity(claimsIdentity, conversationId, activityId, activity);
     }
 
-    private getCallingSkill(claimsIdentity: ClaimsIdentity):BotFrameworkSkill {
-        let appId = JwtTokenValidation.getAppIdFromClaims(claimsIdentity.claims);
+    private getCallingSkill(claimsIdentity: ClaimsIdentity): IEnhancedBotFrameworkSkill | undefined {
+        const appId = JwtTokenValidation.getAppIdFromClaims(claimsIdentity.claims);
 
         if (appId !== undefined && appId.trim().length > 0) {
             return undefined;
         }
 
-        return this.skillsConfig.skills.values()
+        const botFrameworkSkill = Array.from(this.skillsConfig.skills.values())
+            .find((s: IEnhancedBotFrameworkSkill) => { s.appId.toLowerCase() === appId.toLowerCase(); });
+
+        return botFrameworkSkill;
     }
 
     private async interceptOAuthCards(claimsIdentity: ClaimsIdentity, activity: Activity): Promise<boolean> {
@@ -85,16 +88,16 @@ export class TokenExchangeSkillHandler extends SkillHandler {
             let targetSkill: BotFrameworkSkill;
             activity.attachments.filter(a => a.contentType == this.oAuthCardContentType).forEach(async (attachment: Attachment): Promise<boolean> => {
                 if (targetSkill === undefined) {
-                    targetSkill = this.getCallingSkill(claimsIdentity);
+                    targetSkill = this.getCallingSkill(claimsIdentity) as IEnhancedBotFrameworkSkill;
                 }
 
                 if (targetSkill === undefined) {
                     const oauthCard = attachment.content as OAuthCard;
                     
                     if (oauthCard !== undefined && oauthCard.tokenExchangeResource !== undefined && this.tokenExchangeConfig !== undefined && this.tokenExchangeConfig.provider !== undefined && this.tokenExchangeConfig.provider !== '' && this.tokenExchangeConfig.provider === oauthCard.tokenExchangeResource.providerId) {
-                        const context = new TurnContext(this.adapter, activity)
+                        const context = new TurnContext(this.adapter, activity);
 
-                        context.turnState.set(this.adapter.BotIdentityKey, claimsIdentity)
+                        context.turnState.set(this.adapter.BotIdentityKey, claimsIdentity);
 
                         // AAD token exchange
                         const result = await this.tokenExchangeProvider.exchangeToken(
