@@ -2,7 +2,11 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-import {ITokenExchangeConfig} from './ITokenExchangeConfig';
+
+export interface ITokenExchangeConfig {
+    provider: string;
+    connectionName: string;
+}
 
 export class TokenExchangeConfig implements ITokenExchangeConfig {
     public provider: string = '';
