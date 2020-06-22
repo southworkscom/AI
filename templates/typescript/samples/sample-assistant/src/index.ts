@@ -43,7 +43,7 @@ import { Activity } from 'botframework-schema';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IUserProfileState } from './models/userProfileState';
 import { AllowedCallersClaimsValidator } from './authentication/allowedCallersClaimsValidator';
-import { ITokenExchangeConfig } from "./tokenExchange";
+import { ITokenExchangeConfig, TokenExchangeSkillHandler } from "./tokenExchange";
 
 // Configure internationalization and default locale
 i18next.use(i18nextNodeFsBackend)
@@ -92,7 +92,7 @@ const settings: Partial<IBotSettings> = {
 const credentialProvider: SimpleCredentialProvider = new SimpleCredentialProvider(appsettings.microsoftAppId, appsettings.microsoftAppPassword);
 
 // Register the skills configuration class.
-const skillsConfig: SkillsConfiguration = new SkillsConfiguration(appsettings.botFrameworkSkills, appsettings.skillHostEndpoint);
+const skillsConfig: SkillsConfiguration = new SkillsConfiguration(appsettings.botFrameworkSkills as IEnhancedBotFrameworkSkill[], appsettings.skillHostEndpoint);
 
 // Register AuthConfiguration to enable custom claim validation.
 const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillsConfig);
@@ -107,7 +107,7 @@ const telemetryLoggerMiddleware: TelemetryLoggerMiddleware = new TelemetryLogger
 const telemetryInitializerMiddleware: TelemetryInitializerMiddleware = new TelemetryInitializerMiddleware(telemetryLoggerMiddleware);
 
 // Configure bot services
-const botServices: BotServices = new BotServices(settings, telemetryClient);
+const botServices: BotServices = new BotServices(settings as IBotSettings, telemetryClient);
 
 if (settings.cosmosDb === undefined) {
     throw new Error();
@@ -201,11 +201,6 @@ try {
         activeSkillProperty
     );
 
-    // Configure TokenExchangeConfig for SSO
-    if (settings.tokenExchangeConfig !== undefined) {
-        const tokenExchangeConfig: ITokenExchangeConfig = settings.tokenExchangeConfig;
-    }
-
     bot = new DefaultActivityHandler(conversationState, userState, localeTemplateManager, mainDialog);
 } catch (err) {
     throw err;
@@ -237,6 +232,6 @@ server.post('/api/messages', async (req: restify.Request, res: restify.Response)
 });
 
 // Register the request handler.
-const handler: TokenExchangeSkillHandler = new TokenExchangeSkillHandler(adapter, bot, skillConversationIdFactory, skillClient, credentialProvider, authenticationConfiguration);
+const handler: TokenExchangeSkillHandler = new TokenExchangeSkillHandler(adapter, bot, settings as IBotSettings, skillConversationIdFactory, skillsConfig, skillClient, credentialProvider, authenticationConfiguration, settings.tokenExchangeConfig as ITokenExchangeConfig);
 const skillEndpoint = new ChannelServiceRoutes(handler);
 skillEndpoint.register(server, '/api/skills');

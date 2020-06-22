@@ -3,6 +3,4 @@
  * Licensed under the MIT License.
  */
 
- export * from './tokenExchangeConfig';
- export * from './tokenExchangeSkillHandler';
- 
+export * from './guidHelper';
