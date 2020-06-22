@@ -2,7 +2,7 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License
  */
-
+const i18next = require('i18next');
 const assert = require('assert');
 const { getAllResponsesTemplates, getTestAdapterDefault } = require('./helpers/botTestBase');
 const testNock = require('./helpers/testBase');
@@ -10,7 +10,8 @@ const testNock = require('./helpers/testBase');
 describe("Localization", function() {
     describe("es-es locale", function () {
         it("send conversationUpdate and check the card is received with the es-es locale", function (done) {
-                const allIntroCardTitleVariations = getAllResponsesTemplates("es-es").expandTemplate("NewUserIntroCardTitle");
+                await i18next.changeLanguage('es-es');
+                const allIntroCardTitleVariations = getAllResponsesTemplates().expandTemplate("NewUserIntroCardTitle");
 
                 getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
@@ -47,7 +48,8 @@ describe("Localization", function() {
 
 	describe("de-de locale", function () {
             it("send conversationUpdate and check the card is received with the de-de locale", function (done) {
-                const allIntroCardTitleVariations = getAllResponsesTemplates("de-de").expandTemplate("NewUserIntroCardTitle");
+                await i18next.changeLanguage("de-de");
+                const allIntroCardTitleVariations = getAllResponsesTemplates().expandTemplate("NewUserIntroCardTitle");
 
                 getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
@@ -84,7 +86,8 @@ describe("Localization", function() {
 
 	describe("fr-fr locale", function () {
             it("send conversationUpdate and check the card is received with the fr-fr locale", function (done) {
-                const allIntroCardTitleVariations = getAllResponsesTemplates("fr-fr").expandTemplate("NewUserIntroCardTitle");
+                await i18next.changeLanguage('fr-fr');
+                const allIntroCardTitleVariations = getAllResponsesTemplates().expandTemplate("NewUserIntroCardTitle");
 
                 getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
@@ -121,7 +124,8 @@ describe("Localization", function() {
 
 	describe("it-it locale", function () {
             it("send conversationUpdate and check the card is received with the it-it locale", function (done) {
-                const allIntroCardTitleVariations = getAllResponsesTemplates("it-it").expandTemplate("NewUserIntroCardTitle");
+                await i18next.changeLanguage('it-it');
+                const allIntroCardTitleVariations = getAllResponsesTemplates().expandTemplate("NewUserIntroCardTitle");
 
                 getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
@@ -158,7 +162,8 @@ describe("Localization", function() {
 
 	describe("en-us locale", function () {
             it("send conversationUpdate and check the card is received with the en-us locale", function (done) {
-                const allIntroCardTitleVariations = getAllResponsesTemplates("en-us").expandTemplate("NewUserIntroCardTitle");
+                await i18next.changeLanguage('en-us');
+                const allIntroCardTitleVariations = getAllResponsesTemplates().expandTemplate("NewUserIntroCardTitle");
 
                 getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
@@ -195,7 +200,8 @@ describe("Localization", function() {
 
 	describe("zh-cn locale", function () {
             it("send conversationUpdate and check the card is received with the zh-cn locale", function (done) {
-                const allIntroCardTitleVariations = getAllResponsesTemplates("zh-cn").expandTemplate("NewUserIntroCardTitle");
+                await i18next.changeLanguage("zh-cn");
+                const allIntroCardTitleVariations = getAllResponsesTemplates().expandTemplate("NewUserIntroCardTitle");
 
                 getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
@@ -234,6 +240,7 @@ describe("Localization", function() {
     xdescribe("defaulting localization", function () {
         it("fallback to a locale of the root language locale", function (done) {
             getTestAdapterDefault().then((testAdapter) => {
+            await i18next.changeLanguage('en-uk');
             const flow = testAdapter
                 .send({
                     type: "conversationUpdate",
