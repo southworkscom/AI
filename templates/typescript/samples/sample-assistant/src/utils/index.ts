@@ -3,4 +3,4 @@
  * Licensed under the MIT License.
  */
 
-export { uuid } from './guidHelper';
+export * from './guidHelper';

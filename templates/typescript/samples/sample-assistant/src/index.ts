@@ -43,8 +43,7 @@ import { Activity } from 'botframework-schema';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
 import { IUserProfileState } from './models/userProfileState';
 import { AllowedCallersClaimsValidator } from './authentication/allowedCallersClaimsValidator';
-import { ITokenExchangeConfig } from "./tokenExchange";
-import {TokenExchangeSkillHandler} from "./tokenExchange/tokenExchangeSkillHandler";
+import { ITokenExchangeConfig, TokenExchangeSkillHandler } from "./tokenExchange";
 
 // Configure internationalization and default locale
 i18next.use(i18nextNodeFsBackend)
@@ -94,9 +93,6 @@ const credentialProvider: SimpleCredentialProvider = new SimpleCredentialProvide
 
 // Register the skills configuration class.
 const skillsConfig: SkillsConfiguration = new SkillsConfiguration(appsettings.botFrameworkSkills as IEnhancedBotFrameworkSkill[], appsettings.skillHostEndpoint);
-
-// Register the token configuration.
-const tokenExchangeConfig: ITokenExchangeConfig | undefined = settings.tokenExchangeConfig;
 
 // Register AuthConfiguration to enable custom claim validation.
 const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(skillsConfig);
@@ -236,6 +232,6 @@ server.post('/api/messages', async (req: restify.Request, res: restify.Response)
 });
 
 // Register the request handler.
-const handler: TokenExchangeSkillHandler = new TokenExchangeSkillHandler(adapter, bot, skillConversationIdFactory, skillClient, credentialProvider, authenticationConfiguration, tokenExchangeConfig as ITokenExchangeConfig, skillsConfig);
+const handler: TokenExchangeSkillHandler = new TokenExchangeSkillHandler(adapter, bot, settings as IBotSettings, skillConversationIdFactory, skillsConfig, skillClient, credentialProvider, authenticationConfiguration, settings.tokenExchangeConfig as ITokenExchangeConfig);
 const skillEndpoint = new ChannelServiceRoutes(handler);
 skillEndpoint.register(server, '/api/skills');

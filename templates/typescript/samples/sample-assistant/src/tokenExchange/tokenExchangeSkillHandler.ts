@@ -9,7 +9,9 @@ import {
     BotAdapter,
     ExtendedUserTokenProvider,
     ResourceResponse,
-    TurnContext
+    TurnContext,
+    SkillConversationReference,
+    InvokeResponse
 } from 'botbuilder-core';
 import {
     AuthenticationConfiguration,
@@ -17,43 +19,44 @@ import {
     JwtTokenValidation,
     SimpleCredentialProvider
 } from 'botframework-connector';
-import {ITokenExchangeConfig} from './tokenExchangeConfig';
-import {ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBotFrameworkSkill} from 'bot-solutions/lib';
-import {SkillHandler, SkillHttpClient, BotFrameworkSkill, BotFrameworkAdapter} from 'botbuilder';
-import {OAuthCard, Attachment, TokenExchangeRequest} from 'botframework-schema';
+import { ITokenExchangeConfig } from './';
+import { ActivityEx, SkillConversationIdFactory, SkillsConfiguration, IEnhancedBotFrameworkSkill } from 'bot-solutions/lib';
+import { SkillHandler, SkillHttpClient, BotFrameworkSkill, BotFrameworkAdapter } from 'botbuilder';
+import { tokenExchangeOperationName } from 'botbuilder-core';
+import { OAuthCard, Attachment } from 'botframework-schema';
 import { uuid } from '../utils';
-import * as appsettings from '../appsettings.json';
+import { IBotSettings } from '../services';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-//@ts-ignore
 export class TokenExchangeSkillHandler extends SkillHandler {
-    private readonly adapter: BotAdapter;
+    private readonly tokenExchangeSkillHandlerAdapter: BotAdapter;
     private readonly tokenExchangeProvider: ExtendedUserTokenProvider;
     private readonly tokenExchangeConfig: ITokenExchangeConfig;
     private readonly skillsConfig: SkillsConfiguration;
     private readonly skillClient: SkillHttpClient;
     private readonly botId: string;
-    private readonly conversationIdFactory: SkillConversationIdFactory;
-    private readonly oAuthCardContentType: string = 'application/vnd.microsoft.card.oauth'
+    private readonly tokenExchangeSkillHandlerConversationIdFactory: SkillConversationIdFactory;
+    private readonly oAuthCardContentType: string = 'application/vnd.microsoft.card.oauth';
 
     public constructor(
         adapter: BotAdapter,
         bot: ActivityHandlerBase,
+        configuration: IBotSettings,
         conversationIdFactory: SkillConversationIdFactory,
+        skillsConfig: SkillsConfiguration,
         skillClient: SkillHttpClient,
         credentialProvider: SimpleCredentialProvider,
         authConfig: AuthenticationConfiguration,
         tokenExchangeConfig: ITokenExchangeConfig,
-        skillsConfig: SkillsConfiguration
     ) {
         super(adapter,bot, conversationIdFactory, credentialProvider, authConfig);
-        this.adapter = adapter;
+        this.tokenExchangeSkillHandlerAdapter = adapter;
         this.tokenExchangeProvider = adapter as BotFrameworkAdapter;
         this.tokenExchangeConfig = tokenExchangeConfig;
         this.skillsConfig = skillsConfig;
         this.skillClient = skillClient;
-        this.conversationIdFactory = conversationIdFactory;
-        this.botId = appsettings.microsoftAppId;
+        this.tokenExchangeSkillHandlerConversationIdFactory = conversationIdFactory;
+
+        this.botId = configuration.microsoftAppId;
     }
 
     protected async onSendToConversation(claimsIdentity: ClaimsIdentity, conversationId: string, activity: Activity): Promise<ResourceResponse> {
@@ -73,7 +76,7 @@ export class TokenExchangeSkillHandler extends SkillHandler {
     }
 
     private getCallingSkill(claimsIdentity: ClaimsIdentity): BotFrameworkSkill | undefined {
-        const appId = JwtTokenValidation.getAppIdFromClaims(claimsIdentity.claims);
+        const appId: string = JwtTokenValidation.getAppIdFromClaims(claimsIdentity.claims);
 
         if (appId !== undefined && appId.trim().length > 0) {
             return undefined;
@@ -87,38 +90,38 @@ export class TokenExchangeSkillHandler extends SkillHandler {
 
     private async interceptOAuthCards(claimsIdentity: ClaimsIdentity, activity: Activity): Promise<boolean> {
         if (activity.attachments !== undefined) {
-            let targetSkill: BotFrameworkSkill;
-            activity.attachments.filter(a => a.contentType == this.oAuthCardContentType).forEach(async (attachment: Attachment): Promise<boolean> => {
+            let targetSkill: BotFrameworkSkill | undefined;
+            activity.attachments.filter(a => a.contentType === this.oAuthCardContentType).forEach(async (attachment: Attachment) => {
                 if (targetSkill === undefined) {
-                    targetSkill = this.getCallingSkill(claimsIdentity) as IEnhancedBotFrameworkSkill;
+                    targetSkill = this.getCallingSkill(claimsIdentity);
                 }
 
-                if (targetSkill === undefined) {
-                    const oauthCard = attachment.content as OAuthCard;
+                if (targetSkill !== undefined) {
+                    const oauthCard: OAuthCard = attachment.content;
                     
-                    if (oauthCard !== undefined && oauthCard.tokenExchangeResource !== undefined && this.tokenExchangeConfig !== undefined && this.tokenExchangeConfig.provider !== undefined && this.tokenExchangeConfig.provider !== '' && this.tokenExchangeConfig.provider === oauthCard.tokenExchangeResource.providerId) {
-                        const context = new TurnContext(this.adapter, activity);
+                    if (oauthCard !== undefined && oauthCard.tokenExchangeResource !== undefined &&
+                        this.tokenExchangeConfig !== undefined && this.tokenExchangeConfig.provider !== undefined && this.tokenExchangeConfig.provider.trim().length > 0 &&
+                        this.tokenExchangeConfig.provider === oauthCard.tokenExchangeResource.providerId) {
+                        const context: TurnContext = new TurnContext(this.tokenExchangeSkillHandlerAdapter, activity);
 
-                        context.turnState.set(this.adapter.BotIdentityKey, claimsIdentity);
+                        context.turnState.set(this.tokenExchangeSkillHandlerAdapter.BotIdentityKey, claimsIdentity);
 
                         // AAD token exchange
                         const result = await this.tokenExchangeProvider.exchangeToken(
                             context,
                             activity.recipient?.id,
                             this.tokenExchangeConfig.connectionName,
-                            { Uri: oauthCard.tokenExchangeResource.uri } as TokenExchangeRequest);
+                            { uri: oauthCard.tokenExchangeResource.uri });
 
-                        if (result.token !== undefined && result.token !== ''){
+                        if (result.token !== undefined && result.token.trim().length > 0){
                             // Send an Invoke back to the Skill
-                            return await this.sendTokenExchangeInvokeToSkill(activity, oauthCard.tokenExchangeResource.id as string,result.token, oauthCard.connectionName, targetSkill);
+                            return await this.sendTokenExchangeInvokeToSkill(activity, oauthCard.tokenExchangeResource.id as string, result.token, oauthCard.connectionName, targetSkill);
                         }
+
                         return false;
                     }
                 }
-
-                return false;
             });
-
         }
         
         return false;
@@ -127,18 +130,18 @@ export class TokenExchangeSkillHandler extends SkillHandler {
     private async sendTokenExchangeInvokeToSkill(incomingActivity: Activity, id: string, token: string, connectionName: string, targetSkill: BotFrameworkSkill): Promise<boolean> {
         const activity: Activity = ActivityEx.createReply(incomingActivity);
         activity.type = ActivityTypes.Invoke;
-        activity.name = 'signin/tokenExchange';
+        activity.name = tokenExchangeOperationName;
         activity.value = {
             id: id,
             token: token,
             connectionName: connectionName
         };
 
-        const conversationReference = await this.conversationIdFactory.getSkillConversationReference(incomingActivity.conversation.id);
+        const conversationReference: SkillConversationReference = await this.tokenExchangeSkillHandlerConversationIdFactory.getSkillConversationReference(incomingActivity.conversation.id);
         activity.conversation = conversationReference.conversationReference.conversation;
 
         // route the activity to the skill
-        const response = await this.skillClient.postActivity(this.botId, targetSkill.appId, targetSkill.skillEndpoint, this.skillsConfig.skillHostEndpoint, activity.conversation.id, activity);
+        const response: InvokeResponse = await this.skillClient.postActivity(this.botId, targetSkill.appId, targetSkill.skillEndpoint, this.skillsConfig.skillHostEndpoint, activity.conversation.id, activity);
 
         // Check response status: true if success, false if failure
         return response.status >= 200 && response.status <= 299;
