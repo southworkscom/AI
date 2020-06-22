@@ -4,16 +4,14 @@
  * Licensed under the MIT License.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MainDialog = void 0;
+exports.MockMainDialog = void 0;
 const botbuilder_ai_1 = require("botbuilder-ai");
 const botbuilder_dialogs_1 = require("botbuilder-dialogs");
-const bot_solutions_1 = require("bot-solutions");
-const botframework_schema_1 = require("botframework-schema");
-const stateProperties_1 = require("../models/stateProperties");
 const mainDialog = require("../../../lib/dialogs/mainDialog");
 const join = require('path').join;
 const readFileSync = require('fs').readFileSync;
-const testNock = require('../../helpers/testBase');
+const nock = require('nock');
+
 /**
  * Dialog providing activity routing and message/event processing.
  */
@@ -23,7 +21,7 @@ let MockMainDialog = /** @class */ (() => {
             super(MainDialog.name);
             this.faqDialogId = 'faq';
             this.services = services;
-            this.templateManager = templateManager;
+            this._templateManager = templateManager;
             this.skillsConfig = skillsConfig;
             this.userProfileState = userProfileState;
             this.previousResponseAccesor = previousResponseAccessor;
@@ -47,7 +45,9 @@ let MockMainDialog = /** @class */ (() => {
             skillDialogs.forEach((dialog) => {
                 this.addDialog(dialog);
             });
-            this._mockHttpHandler = testNock.resolveWithMocks('QnAMaker_NoAnswer');
+            this._mockHttpHandler = nock('http://mockedQnAHost.azurewebsites.net').post('*/knowledgebases/*/generateanswer').replyWithFile(200, JSON.parse(this.getResponse('QnAMaker_NoAnswer.json')), {
+                'Content-Type': 'application/json'
+            });
             super.tryCreateQnADialog(this.tryCreateQnADialog.bind(this));
         }
 
@@ -70,15 +70,15 @@ let MockMainDialog = /** @class */ (() => {
                 return undefined;
             }
         }
-/*
+
         getFilePath(fileName) {
             return join(__dirname, '..', 'testData', fileName);
         }
 
         getResponse(fileName) {
             const path = this.getFilePath(fileName);
-            return readFileSync(fileName, 'UTF8');
-        }*/
+            return readFileSync(path, 'UTF8');
+        }
     }
     // Conversation state property with the active skill (if any).
     MockMainDialog.activeSkillPropertyName = `${typeof (MockMainDialog).name}.ActiveSkillProperty`;
