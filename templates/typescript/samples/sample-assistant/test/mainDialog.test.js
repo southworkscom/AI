@@ -58,9 +58,13 @@ describe("Main Dialog", function () {
         });
     });
 	
-    xdescribe("confused", function () {
+    describe("confused", function () {
+    	/*
+    	ChitChat is the default fallback which will not be configured at functional test time so a mock ensures QnAMaker returns no answer
+    	enabling the unsupported message to be returned.
+    	 */
         it("send an unhandled message", function (done) {
-			const allResponseVariations = getAllResponsesTemplates("en-us").expandTemplate("UnsupportedMessage", testUserProfileState);
+			const allResponseVariations = getAllResponsesTemplates().expandTemplate("UnsupportedMessage", testUserProfileState);
 
 			getTestAdapterDefault().then((testAdapter) => {
 				const flow = testAdapter

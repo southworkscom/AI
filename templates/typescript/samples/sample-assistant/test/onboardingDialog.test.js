@@ -21,8 +21,8 @@ describe("Onboarding Dialog", function () {
 
             const profileState = { name: testName };
 
-            const allNamePromptVariations = getAllResponsesTemplates("en-us").expandTemplate("NamePrompt");
-            const allHaveMessageVariations = getAllResponsesTemplates("en-us").expandTemplate("HaveNameMessage", profileState);
+            const allNamePromptVariations = getAllResponsesTemplates().expandTemplate("NamePrompt");
+            const allHaveMessageVariations = getAllResponsesTemplates().expandTemplate("HaveNameMessage", profileState);
 
             getTestAdapterDefault({ storage: testStorage }).then((testAdapter) => {
                 const flow = testAdapter
