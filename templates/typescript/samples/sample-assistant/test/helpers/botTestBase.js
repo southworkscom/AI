@@ -13,7 +13,7 @@ const i18nextNodeFsBackend = require('i18next-node-fs-backend');
 const { BotServices } = require('../../lib/services/botServices');
 const { DefaultActivityHandler } = require('../../lib/bots/defaultActivityHandler');
 const { OnboardingDialog } = require('../../lib/dialogs/onboardingDialog');
-const { MainDialog } = require('../../lib/dialogs/mainDialog');
+const { MockMainDialog } = require('../mocks/dialogs/mainDialog');
 const { Templates } = require('botbuilder-lg');
 
 const TEST_MODE = require('./testBase').testMode;
@@ -31,7 +31,8 @@ const localizedTemplates = new Map();
 const templateFile = 'AllResponses';
 const supportedLocales = ['en-us', 'de-de', 'es-es', 'fr-fr', 'it-it', 'zh-cn'];
 
-function getAllResponsesTemplates(locale) {
+function getAllResponsesTemplates() {
+    const locale = i18next.language;
     const path = locale === 'en-us'
         ? join(__dirname, '..', '..', 'lib', 'responses', `AllResponses.lg`)
         : join(__dirname, '..', '..', 'lib', 'responses', `AllResponses.${ locale }.lg`);
@@ -46,7 +47,7 @@ supportedLocales.forEach((locale) => {
     localizedTemplates.set(locale, localTemplateFile);
 });
 
-const templateManager = new LocaleTemplateManager(localizedTemplates, 'en-us');
+const testLocaleTemplateManager = new LocaleTemplateManager(localizedTemplates, 'en-us');
 const testUserProfileState = { name: 'Bot' };
 
 async function initConfiguration() {
@@ -91,16 +92,16 @@ async function getTestAdapterDefault(settings) {
 
     const botServices = new BotServices(botSettings);
     const botServicesAccesor = userState.createProperty(BotServices.name)
-    const onboardingDialog = new OnboardingDialog(botServicesAccesor, botServices, templateManager, telemetryClient);
+    const onboardingDialog = new OnboardingDialog(botServicesAccesor, botServices, testLocaleTemplateManager, telemetryClient);
     const skillDialogs = [];
     const userProfileStateAccesor = userState.createProperty('IUserProfileState');
     const previousResponseAccesor = userState.createProperty('Activity');
     const switchSkillDialog = new SwitchSkillDialog(conversationState);
     const skillsConfig = new SkillsConfiguration([], '');
     const activeSkillProperty = conversationState.createProperty('BotFrameworkSkill');
-    const mainDialog = new MainDialog(
+    const mockMainDialog = new MockMainDialog(
         botServices,
-        templateManager,
+        testLocaleTemplateManager,
         userProfileStateAccesor,
         previousResponseAccesor,
         onboardingDialog,
@@ -110,7 +111,7 @@ async function getTestAdapterDefault(settings) {
         activeSkillProperty
     );
 
-    const botLogic = new DefaultActivityHandler(conversationState, userState, templateManager, mainDialog);
+    const botLogic = new DefaultActivityHandler(conversationState, userState, testLocaleTemplateManager, mockMainDialog);
     const adapter = new TestAdapter(botLogic.run.bind(botLogic));
 
     adapter.onTurnError = async function(context, error) {
@@ -137,6 +138,6 @@ async function getTestAdapterDefault(settings) {
 module.exports = {
     getAllResponsesTemplates: getAllResponsesTemplates,
     getTestAdapterDefault: getTestAdapterDefault,
-    templateManager: templateManager,
+    templateManager: testLocaleTemplateManager,
     testUserProfileState: testUserProfileState
 }
