@@ -45,7 +45,9 @@ let MockMainDialog = /** @class */ (() => {
             skillDialogs.forEach((dialog) => {
                 this.addDialog(dialog);
             });
-            this._mockHttpHandler = nock('http://mockedQnAHost.azurewebsites.net').post('*/knowledgebases/*/generateanswer').replyWithFile(200, JSON.parse(this.getResponse('QnAMaker_NoAnswer.json')), {
+            
+            // All calls to Generate Answer regardless of host or knowledgebaseId are captured
+            this._mockHttpHandler = nock('/.*/').post('*/knowledgebases/*/generateanswer').replyWithFile(200, JSON.parse(this.getResponse('QnAMaker_NoAnswer.json')), {
                 'Content-Type': 'application/json'
             });
             super.tryCreateQnADialog(this.tryCreateQnADialog.bind(this));
