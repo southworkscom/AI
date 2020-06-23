@@ -289,7 +289,7 @@ Error: Path to the nonExistenceen-usDispatch.dispatch file leads to a nonexisten
             strictEqual(errorList[errorList.length - 1], `There was an error while connecting the Skill to the Assistant:
 Error: An error ocurred while updating the Dispatch model:
 Error: There was an error in the bf luis:convert command:
-Command: bf luis:convert --in "${join(configuration.luisFolder, configuration.languages[0], "testSkill.lu")}" --culture ${configuration.languages[0]} --out ${join(configuration.luisFolder, configuration.languages[0], 'testskill.luis')} --name testSkill
+Command: bf luis:convert --in "${join(configuration.luisFolder, configuration.languages[0], "testSkill.lu")}" --culture ${configuration.languages[0]} --out ${join(configuration.luisFolder, configuration.languages[0], 'testskill.luis')} --name testSkill --force
 Error: Path to testskill.luis (${join(configuration.luisFolder, configuration.languages[0], "testskill.luis")}) leads to a nonexistent file.`);
         });
 
@@ -380,7 +380,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             strictEqual(errorList[errorList.length - 1], `There was an error while connecting the Skill to the Assistant:
 Error: An error ocurred while updating the Dispatch model:
 Error: There was an error in the bf luis:convert command:
-Command: bf luis:convert --in "${join(configuration.luisFolder, configuration.languages[0], "testSkill.lu")}" --culture ${configuration.languages[0]} --out ${join(configuration.luisFolder, configuration.languages[0], 'testskill.luis')} --name testSkill
+Command: bf luis:convert --in "${join(configuration.luisFolder, configuration.languages[0], "testSkill.lu")}" --culture ${configuration.languages[0]} --out ${join(configuration.luisFolder, configuration.languages[0], 'testskill.luis')} --name testSkill --force
 Error: The execution of the bf command failed with the following error:
 Error: Mocked function throws an Error`);
 		});
@@ -420,7 +420,7 @@ Error: Mocked function throws an Error`);
         it("The localManifest V1 points to a nonexisting Endpoint URL", async function() {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "invalidEndpoint.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "invalidEndpoint.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -436,7 +436,7 @@ Error: Mocked function throws an Error`);
         
             const errorMessages = [
                 `Missing property 'endpoint' of the manifest`,
-                `There was an error while connecting the Skill to the Assistant:\nError: Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`
+                `There was an error while connecting the Skill to the Assistant:\nError: One or more properties are missing from your Skill Manifest`
             ]
         
             this.connector.configuration = configuration;
@@ -451,7 +451,7 @@ Error: Mocked function throws an Error`);
         it("The localManifest V1 points to a Endpoint URL with uppercase scenario", async function() {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "invalidEndpointManifest.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v1", "invalidEndpointManifest.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -467,7 +467,7 @@ Error: Mocked function throws an Error`);
         
             const errorMessages = [
                 `The 'endpoint' property contains some characters not allowed.`,
-                `There was an error while connecting the Skill to the Assistant:\nError: Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`
+                `There was an error while connecting the Skill to the Assistant:\nError: One or more properties are missing from your Skill Manifest`
             ]
         
             this.connector.configuration = configuration;
@@ -482,7 +482,7 @@ Error: Mocked function throws an Error`);
         it("The localManifest V2 points to a nonexisting Endpoint URL", async function() {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "invalidEndpointV2.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "invalidEndpointV2.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -498,7 +498,7 @@ Error: Mocked function throws an Error`);
         
             const errorMessages = [
                 `Missing property 'endpointUrl' at the selected endpoint. If you didn't select any endpoint, the first one is taken by default`,
-                `There was an error while connecting the Skill to the Assistant:\nError: Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`
+                `There was an error while connecting the Skill to the Assistant:\nError: One or more properties are missing from your Skill Manifest`
             ]
         
             this.connector.configuration = configuration;
@@ -513,7 +513,7 @@ Error: Mocked function throws an Error`);
         it("The localManifest V2 points to a Endpoint URL with uppercase scenario", async function() {
             const configuration = {
                 botName: "",
-                localManifest: resolve(__dirname, join("mocks", "skills", "invalidEndpointManifestV2.json")),
+                localManifest: resolve(__dirname, join("mocks", "manifests", "v2", "invalidEndpointManifestV2.json")),
                 remoteManifest: "",
                 languages: "",
                 luisFolder: "",
@@ -528,8 +528,8 @@ Error: Mocked function throws an Error`);
             };
         
             const errorMessages = [
-                `The 'endpointUrl' property contains some characters not allowed at the selected endpoint. If you didn't select any endpoint, the first one is taken by default.`,
-                `There was an error while connecting the Skill to the Assistant:\nError: Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.`
+                `The 'endpointUrl' property of the selected endpoint contains invalid characters or does not comply with the URL format. If you didn't select any endpoint, the first one is taken by default.`,
+                `There was an error while connecting the Skill to the Assistant:\nError: One or more properties are missing from your Skill Manifest`
             ]
         
             this.connector.configuration = configuration;
