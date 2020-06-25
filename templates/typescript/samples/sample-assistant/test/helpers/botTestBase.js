@@ -13,7 +13,7 @@ const i18nextNodeFsBackend = require('i18next-node-fs-backend');
 const { BotServices } = require('../../lib/services/botServices');
 const { DefaultActivityHandler } = require('../../lib/bots/defaultActivityHandler');
 const { OnboardingDialog } = require('../../lib/dialogs/onboardingDialog');
-const { MainDialog } = require('../libs/dialogs/mainDialog');
+const { MainDialog } = require('../lib/dialogs/mainDialog');
 const { Templates } = require('botbuilder-lg');
 
 const TEST_MODE = require('./testBase').testMode;
