@@ -45,7 +45,7 @@ describe("Main Dialog", function () {
 	});
 
 	describe("escalating", function () {
-        it("test escale intent", function (done) {
+        it("test escalate intent", function (done) {
             getTestAdapterDefault().then((testAdapter) => {
 				const flow = testAdapter
 					.send('I want to talk to a human')	
