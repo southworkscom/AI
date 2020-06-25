@@ -9,7 +9,7 @@ const { getTestAdapterDefault, testUserProfileState } = require('./helpers/botTe
 
 describe("Main Dialog", function () {
 	describe("intro card", function() {
-		it("send a 'conversationUpdate' and verify intro message card is received", function(done) {
+		it("test intro message", function(done) {
 			getTestAdapterDefault().then((testAdapter) => {
                 const flow = testAdapter
                 .send({
@@ -31,7 +31,7 @@ describe("Main Dialog", function () {
 	});
 
 	describe("help", function () {
-		it("send 'Help' and verify help message card is received", function (done) {
+		it("test help intent", function (done) {
 			getTestAdapterDefault().then((testAdapter) => {
 				const flow = testAdapter
 					.send('Help')
@@ -45,7 +45,7 @@ describe("Main Dialog", function () {
 	});
 
 	describe("escalating", function () {
-        it("send 'I want to talk to a human' and check you get the expected response", function (done) {
+        it("test escale intent", function (done) {
             getTestAdapterDefault().then((testAdapter) => {
 				const flow = testAdapter
 					.send('I want to talk to a human')	
@@ -63,7 +63,7 @@ describe("Main Dialog", function () {
     	ChitChat is the default fallback which will not be configured at functional test time so a mock ensures QnAMaker returns no answer
     	enabling the unsupported message to be returned.
     	 */
-        it("send an unhandled message", function (done) {
+        it("test unhandled message", function (done) {
 			const allResponseVariations = getAllResponsesTemplates().expandTemplate("UnsupportedMessage", testUserProfileState);
 
 			getTestAdapterDefault().then((testAdapter) => {

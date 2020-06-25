@@ -13,7 +13,7 @@ const i18nextNodeFsBackend = require('i18next-node-fs-backend');
 const { BotServices } = require('../../lib/services/botServices');
 const { DefaultActivityHandler } = require('../../lib/bots/defaultActivityHandler');
 const { OnboardingDialog } = require('../../lib/dialogs/onboardingDialog');
-const { MockMainDialog } = require('../mocks/dialogs/mainDialog');
+const { MainDialog } = require('../libs/dialogs/mainDialog');
 const { Templates } = require('botbuilder-lg');
 
 const TEST_MODE = require('./testBase').testMode;
@@ -99,7 +99,7 @@ async function getTestAdapterDefault(settings) {
     const switchSkillDialog = new SwitchSkillDialog(conversationState);
     const skillsConfig = new SkillsConfiguration([], '');
     const activeSkillProperty = conversationState.createProperty('BotFrameworkSkill');
-    const mockMainDialog = new MockMainDialog(
+    const mainDialog = new MainDialog(
         botServices,
         testLocaleTemplateManager,
         userProfileStateAccesor,
@@ -111,7 +111,7 @@ async function getTestAdapterDefault(settings) {
         activeSkillProperty
     );
 
-    const botLogic = new DefaultActivityHandler(conversationState, userState, testLocaleTemplateManager, mockMainDialog);
+    const botLogic = new DefaultActivityHandler(conversationState, userState, testLocaleTemplateManager, mainDialog);
     const adapter = new TestAdapter(botLogic.run.bind(botLogic));
 
     adapter.onTurnError = async function(context, error) {

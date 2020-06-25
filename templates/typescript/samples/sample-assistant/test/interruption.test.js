@@ -16,7 +16,7 @@ describe("Interruption", function() {
             done();
         });
 
-        it("send help and check that there is a attachment", function(done) {
+        it("send help interruption", function(done) {
             getTestAdapterDefault({ storage: testStorage }).then((testAdapter) => {
                 const flow = testAdapter
                 .send("Help")
@@ -28,7 +28,7 @@ describe("Interruption", function() {
             });
         });
 
-        it("send help and check that there is a attachment of the response file", function(done) {
+        it("send help interruption and during a dialog", function(done) {
             const allNamePromptVariations = getAllResponsesTemplates().expandTemplate("NamePrompt");
 
             getTestAdapterDefault({ storage: testStorage }).then((testAdapter) => {
@@ -58,8 +58,8 @@ describe("Interruption", function() {
     });
 
     describe ("cancel interruption", function(done) {
-        // "the LG template 'UnsupportedMessage' has randomly generated response which makes this test unreliable"
-        xit("send cancel during a flow and check the response is one of the file", function(done) {
+        // IGNORED: "the LG template 'UnsupportedMessage' has randomly generated response which makes this test unreliable"
+        xit("send cancel interruption", function(done) {
             const allNamePromptVariations = getAllResponsesTemplates().expandTemplate("NamePrompt");
             const allCancelledVariations = getAllResponsesTemplates().expandTemplate("CancelledMessage", testUserProfileState);
 
@@ -84,7 +84,7 @@ describe("Interruption", function() {
             });
         });
 
-        it("send repeat during a flow and check the response is one of the file", function(done) {
+        it("send repeat interruption", function(done) {
             const allNamePromptVariations = getAllResponsesTemplates().expandTemplate("NamePrompt");
 
             getTestAdapterDefault().then((testAdapter) => {
