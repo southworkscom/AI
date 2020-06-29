@@ -51,7 +51,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
         }
         this.conversationState = conversationState;
         if (templateEngine === undefined) {
-            throw new Error('templateManager parameter is null');
+            throw new Error('templateEngine parameter is null');
         }
         this.templateEngine = templateEngine;
         if (telemetryClient === undefined) {
