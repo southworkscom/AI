@@ -17,12 +17,12 @@ import {
     EventDebuggerMiddleware,
     SetLocaleMiddleware,
     LocaleTemplateManager,
-    SetSpeakMiddleware } from 'bot-solutions';
+    SetSpeakMiddleware,
+    ActivityEx } from 'bot-solutions';
 import { IBotSettings } from '../services/botSettings';
 import { TurnContextEx } from '../extensions/turnContextEx';
 import { AzureBlobTranscriptStore, BlobStorageSettings } from 'botbuilder-azure';
 import { TelemetryInitializerMiddleware } from 'botbuilder-applicationinsights';
-import {ActivityEx} from 'bot-solutions/lib';
 
 export class DefaultAdapter extends BotFrameworkAdapter {
 
@@ -36,7 +36,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
         conversationState: ConversationState,
         telemetryMiddleware: TelemetryInitializerMiddleware,
         telemetryClient: BotTelemetryClient,
-        adapterSettings: Partial<BotFrameworkAdapterSettings>,
+        adapterSettings: Partial<BotFrameworkAdapterSettings>
     ) {
         super(adapterSettings);
 
@@ -115,7 +115,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
             }
         }
         catch (err) {
-            console.error(`Exception caught in sendEndOfConversationToParent : ${ err }`);
+            console.error(`Exception caught in sendEoCToParent : ${ err }`);
         }
     }
 
@@ -127,7 +127,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
             await this.conversationState.delete(turnContext);
         }
         catch (err) {
-            console.error(`Exception caught in clearConversationStateAsync : ${ err }`);
+            console.error(`Exception caught on attempting to Delete ConversationState : ${ err }`);
         }
     }
 }
