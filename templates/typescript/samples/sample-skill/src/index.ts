@@ -32,6 +32,8 @@ import { SampleAction } from './dialogs/sampleAction';
 import { SkillState } from './models/skillState';
 import { BotServices } from './services/botServices';
 import { IBotSettings } from './services/botSettings';
+import {SkillsConfiguration} from "bot-solutions/lib";
+import {AuthenticationConfiguration, Claim, SimpleCredentialProvider} from "botframework-connector";
 
 const cognitiveModels: Map<string, ICognitiveModelConfiguration> = new Map();
 const cognitiveModelDictionary: { [key: string]: Object } = cognitiveModelsRaw.cognitiveModels;
@@ -41,7 +43,7 @@ cognitiveModelMap.forEach((value: Object, key: string): void => {
 });
 
 // Load settings
-const botSettings: Partial<IBotSettings> = {
+const settings: Partial<IBotSettings> = {
     appInsights: appsettings.appInsights,
     blobStorage: appsettings.blobStorage,
     cognitiveModels: cognitiveModels,
@@ -50,7 +52,7 @@ const botSettings: Partial<IBotSettings> = {
     microsoftAppId: appsettings.microsoftAppId,
     microsoftAppPassword: appsettings.microsoftAppPassword
 };
-if (botSettings.appInsights === undefined) {
+if (settings.appInsights === undefined) {
     throw new Error('There is no appInsights value in appsettings file');
 }
 
@@ -64,21 +66,34 @@ function getTelemetryClient(settings: Partial<IBotSettings>): BotTelemetryClient
     return new NullTelemetryClient();
 }
 
+// Configure configuration provider
+const credentialProvider: SimpleCredentialProvider = new SimpleCredentialProvider(appsettings.microsoftAppId, appsettings.microsoftAppPassword);
+
+// Register AuthConfiguration to enable custom claim validation.
+const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator("...");
+const authenticationConfiguration = new AuthenticationConfiguration(
+    undefined,
+    (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
+);
+
 // Configure telemetry
-const telemetryClient: BotTelemetryClient = getTelemetryClient(botSettings);
+const telemetryClient: BotTelemetryClient = getTelemetryClient(settings);
 const telemetryLoggerMiddleware: TelemetryLoggerMiddleware = new TelemetryLoggerMiddleware(telemetryClient);
 const telemetryInitializerMiddleware: TelemetryInitializerMiddleware = new TelemetryInitializerMiddleware(telemetryLoggerMiddleware);
 
-if (botSettings.cosmosDb === undefined) {
+// Configure bot services
+const botServices: BotServices = new BotServices(settings, telemetryClient);
+
+if (settings.cosmosDb === undefined) {
     throw new Error();
 }
 
 // Configure storage
 const cosmosDbStorageOptions: CosmosDbPartitionedStorageOptions = {
-    authKey: botSettings.cosmosDb.authKey,
-    containerId: botSettings.cosmosDb.containerId,
-    databaseId: botSettings.cosmosDb.databaseId,
-    cosmosDbEndpoint: botSettings.cosmosDb.cosmosDbEndpoint
+    authKey: settings.cosmosDb.authKey,
+    containerId: settings.cosmosDb.containerId,
+    databaseId: settings.cosmosDb.databaseId,
+    cosmosDbEndpoint: settings.cosmosDb.cosmosDbEndpoint
 };
 const storage: CosmosDbPartitionedStorage =  new CosmosDbPartitionedStorage(cosmosDbStorageOptions);
 const userState: UserState = new UserState(storage);
@@ -98,37 +113,38 @@ supportedLocales.forEach((locale: string) => {
     localizedTemplates.set(locale, localTemplateFile);
 });
 
-const localeTemplateManager: LocaleTemplateManager = new LocaleTemplateManager(localizedTemplates, botSettings.defaultLocale || 'en-us');
+const localeTemplateManager: LocaleTemplateManager = new LocaleTemplateManager(localizedTemplates, settings.defaultLocale || 'en-us');
 
 const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
-    appId: botSettings.microsoftAppId,
-    appPassword: botSettings.microsoftAppPassword
+    appId: settings.microsoftAppId,
+    appPassword: settings.microsoftAppPassword
 };
 
 const defaultAdapter: DefaultAdapter = new DefaultAdapter(
-    botSettings,
-    adapterSettings,
+    settings,
     localeTemplateManager,
+    conversationState,
     telemetryInitializerMiddleware,
-    telemetryClient);
+    telemetryClient,
+    adapterSettings,);
 
 const adapter: BotFrameworkAdapter = defaultAdapter;
 
 let bot: DefaultActivityHandler<Dialog>;
 try {
     // Configure bot services
-    const botServices: BotServices = new BotServices(botSettings, telemetryClient);
+    const botServices: BotServices = new BotServices(settings, telemetryClient);
 
     // Register dialogs
     const sampleDialog: SampleDialog = new SampleDialog(
-        botSettings,
+        settings,
         botServices,
         stateAccessor,
         telemetryClient,
         localeTemplateManager
     );
     const sampleAction: SampleAction = new SampleAction(
-        botSettings,
+        settings,
         botServices,
         stateAccessor,
         telemetryClient,
