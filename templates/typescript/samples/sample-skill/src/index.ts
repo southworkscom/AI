@@ -32,8 +32,7 @@ import { SampleAction } from './dialogs/sampleAction';
 import { SkillState } from './models/skillState';
 import { BotServices } from './services/botServices';
 import { IBotSettings } from './services/botSettings';
-import {SkillsConfiguration} from "bot-solutions/lib";
-import {AuthenticationConfiguration, Claim, SimpleCredentialProvider} from "botframework-connector";
+import { AuthenticationConfiguration, Claim, SimpleCredentialProvider } from 'botframework-connector';
 
 const cognitiveModels: Map<string, ICognitiveModelConfiguration> = new Map();
 const cognitiveModelDictionary: { [key: string]: Object } = cognitiveModelsRaw.cognitiveModels;
@@ -70,8 +69,8 @@ function getTelemetryClient(settings: Partial<IBotSettings>): BotTelemetryClient
 const credentialProvider: SimpleCredentialProvider = new SimpleCredentialProvider(appsettings.microsoftAppId, appsettings.microsoftAppPassword);
 
 // Register AuthConfiguration to enable custom claim validation.
-const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator("...");
-const authenticationConfiguration = new AuthenticationConfiguration(
+const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(appsettings.allowedCallers);
+const authenticationConfiguration:AuthenticationConfiguration  = new AuthenticationConfiguration(
     undefined,
     (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
 );
@@ -126,7 +125,7 @@ const defaultAdapter: DefaultAdapter = new DefaultAdapter(
     conversationState,
     telemetryInitializerMiddleware,
     telemetryClient,
-    adapterSettings,);
+    adapterSettings);
 
 const adapter: BotFrameworkAdapter = defaultAdapter;
 
