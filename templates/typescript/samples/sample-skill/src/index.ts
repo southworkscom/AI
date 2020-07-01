@@ -29,10 +29,9 @@ import * as cognitiveModelsRaw from './cognitivemodels.json';
 import { MainDialog } from './dialogs/mainDialog';
 import { SampleDialog } from './dialogs/sampleDialog';
 import { SampleAction } from './dialogs/sampleAction';
-import { SkillState } from './models/skillState';
+import { SkillState } from './models';
 import { BotServices } from './services/botServices';
 import { IBotSettings } from './services/botSettings';
-import { AuthenticationConfiguration, Claim, SimpleCredentialProvider } from 'botframework-connector';
 
 const cognitiveModels: Map<string, ICognitiveModelConfiguration> = new Map();
 const cognitiveModelDictionary: { [key: string]: Object } = cognitiveModelsRaw.cognitiveModels;
@@ -65,23 +64,10 @@ function getTelemetryClient(settings: Partial<IBotSettings>): BotTelemetryClient
     return new NullTelemetryClient();
 }
 
-// Configure configuration provider
-const credentialProvider: SimpleCredentialProvider = new SimpleCredentialProvider(appsettings.microsoftAppId, appsettings.microsoftAppPassword);
-
-// Register AuthConfiguration to enable custom claim validation.
-const allowedCallersClaimsValidator: AllowedCallersClaimsValidator = new AllowedCallersClaimsValidator(appsettings.allowedCallers);
-const authenticationConfiguration:AuthenticationConfiguration  = new AuthenticationConfiguration(
-    undefined,
-    (claims: Claim[]) => allowedCallersClaimsValidator.validateClaims(claims)
-);
-
 // Configure telemetry
 const telemetryClient: BotTelemetryClient = getTelemetryClient(settings);
 const telemetryLoggerMiddleware: TelemetryLoggerMiddleware = new TelemetryLoggerMiddleware(telemetryClient);
 const telemetryInitializerMiddleware: TelemetryInitializerMiddleware = new TelemetryInitializerMiddleware(telemetryLoggerMiddleware);
-
-// Configure bot services
-const botServices: BotServices = new BotServices(settings, telemetryClient);
 
 if (settings.cosmosDb === undefined) {
     throw new Error();
@@ -126,8 +112,6 @@ const defaultAdapter: DefaultAdapter = new DefaultAdapter(
     telemetryInitializerMiddleware,
     telemetryClient,
     adapterSettings);
-
-const adapter: BotFrameworkAdapter = defaultAdapter;
 
 let bot: DefaultActivityHandler<Dialog>;
 try {
