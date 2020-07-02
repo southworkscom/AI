@@ -142,7 +142,7 @@ try {
         localeTemplateManager
     );
 
-    bot = new DefaultActivityHandler(conversationState, userState, localeTemplateManager, mainDialog);
+    bot = new DefaultActivityHandler(conversationState, userState, localeTemplateManager, telemetryClient, mainDialog);
 } catch (err) {
     throw err;
 }
