@@ -38,13 +38,10 @@ export class MainDialog extends ComponentDialog {
     private readonly sampleDialog: SampleDialog;
     private readonly sampleAction: SampleAction;
     private readonly templateManager: LocaleTemplateManager;
-    private readonly stateAccessor: StatePropertyAccessor<SkillState>;
     
     // Constructor
     public constructor(
         services: BotServices,
-        telemetryClient: BotTelemetryClient,
-        stateAccessor: StatePropertyAccessor<SkillState>,
         sampleDialog: SampleDialog,
         sampleAction: SampleAction,
         templateManager: LocaleTemplateManager
@@ -52,10 +49,6 @@ export class MainDialog extends ComponentDialog {
         super(MainDialog.name);
         this.services = services;
         this.templateManager = templateManager;
-        this.telemetryClient = telemetryClient;
-
-        // Create conversationstate properties
-        this.stateAccessor = stateAccessor;
 
         const steps: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             this.introStep.bind(this),
@@ -76,7 +69,8 @@ export class MainDialog extends ComponentDialog {
 
     // Runs when the dialog is started.
     protected async onBeginDialog(innerDc: DialogContext, options: Object): Promise<DialogTurnResult> {
-        if (innerDc.context.activity.type == ActivityTypes.Message) {
+        const activity = innerDc.context.activity;
+        if (activity.type == ActivityTypes.Message && (activity.text !== undefined && activity.text.trim().length > 0)) {
         
             // Get cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels(innerDc.context.activity.locale as string);
@@ -98,9 +92,9 @@ export class MainDialog extends ComponentDialog {
             // Check for any interruptions
             const interrupted = await this.interruptDialog(innerDc);
 
-            if (interrupted) {
-                // If dialog was interrupted, return EndOfTurn
-                return MainDialog.EndOfTurn;
+            if (interrupted !== undefined) {
+                // If dialog was interrupted, return interrupted result
+                return interrupted;
             }
         }
 
@@ -109,8 +103,9 @@ export class MainDialog extends ComponentDialog {
 
     // Runs on every turn of the conversation.
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
-        if (innerDc.context.activity.type === ActivityTypes.Message) {
-        
+        const activity = innerDc.context.activity;
+        if (activity.type === ActivityTypes.Message && (activity.text !== undefined && activity.text.trim().length > 0)) {
+
             // Get cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels(innerDc.context.activity.locale as string);
             // Run LUIS recognition on Skill model and store result in turn state.
@@ -130,9 +125,9 @@ export class MainDialog extends ComponentDialog {
             // Check for any interruptions
             const interrupted = await this.interruptDialog(innerDc);
 
-            if (interrupted) {
-                // If dialog was interrupted, return EndOfTurn
-                return MainDialog.EndOfTurn;
+            if (interrupted !== undefined) {
+                // If dialog was interrupted, return interrupted result
+                return interrupted;
             }
         }
 
@@ -140,8 +135,8 @@ export class MainDialog extends ComponentDialog {
     }
 
     // Runs on every turn of the conversation to check if the conversation should be interrupted.
-    protected async interruptDialog(innerDc: DialogContext): Promise<Boolean> {
-        let interrupted = false;
+    protected async interruptDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
+        let interrupted:DialogTurnResult;
         const activity: Activity = innerDc.context.activity;
 
         if (activity.type === ActivityTypes.Message && activity.text !== undefined && activity.text.trim().length > 0) {
@@ -155,15 +150,19 @@ export class MainDialog extends ComponentDialog {
 
                         await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('CancelledMessage', innerDc.context.activity.locale));
                         await innerDc.cancelAllDialogs();
-                        await innerDc.beginDialog(this.initialDialogId);
-                        interrupted = true;
+                        if (TurnContextEx.isSkill(innerDc.context)) {
+                            interrupted = await innerDc.endDialog();
+                        }
+                        else {
+                            interrupted = await innerDc.beginDialog(this.initialDialogId);
+                        }
                         break;
                     } 
                     case 'Help': {
 
                         await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('HelpCard', innerDc.context.activity.locale));
                         await innerDc.repromptDialog();
-                        interrupted = true;
+                        interrupted = MainDialog.EndOfTurn;
                         break;
                     }
                     case 'Logout': {
@@ -173,8 +172,12 @@ export class MainDialog extends ComponentDialog {
 
                         await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('LogoutMessage', innerDc.context.activity.locale));
                         await innerDc.cancelAllDialogs();
-                        await innerDc.beginDialog(this.initialDialogId);
-                        interrupted = true;
+                        if (TurnContextEx.isSkill(innerDc.context)) {
+                            interrupted = await innerDc.endDialog();
+                        }
+                        else {
+                            interrupted = await innerDc.beginDialog(this.initialDialogId);
+                        }
                         break;
                     }
                 }
@@ -189,13 +192,13 @@ export class MainDialog extends ComponentDialog {
         if (TurnContextEx.isSkill(stepContext.context)) {
             // If the bot is in skill mode, skip directly to route and do not prompt
             return await stepContext.next();
-        } else {
-            // If bot is in local mode, prompt with intro or continuation message
-            const promptOptions: PromptOptions = {
-                prompt: Object.keys(stepContext.options as Activity).length > 0 ? stepContext.options as Activity : this.templateManager.generateActivityForLocale('FirstPromptMessage', stepContext.context.activity.locale)
-            };
-            return await stepContext.prompt(TextPrompt.name, promptOptions);
         }
+
+        // If bot is in local mode, prompt with intro or continuation message
+        const promptOptions: PromptOptions = {
+            prompt: Object.keys(stepContext.options as Activity).length > 0 ? stepContext.options as Activity : this.templateManager.generateActivityForLocale('FirstPromptMessage', stepContext.context.activity.locale)
+        };
+        return await stepContext.prompt(TextPrompt.name, promptOptions);
     }
 
     // Handles routing to additional dialogs logic.
