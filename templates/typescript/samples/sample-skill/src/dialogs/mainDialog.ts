@@ -136,7 +136,7 @@ export class MainDialog extends ComponentDialog {
 
     // Runs on every turn of the conversation to check if the conversation should be interrupted.
     protected async interruptDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
-        let interrupted:DialogTurnResult;
+        let interrupted: DialogTurnResult = {} as DialogTurnResult;
         const activity: Activity = innerDc.context.activity;
 
         if (activity.type === ActivityTypes.Message && activity.text !== undefined && activity.text.trim().length > 0) {
@@ -241,7 +241,7 @@ export class MainDialog extends ComponentDialog {
                     case 'SampleAction': {
                         let actionData: Object = {};
 
-                        if (ev.value !== undefined && actionData !== undefined) {
+                        if (ev.value !== undefined) {
                             actionData = ev.value as SampleActionInput;
                         }
 
