@@ -19,7 +19,6 @@ Param(
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
 )
 
-
 function ParseValidationResult
 (
     [ValidateNotNullOrEmpty()]
@@ -175,7 +174,7 @@ if (-not $luisAuthoringKey) {
         else {
             $createLuisAuthoring = $true
         }
-    } 
+    }
 }
 else {
     $createLuisAuthoring = $false
