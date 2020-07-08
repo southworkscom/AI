@@ -11,7 +11,7 @@ import { SkillDialogBase } from './skillDialogBase';
 import { BotTelemetryClient, StatePropertyAccessor, Activity } from 'botbuilder';
 import { BotServices } from '../services/botServices';
 import { LocaleTemplateManager } from 'bot-solutions';
-import { SkillState } from '../models/skillState';
+import { SkillState } from '../models';
 import { IBotSettings } from '../services/botSettings';
 
 export class SampleActionInput {
@@ -33,15 +33,14 @@ export class SampleAction extends SkillDialogBase {
         settings: Partial<IBotSettings>,
         services: BotServices,
         stateAccessor: StatePropertyAccessor<SkillState>,
-        telemetryClient: BotTelemetryClient,
         templateManager: LocaleTemplateManager
     ) {
-        super(SampleAction.name, settings, services, stateAccessor, telemetryClient, templateManager);
+        super(SampleAction.name, settings, services, stateAccessor, templateManager);
         
         const sample: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             this.promptForName.bind(this),
             this.greetUser.bind(this),
-            this.end.bind(this)
+            SampleAction.end.bind(this)
         ];
 
         this.addDialog(new WaterfallDialog(SampleAction.name, sample));
@@ -72,7 +71,7 @@ export class SampleAction extends SkillDialogBase {
         return await stepContext.next();
     }
 
-    private async end(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+    private static async end(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         // Simulate a response object payload
         const actionResponse: SampleActionOutput = new SampleActionOutput();
         actionResponse.customerId = Math.random();
