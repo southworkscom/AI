@@ -8,7 +8,7 @@ import {
     WaterfallDialog,
     TextPrompt } from 'botbuilder-dialogs';
 import { SkillDialogBase } from './skillDialogBase';
-import { BotTelemetryClient, StatePropertyAccessor, Activity } from 'botbuilder';
+import { StatePropertyAccessor, Activity } from 'botbuilder';
 import { BotServices } from '../services/botServices';
 import { LocaleTemplateManager } from 'bot-solutions';
 import { SkillState } from '../models';
