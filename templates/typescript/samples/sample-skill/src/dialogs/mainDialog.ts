@@ -37,18 +37,18 @@ export class MainDialog extends ComponentDialog {
     private readonly services: BotServices;
     private readonly sampleDialog: SampleDialog;
     private readonly sampleAction: SampleAction;
-    private readonly templateManager: LocaleTemplateManager;
+    private readonly templateEngine: LocaleTemplateManager;
     
     // Constructor
     public constructor(
         services: BotServices,
         sampleDialog: SampleDialog,
         sampleAction: SampleAction,
-        templateManager: LocaleTemplateManager
+        templateEngine: LocaleTemplateManager
     ) {
         super(MainDialog.name);
         this.services = services;
-        this.templateManager = templateManager;
+        this.templateEngine = templateEngine;
 
         const steps: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             this.introStep.bind(this),
@@ -69,8 +69,8 @@ export class MainDialog extends ComponentDialog {
 
     // Runs when the dialog is started.
     protected async onBeginDialog(innerDc: DialogContext, options: Object): Promise<DialogTurnResult> {
-        const activity = innerDc.context.activity;
-        if (activity.type == ActivityTypes.Message && (activity.text !== undefined && activity.text.trim().length > 0)) {
+        const activity: Activity = innerDc.context.activity;
+        if (activity.type === ActivityTypes.Message && activity.text !== undefined && activity.text.trim().length > 0) {
         
             // Get cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels(innerDc.context.activity.locale as string);
@@ -90,7 +90,7 @@ export class MainDialog extends ComponentDialog {
             }
 
             // Check for any interruptions
-            const interrupted = await this.interruptDialog(innerDc);
+            const interrupted: DialogTurnResult = await this.interruptDialog(innerDc);
 
             if (interrupted !== undefined) {
                 // If dialog was interrupted, return interrupted result
@@ -103,11 +103,11 @@ export class MainDialog extends ComponentDialog {
 
     // Runs on every turn of the conversation.
     protected async onContinueDialog(innerDc: DialogContext): Promise<DialogTurnResult> {
-        const activity = innerDc.context.activity;
-        if (activity.type === ActivityTypes.Message && (activity.text !== undefined && activity.text.trim().length > 0)) {
-
+        const activity: Activity = innerDc.context.activity;
+        if (activity.type === ActivityTypes.Message && activity.text !== undefined && activity.text.trim().length > 0) {
             // Get cognitive models for the current locale.
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels(innerDc.context.activity.locale as string);
+
             // Run LUIS recognition on Skill model and store result in turn state.
             const skillLuis: LuisRecognizer | undefined = localizedServices.luisServices ? localizedServices.luisServices.get('sampleSkill') : undefined;
             if (skillLuis !== undefined) {
@@ -123,7 +123,7 @@ export class MainDialog extends ComponentDialog {
             }     
         
             // Check for any interruptions
-            const interrupted = await this.interruptDialog(innerDc);
+            const interrupted: DialogTurnResult = await this.interruptDialog(innerDc);
 
             if (interrupted !== undefined) {
                 // If dialog was interrupted, return interrupted result
@@ -147,8 +147,7 @@ export class MainDialog extends ComponentDialog {
             if (generalResult.intents[intent].score > 0.5) {
                 switch(intent) {
                     case 'Cancel': { 
-
-                        await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('CancelledMessage', innerDc.context.activity.locale));
+                        await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('CancelledMessage', innerDc.context.activity.locale));
                         await innerDc.cancelAllDialogs();
                         if (TurnContextEx.isSkill(innerDc.context)) {
                             interrupted = await innerDc.endDialog();
@@ -159,18 +158,16 @@ export class MainDialog extends ComponentDialog {
                         break;
                     } 
                     case 'Help': {
-
-                        await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('HelpCard', innerDc.context.activity.locale));
+                        await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('HelpCard', innerDc.context.activity.locale));
                         await innerDc.repromptDialog();
                         interrupted = MainDialog.EndOfTurn;
                         break;
                     }
                     case 'Logout': {
-
                         // Log user out of all accounts.
                         await this.logUserOut(innerDc);
 
-                        await innerDc.context.sendActivity(this.templateManager.generateActivityForLocale('LogoutMessage', innerDc.context.activity.locale));
+                        await innerDc.context.sendActivity(this.templateEngine.generateActivityForLocale('LogoutMessage', innerDc.context.activity.locale));
                         await innerDc.cancelAllDialogs();
                         if (TurnContextEx.isSkill(innerDc.context)) {
                             interrupted = await innerDc.endDialog();
@@ -196,7 +193,7 @@ export class MainDialog extends ComponentDialog {
 
         // If bot is in local mode, prompt with intro or continuation message
         const promptOptions: PromptOptions = {
-            prompt: Object.keys(stepContext.options as Activity).length > 0 ? stepContext.options as Activity : this.templateManager.generateActivityForLocale('FirstPromptMessage', stepContext.context.activity.locale)
+            prompt: Object.keys(stepContext.options as Activity).length > 0 ? stepContext.options as Activity : this.templateEngine.generateActivityForLocale('FirstPromptMessage', stepContext.context.activity.locale)
         };
         return await stepContext.prompt(TextPrompt.name, promptOptions);
     }
@@ -226,7 +223,7 @@ export class MainDialog extends ComponentDialog {
                     case 'None': 
                     default: {
                         // intent was identified but not yet implemented
-                        await stepContext.context.sendActivity(this.templateManager.generateActivityForLocale('UnsupportedMessage', stepContext.context.activity.locale));
+                        await stepContext.context.sendActivity(this.templateEngine.generateActivityForLocale('UnsupportedMessage', stepContext.context.activity.locale));
                         return await stepContext.next();
                     }
                 }  
@@ -277,7 +274,7 @@ export class MainDialog extends ComponentDialog {
             return await stepContext.endDialog(result);
         } else {
             
-            return await stepContext.replaceDialog(this.id, this.templateManager.generateActivityForLocale('CompletedMessage', stepContext.context.activity.locale));
+            return await stepContext.replaceDialog(this.id, this.templateEngine.generateActivityForLocale('CompletedMessage', stepContext.context.activity.locale));
         }
     }
 
