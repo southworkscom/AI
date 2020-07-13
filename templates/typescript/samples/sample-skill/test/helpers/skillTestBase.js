@@ -167,10 +167,10 @@ const getTelemetryClient = function(settings) {
     return new NullTelemetryClient();
 };
 
-const getTemplates = function(name, data) {
-    const path = Intl.DateTimeFormat().resolvedOptions().locale === 'en-us'
+const getTemplates = function(locale, name, data) {
+    const path = locale === 'en-us'
         ? join(__dirname, '..', '..', 'lib', 'responses', 'AllResponses.lg')
-        : join(__dirname, '..', '..', 'lib', 'responses', `AllResponses.${Intl.DateTimeFormat().resolvedOptions().locale.toLowerCase()}.lg`)
+        : join(__dirname, '..', '..', 'lib', 'responses', `AllResponses.${locale}.lg`)
     
     return TemplatesParser.parseFile(path).expandTemplate(name, data);
 };
