@@ -20,7 +20,7 @@ export interface _Entities {
     $instance : _Instance;
 }
 
-export interface skillSampleLuis {
+export interface sampleSkillLuis {
     text: string;
     alteredText?: string;
     intents: _Intents;
