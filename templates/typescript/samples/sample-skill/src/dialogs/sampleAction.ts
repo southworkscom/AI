@@ -27,8 +27,6 @@ enum DialogIds {
 }
 
 export class SampleAction extends SkillDialogBase {
-    private readonly nameKey: string = 'name';
-
     public constructor(
         settings: Partial<IBotSettings>,
         services: BotServices,
@@ -40,7 +38,7 @@ export class SampleAction extends SkillDialogBase {
         const sample: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             this.promptForName.bind(this),
             this.greetUser.bind(this),
-            SampleAction.end.bind(this)
+            this.end.bind(this)
         ];
 
         this.addDialog(new WaterfallDialog(SampleAction.name, sample));
@@ -64,14 +62,14 @@ export class SampleAction extends SkillDialogBase {
 
     private async greetUser(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         const data: Object = { name: stepContext.result as string };
-        const response: Partial<Activity> = this.templateManager.generateActivityForLocale('HaveNameMessage', stepContext.context.activity.locale, data);
+        const response: Partial<Activity> = this.templateManager.generateActivityForLocale('HaveNameMessage', data, stepContext.context.activity.locale);
         await stepContext.context.sendActivity(response);
 
         // Pass the response which we'll return to the user onto the next step
         return await stepContext.next();
     }
 
-    private static async end(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
+    private async end(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
         // Simulate a response object payload
         const actionResponse: SampleActionOutput = new SampleActionOutput();
         actionResponse.customerId = Math.random();
