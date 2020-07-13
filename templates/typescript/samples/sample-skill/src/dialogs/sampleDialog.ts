@@ -62,7 +62,7 @@ export class SampleDialog extends SkillDialogBase {
         tokens.set(this.nameKey, stepContext.result as string);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const response: any = this.templateManager.generateActivityForLocale('HaveNameMessage', stepContext.context.activity.locale, tokens);
+        const response: any = this.templateManager.generateActivityForLocale('HaveNameMessage', tokens, stepContext.context.activity.locale);
         await stepContext.context.sendActivity(response);
 
         return await stepContext.next();
