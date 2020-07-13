@@ -22,9 +22,6 @@ enum DialogIds {
 }
 
 export class SampleDialog extends SkillDialogBase {
-
-    private readonly nameKey: string = 'name';
-
     // Constructor
     public constructor(
         settings: Partial<IBotSettings>,
@@ -57,11 +54,10 @@ export class SampleDialog extends SkillDialogBase {
     }
 
     private async greetUser(stepContext: WaterfallStepContext): Promise<DialogTurnResult> {
-        const tokens: Map<string, string> = new Map<string, string>();
-        tokens.set(this.nameKey, stepContext.result as string);
+        const data: Object = { name: stepContext.result as string };
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const response: any = this.templateManager.generateActivityForLocale('HaveNameMessage', tokens, stepContext.context.activity.locale);
+        const response: any = this.templateManager.generateActivityForLocale('HaveNameMessage', stepContext.context.activity.locale, data);
         await stepContext.context.sendActivity(response);
 
         return await stepContext.next();
