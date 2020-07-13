@@ -129,7 +129,6 @@ try {
         settings,
         botServices,
         stateAccessor,
-        telemetryClient,
         localeTemplateManager
     );
     const mainDialog: MainDialog = new MainDialog(
