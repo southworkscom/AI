@@ -11,6 +11,7 @@ const {
     UserState
 } = require("botbuilder");
 const { join } = require("path");
+const { TemplatesParser } = require("botbuilder-lg");
 const {
     ApplicationInsightsTelemetryClient
 } = require("botbuilder-applicationinsights");
@@ -166,8 +167,12 @@ const getTelemetryClient = function(settings) {
     return new NullTelemetryClient();
 };
 
-const getTemplates = function(locale, name) {
-    return templateManager.lgPerLocale.get(locale).expandTemplate(name);
+const getTemplates = function(name, data) {
+    const path = Intl.DateTimeFormat().resolvedOptions().locale === 'en-us'
+        ? join(__dirname, '..', '..', 'lib', 'responses', 'AllResponses.lg')
+        : join(__dirname, '..', '..', 'lib', 'responses', `AllResponses.${Intl.DateTimeFormat().resolvedOptions().locale.toLowerCase()}.lg`)
+    
+    return TemplatesParser.parseFile(path).expandTemplate(name, data);
 };
 
 module.exports = {
