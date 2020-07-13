@@ -8,10 +8,10 @@ import {
     WaterfallDialog,
     TextPrompt } from 'botbuilder-dialogs';
 import { SkillDialogBase } from './skillDialogBase';
-import { BotTelemetryClient, StatePropertyAccessor, Activity } from 'botbuilder';
+import { StatePropertyAccessor, Activity } from 'botbuilder';
 import { BotServices } from '../services/botServices';
 import { LocaleTemplateManager } from 'bot-solutions';
-import { SkillState } from '../models/skillState';
+import { SkillState } from '../models';
 import { IBotSettings } from '../services/botSettings';
 
 export class SampleActionInput {
@@ -27,16 +27,13 @@ enum DialogIds {
 }
 
 export class SampleAction extends SkillDialogBase {
-    private readonly nameKey: string = 'name';
-
     public constructor(
         settings: Partial<IBotSettings>,
         services: BotServices,
         stateAccessor: StatePropertyAccessor<SkillState>,
-        telemetryClient: BotTelemetryClient,
         templateManager: LocaleTemplateManager
     ) {
-        super(SampleAction.name, settings, services, stateAccessor, telemetryClient, templateManager);
+        super(SampleAction.name, settings, services, stateAccessor, templateManager);
         
         const sample: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             this.promptForName.bind(this),
