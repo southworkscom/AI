@@ -31,15 +31,14 @@ export class SampleDialog extends SkillDialogBase {
         settings: Partial<IBotSettings>,
         services: BotServices,
         stateAccessor: StatePropertyAccessor<SkillState>,
-        telemetryClient: BotTelemetryClient,
         templateManager: LocaleTemplateManager
     ) {
-        super(SampleDialog.name, settings, services, stateAccessor, telemetryClient, templateManager);
+        super(SampleDialog.name, settings, services, stateAccessor, templateManager);
 
         const sample: ((sc: WaterfallStepContext) => Promise<DialogTurnResult>)[] = [
             // NOTE: Uncomment these lines to include authentication steps to this dialog
-            // GetAuthToken,
-            // AfterGetAuthToken,
+            // this.getAuthToken.bind(this),
+            // this.afterGetAuthToken.bind(this),
             this.promptForName.bind(this),
             this.greetUser.bind(this),
             this.end.bind(this)
