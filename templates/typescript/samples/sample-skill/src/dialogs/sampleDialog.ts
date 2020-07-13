@@ -5,14 +5,13 @@
 
 import {
     Activity,
-    BotTelemetryClient,
     StatePropertyAccessor} from 'botbuilder';
 import {
     DialogTurnResult,
     TextPrompt,
     WaterfallDialog,
     WaterfallStepContext } from 'botbuilder-dialogs';
-import { SkillState } from '../models/skillState';
+import { SkillState } from '../models';
 import { BotServices } from '../services/botServices';
 import { IBotSettings } from '../services/botSettings';
 import { SkillDialogBase } from './skillDialogBase';
