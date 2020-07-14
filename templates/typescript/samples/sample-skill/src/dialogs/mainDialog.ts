@@ -6,9 +6,7 @@ import {
     Activity,
     ActivityTypes,
     BotFrameworkAdapter,
-    BotTelemetryClient,
-    RecognizerResult,
-    StatePropertyAccessor } from 'botbuilder';
+    RecognizerResult } from 'botbuilder';
 import { LuisRecognizer } from 'botbuilder-ai';
 import {
     DialogContext,
@@ -20,7 +18,6 @@ import {
     ComponentDialog } from 'botbuilder-dialogs';
 import { ICognitiveModelSet, LocaleTemplateManager } from 'bot-solutions';
 import { TokenStatus } from 'botframework-connector';
-import { SkillState } from '../models/skillState';
 import { BotServices } from '../services/botServices';
 import { SampleDialog } from './sampleDialog';
 import { StateProperties } from '../models';
