@@ -6,6 +6,7 @@
 import { TurnContext } from 'botbuilder';
 import { SkillValidation, ClaimsIdentity } from 'botframework-connector';
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace TurnContextEx {
 
     export function isSkill(turnContext: TurnContext): boolean {

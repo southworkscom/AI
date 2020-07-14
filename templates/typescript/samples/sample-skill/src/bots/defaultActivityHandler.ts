@@ -43,6 +43,7 @@ export class DefaultActivityHandler<T extends Dialog> extends ActivityHandler {
         await this.userState.saveChanges(turnContext, false);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected async membersAdded(turnContext: TurnContext, next: () => Promise<void>): Promise<void> {
         await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('IntroMessage', turnContext.activity.locale));
         await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
