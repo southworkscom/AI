@@ -19,65 +19,57 @@ export class BotServices {
 
     public cognitiveModelSets: Map<string, Partial<ICognitiveModelSet>> = new Map();
 
-    public constructor(settings: Partial<IBotSettings>, client: BotTelemetryClient) {
-        if (settings.cognitiveModels !== undefined) {
-            settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
+    public constructor(settings: IBotSettings, client: BotTelemetryClient) {
+        settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
 
-                const set: Partial<ICognitiveModelSet> = {
-                    luisServices: new Map()
-                };
-                const language: string = key;
-                const config: ICognitiveModelConfiguration = value;
+            const language: string = key;
+            const config: ICognitiveModelConfiguration = value;
 
-                const telemetryClient: BotTelemetryClient = client;
+            const telemetryClient: BotTelemetryClient = client;
 
-                const luisOptions: LuisRecognizerOptionsV3 = {
-                    telemetryClient: client,
-                    logPersonalInformation: true,
-                    apiVersion: 'v3'
-                };
+            const luisOptions: LuisRecognizerOptionsV3 = {
+                telemetryClient: telemetryClient,
+                logPersonalInformation: true,
+                apiVersion: 'v3'
+            };
 
-                if (config.dispatchModel !== undefined) {
-                    const dispatchApp: LuisApplication = {
-                        applicationId: config.dispatchModel.appId,
-                        endpointKey: config.dispatchModel.subscriptionKey,
-                        endpoint: config.dispatchModel.getEndpoint()
+            const dispatchApp: LuisApplication = {
+                applicationId: config.dispatchModel.appId,
+                endpointKey: config.dispatchModel.subscriptionKey,
+                endpoint: config.dispatchModel.getEndpoint()
+            };
+            const set: ICognitiveModelSet = {
+                dispatchService: new LuisRecognizer(dispatchApp, luisOptions),
+                luisServices: new Map(),
+                qnaConfiguration: new Map(),
+                qnaServices: new Map()
+            };
+
+            if (config.languageModels !== undefined) {
+                config.languageModels.forEach((model: LuisService): void => {
+                    const luisApp: LuisApplication  = {
+                        applicationId: model.appId,
+                        endpointKey: model.subscriptionKey,
+                        endpoint: model.getEndpoint()
                     };
 
-                    set.dispatchService = new LuisRecognizer(dispatchApp, luisOptions);
-                }
+                    set.luisServices.set(model.id, new LuisRecognizer(luisApp, luisOptions));
+                });
+            }
 
-                if (config.languageModels !== undefined) {
-                    config.languageModels.forEach((model: LuisService): void => {
-                        const luisApp: LuisApplication  = {
-                            applicationId: model.appId,
-                            endpointKey: model.subscriptionKey,
-                            endpoint: model.getEndpoint()
-                        };
-
-                        if (set.luisServices !== undefined) {
-                            set.luisServices.set(model.id, new LuisRecognizer(luisApp, luisOptions));
-                        }
-                    });
-                }
-
-                if (config.knowledgeBases !== undefined) {
-                    config.knowledgeBases.forEach((kb: QnaMakerService): void => {
-                        const qnaEndpoint: QnAMakerEndpoint = {
-                            knowledgeBaseId: kb.kbId,
-                            endpointKey: kb.endpointKey,
-                            host: kb.hostname
-                        };
-                        const qnaMaker: QnAMaker = new QnAMaker(qnaEndpoint, undefined, client, true);
-
-                        if (set.qnaServices !== undefined) {
-                            set.qnaServices.set(kb.id, qnaMaker);
-                        }
-                    });
-                }
-                this.cognitiveModelSets.set(language, set);
-            });
-        }
+            if (config.knowledgeBases !== undefined) {
+                config.knowledgeBases.forEach((kb: QnaMakerService): void => {
+                    const qnaEndpoint: QnAMakerEndpoint = {
+                        knowledgeBaseId: kb.kbId,
+                        endpointKey: kb.endpointKey,
+                        host: kb.hostname
+                    };
+                    
+                    set.qnaServices.set(kb.id, new QnAMaker(qnaEndpoint, undefined, client, true));
+                });
+            }
+            this.cognitiveModelSets.set(language, set);
+        });
     }
 
     public getCognitiveModels(locale: string): Partial<ICognitiveModelSet> {
