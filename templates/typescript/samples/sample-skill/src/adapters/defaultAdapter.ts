@@ -91,7 +91,7 @@ export class DefaultAdapter extends BotFrameworkAdapter {
             this.telemetryClient.trackException(telemetryException);
 
             // Send a message to the user.
-            await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('ErrorMessage'));
+            await turnContext.sendActivity(this.templateEngine.generateActivityForLocale('ErrorMessage', turnContext.activity.locale));
 
             // Send a trace activity, which will be displayed in the Bot Framework Emulator.
             // Note: we return the entire exception in the value property to help the developer;

@@ -11,7 +11,7 @@ import {
     QnAMaker,
     QnAMakerEndpoint
 } from 'botbuilder-ai';
-import { ICognitiveModelConfiguration, ICognitiveModelSet } from 'bot-solutions';
+import { CognitiveModelConfiguration, ICognitiveModelSet } from 'bot-solutions';
 import { LuisService, QnaMakerService } from 'botframework-config';
 import { IBotSettings } from './botSettings';
 
@@ -20,10 +20,10 @@ export class BotServices {
     public cognitiveModelSets: Map<string, Partial<ICognitiveModelSet>> = new Map();
 
     public constructor(settings: IBotSettings, client: BotTelemetryClient) {
-        settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
+        settings.cognitiveModels.forEach((value: CognitiveModelConfiguration, key: string): void => {
 
             const language: string = key;
-            const config: ICognitiveModelConfiguration = value;
+            const config: CognitiveModelConfiguration = value;
 
             const telemetryClient: BotTelemetryClient = client;
 
