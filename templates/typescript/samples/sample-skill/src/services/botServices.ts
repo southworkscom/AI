@@ -78,7 +78,7 @@ export class BotServices {
 
         if (cognitiveModels === undefined) {
             const keyFound: string | undefined = Array.from(this.cognitiveModelSets.keys())
-                .find((key: string) => { key.substring(0, 2) === locale.substring(0, 2) });
+                .find((key: string) => { key.substring(0, 2) === locale.substring(0, 2); });
             if (keyFound !== undefined) {
                 cognitiveModels = this.cognitiveModelSets.get(keyFound);
             }
