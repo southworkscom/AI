@@ -4,7 +4,6 @@
  */
 
 import {
-    BotFrameworkAdapter,
     BotFrameworkAdapterSettings,
     BotTelemetryClient,
     ConversationState,
