@@ -4,73 +4,72 @@
  */
 
 import { BotTelemetryClient } from 'botbuilder';
-import { LuisApplication, LuisPredictionOptions, LuisRecognizer, QnAMaker, QnAMakerEndpoint } from 'botbuilder-ai';
+import {
+    LuisApplication,
+    LuisRecognizer,
+    LuisRecognizerOptionsV3,
+    QnAMaker,
+    QnAMakerEndpoint
+} from 'botbuilder-ai';
 import { ICognitiveModelConfiguration, ICognitiveModelSet } from 'bot-solutions';
-import { DispatchService, LuisService, QnaMakerService } from 'botframework-config';
+import { LuisService, QnaMakerService } from 'botframework-config';
 import { IBotSettings } from './botSettings';
 
 export class BotServices {
 
     public cognitiveModelSets: Map<string, Partial<ICognitiveModelSet>> = new Map();
 
-    public constructor(settings: Partial<IBotSettings>, telemetryClient: BotTelemetryClient) {
-        const luisPredictionOptions: LuisPredictionOptions = {
-            telemetryClient: telemetryClient,
-            logPersonalInformation: true
-        };
+    public constructor(settings: IBotSettings, client: BotTelemetryClient) {
+        settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
 
-        if (settings.cognitiveModels !== undefined) {
-            settings.cognitiveModels.forEach((value: ICognitiveModelConfiguration, key: string): void => {
+            const language: string = key;
+            const config: ICognitiveModelConfiguration = value;
 
-                const language: string = key;
-                const config: ICognitiveModelConfiguration = value;
-                const cognitiveModelSet: Partial<ICognitiveModelSet> = {
-                    luisServices: new Map()
-                };
+            const telemetryClient: BotTelemetryClient = client;
 
-                if (config.dispatchModel !== undefined) {
-                    const dispatchModel: DispatchService = new DispatchService(config.dispatchModel);
+            const luisOptions: LuisRecognizerOptionsV3 = {
+                telemetryClient: telemetryClient,
+                logPersonalInformation: true,
+                apiVersion: 'v3'
+            };
 
-                    const dispatchApp: LuisApplication = {
-                        applicationId: dispatchModel.appId,
-                        endpointKey: dispatchModel.subscriptionKey,
-                        endpoint: dispatchModel.getEndpoint()
+            const dispatchApp: LuisApplication = {
+                applicationId: config.dispatchModel.appId,
+                endpointKey: config.dispatchModel.subscriptionKey,
+                endpoint: config.dispatchModel.getEndpoint()
+            };
+            const set: ICognitiveModelSet = {
+                dispatchService: new LuisRecognizer(dispatchApp, luisOptions),
+                luisServices: new Map(),
+                qnaConfiguration: new Map(),
+                qnaServices: new Map()
+            };
+
+            if (config.languageModels !== undefined) {
+                config.languageModels.forEach((model: LuisService): void => {
+                    const luisApp: LuisApplication  = {
+                        applicationId: model.appId,
+                        endpointKey: model.subscriptionKey,
+                        endpoint: model.getEndpoint()
                     };
 
-                    cognitiveModelSet.dispatchService = new LuisRecognizer(dispatchApp, luisPredictionOptions);
-                }
+                    set.luisServices.set(model.id, new LuisRecognizer(luisApp, luisOptions));
+                });
+            }
 
-                if (config.languageModels !== undefined) {
-                    config.languageModels.forEach((model: LuisService): void => {
-                        const luisService: LuisService = new LuisService(model);
-                        const luisApp: LuisApplication  = {
-                            applicationId: luisService.appId,
-                            endpointKey: luisService.subscriptionKey,
-                            endpoint: luisService.getEndpoint()
-                        };
-                        if (cognitiveModelSet.luisServices !== undefined) {
-                            cognitiveModelSet.luisServices.set(luisService.id, new LuisRecognizer(luisApp, luisPredictionOptions));
-                        }
-                    });
-                }
+            if (config.knowledgeBases !== undefined) {
+                config.knowledgeBases.forEach((kb: QnaMakerService): void => {
+                    const qnaEndpoint: QnAMakerEndpoint = {
+                        knowledgeBaseId: kb.kbId,
+                        endpointKey: kb.endpointKey,
+                        host: kb.hostname
+                    };
 
-                if (config.knowledgeBases !== undefined) {
-                    config.knowledgeBases.forEach((kb: QnaMakerService): void => {
-                        const qnaEndpoint: QnAMakerEndpoint = {
-                            knowledgeBaseId: kb.kbId,
-                            endpointKey: kb.endpointKey,
-                            host: kb.hostname
-                        };
-                        const qnaMaker: QnAMaker = new QnAMaker(qnaEndpoint, undefined, telemetryClient, true);
-
-                        if (cognitiveModelSet.qnaServices !== undefined) {
-                            cognitiveModelSet.qnaServices.set(kb.id, qnaMaker);
-                        }
-                    });
-                }
-                this.cognitiveModelSets.set(language, cognitiveModelSet);
-            });
-        }
+                    set.qnaServices.set(kb.id, new QnAMaker(qnaEndpoint, undefined, client, true));
+                });
+            }
+            this.cognitiveModelSets.set(language, set);
+        });
     }
 
     public getCognitiveModels(locale: string): Partial<ICognitiveModelSet> {
@@ -79,12 +78,7 @@ export class BotServices {
 
         if (cognitiveModels === undefined) {
             const keyFound: string | undefined = Array.from(this.cognitiveModelSets.keys())
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-                .find((key: string) => {
-                    if (key.substring(0, 2) === locale.substring(0, 2)) {
-                        return key;
-                    }
-                });
+                .find((key: string) => { key.substring(0, 2) === locale.substring(0, 2) });
             if (keyFound !== undefined) {
                 cognitiveModels = this.cognitiveModelSets.get(keyFound);
             }

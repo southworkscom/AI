@@ -6,11 +6,10 @@
 import { TurnContext } from 'botbuilder';
 import { SkillValidation, ClaimsIdentity } from 'botframework-connector';
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace TurnContextEx {
 
     export function isSkill(turnContext: TurnContext): boolean {
-        const botIdentity = turnContext.turnState.get((turnContext.adapter as any).BotIdentityKey);
+        const botIdentity = turnContext.turnState.get(turnContext.adapter.BotIdentityKey);
         return botIdentity instanceof ClaimsIdentity && SkillValidation.isSkillClaim(botIdentity.claims) ? true : false;
     }
 

@@ -122,14 +122,12 @@ try {
         settings,
         botServices,
         stateAccessor,
-        telemetryClient,
         localeTemplateManager
     );
     const sampleAction: SampleAction = new SampleAction(
         settings,
         botServices,
         stateAccessor,
-        telemetryClient,
         localeTemplateManager
     );
     const mainDialog: MainDialog = new MainDialog(
