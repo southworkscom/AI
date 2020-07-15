@@ -17,7 +17,7 @@ import { CosmosDbPartitionedStorageOptions, CosmosDbPartitionedStorage } from 'b
 import {
     Dialog } from 'botbuilder-dialogs';
 import {
-    ICognitiveModelConfiguration,
+    CognitiveModelConfiguration,
     LocaleTemplateManager } from 'bot-solutions';
 import { join } from 'path';
 import * as restify from 'restify';
@@ -32,11 +32,11 @@ import { SkillState } from './models';
 import { BotServices } from './services/botServices';
 import { IBotSettings } from './services/botSettings';
 
-const cognitiveModels: Map<string, ICognitiveModelConfiguration> = new Map();
+const cognitiveModels: Map<string, CognitiveModelConfiguration> = new Map();
 const cognitiveModelDictionary: { [key: string]: Object } = cognitiveModelsRaw.cognitiveModels;
 const cognitiveModelMap: Map<string, Object> = new Map(Object.entries(cognitiveModelDictionary));
 cognitiveModelMap.forEach((value: Object, key: string): void => {
-    cognitiveModels.set(key, value as ICognitiveModelConfiguration);
+    cognitiveModels.set(key, value as CognitiveModelConfiguration);
 });
 
 // Load settings
@@ -115,7 +115,7 @@ const defaultAdapter: DefaultAdapter = new DefaultAdapter(
 let bot: DefaultActivityHandler<Dialog>;
 try {
     // Configure bot services
-    const botServices: BotServices = new BotServices(settings, telemetryClient);
+    const botServices: BotServices = new BotServices(settings as IBotSettings, telemetryClient);
 
     // Register dialogs
     const sampleDialog: SampleDialog = new SampleDialog(
@@ -132,8 +132,6 @@ try {
     );
     const mainDialog: MainDialog = new MainDialog(
         botServices,
-        telemetryClient,
-        stateAccessor,
         sampleDialog,
         sampleAction,
         localeTemplateManager
