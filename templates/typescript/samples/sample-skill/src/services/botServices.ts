@@ -64,7 +64,7 @@ export class BotServices {
                         endpointKey: kb.endpointKey,
                         host: kb.hostname
                     };
-                    
+
                     set.qnaServices.set(kb.id, new QnAMaker(qnaEndpoint, undefined, client, true));
                 });
             }
@@ -78,12 +78,7 @@ export class BotServices {
 
         if (cognitiveModels === undefined) {
             const keyFound: string | undefined = Array.from(this.cognitiveModelSets.keys())
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-                .find((key: string) => {
-                    if (key.substring(0, 2) === locale.substring(0, 2)) {
-                        return key;
-                    }
-                });
+                .find((key: string) => { key.substring(0, 2) === locale.substring(0, 2) });
             if (keyFound !== undefined) {
                 cognitiveModels = this.cognitiveModelSets.get(keyFound);
             }
