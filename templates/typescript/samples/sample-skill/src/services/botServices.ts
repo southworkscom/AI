@@ -33,27 +33,34 @@ export class BotServices {
                 apiVersion: 'v3'
             };
 
-            const dispatchApp: LuisApplication = {
-                applicationId: config.dispatchModel.appId,
-                endpointKey: config.dispatchModel.subscriptionKey,
-                endpoint: config.dispatchModel.getEndpoint()
-            };
-            const set: ICognitiveModelSet = {
-                dispatchService: new LuisRecognizer(dispatchApp, luisOptions),
+            let set: Partial<ICognitiveModelSet> = {
                 luisServices: new Map(),
                 qnaConfiguration: new Map(),
                 qnaServices: new Map()
             };
+            if (config.dispatchModel !== undefined) {
+                const dispatchModel: LuisService = new LuisService(config.dispatchModel);
+                const dispatchApp: LuisApplication = {
+                    applicationId: dispatchModel.appId,
+                    endpointKey: dispatchModel.subscriptionKey,
+                    endpoint: dispatchModel.getEndpoint()
+                };
 
+                set.dispatchService= new LuisRecognizer(dispatchApp, luisOptions);
+            }
+            
             if (config.languageModels !== undefined) {
                 config.languageModels.forEach((model: LuisService): void => {
+                    const luisModel: LuisService = new LuisService(model);
                     const luisApp: LuisApplication  = {
-                        applicationId: model.appId,
-                        endpointKey: model.subscriptionKey,
-                        endpoint: model.getEndpoint()
+                        applicationId: luisModel.appId,
+                        endpointKey: luisModel.subscriptionKey,
+                        endpoint: luisModel.getEndpoint()
                     };
 
-                    set.luisServices.set(model.id, new LuisRecognizer(luisApp, luisOptions));
+                    if (set.luisServices !== undefined) {
+                        set.luisServices.set(model.id, new LuisRecognizer(luisApp, luisOptions));
+                    }
                 });
             }
 
@@ -65,7 +72,9 @@ export class BotServices {
                         host: kb.hostname
                     };
 
-                    set.qnaServices.set(kb.id, new QnAMaker(qnaEndpoint, undefined, client, true));
+                    if (set.qnaServices !== undefined) {
+                        set.qnaServices.set(kb.id, new QnAMaker(qnaEndpoint, undefined, client, true));
+                    }
                 });
             }
             this.cognitiveModelSets.set(language, set);
