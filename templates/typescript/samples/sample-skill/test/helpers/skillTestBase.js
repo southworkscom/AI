@@ -103,25 +103,21 @@ const initialize = async function() {
         botSettings,
         botServices,
         stateAccessor,
-        telemetryClient,
         templateManager
     );
     const sampleAction = new SampleAction(
         botSettings,
         botServices,
         stateAccessor,
-        telemetryClient,
         templateManager
     );
     const mainDialog = new MainDialog(
         botServices,
-        telemetryClient,
-        stateAccessor,
         sampleDialog,
         sampleAction,
         templateManager
     );
-    this.bot = new DefaultActivityHandler(conversationState, userState, templateManager, mainDialog);
+    this.bot = new DefaultActivityHandler(conversationState, userState, templateManager, telemetryClient, mainDialog);
 };
 
 /**

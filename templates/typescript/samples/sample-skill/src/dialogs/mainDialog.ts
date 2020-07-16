@@ -89,7 +89,7 @@ export class MainDialog extends ComponentDialog {
             // Check for any interruptions
             const interrupted: DialogTurnResult = await this.interruptDialog(innerDc);
 
-            if (interrupted !== undefined) {
+            if (Object.keys(interrupted).length > 0) {
                 // If dialog was interrupted, return interrupted result
                 return interrupted;
             }
