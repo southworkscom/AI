@@ -4,14 +4,14 @@
         "method": "POST",
         "path": "/luis/prediction/v3.0/apps/f7c2ee78-8679-4a3e-b384-0cd10c67e554/slots/production/predict?verbose=true&log=true&show-all-intents=false",
         "body": {
-            "query": "sample dialog",
+            "query": "run sample dialog",
             "options": {
                 "preferExternalEntities": true
             }
         },
         "status": 200,
         "response": {
-            "query": "sample dialog",
+            "query": "run sample dialog",
             "prediction": {
                 "topIntent": "Sample",
                 "intents": {
@@ -54,14 +54,14 @@
         "method": "POST",
         "path": "/luis/prediction/v3.0/apps/f7c2ee78-8679-4a3e-b384-0cd10c67e554/slots/production/predict?verbose=true&log=true&show-all-intents=false",
         "body": {
-            "query": "sample dialog",
+            "query": "run sample dialog",
             "options": {
                 "preferExternalEntities": true
             }
         },
         "status": 200,
         "response": {
-            "query": "sample dialog",
+            "query": "run sample dialog",
             "prediction": {
                 "topIntent": "Confirm",
                 "intents": {
@@ -104,14 +104,14 @@
         "method": "POST",
         "path": "/luis/prediction/v3.0/apps/f7c2ee78-8679-4a3e-b384-0cd10c67e554/slots/production/predict?verbose=true&log=true&show-all-intents=false",
         "body": {
-            "query": "sample dialog",
+            "query": "run sample dialog",
             "options": {
                 "preferExternalEntities": true
             }
         },
         "status": 200,
         "response": {
-            "query": "sample dialog",
+            "query": "run sample dialog",
             "prediction": {
                 "topIntent": "Sample",
                 "intents": {
@@ -154,14 +154,14 @@
         "method": "POST",
         "path": "/luis/prediction/v3.0/apps/f7c2ee78-8679-4a3e-b384-0cd10c67e554/slots/production/predict?verbose=true&log=true&show-all-intents=false",
         "body": {
-            "query": "sample dialog",
+            "query": "run sample dialog",
             "options": {
                 "preferExternalEntities": true
             }
         },
         "status": 200,
         "response": {
-            "query": "sample dialog",
+            "query": "run sample dialog",
             "prediction": {
                 "topIntent": "Confirm",
                 "intents": {
