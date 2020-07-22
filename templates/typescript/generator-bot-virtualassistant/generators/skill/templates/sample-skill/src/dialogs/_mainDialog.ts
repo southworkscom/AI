@@ -73,7 +73,7 @@ export class MainDialog extends ComponentDialog {
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels(innerDc.context.activity.locale as string);
 
             // Run LUIS recognition on Skill model and store result in turn state.
-            const skillLuis: LuisRecognizer | undefined = localizedServices.luisServices ? localizedServices.luisServices.get('sampleSkill') : undefined;
+            const skillLuis: LuisRecognizer | undefined = localizedServices.luisServices ? localizedServices.luisServices.get('<%=skillNameCamelCase%>') : undefined;
             if (skillLuis !== undefined) {
                 const skillResult: RecognizerResult = await skillLuis.recognize(innerDc.context);
                 innerDc.context.turnState.set(this.stateProperties.skillLuisResult, skillResult);
@@ -106,7 +106,7 @@ export class MainDialog extends ComponentDialog {
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels(innerDc.context.activity.locale as string);
 
             // Run LUIS recognition on Skill model and store result in turn state.
-            const skillLuis: LuisRecognizer | undefined = localizedServices.luisServices ? localizedServices.luisServices.get('sampleSkill') : undefined;
+            const skillLuis: LuisRecognizer | undefined = localizedServices.luisServices ? localizedServices.luisServices.get('<%=skillNameCamelCase%>') : undefined;
             if (skillLuis !== undefined) {
                 const skillResult: RecognizerResult = await skillLuis.recognize(innerDc.context);
                 innerDc.context.turnState.set(this.stateProperties.skillLuisResult, skillResult);
@@ -207,7 +207,7 @@ export class MainDialog extends ComponentDialog {
             const localizedServices: Partial<ICognitiveModelSet> = this.services.getCognitiveModels(stepContext.context.activity.locale as string);
 
             // Get skill LUIS model from configuration.
-            const luisService: LuisRecognizer | undefined = localizedServices.luisServices? localizedServices.luisServices.get('sampleSkill') : undefined;
+            const luisService: LuisRecognizer | undefined = localizedServices.luisServices? localizedServices.luisServices.get('<%=skillNameCamelCase%>') : undefined;
 
             if (luisService !== undefined){
                 const result = stepContext.context.turnState.get(this.stateProperties.skillLuisResult);
