@@ -45,6 +45,8 @@ See the [Skills Overview]({{site.baseurl}}/overview/skills) section for details 
 
 ## Adding Skills to your Virtual Assistant
 
+> Note: The Botframework Team added the Skill's LU inside the Skill folder of the Virtual Assistant just to simplify the botskills execution as by default the tool search in the Skills folder. Before, we had the out-of-box skills in the repo, but they moved to the [Botframework Skills](https://github.com/microsoft/botframework-skills/tree/master/skills/csharp) repo. Currently, the Skills folder contains inside the LU folder, the Skills present in the repository mentioned recently.
+
 Run the following command to add each Skill to your Virtual Assistant. This assumes you are running the CLI within the project directory and have created your Bot through the template and therefore have a `appsettings.json` file present in the working folder.
 
 ```bash
