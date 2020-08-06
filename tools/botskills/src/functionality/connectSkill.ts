@@ -96,7 +96,7 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
                         writeFileSync(luPath, remoteLuFile);
                         luFilePath = luPath;
                     } catch (error) {
-                        console.log(error);
+                        throw new Error(error);
                     }
                 }
                 else {
@@ -165,13 +165,17 @@ Make sure your Skill's .lu file's name matches your Skill's manifest id`);
     }
 
     private async getRemoteLu(path: string): Promise<string> {
-        try {
-            return get({
-                uri: path
-            });
-        } catch (err) {
-            throw new Error(`There was a problem while getting the remote lu file:\n${ err }`);
-        }
+        return get({
+            uri: path
+        }).catch( (err: Error): Error => {
+            if (err.name === 'RequestError') {
+                throw new Error(`There was a problem while getting the remote lu file:
+Please validate that the URL where you try to reach the .lu file is working.`);
+            }
+            else{
+                throw new Error(`There was a problem while getting the remote lu file:\n${ err }`);
+            }
+        });
     }
 
 
