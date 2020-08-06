@@ -15,22 +15,6 @@ export class MigrateSkill {
     }
     public async migrateSkill(configuration: IMigrateConfiguration): Promise<boolean> {
         try {
-            // Validate configuration.destFile
-            if (!existsSync(configuration.destFile)) {
-                this.logger.error(`The 'destFile' argument is absent or leads to a non-existing file.
-Please make sure to provide a valid path to your Assistant Skills configuration file using the '--destFile' argument.`);
-
-                return false;
-            }
-
-            // Validate configuration.sourceFile
-            if (!existsSync(configuration.sourceFile)) {
-                this.logger.error(`The 'sourceFile' argument is absent or leads to a non-existing file.
-Please make sure to provide a valid path to your Assistant Skills configuration file using the '--sourceFile' argument.`);
-
-                return false;
-            }
-
             // Take source file Skills configurations
             const sourceAssistantSkills: ISkillFileV1 = JSON.parse(readFileSync(configuration.sourceFile, 'UTF8'));
             if (sourceAssistantSkills.skills === undefined || sourceAssistantSkills.skills.length === 0) {
