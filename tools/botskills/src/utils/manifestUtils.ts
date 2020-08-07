@@ -18,7 +18,7 @@ export class ManifestUtils {
                 : undefined;
     
         if (manifest === undefined) {
-            throw new Error('Your Skill Manifest is not compatible. Please, check that your manifest complies with one of the manifests in the Microsoft botframework-solutions repository');
+            throw new Error('The Skill Manifest has an incorrect format. Please, check that your manifest complies with the availables manifest versions. For more information about the manifests: https://microsoft.github.io/botframework-solutions/skills/handbook/manifest/');
         }
         
         return manifest;

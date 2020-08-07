@@ -45,7 +45,7 @@ export class MigrateSkill {
                     });
                 }
                 else {
-                    throw new Error(`The skill '${ skill.name }' has an incorrect format. Please check that your manifest complies with one of the manifests in the Microsoft botframework-solutions repository`);
+                    throw new Error(`The skill '${ skill.name }' has an incorrect format. Please check that all the skills intended to be migrated are present in the skill.json file`);
                 }
             });
 
