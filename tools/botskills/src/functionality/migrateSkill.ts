@@ -61,7 +61,7 @@ Please make sure to provide a valid path to your Assistant Skills configuration 
                     });
                 }
                 else {
-                    throw new Error(`The skill '${ skill.name }' has an incorrect format, please check that all the skills intended to be migrated has the V1 format`);
+                    throw new Error(`The skill '${ skill.name }' has an incorrect format. Please check that your manifest complies with one of the manifests in the Microsoft botframework-solutions repository`);
                 }
             });
 
