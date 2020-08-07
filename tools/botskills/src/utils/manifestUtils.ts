@@ -18,7 +18,7 @@ export class ManifestUtils {
                 : undefined;
     
         if (manifest === undefined) {
-            throw new Error('Your Skill Manifest is not compatible. Please note that the minimum supported manifest version is 2.1.');
+            throw new Error('Your Skill Manifest is not compatible. Please, check that your manifest complies with one of the manifests in the Microsoft botframework-solutions repository');
         }
         
         return manifest;
@@ -34,8 +34,14 @@ export class ManifestUtils {
         return get({
             uri: manifestURI,
             json: false
-        }).catch( err=> { 
-            throw new Error(`There was a problem while getting the remote manifest:\n${ err }`);
+        }).catch( (err: Error): Error => { 
+            if (err.name === 'RequestError') {
+                throw new Error(`There was a problem while getting the remote manifest:
+Please validate that the URL where you try to reach the manifest is working.`);
+            }
+            else{
+                throw new Error(`There was a problem while getting the remote manifest:\n${ err }`);
+            }
         });
     }
     
@@ -98,6 +104,11 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
             action.definition.triggers.utteranceSources).reduce((acc: IUtteranceSource[], val: IAction): IUtteranceSource[] => acc.concat(val.definition.triggers.utteranceSources), [])
             .reduce((acc: Map<string, string[]>, val: IUtteranceSource): Map<string, string[]> => {
                 const luisApps: string[] = val.source.map((v: string): string => v.split('#')[0]);
+
+                if (val.locale || val.locale === undefined) {
+                    throw new Error(`The manifest has not specified the 'locale' property in an utteranceSource. Please add it to continue.`);
+                }
+
                 if (acc.has(val.locale)) {
                     const previous: string[] = acc.get(val.locale) || [];
                     const filteredluisApps: string[] = [...new Set(luisApps.concat(previous))];
