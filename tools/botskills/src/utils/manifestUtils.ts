@@ -34,14 +34,12 @@ export class ManifestUtils {
         return get({
             uri: manifestURI,
             json: false
-        }).catch( (err: Error): Error => { 
+        }).catch((err: Error): Error => { 
+            const genericError = 'There was a problem while getting the remote manifest:\n';
             if (err.name === 'RequestError') {
-                throw new Error(`There was a problem while getting the remote manifest:
-Please validate that the URL where you try to reach the manifest is working.`);
+                throw new Error(`${ genericError } Please validate that the URL where you try to reach the .lu file is working.`);
             }
-            else{
-                throw new Error(`There was a problem while getting the remote manifest:\n${ err }`);
-            }
+            throw new Error(genericError + err);
         });
     }
     
@@ -105,8 +103,8 @@ Please make sure to provide a valid path to your Skill manifest using the '--loc
             .reduce((acc: Map<string, string[]>, val: IUtteranceSource): Map<string, string[]> => {
                 const luisApps: string[] = val.source.map((v: string): string => v.split('#')[0]);
 
-                if (val.locale || val.locale === undefined) {
-                    throw new Error(`The manifest has not specified the 'locale' property in an utteranceSource. Please add it to continue.`);
+                if (val.locale === undefined) {
+                    throw new Error(`The manifest has not specified the 'locale' property in an utteranceSource. It is mandatory to have the 'locale' property inside the 'utteranceSources'`);
                 }
 
                 if (acc.has(val.locale)) {

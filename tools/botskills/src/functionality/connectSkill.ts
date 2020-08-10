@@ -87,17 +87,15 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
                     }
                 }
                 else if (currentApp.url.startsWith('http')) {
-                    try {
-                        const remoteLuFile = await this.getRemoteLu(currentApp.url);
-                        let luisAppName: string = currentApp.url.split('/').reverse()[0];
+                    
+                    const remoteLuFile = await this.getRemoteLu(currentApp.url);
+                    let luisAppName: string = currentApp.url.split('/').reverse()[0];
 
-                        const luPath = join(this.configuration.luisFolder, culture, luisAppName.endsWith('.lu') ? luisAppName : luisAppName + '.lu');
-                        this.verifyLuisFolder(culture);
-                        writeFileSync(luPath, remoteLuFile);
-                        luFilePath = luPath;
-                    } catch (error) {
-                        throw new Error(error);
-                    }
+                    const luPath = join(this.configuration.luisFolder, culture, luisAppName.endsWith('.lu') ? luisAppName : luisAppName + '.lu');
+                    this.verifyLuisFolder(culture);
+                    writeFileSync(luPath, remoteLuFile);
+                    luFilePath = luPath;
+                    
                 }
                 else {
                     luFilePath = currentApp.url;
@@ -167,14 +165,12 @@ Make sure your Skill's .lu file's name matches your Skill's manifest id`);
     private async getRemoteLu(path: string): Promise<string> {
         return get({
             uri: path
-        }).catch( (err: Error): Error => {
+        }).catch((err: Error): Error => {
+            const genericError = 'There was a problem while getting the remote lu file:\n';
             if (err.name === 'RequestError') {
-                throw new Error(`There was a problem while getting the remote lu file:
-Please validate that the URL where you try to reach the .lu file is working.`);
+                throw new Error(`${ genericError } Please validate that the URL where you try to reach the .lu file is working.`);
             }
-            else{
-                throw new Error(`There was a problem while getting the remote lu file:\n${ err }`);
-            }
+            throw new Error(genericError + err);
         });
     }
 
