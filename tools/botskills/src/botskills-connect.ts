@@ -31,8 +31,8 @@ program.Command.prototype.unknownOption = (flag: string): void => {
 program
     .name('botskills connect')
     .description('Connect a skill to your assistant bot. Only one of both path or URL to Skill is needed.')
-    .option('-l, --localManifest <path>', 'Path to local Skill Manifest file')
-    .option('-r, --remoteManifest <url>', 'URL to remote Skill Manifest')
+    .option('-l, --localManifest <path>', 'Path to local Skills Manifest files. To connect multiple skills, use multiple paths separated by a comma')
+    .option('-r, --remoteManifest <url>', 'URL to remote Skills Manifests. To connect multiple skills, use multiple URLs separated by a comma')
     .option('--cs', 'Determine your assistant project structure to be a CSharp-like structure')
     .option('--ts', 'Determine your assistant project structure to be a TypeScript-like structure')
     .option('--noRefresh [true|FALSE]', '[OPTIONAL] Determine whether the model of your skills connected are not going to be refreshed (by default they are refreshed)')
@@ -161,4 +161,4 @@ const configuration: IConnectConfiguration = {
 };
 
 // End of arguments validation
-new ConnectSkill((configuration as IConnectConfiguration), logger).connectSkill();
+new ConnectSkill((configuration as IConnectConfiguration), logger).connectSkills();

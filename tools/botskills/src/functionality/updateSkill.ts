@@ -53,7 +53,7 @@ export class UpdateSkill {
     private async executeConnectSkill(): Promise<void> {
         const connectConfiguration: IConnectConfiguration = {...{}, ...this.configuration};
         connectConfiguration.noRefresh = this.configuration.noRefresh;
-        await new ConnectSkill(connectConfiguration, this.logger).connectSkill();
+        await new ConnectSkill(connectConfiguration, this.logger).connectSkills();
     }
 
     public async updateSkill(): Promise<boolean> {

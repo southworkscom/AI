@@ -286,38 +286,53 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
         }
     }
 
-    public async connectSkill(): Promise<boolean> {
+    /**
+     * Connects one or more skills.
+     * To connect multiple skills, the `--localManifest` or `--remoteManifest` must be a comma separated list.
+     */
+    public async connectSkills(): Promise<boolean> {
         try {
-            // Validate if the user has the necessary tools to run the command
-            await validateLibrary([libraries.BotFrameworkCLI], this.logger);
-            if (this.logger.isError) {
-                throw new Error('You have not installed the required tools to run this command');
-            }
-
             // Validate if no manifest path or URL was passed
             if (!this.configuration.localManifest && !this.configuration.remoteManifest) {
                 throw new Error(`Either the 'localManifest' or 'remoteManifest' argument should be passed.`);
             }
 
-            // Validate if cognitiveModels files doesn't exist
-            if (!existsSync(this.configuration.cognitiveModelsFile)) {
-                throw new Error(`Could not find the cognitiveModels file (${
-                    this.configuration.cognitiveModelsFile }). Please provide the '--cognitiveModelsFile' argument.`);
+            const manifests: string[] = this.configuration.localManifest
+                ? this.configuration.localManifest.split(',')
+                : this.configuration.remoteManifest.split(',');
+
+            for (const file of manifests) {
+                this.configuration[this.configuration.localManifest ? 'localManifest' : 'remoteManifest'] = file;
+                await this.connectSkill();
             }
-            
-            // Take cognitiveModels
-            const cognitiveModelsFile: ICognitiveModel = JSON.parse(readFileSync(this.configuration.cognitiveModelsFile, 'UTF8'));
-            // Take skillManifest
-            const rawManifest: string = await this.manifestUtils.getRawManifestFromResource(this.configuration);
-            this.manifest = await this.manifestUtils.getManifest(rawManifest, this.logger);
-            await this.connectSkillManifest(cognitiveModelsFile, this.manifest);
 
             return true;
-           
+
         } catch (err) {
-            this.logger.error(`There was an error while connecting the Skill to the Assistant:\n${ err }`);
+            this.logger.error(`There was an error while connecting the skills to the Assistant:\n${ err }`);
             return false;
         }
+    }
+
+    private async connectSkill(): Promise<void> {
+        // Validate if the user has the necessary tools to run the command
+        await validateLibrary([libraries.BotFrameworkCLI], this.logger);
+        if (this.logger.isError) {
+            throw new Error('You have not installed the required tools to run this command');
+        }
+
+        // Validate if cognitiveModels files doesn't exist
+        if (!existsSync(this.configuration.cognitiveModelsFile)) {
+            throw new Error(`Could not find the cognitiveModels file (${
+                this.configuration.cognitiveModelsFile }). Please provide the '--cognitiveModelsFile' argument.`);
+        }
+        
+        // Take cognitiveModels
+        const cognitiveModelsFile: ICognitiveModel = JSON.parse(readFileSync(this.configuration.cognitiveModelsFile, 'UTF8'));
+        // Take skillManifest
+        const rawManifest: string = await this.manifestUtils.getRawManifestFromResource(this.configuration);
+        this.manifest = await this.manifestUtils.getManifest(rawManifest, this.logger);
+        await this.connectSkillManifest(cognitiveModelsFile, this.manifest);
     }
 
     private async AddSkill(assistantSkillsFile: IAppSetting, assistantSkills: ISkill[], skill: IManifest): Promise<void> {
