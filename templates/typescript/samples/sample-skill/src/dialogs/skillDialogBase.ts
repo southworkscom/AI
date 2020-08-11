@@ -13,7 +13,8 @@ import {
     DialogTurnResult,
     DialogTurnStatus,
     PromptValidatorContext,
-    WaterfallStepContext} from 'botbuilder-dialogs';
+    WaterfallStepContext,
+    OAuthPromptSettings } from 'botbuilder-dialogs';
 import {
     CommonUtil,
     IProviderTokenResponse,
@@ -46,12 +47,17 @@ export class SkillDialogBase extends ComponentDialog {
         this.templateManager = templateManager;
 
         // NOTE: Uncomment the following if your skill requires authentication
-        // if (!services.authenticationConnections.any())
-        // {
-        //     throw new Error("You must configure an authentication connection in your bot file before using this component.");
-        // }
-        //
-        // this.addDialog(new MultiProviderAuthDialog(services));
+        if (settings.oauthConnections === undefined)
+        {
+            throw new Error("You must configure an authentication connection in your bot file before using this component.");
+        }
+        const oAuthSettings: OAuthPromptSettings[] = 
+        [{
+            connectionName: 'Outlook',
+            title: 'TitleText',
+            text: 'TextText'
+        }];
+        this.addDialog(new MultiProviderAuthDialog(settings.oauthConnections, oAuthSettings));
     }
 
     protected async getAuthToken(sc: WaterfallStepContext): Promise<DialogTurnResult> {
@@ -75,7 +81,7 @@ export class SkillDialogBase extends ComponentDialog {
 
             if (providerTokenResponse !== undefined) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const state: any = await this.stateAccessor.get(sc.context);
+                const state: any = await this.stateAccessor.get(sc.context, { token: '', timeZone: new Date(), clear: () => { return; }});
                 state.token = providerTokenResponse.tokenResponse.token;
             }
 
