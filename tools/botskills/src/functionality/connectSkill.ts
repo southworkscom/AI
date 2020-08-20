@@ -274,13 +274,6 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
                     await this.executeLuisConvert(culture, executionModelByCulture);
                     await this.executeDispatchAdd(culture, executionModelByCulture);
                 }));
-
-            // Check if it is necessary to refresh the skill
-            if (!this.configuration.noRefresh) {
-                await this.executeRefresh();
-            } else {
-                this.logger.warning(`Run 'botskills refresh --${ this.configuration.lgLanguage }' command to refresh your connected skills`);
-            }
         } catch (err) {
             throw new Error(`An error ocurred while updating the Dispatch model:\n${ err }`);
         }
@@ -303,7 +296,15 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
 
             for (const file of manifests) {
                 this.configuration[this.configuration.localManifest ? 'localManifest' : 'remoteManifest'] = file;
-                await this.connectSkill();
+                await this.runValidations();
+                await this.connectManifest();
+            }
+
+            // Check if it is necessary to refresh the skill
+            if (!this.configuration.noRefresh) {
+                await this.executeRefresh();
+            } else {
+                this.logger.warning(`Run 'botskills refresh --${ this.configuration.lgLanguage }' command to refresh your connected skills`);
             }
 
             return true;
@@ -314,7 +315,7 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
         }
     }
 
-    private async connectSkill(): Promise<void> {
+    private async runValidations(): Promise<void> {
         // Validate if the user has the necessary tools to run the command
         await validateLibrary([libraries.BotFrameworkCLI], this.logger);
         if (this.logger.isError) {
@@ -326,9 +327,12 @@ Make sure you have a Dispatch for the cultures you are trying to connect, and th
             throw new Error(`Could not find the cognitiveModels file (${
                 this.configuration.cognitiveModelsFile }). Please provide the '--cognitiveModelsFile' argument.`);
         }
-        
+    }
+
+    private async connectManifest(): Promise<void> {
         // Take cognitiveModels
         const cognitiveModelsFile: ICognitiveModel = JSON.parse(readFileSync(this.configuration.cognitiveModelsFile, 'UTF8'));
+
         // Take skillManifest
         const rawManifest: string = await this.manifestUtils.getRawManifestFromResource(this.configuration);
         this.manifest = await this.manifestUtils.getManifest(rawManifest, this.logger);
