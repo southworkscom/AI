@@ -2,7 +2,7 @@
  * Copyright(c) Microsoft Corporation.All rights reserved.
  * Licensed under the MIT License.
  */
-import { StatePropertyAccessor, RecognizerResult } from 'botbuilder';
+import { StatePropertyAccessor, RecognizerResult, BotTelemetryClient } from 'botbuilder';
 import {
     ComponentDialog,
     DialogTurnResult,
@@ -29,9 +29,11 @@ export class OnboardingDialog extends ComponentDialog {
     public constructor(
         accessor: StatePropertyAccessor<IUserProfileState>,
         services: BotServices,
-        templateManager: LocaleTemplateManager) {
+        templateManager: LocaleTemplateManager,
+        telemetryClient: BotTelemetryClient) {
         super(OnboardingDialog.name);
         this.templateManager = templateManager;
+        this.telemetryClient = telemetryClient;
 
         this.accessor = accessor;
         this.services = services;

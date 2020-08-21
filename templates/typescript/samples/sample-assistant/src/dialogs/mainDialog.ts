@@ -4,6 +4,7 @@
  */
 import {
     BotFrameworkAdapter,
+    BotTelemetryClient,
     RecognizerResult,
     StatePropertyAccessor, 
     TurnContext, 
@@ -66,7 +67,8 @@ export class MainDialog extends ComponentDialog {
         switchSkillDialog: SwitchSkillDialog,
         skillDialogs: SkillDialog[],
         skillsConfig: SkillsConfiguration,
-        activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill>
+        activeSkillProperty: StatePropertyAccessor<BotFrameworkSkill>,
+        telemetryClient: BotTelemetryClient
     ) {
         super(MainDialog.name);
 
@@ -75,6 +77,7 @@ export class MainDialog extends ComponentDialog {
         this.skillsConfig = skillsConfig,
         this.userProfileState = userProfileState;
         this.previousResponseAccesor = previousResponseAccessor;
+        this.telemetryClient = telemetryClient;
 
         // Create state property to track the active skillCreate state property to track the active skill
         this.activeSkillProperty = activeSkillProperty;

@@ -157,7 +157,7 @@ try {
     const botServices: BotServices = new BotServices(botSettings, telemetryClient);
 
     const userProfileStateAccesor: StatePropertyAccessor<IUserProfileState> = userState.createProperty<IUserProfileState>('IUserProfileState');
-    const onboardingDialog: OnboardingDialog = new OnboardingDialog(userProfileStateAccesor, botServices, localeTemplateManager);
+    const onboardingDialog: OnboardingDialog = new OnboardingDialog(userProfileStateAccesor, botServices, localeTemplateManager, telemetryClient);
     const switchSkillDialog: SwitchSkillDialog = new SwitchSkillDialog(conversationState);
     const previousResponseAccesor: StatePropertyAccessor<Partial<Activity>[]> = userState.createProperty<Partial<Activity>[]>('Activity');
 
@@ -202,7 +202,8 @@ try {
         switchSkillDialog,
         skillDialogs,
         skillsConfiguration,
-        activeSkillProperty
+        activeSkillProperty,
+        telemetryClient
     );
 
     bot = new DefaultActivityHandler(conversationState, userState, localeTemplateManager, mainDialog);
