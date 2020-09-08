@@ -40,6 +40,7 @@ program
     .option('--appSettingsFile [path]', '[OPTIONAL] Path to your appsettings file (defaults to \'appsettings.json\' inside your assistant\'s folder)')
     .option('--cognitiveModelsFile [path]', '[OPTIONAL] Path to your Cognitive Models file (defaults to \'cognitivemodels.json\' inside your assistant\'s folder)')
     .option('--verbose', '[OPTIONAL] Output detailed information about the processing of the tool')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .action((cmd: program.Command, actions: program.Command): undefined => undefined);
 
 const args: program.Command = program.parse(process.argv);
@@ -49,15 +50,15 @@ if (process.argv.length < 3) {
     process.exit(0);
 }
 
-let skillId = '';
-let outFolder: string;
+const outFolder: string = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');
+const languages: string[] = args.languages ? args.languages.split(',') : ['en-us'];
+const dispatchFolder: string = args.dispatchFolder ? sanitizePath(args.dispatchFolder) : join(outFolder, 'Deployment', 'Resources', 'Dispatch');
+const lgOutFolder: string = args.lgOutFolder ? sanitizePath(args.lgOutFolder) : join(outFolder, (args.ts ? join('src', 'Services', 'DispatchLuis.ts') : join('Services', 'DispatchLuis.cs')));
+const lgLanguage: string = args.cs ? 'cs' : 'ts';
+const appSettingsFile: string = args.appSettingsFile || join(outFolder, (args.ts ? join('src', 'appsettings.json') : 'appsettings.json'));
+
 let noRefresh = false;
-let cognitiveModelsFile: string;
-let languages: string[];
-let dispatchFolder: string;
-let lgOutFolder: string;
-let lgLanguage: string;
-let appSettingsFile: string;
+let skillId = '';
 
 logger.isVerbose = args.verbose;
 
@@ -71,7 +72,6 @@ if (csAndTsValidationResult) {
     );
     process.exit(1);
 }
-lgLanguage = args.cs ? 'cs' : 'ts';
 
 // noRefresh validation
 if (args.noRefresh) {
@@ -85,11 +85,6 @@ if (!args.skillId) {
 }
 
 skillId = args.skillId;
-// outFolder validation -- the var is needed for reassuring 'configuration.outFolder' is not undefined
-outFolder = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');
-
-// appSettingsFile validation
-appSettingsFile = args.appSettingsFile || join(outFolder, (args.ts ? join('src', 'appsettings.json') : 'appsettings.json'));
 
 // validate the existence of the appsettings file
 if (appSettingsFile === undefined) {
@@ -100,18 +95,7 @@ if (appSettingsFile === undefined) {
 // cognitiveModelsFile validation
 const cognitiveModelsFilePath: string = args.cognitiveModelsFile || join(
     outFolder, (args.ts ? join('src', 'cognitivemodels.json') : 'cognitivemodels.json'));
-cognitiveModelsFile = cognitiveModelsFilePath;
-
-// languages validation
-languages = args.languages ? args.languages.split(',') : ['en-us'];
-
-// dispatchFolder validation
-dispatchFolder = args.dispatchFolder ?
-    sanitizePath(args.dispatchFolder) : join(outFolder, 'Deployment', 'Resources', 'Dispatch');
-
-// lgOutFolder validation
-lgOutFolder = args.lgOutFolder ?
-    sanitizePath(args.lgOutFolder) : join(outFolder, (args.ts ? join('src', 'Services', 'DispatchLuis.ts') : join('Services', 'DispatchLuis.cs')));
+const cognitiveModelsFile = cognitiveModelsFilePath;
 
 // End of arguments validation
 // Initialize an instance of IDisconnectConfiguration to send the needed arguments to the disconnectSkill function

@@ -41,6 +41,7 @@ program
     .description('List all the Skills connected to your assistant')
     .option('--appSettingsFile [path]', '[OPTIONAL] Path to your appsettings file (defaults to \'appsettings.json\' inside your assistant\'s folder)')
     .option('--verbose', '[OPTIONAL] Output detailed information about the processing of the tool')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .action((cmd: program.Command, actions: program.Command): undefined => undefined);
 
 const args: program.Command = program.parse(process.argv);

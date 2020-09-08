@@ -86,7 +86,7 @@ export function manifestV2Validation(skillManifest: ISkillManifestV2, logger: IL
     if (skillManifest.endpoints === undefined || skillManifest.endpoints.length === 0) {
         logger.error(`Missing property 'endpoints' of the manifest`);
     } else {
-        let currentEndpoint = skillManifest.endpoints.find((endpoint): boolean =>  endpoint.name == endpointName) || skillManifest.endpoints[0];
+        const currentEndpoint = skillManifest.endpoints.find((endpoint): boolean =>  endpoint.name == endpointName) || skillManifest.endpoints[0];
         if (currentEndpoint.name === undefined || currentEndpoint.name === ''){
             logger.error(`Missing property 'name' at the selected endpoint. If you didn't select any endpoint, the first one is taken by default`);
         }
@@ -116,6 +116,7 @@ export function manifestV2Validation(skillManifest: ISkillManifestV2, logger: IL
 export async function validateLibrary(libs: libraries[], logger: ILogger): Promise<void> {
     await Promise.all(libs.map(async (library: libraries) => {
         const lib: libraryCommand = commands[library];
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         await new ChildProcessUtils().execute(lib.cmd, lib.args).catch( err => {
             logger.error(`You are missing the library ${ libraries[library] }. Please visit ${ lib.package }.`);
         });

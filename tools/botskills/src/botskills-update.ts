@@ -45,6 +45,7 @@ program
     .option('--appSettingsFile [path]', '[OPTIONAL] Path to your app settings file (defaults to \'appsettings.json\' inside your assistant\'s folder)')
     .option('--cognitiveModelsFile [path]', '[OPTIONAL] Path to your Cognitive Models file (defaults to \'cognitivemodels.json\' inside your assistant\'s folder)')
     .option('--verbose', '[OPTIONAL] Output detailed information about the processing of the tool')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .action((cmd: program.Command, actions: program.Command): undefined => undefined);
 
 const args: program.Command = program.parse(process.argv);
@@ -55,20 +56,21 @@ if (process.argv.length < 3) {
 }
 
 const skillId = '';
+const localManifest: string = args.localManifest;
+const remoteManifest: string = args.remoteManifest;
+const endpointName: string = args.endpointName;
+const languages: string[] = args.languages ? args.languages.split(',') : ['en-us'];
+const outFolder: string = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');
+const luisFolder: string = args.luisFolder ? sanitizePath(args.luisFolder) : join(outFolder, 'Deployment', 'Resources', 'Skills');
+const dispatchFolder: string = args.dispatchFolder ? sanitizePath(args.dispatchFolder) : join(outFolder, 'Deployment', 'Resources', 'Dispatch');
+const lgOutFolder: string = args.lgOutFolder ? sanitizePath(args.lgOutFolder) : join(outFolder, (args.ts ? join('src', 'Services', 'DispatchLuis.ts') : join('Services', 'DispatchLuis.cs')));
+const appSettingsFile: string = args.appSettingsFile || join(outFolder, (args.ts ? join('src', 'appsettings.json') : 'appsettings.json'));
+const lgLanguage: string = args.cs ? 'cs' : 'ts';
+
 let botName = '';
-let localManifest: string;
-let remoteManifest: string;
-let endpointName: string;
 let noRefresh = false;
-let languages: string[];
-let luisFolder: string;
-let dispatchFolder: string;
-let outFolder: string;
-let lgOutFolder: string;
 let resourceGroup = '';
-let appSettingsFile: string;
-let cognitiveModelsFile: string;
-let lgLanguage: string;
+
 
 logger.isVerbose = args.verbose;
 
@@ -82,8 +84,6 @@ if (csAndTsValidationResult) {
     );
     process.exit(1);
 }
-
-lgLanguage = args.cs ? 'cs' : 'ts';
 
 // noRefresh validation
 if (args.noRefresh) {
@@ -104,16 +104,6 @@ if (args.localManifest && extname(args.localManifest) !== '.json') {
     process.exit(1);
 }
 
-localManifest = args.localManifest;
-remoteManifest = args.remoteManifest;
-endpointName = args.endpointName;
-
-// outFolder validation -- the var is needed for reassuring 'configuration.outFolder' is not undefined
-outFolder = args.outFolder ? sanitizePath(args.outFolder) : resolve('./');
-
-// appSettingsFile validation
-appSettingsFile = args.appSettingsFile || join(outFolder, (args.ts ? join('src', 'appsettings.json') : 'appsettings.json'));
-
 // validate the existence of the appsettings file
 if (appSettingsFile !== undefined) {
     const appSettings: IAppSetting = JSON.parse(readFileSync(appSettingsFile, 'UTF8'));
@@ -127,21 +117,7 @@ if (appSettingsFile !== undefined) {
 
 // cognitiveModelsFile validation
 const cognitiveModelsFilePath: string = args.cognitiveModelsFile || join(outFolder, (args.ts ? join('src', 'cognitivemodels.json') : 'cognitivemodels.json'));
-cognitiveModelsFile = cognitiveModelsFilePath;
-
-// languages validation
-languages = args.languages ? args.languages.split(',') : ['en-us'];
-
-// luisFolder validation
-luisFolder = args.luisFolder ? sanitizePath(args.luisFolder) : join(outFolder, 'Deployment', 'Resources', 'Skills');
-
-// dispatchFolder validation
-dispatchFolder = args.dispatchFolder ? sanitizePath(args.dispatchFolder) : join(outFolder, 'Deployment', 'Resources', 'Dispatch');
-
-// lgOutFolder validation
-lgOutFolder = args.lgOutFolder ? sanitizePath(args.lgOutFolder) : join(outFolder, (args.ts ? join('src', 'Services', 'DispatchLuis.ts') : join('Services', 'DispatchLuis.cs')));
-
-// End of arguments validation
+const cognitiveModelsFile = cognitiveModelsFilePath;
 
 // Initialize an instance of IUpdateConfiguration to send the needed arguments to the updateSkill function
 const configuration: IUpdateConfiguration = {

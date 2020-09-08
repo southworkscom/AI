@@ -42,6 +42,7 @@ program
     .option('--sourceFile [path]', '[OPTIONAL] Path to your skills.json file, which contains the skills that will be migrated (defaults to \'skills.json\' inside your Virtual Assistant\'s folder)')
     .option('--destFile [path]', '[OPTIONAL] Path to your appsettings file. The skills information will be migrated to this file (defaults to \'appsettings.json\' inside your Virtual Assistant\'s folder)')
     .option('--verbose', '[OPTIONAL] Output detailed information about the processing of the tool')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .action((cmd: program.Command, actions: program.Command): undefined => undefined);
 
 const args: program.Command = program.parse(process.argv);

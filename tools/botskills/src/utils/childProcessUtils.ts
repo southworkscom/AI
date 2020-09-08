@@ -14,6 +14,7 @@ export class ChildProcessUtils {
 
         return new Promise((pResolve, pReject): void => {
             childProcess.spawn('dotnet', [dispatchPath, ...args], { stdio: 'inherit' })
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 .on('close', (code: number): void => {
                     pResolve('');
                 })
