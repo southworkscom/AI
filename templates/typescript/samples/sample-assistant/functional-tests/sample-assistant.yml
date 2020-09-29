@@ -90,7 +90,7 @@ stages:
 
        # Install botframework-cli from MyGet
        npm i -g @microsoft/botframework-cli --registry https://botbuilder.myget.org/F/botframework-cli/npm/
-      displayName: 'Prepare: Install preview botframework-cli'
+      displayName: 'Install preview botframework-cli'
 
     - pwsh: |
        # Install generator-bot-virtualassistant from MyGet
@@ -98,13 +98,13 @@ stages:
 
        npm install -g yo generator-bot-virtualassistant
 
-      displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
+      displayName: 'Install yeoman, generator-bot-virtualassistant'
 
     - powershell: 'yo bot-virtualassistant -n $(VirtualAssistantBotName) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
       displayName: 'Create a Virtual Assistant using the generator'
 
     - powershell: 'yo bot-virtualassistant:skill -n $(SkillBotName) -d "pipeline testing" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
-      displayName: 'Prepare: Create a Skill using the generator'
+      displayName: 'Create a Skill using the generator'
 
     - pwsh: |
        # Install botskills from MyGet
@@ -207,7 +207,7 @@ stages:
        Write-Host "generator-bot-virtualassistant Version"
        Write-Host "===="
        npm view generator-bot-virtualassistant version --silent
-      displayName: 'Prepare: Get CLI and SDK versions'
+      displayName: 'Get CLI and SDK versions'
 
     - task: knom.regexreplace-task.regex-replace.RegexReplace@3
       displayName: 'Update SDK to latest preview version'
@@ -229,6 +229,7 @@ stages:
 
   - job: Build
     steps:
+    - checkout: none
     - task: Npm@1
       displayName: 'VA - Run npm install'
       inputs:
@@ -330,6 +331,7 @@ stages:
 
   - job: Deploy
     steps:
+    - checkout: none
     - pwsh: |
        az login --service-principal --username "$(ServicePrincipal)" --password "$(AzureDevOps-ServicePrincipal-Secret)" --tenant "$(Azure_Tenant)"
 
@@ -396,6 +398,7 @@ stages:
 
   - job: Test
     steps:
+    - checkout: none
     - task: AzureCLI@1
       displayName: 'Skill - Create Direct Line registration'
       inputs:
@@ -498,6 +501,7 @@ stages:
 
   - job: Debug
     steps:
+    - checkout: none
     - pwsh: |
        Write-Host "Deploy log"
        Write-Host "===="
