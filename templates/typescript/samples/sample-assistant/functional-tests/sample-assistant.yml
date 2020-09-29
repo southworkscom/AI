@@ -228,6 +228,7 @@ stages:
          **/src/manifest/manifest-1.0.json
 
   - job: Build
+    dependsOn: Prepare
     steps:
     - checkout: none
     - task: Npm@1
@@ -330,6 +331,7 @@ stages:
         publishTestResults: false
 
   - job: Deploy
+    dependsOn: Build
     steps:
     - checkout: none
     - pwsh: |
@@ -397,6 +399,7 @@ stages:
       displayName: 'Skill - Get variables from appsettings'
 
   - job: Test
+    dependsOn: Deploy
     steps:
     - checkout: none
     - task: AzureCLI@1
@@ -500,6 +503,7 @@ stages:
         arguments: '-v n --configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
 
   - job: Debug
+    dependsOn: Test
     steps:
     - checkout: none
     - pwsh: |
