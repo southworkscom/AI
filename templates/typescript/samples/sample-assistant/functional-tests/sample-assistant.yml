@@ -230,7 +230,6 @@ stages:
   - job: Build
     dependsOn: Prepare
     steps:
-    - checkout: none
     - task: Npm@1
       displayName: 'VA - Run npm install'
       inputs:
@@ -333,7 +332,6 @@ stages:
   - job: Deploy
     dependsOn: Build
     steps:
-    - checkout: none
     - pwsh: |
        az login --service-principal --username "$(ServicePrincipal)" --password "$(AzureDevOps-ServicePrincipal-Secret)" --tenant "$(Azure_Tenant)"
 
@@ -401,7 +399,6 @@ stages:
   - job: Test
     dependsOn: Deploy
     steps:
-    - checkout: none
     - task: AzureCLI@1
       displayName: 'Skill - Create Direct Line registration'
       inputs:
@@ -505,7 +502,6 @@ stages:
   - job: Debug
     dependsOn: Test
     steps:
-    - checkout: none
     - pwsh: |
        Write-Host "Deploy log"
        Write-Host "===="
