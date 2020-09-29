@@ -228,6 +228,7 @@ stages:
          **/src/manifest/manifest-1.0.json
 
   - job: Build
+    steps:
     - task: Npm@1
       displayName: 'VA - Run npm install'
       inputs:
@@ -328,6 +329,7 @@ stages:
         publishTestResults: false
 
   - job: Deploy
+    steps:
     - pwsh: |
        az login --service-principal --username "$(ServicePrincipal)" --password "$(AzureDevOps-ServicePrincipal-Secret)" --tenant "$(Azure_Tenant)"
 
@@ -393,6 +395,7 @@ stages:
       displayName: 'Skill - Get variables from appsettings'
 
   - job: Test
+    steps:
     - task: AzureCLI@1
       displayName: 'Skill - Create Direct Line registration'
       inputs:
@@ -494,6 +497,7 @@ stages:
         arguments: '-v n --configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
 
   - job: Debug
+    steps:
     - pwsh: |
        Write-Host "Deploy log"
        Write-Host "===="
