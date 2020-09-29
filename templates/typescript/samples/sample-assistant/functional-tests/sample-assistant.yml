@@ -27,524 +27,513 @@ variables:
   # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
 
 
-stages:
-- stage: Main
-  jobs:
-  - job: Prepare
-    timeoutInMinutes: 0
-    steps:
-    - task: NodeTool@0
-      displayName: 'Use Node 10.16.3'
-      inputs:
-        versionSpec: 10.16.3
-    - task: AzureCLI@2
-      displayName: 'Delete preexisting resources'
-      inputs:
-        azureSubscription: 'mr-azure-subscription-kobuk'
-        scriptType: pscore
-        scriptLocation: inlineScript
-        inlineScript: |
-         # If RG exists, delete it to avoid possible App ID registration conflict.
-         $virtualassistantexists = az group exists --name $(VirtualAssistantBotName)
+jobs:
+- job: Main
+  timeoutInMinutes: 0
+  steps:
+  - task: NodeTool@0
+    displayName: 'Use Node 10.16.3'
+    inputs:
+      versionSpec: 10.16.3
+  - task: AzureCLI@2
+    displayName: 'Prepare: Delete preexisting resources'
+    inputs:
+      azureSubscription: 'mr-azure-subscription-kobuk'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+       # If RG exists, delete it to avoid possible App ID registration conflict.
+       $virtualassistantexists = az group exists --name $(VirtualAssistantBotName)
 
-         if ($virtualassistantexists -eq 'true')
-         {
-             Write-Host "Resource group $(VirtualAssistantBotName) exists, there is likely an error on the previous build. Deleting."
-              az group delete --name $(VirtualAssistantBotName) --yes
-         }
-         else
-         {
-             Write-Host "Resource group $(VirtualAssistantBotName) does not exist."
-         }
-
-         # If RG exists, delete it to avoid possible App ID registration conflict.
-         $skillexists= az group exists --name $(SkillBotName)
-
-         if ($skillexists -eq 'true')
-         {
-             Write-Host "Resource group $(SkillBotName) exists, there is likely an error on the previous build. Deleting."
-              az group delete --name $(SkillBotName) --yes
-         }
-         else
-         {
-             Write-Host "Resource group $(SkillBotName) does not exist."
-         }
-        workingDirectory: 'templates/typescript/samples/$(VirtualAssistantBotName)'
-
-    - pwsh: |
-       # Install botdispatch and luis-apis from MyGet
-       npm install -g botdispatch luis-apis @latest --registry https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/
-      displayName: 'Install preview dispatch, luis-apis'
-
-    - pwsh: |
-       # Create config file
-       $path = Join-Path $env:LOCALAPPDATA "@microsoft" "botframework-cli"
-
-       New-Item -Path $path -ItemType Directory
-
-       $config = @{
-           telemetry = $true
+       if ($virtualassistantexists -eq 'true')
+       {
+           Write-Host "Resource group $(VirtualAssistantBotName) exists, there is likely an error on the previous build. Deleting."
+            az group delete --name $(VirtualAssistantBotName) --yes
+       }
+       else
+       {
+           Write-Host "Resource group $(VirtualAssistantBotName) does not exist."
        }
 
-       $config | ConvertTo-Json -depth 100 | Out-File $(Join-Path $path "config.json")
+       # If RG exists, delete it to avoid possible App ID registration conflict.
+       $skillexists= az group exists --name $(SkillBotName)
 
-       # Install botframework-cli from MyGet
-       npm i -g @microsoft/botframework-cli --registry https://botbuilder.myget.org/F/botframework-cli/npm/
-      displayName: 'Install preview botframework-cli'
+       if ($skillexists -eq 'true')
+       {
+           Write-Host "Resource group $(SkillBotName) exists, there is likely an error on the previous build. Deleting."
+            az group delete --name $(SkillBotName) --yes
+       }
+       else
+       {
+           Write-Host "Resource group $(SkillBotName) does not exist."
+       }
+      workingDirectory: 'templates/typescript/samples/$(VirtualAssistantBotName)'
 
-    - pwsh: |
-       # Install generator-bot-virtualassistant from MyGet
-       npm config set registry https://botbuilder.myget.org/F/aitemplates/npm/
+  - pwsh: |
+     # Install botdispatch and luis-apis from MyGet
+     npm install -g botdispatch luis-apis @latest --registry https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/
+    displayName: 'Prepare: Install preview dispatch, luis-apis'
 
-       npm install -g yo generator-bot-virtualassistant
+  - pwsh: |
+     # Create config file
+     $path = Join-Path $env:LOCALAPPDATA "@microsoft" "botframework-cli"
 
-      displayName: 'Install yeoman, generator-bot-virtualassistant'
+     New-Item -Path $path -ItemType Directory
 
-    - powershell: 'yo bot-virtualassistant -n $(VirtualAssistantBotName) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
-      displayName: 'Create a Virtual Assistant using the generator'
+     $config = @{
+         telemetry = $true
+     }
 
-    - powershell: 'yo bot-virtualassistant:skill -n $(SkillBotName) -d "pipeline testing" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
-      displayName: 'Create a Skill using the generator'
+     $config | ConvertTo-Json -depth 100 | Out-File $(Join-Path $path "config.json")
 
-    - pwsh: |
-       # Install botskills from MyGet
-       npm install -g botskills@latest --registry https://botbuilder.myget.org/F/aitemplates/npm/
+     # Install botframework-cli from MyGet
+     npm i -g @microsoft/botframework-cli --registry https://botbuilder.myget.org/F/botframework-cli/npm/
+    displayName: 'Prepare: Install preview botframework-cli'
 
-      displayName: 'Install preview botskills'
+  - pwsh: |
+     # Install generator-bot-virtualassistant from MyGet
+     npm config set registry https://botbuilder.myget.org/F/aitemplates/npm/
 
-    - pwsh: |
-       Write-Host "CLI versions in use for this Nightly Build"
-       Write-Host "`r`n"
+     npm install -g yo generator-bot-virtualassistant
 
-       Write-Host "BF CLI"
-       Write-Host "===="
-       bf -v
-       Write-Host "`r`n"
+    displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
 
-       Write-Host "Dispatch CLI"
-       Write-Host "===="
-       dispatch -v
-       Write-Host "`r`n"
+  - powershell: 'yo bot-virtualassistant -n $(VirtualAssistantBotName) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
+    displayName: 'Prepare: Create a Virtual Assistant using the generator'
 
-       Write-Host "BotSkills CLI"
-       Write-Host "===="
-       botskills -v
-       Write-Host "`r`n"
+  - powershell: 'yo bot-virtualassistant:skill -n $(SkillBotName) -d "pipeline testing" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
+    displayName: 'Prepare: Create a Skill using the generator'
 
-       Write-Host "BF SDK and Solutions package versions being used by the VA Sample for this nightly build"
-       Write-Host "===="
+  - pwsh: |
+     # Install botskills from MyGet
+     npm install -g botskills@latest --registry https://botbuilder.myget.org/F/aitemplates/npm/
 
-       $path = '$(System.DefaultWorkingDirectory)\templates\typescript\samples\functionalTests\$(VirtualAssistantBotName)\package-lock.json'
+    displayName: 'Prepare: Install preview botskills'
 
-       $json = Get-Content $path | Out-String | ConvertFrom-Json
+  - pwsh: |
+     Write-Host "CLI versions in use for this Nightly Build"
+     Write-Host "`r`n"
 
-       Write-Host "bot-solutions Version"
-       Write-Host "===="
-       $botsolutionsVersion = $json.dependencies.'bot-solutions'.version
+     Write-Host "BF CLI"
+     Write-Host "===="
+     bf -v
+     Write-Host "`r`n"
 
-       Write-Host $botsolutionsVersion
+     Write-Host "Dispatch CLI"
+     Write-Host "===="
+     dispatch -v
+     Write-Host "`r`n"
 
-       Write-Host "botbuilder Version"
-       Write-Host "===="
-       $botbuilderVersion = $json.dependencies.botbuilder.version
+     Write-Host "BotSkills CLI"
+     Write-Host "===="
+     botskills -v
+     Write-Host "`r`n"
 
-       Write-Host $botbuilderVersion
+     Write-Host "BF SDK and Solutions package versions being used by the VA Sample for this nightly build"
+     Write-Host "===="
 
-       Write-Host "botbuilder-ai Version"
-       Write-Host "===="
-       $botbuilderaiVersion = $json.dependencies.'botbuilder-ai'.version
+     $path = '$(System.DefaultWorkingDirectory)\templates\typescript\samples\functionalTests\$(VirtualAssistantBotName)\package-lock.json'
 
-       Write-Host $botbuilderaiVersion
+     $json = Get-Content $path | Out-String | ConvertFrom-Json
 
-       Write-Host "botbuilder-applicationinsights Version"
-       Write-Host "===="
-       $botbuilderapplicationinsights = $json.dependencies.'botbuilder-applicationinsights'.version
+     Write-Host "bot-solutions Version"
+     Write-Host "===="
+     $botsolutionsVersion = $json.dependencies.'bot-solutions'.version
 
-       Write-Host $botbuilderapplicationinsights
+     Write-Host $botsolutionsVersion
 
-       Write-Host "botbuilder-azure Version"
-       Write-Host "===="
-       $botbuilderazure = $json.dependencies.'botbuilder-azure'.version
+     Write-Host "botbuilder Version"
+     Write-Host "===="
+     $botbuilderVersion = $json.dependencies.botbuilder.version
 
-       Write-Host $botbuilderazure
+     Write-Host $botbuilderVersion
 
-       Write-Host "botbuilder-dialogs Version"
-       Write-Host "===="
-       $botbuilderdialogs = $json.dependencies.'botbuilder-dialogs'.version
+     Write-Host "botbuilder-ai Version"
+     Write-Host "===="
+     $botbuilderaiVersion = $json.dependencies.'botbuilder-ai'.version
 
-       Write-Host $botbuilderdialogs
+     Write-Host $botbuilderaiVersion
 
-       Write-Host "botbuilder-lg Version"
-       Write-Host "===="
-       $botbuilderlg = $json.dependencies.'botbuilder-lg'.version
+     Write-Host "botbuilder-applicationinsights Version"
+     Write-Host "===="
+     $botbuilderapplicationinsights = $json.dependencies.'botbuilder-applicationinsights'.version
 
-       Write-Host $botbuilderlg
+     Write-Host $botbuilderapplicationinsights
 
-       Write-Host "botframework-config Version"
-       Write-Host "===="
-       $botframeworkconfig = $json.dependencies.'botframework-config'.version
+     Write-Host "botbuilder-azure Version"
+     Write-Host "===="
+     $botbuilderazure = $json.dependencies.'botbuilder-azure'.version
 
-       Write-Host $botframeworkconfig
+     Write-Host $botbuilderazure
 
-       Write-Host "botframework-connector Version"
-       Write-Host "===="
-       $botframeworkconnector = $json.dependencies.'botframework-connector'.version
+     Write-Host "botbuilder-dialogs Version"
+     Write-Host "===="
+     $botbuilderdialogs = $json.dependencies.'botbuilder-dialogs'.version
 
-       Write-Host $botframeworkconnector
+     Write-Host $botbuilderdialogs
 
-       Write-Host "botframework-schema Version"
-       Write-Host "===="
-       $botframeworkschema = $json.dependencies.'botframework-schema'.version
+     Write-Host "botbuilder-lg Version"
+     Write-Host "===="
+     $botbuilderlg = $json.dependencies.'botbuilder-lg'.version
 
-       Write-Host $botframeworkschema
+     Write-Host $botbuilderlg
 
-       Write-Host "botframework-streaming Version"
-       Write-Host "===="
-       $botframeworkstreaming = $json.dependencies.'botframework-streaming'.version
+     Write-Host "botframework-config Version"
+     Write-Host "===="
+     $botframeworkconfig = $json.dependencies.'botframework-config'.version
 
-       Write-Host $botframeworkstreaming
+     Write-Host $botframeworkconfig
 
-       Write-Host "generator-bot-virtualassistant Version"
-       Write-Host "===="
-       npm view generator-bot-virtualassistant version --silent
-      displayName: 'Get CLI and SDK versions'
+     Write-Host "botframework-connector Version"
+     Write-Host "===="
+     $botframeworkconnector = $json.dependencies.'botframework-connector'.version
 
-    - task: knom.regexreplace-task.regex-replace.RegexReplace@3
-      displayName: 'Update SDK to latest preview version'
-      inputs:
-        InputSearchPattern: |
-          templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/package.json
-          templates/typescript/samples/functionalTests/$(SkillBotName)/package.json
-        FindRegex: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-        ReplaceRegex: '$1:$(PreviewVersion)'
+     Write-Host $botframeworkconnector
 
-    - task: FileTransform@1
-      displayName: 'Replace Skill manifest properties'
-      inputs:
-        folderPath: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-        fileType: json
-        targetFiles: |
-         **/src/manifest/manifest-1.1.json
-         **/src/manifest/manifest-1.0.json
+     Write-Host "botframework-schema Version"
+     Write-Host "===="
+     $botframeworkschema = $json.dependencies.'botframework-schema'.version
 
-  - job: Build
-    dependsOn: Prepare
-    steps:
-    - task: Npm@1
-      displayName: 'VA - Run npm install'
-      inputs:
-        workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-        verbose: false
+     Write-Host $botframeworkschema
 
-    - task: Npm@1
-      displayName: 'VA - Run npm build'
-      inputs:
-        command: custom
-        workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-        verbose: false
-        customCommand: 'run build'
+     Write-Host "botframework-streaming Version"
+     Write-Host "===="
+     $botframeworkstreaming = $json.dependencies.'botframework-streaming'.version
 
-    - task: Npm@1
-      displayName: 'VA - Run npm test'
-      inputs:
-        command: custom
-        workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-        verbose: false
-        customCommand: 'run test'
+     Write-Host $botframeworkstreaming
 
-    - task: Npm@1
-      displayName: 'VA - Run npm test on unit tests with code coverage'
-      inputs:
-        command: custom
-        workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-        verbose: false
-        customCommand: 'run test-coverage-ci'
+     Write-Host "generator-bot-virtualassistant Version"
+     Write-Host "===="
+     npm view generator-bot-virtualassistant version --silent
+    displayName: 'Prepare: Get CLI and SDK versions'
 
-    - task: PublishTestResults@2
-      displayName: 'VA - Publish Test Results'
-      inputs:
-        testResultsFiles: 'test-results.xml'
-        searchFolder: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-        failTaskOnFailedTests: true
+  - task: knom.regexreplace-task.regex-replace.RegexReplace@3
+    displayName: 'Prepare: Update SDK to latest preview version'
+    inputs:
+      InputSearchPattern: |
+        templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/package.json
+        templates/typescript/samples/functionalTests/$(SkillBotName)/package.json
+      FindRegex: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
+      ReplaceRegex: '$1:$(PreviewVersion)'
 
-    - task: PublishCodeCoverageResults@1
-      displayName: 'VA - Publish Code Coverage'
-      inputs:
-        codeCoverageTool: Cobertura
-        summaryFileLocation: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/cobertura-coverage.xml'
-        reportDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/'
+  - task: FileTransform@1
+    displayName: 'Prepare: Replace Skill manifest properties'
+    inputs:
+      folderPath: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+      fileType: json
+      targetFiles: |
+       **/src/manifest/manifest-1.1.json
+       **/src/manifest/manifest-1.0.json
 
-    - task: Npm@1
-      displayName: 'Skill - Run npm install'
-      inputs:
-        workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-        verbose: false
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm install'
+    inputs:
+      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+      verbose: false
 
-    - task: Npm@1
-      displayName: 'Skill - Run npm build'
-      inputs:
-        command: custom
-        workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-        verbose: false
-        customCommand: 'run build'
-    - task: DotNetCoreCLI@2
-      displayName: 'VA - Restore dependencies'
-      inputs:
-        command: restore
-        projects: |
-         templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm build'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+      verbose: false
+      customCommand: 'run build'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'VA - Build project'
-      inputs:
-        projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
-        arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm test'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+      verbose: false
+      customCommand: 'run test'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'VA - Execute unit tests'
-      inputs:
-        command: test
-        projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
-        arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
-        publishTestResults: false
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm test on unit tests with code coverage'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+      verbose: false
+      customCommand: 'run test-coverage-ci'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'Skill - Restore dependencies'
-      inputs:
-        command: restore
-        projects: |
-         templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj
+  - task: PublishTestResults@2
+    displayName: 'Build: VA - Publish Test Results'
+    inputs:
+      testResultsFiles: 'test-results.xml'
+      searchFolder: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+      failTaskOnFailedTests: true
 
-    - task: DotNetCoreCLI@2
-      displayName: 'Skill - Build project'
-      inputs:
-        projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
-        arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Build: VA - Publish Code Coverage'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/cobertura-coverage.xml'
+      reportDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'Skill - Execute unit tests'
-      inputs:
-        command: test
-        projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
-        arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
-        publishTestResults: false
+  - task: Npm@1
+    displayName: 'Build: Skill - Run npm install'
+    inputs:
+      workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+      verbose: false
 
-  - job: Deploy
-    dependsOn: Build
-    steps:
-    - pwsh: |
-       az login --service-principal --username "$(ServicePrincipal)" --password "$(AzureDevOps-ServicePrincipal-Secret)" --tenant "$(Azure_Tenant)"
+  - task: Npm@1
+    displayName: 'Build: Skill - Run npm build'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+      verbose: false
+      customCommand: 'run build'
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: VA - Restore dependencies'
+    inputs:
+      command: restore
+      projects: |
+       templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj
 
-       ./deployment/scripts/deploy.ps1 -name $(VirtualAssistantBotName) -location $(Location) -languages "en-us" -appId $(VirtualAssistantBotAppId) -appPassword $(VirtualAssistantBotAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "deployment" -luisEndpoint "https://westus.api.cognitive.microsoft.com/"
-      errorActionPreference: continue
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      displayName: 'VA'
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: VA - Build project'
+    inputs:
+      projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
+      arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: VA - Execute unit tests'
+    inputs:
+      command: test
+      projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
+      arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
+      publishTestResults: false
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: Skill - Restore dependencies'
+    inputs:
+      command: restore
+      projects: |
+       templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: Skill - Build project'
+    inputs:
+      projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
+      arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: Skill - Execute unit tests'
+    inputs:
+      command: test
+      projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
+      arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
+      publishTestResults: false
+
+  - pwsh: |
+     az login --service-principal --username "$(ServicePrincipal)" --password "$(AzureDevOps-ServicePrincipal-Secret)" --tenant "$(Azure_Tenant)"
+
+     ./deployment/scripts/deploy.ps1 -name $(VirtualAssistantBotName) -location $(Location) -languages "en-us" -appId $(VirtualAssistantBotAppId) -appPassword $(VirtualAssistantBotAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "deployment" -luisEndpoint "https://westus.api.cognitive.microsoft.com/"
+    errorActionPreference: continue
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+    displayName: 'Deploy: VA'
+    continueOnError: true
+
+  - pwsh: |
+     $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
+
+     Write-Host $appSettings
+
+     $botWebAppName = $appsettings.botWebAppName
+     $resourceGroupName= $appsettings.resourceGroupName
+
+     Write-Host "VA Web App Name"
+     Write-Host "===="
+     Write-Host $botWebAppName
+     echo "##vso[task.setvariable variable=VirtualAssistantBotWebAppName;]$botWebAppName"
+
+     Write-Host "VA Resource Group"
+     Write-Host "===="
+     Write-Host $resourceGroupName
+     echo "##vso[task.setvariable variable=VirtualAssistantBotResourceGroup;]$resourceGroupName"
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/src'
+    displayName: 'Deploy: VA - Get variables from appsettings'
+
+  - pwsh: |
+     az login --service-principal --username "$(ServicePrincipal)" --password "$(AzureDevOps-ServicePrincipal-Secret)" --tenant "$(Azure_Tenant)"
+
+     ./Deployment/Scripts/deploy.ps1 -name $(SkillBotName) -location $(Location) -languages "en-us" -appId $(SkillBotAppId) -appPassword $(SkillBotAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "Deployment" -luisEndpoint "https://westus.api.cognitive.microsoft.com/"
+    errorActionPreference: continue
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+    displayName: 'Deploy: Skill'
+    continueOnError: true
+
+  - pwsh: |
+     $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
+
+     Write-Host $appSettings
+
+     $botWebAppName = $appsettings.botWebAppName
+     $resourceGroupName= $appsettings.resourceGroupName
+     $url = "$botWebAppName.azurewebsites.net"
+
+     Write-Host "Skill Web App Name"
+     Write-Host "===="
+     Write-Host $botWebAppName
+     echo "##vso[task.setvariable variable=SkillBotWebAppName;]$botWebAppName"
+
+     Write-Host "URL"
+     Write-Host "===="
+     Write-Host $url
+     echo "##vso[task.setvariable variable=SkillBotWebAppUrl;]$url"
+
+     Write-Host "Skill Resource Group"
+     Write-Host "===="
+     Write-Host $resourceGroupName
+     echo "##vso[task.setvariable variable=SkillBotResourceGroup;]$resourceGroupName"
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)/src'
+    displayName: 'Deploy: Skill - Get variables from appsettings'
+
+- job: Test
+  dependsOn: Deploy
+  steps:
+  - task: AzureCLI@1
+    displayName: 'Deploy: Skill - Create Direct Line registration'
+    inputs:
+      azureSubscription: ''
+      scriptLocation: inlineScript
+      inlineScript: 'call az bot directline create -n "$(SkillBotWebAppName)" -g "$(SkillBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
+      workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+
+  - powershell: |
+     $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
+     $key = $json.properties.properties.sites.key
+
+     Write-Host "Direct Line key"
+     Write-Host "===="
+     Write-Host "$key"
+     Write-Host "`r`n"
+
+     echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
+
+     Write-Host "Bot name"
+     Write-Host "===="
+     Write-Host "DirectLine Bot Name: $(SkillBotWebAppName)"
+     Write-Host "`r`n"
+
+     echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
+
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+    displayName: 'Deploy: Skill - Get channel secrets'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Deploy: Skill - Execute functional tests'
+    inputs:
+      command: test
+      projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
+      arguments: '--configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
       continueOnError: true
 
-    - pwsh: |
-       $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
+  - pwsh: |
+     $skillManifestUrl = "https://$(SkillBotWebAppName).scm.azurewebsites.net/api/vfs/site/wwwroot/src/manifest/manifest-1.1.json"
 
-       Write-Host $appSettings
+     Write-Host "Skill Manifest"
+     Write-Host "===="
+     Write-Host $skillManifestUrl
+     Write-Host "`r`n"
 
-       $botWebAppName = $appsettings.botWebAppName
-       $resourceGroupName= $appsettings.resourceGroupName
+     botskills connect --localManifest "..\$(SkillBotName)\src\manifest\manifest-1.1.json" --luisFolder '..\$(SkillBotName)\deployment\resources\LU\' --ts --languages 'en-us' --noRefresh --verbose
 
-       Write-Host "VA Web App Name"
-       Write-Host "===="
-       Write-Host $botWebAppName
-       echo "##vso[task.setvariable variable=VirtualAssistantBotWebAppName;]$botWebAppName"
+     botskills refresh --ts --verbose
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+    displayName: 'Deploy: VA - Connect SkillSample'
 
-       Write-Host "VA Resource Group"
-       Write-Host "===="
-       Write-Host $resourceGroupName
-       echo "##vso[task.setvariable variable=VirtualAssistantBotResourceGroup;]$resourceGroupName"
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/src'
-      displayName: 'VA - Get variables from appsettings'
+  - task: Npm@1
+    displayName: 'Deploy: Build: VA - Run npm build'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+      verbose: false
+      customCommand: 'run build'
 
-    - pwsh: |
-       az login --service-principal --username "$(ServicePrincipal)" --password "$(AzureDevOps-ServicePrincipal-Secret)" --tenant "$(Azure_Tenant)"
+  - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
+    errorActionPreference: continue
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+    displayName: 'Deploy: VA - Publish with connected Skill'
 
-       ./Deployment/Scripts/deploy.ps1 -name $(SkillBotName) -location $(Location) -languages "en-us" -appId $(SkillBotAppId) -appPassword $(SkillBotAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "Deployment" -luisEndpoint "https://westus.api.cognitive.microsoft.com/"
-      errorActionPreference: continue
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-      displayName: 'Skill'
-      continueOnError: true
-
-    - pwsh: |
-       $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
-
-       Write-Host $appSettings
-
-       $botWebAppName = $appsettings.botWebAppName
-       $resourceGroupName= $appsettings.resourceGroupName
-       $url = "$botWebAppName.azurewebsites.net"
-
-       Write-Host "Skill Web App Name"
-       Write-Host "===="
-       Write-Host $botWebAppName
-       echo "##vso[task.setvariable variable=SkillBotWebAppName;]$botWebAppName"
-
-       Write-Host "URL"
-       Write-Host "===="
-       Write-Host $url
-       echo "##vso[task.setvariable variable=SkillBotWebAppUrl;]$url"
-
-       Write-Host "Skill Resource Group"
-       Write-Host "===="
-       Write-Host $resourceGroupName
-       echo "##vso[task.setvariable variable=SkillBotResourceGroup;]$resourceGroupName"
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)/src'
-      displayName: 'Skill - Get variables from appsettings'
-
-  - job: Test
-    dependsOn: Deploy
-    steps:
-    - task: AzureCLI@1
-      displayName: 'Skill - Create Direct Line registration'
-      inputs:
-        azureSubscription: ''
-        scriptLocation: inlineScript
-        inlineScript: 'call az bot directline create -n "$(SkillBotWebAppName)" -g "$(SkillBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
-        workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-
-    - powershell: |
-       $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
-       $key = $json.properties.properties.sites.key
-
-       Write-Host "Direct Line key"
-       Write-Host "===="
-       Write-Host "$key"
-       Write-Host "`r`n"
-
-       echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
-
-       Write-Host "Bot name"
-       Write-Host "===="
-       Write-Host "DirectLine Bot Name: $(SkillBotWebAppName)"
-       Write-Host "`r`n"
-
-       echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
-
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-      displayName: 'Skill - Get channel secrets'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'Skill - Execute functional tests'
-      inputs:
-        command: test
-        projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
-        arguments: '--configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
-        continueOnError: true
-
-    - pwsh: |
-       $skillManifestUrl = "https://$(SkillBotWebAppName).scm.azurewebsites.net/api/vfs/site/wwwroot/src/manifest/manifest-1.1.json"
-
-       Write-Host "Skill Manifest"
-       Write-Host "===="
-       Write-Host $skillManifestUrl
-       Write-Host "`r`n"
-
-       botskills connect --localManifest "..\$(SkillBotName)\src\manifest\manifest-1.1.json" --luisFolder '..\$(SkillBotName)\deployment\resources\LU\' --ts --languages 'en-us' --noRefresh --verbose
-
-       botskills refresh --ts --verbose
+  - task: AzureCLI@1
+    displayName: 'Deploy: VA - Create Direct Line registration'
+    inputs:
+      azureSubscription: ''
+      scriptLocation: inlineScript
+      inlineScript: 'call az bot directline create -n "$(VirtualAssistantBotWebAppName)" -g "$(VirtualAssistantBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
       workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      displayName: 'VA - Connect SkillSample'
 
-    - task: Npm@1
-      displayName: 'Build: VA - Run npm build'
-      inputs:
-        command: custom
-        workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-        verbose: false
-        customCommand: 'run build'
+  - powershell: |
+     $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
+     $key = $json.properties.properties.sites.key
 
-    - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
-      errorActionPreference: continue
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      displayName: 'VA - Publish with connected Skill'
+     Write-Host "Direct Line key"
+     Write-Host "===="
+     Write-Host "$key"
+     Write-Host "`r`n"
 
-    - task: AzureCLI@1
-      displayName: 'VA - Create Direct Line registration'
-      inputs:
-        azureSubscription: ''
-        scriptLocation: inlineScript
-        inlineScript: 'call az bot directline create -n "$(VirtualAssistantBotWebAppName)" -g "$(VirtualAssistantBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
-        workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+     echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
 
-    - powershell: |
-       $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
-       $key = $json.properties.properties.sites.key
+     Write-Host "Bot name"
+     Write-Host "===="
+     Write-Host "DirectLine Bot Name: $(VirtualAssistantBotWebAppName)"
+     Write-Host "`r`n"
 
-       Write-Host "Direct Line key"
-       Write-Host "===="
-       Write-Host "$key"
-       Write-Host "`r`n"
+     echo "##vso[task.setvariable variable=BOTID;]$(VirtualAssistantBotWebAppName)"
 
-       echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+    displayName: 'Deploy: Test: VA - Get channel secrets'
 
-       Write-Host "Bot name"
-       Write-Host "===="
-       Write-Host "DirectLine Bot Name: $(VirtualAssistantBotWebAppName)"
-       Write-Host "`r`n"
+  - task: DotNetCoreCLI@2
+    displayName: 'Deploy: VA - Execute functional tests'
+    inputs:
+      command: test
+      projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
+      arguments: '-v n --configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
 
-       echo "##vso[task.setvariable variable=BOTID;]$(VirtualAssistantBotWebAppName)"
+  - pwsh: |
+     Write-Host "Deploy log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "deploy_log.txt")
+     Write-Host "`r`n"
 
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      displayName: 'Test: VA - Get channel secrets'
+     Write-Host "Deploy cognitive models log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "deploy_cognitive_models_log.txt")
+     Write-Host "`r`n"
 
-    - task: DotNetCoreCLI@2
-      displayName: 'VA - Execute functional tests'
-      inputs:
-        command: test
-        projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
-        arguments: '-v n --configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
+     Write-Host "Publish log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "publish_log.txt")
+     Write-Host "`r`n"
 
-  - job: Debug
-    dependsOn: Test
-    steps:
-    - pwsh: |
-       Write-Host "Deploy log"
-       Write-Host "===="
-       Get-Content -Path $(Join-Path "Deployment" "deploy_log.txt")
-       Write-Host "`r`n"
+    errorActionPreference: continue
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+    displayName: 'Debug: VA - Show log contents'
+    condition: always()
 
-       Write-Host "Deploy cognitive models log"
-       Write-Host "===="
-       Get-Content -Path $(Join-Path "Deployment" "deploy_cognitive_models_log.txt")
-       Write-Host "`r`n"
+  - pwsh: |
+     Write-Host "Deploy log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "deploy_log.txt")
+     Write-Host "`r`n"
 
-       Write-Host "Publish log"
-       Write-Host "===="
-       Get-Content -Path $(Join-Path "Deployment" "publish_log.txt")
-       Write-Host "`r`n"
+     Write-Host "Deploy cognitive models log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "deploy_cognitive_models_log.txt")
+     Write-Host "`r`n"
 
-      errorActionPreference: continue
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      displayName: 'Debug: VA - Show log contents'
-      condition: always()
+     Write-Host "Publish log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "publish_log.txt")
+     Write-Host "`r`n"
 
-    - pwsh: |
-       Write-Host "Deploy log"
-       Write-Host "===="
-       Get-Content -Path $(Join-Path "Deployment" "deploy_log.txt")
-       Write-Host "`r`n"
+    errorActionPreference: continue
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+    displayName: 'Debug: Skill - Show log contents'
+    condition: always()
 
-       Write-Host "Deploy cognitive models log"
-       Write-Host "===="
-       Get-Content -Path $(Join-Path "Deployment" "deploy_cognitive_models_log.txt")
-       Write-Host "`r`n"
-
-       Write-Host "Publish log"
-       Write-Host "===="
-       Get-Content -Path $(Join-Path "Deployment" "publish_log.txt")
-       Write-Host "`r`n"
-
-      errorActionPreference: continue
-      workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-      displayName: 'Debug: Skill - Show log contents'
-      condition: always()
-
-    - script: 'dir ..\*.* /s'
-      displayName: 'Debug: dir workspace'
-      continueOnError: true
-      condition: always()
+  - script: 'dir ..\*.* /s'
+    displayName: 'Debug: dir workspace'
+    continueOnError: true
+    condition: always()
