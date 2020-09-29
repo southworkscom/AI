@@ -392,7 +392,7 @@ jobs:
   dependsOn: Deploy
   steps:
   - task: AzureCLI@1
-    displayName: 'Deploy: Skill - Create Direct Line registration'
+    displayName: 'Test: Skill - Create Direct Line registration'
     inputs:
       azureSubscription: ''
       scriptLocation: inlineScript
@@ -418,10 +418,10 @@ jobs:
      echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
 
     workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-    displayName: 'Deploy: Skill - Get channel secrets'
+    displayName: 'Test: Skill - Get channel secrets'
 
   - task: DotNetCoreCLI@2
-    displayName: 'Deploy: Skill - Execute functional tests'
+    displayName: 'Test: Skill - Execute functional tests'
     inputs:
       command: test
       projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
@@ -440,10 +440,10 @@ jobs:
 
      botskills refresh --ts --verbose
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-    displayName: 'Deploy: VA - Connect SkillSample'
+    displayName: 'Test: VA - Connect SkillSample'
 
   - task: Npm@1
-    displayName: 'Deploy: Build: VA - Run npm build'
+    displayName: 'Test: Build: VA - Run npm build'
     inputs:
       command: custom
       workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
@@ -453,10 +453,10 @@ jobs:
   - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
     errorActionPreference: continue
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-    displayName: 'Deploy: VA - Publish with connected Skill'
+    displayName: 'Test: VA - Publish with connected Skill'
 
   - task: AzureCLI@1
-    displayName: 'Deploy: VA - Create Direct Line registration'
+    displayName: 'Test: VA - Create Direct Line registration'
     inputs:
       azureSubscription: ''
       scriptLocation: inlineScript
@@ -482,10 +482,10 @@ jobs:
      echo "##vso[task.setvariable variable=BOTID;]$(VirtualAssistantBotWebAppName)"
 
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-    displayName: 'Deploy: Test: VA - Get channel secrets'
+    displayName: 'Test: Test: VA - Get channel secrets'
 
   - task: DotNetCoreCLI@2
-    displayName: 'Deploy: VA - Execute functional tests'
+    displayName: 'Test: VA - Execute functional tests'
     inputs:
       command: test
       projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
