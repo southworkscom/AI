@@ -40,7 +40,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'Delete preexisting resources'
       inputs:
-        azureSubscription: ''
+        azureSubscription: 'Kobuk Funtional Test Auth'
         scriptType: pscore
         scriptLocation: inlineScript
         inlineScript: |
