@@ -27,3 +27,9 @@ steps:
      npm install -g yo generator-bot-virtualassistant
 
     displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
+
+  - pwsh: |
+     # Install botskills from MyGet
+     npm install -g botskills@latest --registry https://botbuilder.myget.org/F/aitemplates/npm/
+
+    displayName: 'Prepare: Install preview botskills'
