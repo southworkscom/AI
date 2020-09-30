@@ -1,5 +1,0 @@
-steps:
-  displayName: 'Prepare: Install preview dispatch, luis-apis'
-  - pwsh: |
-     # Install botdispatch and luis-apis from MyGet
-     npm install -g botdispatch luis-apis @latest --registry https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/

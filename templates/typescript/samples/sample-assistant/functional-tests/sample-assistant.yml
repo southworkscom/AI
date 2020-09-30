@@ -33,9 +33,7 @@ jobs:
   steps:
   - template: templates/useNodeStep.yml
   - template: templates/cleanupResourcesStep.yml
-  - template: templates/npmInstallPreviewDispatchLuisAPIsStep.yml
-  - template: templates/npmInstallPreviewBFCli.yml
-  - template: templates/npmInstallYeomanGeneratorBotVirtualAssistant.yml
+  - template: templates/npmInstallRequirements.yml
 
   - powershell: 'yo bot-virtualassistant -n $(VirtualAssistantBotName) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
     displayName: 'Prepare: Create a Virtual Assistant using the generator'
