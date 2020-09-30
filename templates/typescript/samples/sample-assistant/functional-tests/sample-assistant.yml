@@ -34,7 +34,7 @@ jobs:
   - template: templates/useNodeStep.yml
   - template: templates/cleanupResourcesStep.yml
   - template: templates/npmInstallRequirements.yml
-  - template: yoCreateBotStep.yml
+  - template: templates/yoCreateBotStep.yml
 
   - pwsh: |
      # Install botskills from MyGet
