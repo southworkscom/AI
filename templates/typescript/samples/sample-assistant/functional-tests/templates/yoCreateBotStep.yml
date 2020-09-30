@@ -1,11 +1,11 @@
 steps:
 - powershell: |
-   if ($(AssistantToCreate) -ne "")
+   if ("$(AssistantToCreate)" -ne "")
    {
       yo bot-virtualassistant -n $(AssistantToCreate) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
    }
 
-   if ($(SkillToCreate) -ne "")
+   if ("$(SkillToCreate)" -ne "")
    {
       yo bot-virtualassistant:skill -n $(SkillToCreate) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
    }
