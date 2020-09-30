@@ -1,10 +1,12 @@
 steps:
+  displayName: 'Prepare: Create bots using the generator'
   - powershell: |
-    if (!$Skill)
+    if ($VirtualAssistantBotName !eq null)
     {
-        yo bot-virtualassistant -n $(BotName) -d $Description -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
+        yo bot-virtualassistant -n $(VirtualAssistantBotName) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
     }
-    else
+
+    if ($SkillBotName !eq null)
     {
-        yo bot-virtualassistant:skill -n $(BotName) -d $Description -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
+        yo bot-virtualassistant:skill -n $(SkillBotName) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
     }

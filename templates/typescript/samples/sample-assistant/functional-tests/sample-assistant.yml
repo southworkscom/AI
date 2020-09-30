@@ -30,24 +30,12 @@ variables:
 jobs:
 - job: Main
   timeoutInMinutes: 0
+  variables:
   steps:
   - template: templates/useNodeStep.yml
   - template: templates/cleanupResourcesStep.yml
   - template: templates/npmInstallRequirements.yml
-  variables:
-    Skill: false
-    BotName: $(VirtualAssistantBotName)
-    Description: 'pipeline testing'
-  steps:
-    - template: yoCreateBotStep.yml
-    displayName: 'Prepare: Create a Virtual Assistant using the generator'
-  variables:
-    Skill: false
-    BotName: $(SkillBotName)
-    Description: 'pipeline testing'
-  steps:
-    - template: yoCreateBotStep.yml
-    displayName: 'Prepare: Create a Skill using the generator'
+  - template: yoCreateBotStep.yml
 
   - pwsh: |
      # Install botskills from MyGet
