@@ -30,6 +30,9 @@ variables:
 jobs:
 - job: Main
   timeoutInMinutes: 0
+  variables:
+    AssistantToCreate: $(VirtualAssistantBotName)
+    SkillToCreate: $(SkillBotName)
   steps:
   - template: templates/useNodeStep.yml
   - template: templates/cleanupResourcesStep.yml
