@@ -1,0 +1,16 @@
+steps:
+  displayName: 'Prepare: Install preview botframework-cli'
+  - pwsh: |
+     # Create config file
+     $path = Join-Path $env:LOCALAPPDATA "@microsoft" "botframework-cli"
+
+     New-Item -Path $path -ItemType Directory
+
+     $config = @{
+         telemetry = $true
+     }
+
+     $config | ConvertTo-Json -depth 100 | Out-File $(Join-Path $path "config.json")
+
+     # Install botframework-cli from MyGet
+     npm i -g @microsoft/botframework-cli --registry https://botbuilder.myget.org/F/botframework-cli/npm/
