@@ -12,7 +12,7 @@ steps:
      if ($virtualassistantexists -eq 'true')
      {
          Write-Host "Resource group $(VirtualAssistantBotName) exists, there is likely an error on the previous build. Deleting."
-          az group delete --name $(VirtualAssistantBotName) --yes
+         az group delete --name $(VirtualAssistantBotName) --yes
      }
      else
      {
