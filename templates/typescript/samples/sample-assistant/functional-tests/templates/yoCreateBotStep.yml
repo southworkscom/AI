@@ -1,0 +1,10 @@
+steps:
+  - powershell: |
+    if (!$Skill)
+    {
+        yo bot-virtualassistant -n $(BotName) -d $Description -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
+    }
+    else
+    {
+        yo bot-virtualassistant:skill -n $(BotName) -d $Description -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
+    }

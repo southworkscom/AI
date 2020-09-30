@@ -34,11 +34,19 @@ jobs:
   - template: templates/useNodeStep.yml
   - template: templates/cleanupResourcesStep.yml
   - template: templates/npmInstallRequirements.yml
-
-  - powershell: 'yo bot-virtualassistant -n $(VirtualAssistantBotName) -d "" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
+  variables:
+    Skill: false
+    BotName: $(VirtualAssistantBotName)
+    Description: 'pipeline testing'
+  steps:
+    - template: yoCreateBotStep.yml
     displayName: 'Prepare: Create a Virtual Assistant using the generator'
-
-  - powershell: 'yo bot-virtualassistant:skill -n $(SkillBotName) -d "pipeline testing" -l "en-us" -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt'
+  variables:
+    Skill: false
+    BotName: $(SkillBotName)
+    Description: 'pipeline testing'
+  steps:
+    - template: yoCreateBotStep.yml
     displayName: 'Prepare: Create a Skill using the generator'
 
   - pwsh: |
