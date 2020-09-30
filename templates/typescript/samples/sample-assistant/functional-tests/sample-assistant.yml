@@ -388,9 +388,6 @@ jobs:
     workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)/src'
     displayName: 'Deploy: Skill - Get variables from appsettings'
 
-- job: Test
-  dependsOn: Deploy
-  steps:
   - task: AzureCLI@1
     displayName: 'Test: Skill - Create Direct Line registration'
     inputs:
