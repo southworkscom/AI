@@ -30,7 +30,6 @@ variables:
 jobs:
 - job: Main
   timeoutInMinutes: 0
-  variables:
   steps:
   - template: templates/useNodeStep.yml
   - template: templates/cleanupResourcesStep.yml
