@@ -31,10 +31,7 @@ jobs:
 - job: Main
   timeoutInMinutes: 0
   steps:
-  - task: NodeTool@0
-    displayName: 'Use Node 10.16.3'
-    inputs:
-      versionSpec: 10.16.3
+  - template: templates/useNodeStep.yml
   - task: AzureCLI@2
     displayName: 'Prepare: Delete preexisting resources'
     inputs:
