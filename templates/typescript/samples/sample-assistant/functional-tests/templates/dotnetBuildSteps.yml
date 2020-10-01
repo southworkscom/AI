@@ -3,18 +3,18 @@ steps:
     displayName: 'Build: VA - Restore dependencies'
     inputs:
       command: restore
-      projects: $(DotNetBuildProject)
+      projects: $(FunctionalTestProject)
 
   - task: DotNetCoreCLI@2
     displayName: 'Build: VA - Build project'
     inputs:
-      projects: $(DotNetBuildProject)
+      projects: $(FunctionalTestProject)
       arguments: $(DotNetBuildArguments)
 
 #  - task: DotNetCoreCLI@2
 #    displayName: 'Build: VA - Execute unit tests'
 #    inputs:
 #      command: test
-#      projects:  $(DotNetBuildProject)
+#      projects:  $(FunctionalTestProject)
 #      arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
 #      publishTestResults: false

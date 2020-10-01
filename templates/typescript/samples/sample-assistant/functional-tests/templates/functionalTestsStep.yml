@@ -1,0 +1,8 @@
+step:
+  - task: DotNetCoreCLI@2
+    displayName: 'Test: Skill - Execute functional tests'
+    inputs:
+      command: test
+      projects: $(FunctionalTestProject)
+      arguments: '--configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
+      continueOnError: true

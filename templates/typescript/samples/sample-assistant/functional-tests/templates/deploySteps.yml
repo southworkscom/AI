@@ -1,0 +1,9 @@
+steps:
+  - pwsh: |
+     az login --service-principal --username "$(ServicePrincipal)" --password "$(AzureDevOps-ServicePrincipal-Secret)" --tenant "$(Azure_Tenant)"
+
+     ./deployment/scripts/deploy.ps1 -name $(BotName) -location $(Location) -languages "en-us" -appId $(BotAppId) -appPassword $(BottAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "deployment" -luisEndpoint "https://westus.api.cognitive.microsoft.com/"
+    errorActionPreference: continue
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)'
+    displayName: 'Deploy'
+    continueOnError: true

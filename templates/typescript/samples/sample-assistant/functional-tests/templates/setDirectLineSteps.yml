@@ -1,0 +1,8 @@
+steps:
+  - task: AzureCLI@1
+    displayName: 'Test: Create Direct Line registration'
+    inputs:
+      azureSubscription: ''
+      scriptLocation: inlineScript
+      inlineScript: 'call az bot directline create -n "$(SkillBotWebAppName)" -g "$(SkillBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
+      workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'

@@ -7,28 +7,16 @@ steps:
     scriptLocation: inlineScript
     inlineScript: |
      # If RG exists, delete it to avoid possible App ID registration conflict.
-     $virtualassistantexists = az group exists --name $(VirtualAssistantBotName)
+     $virtualassistantexists = az group exists --name $(BotName)
 
      if ($virtualassistantexists -eq 'true')
      {
-         Write-Host "Resource group $(VirtualAssistantBotName) exists, there is likely an error on the previous build. Deleting."
-         az group delete --name $(VirtualAssistantBotName) --yes
+         Write-Host "Resource group $(BotName) exists, there is likely an error on the previous build. Deleting."
+         az group delete --name $(BotName) --yes
      }
      else
      {
-         Write-Host "Resource group $(VirtualAssistantBotName) does not exist."
+         Write-Host "Resource group $(BotName) does not exist."
      }
 
-     # If RG exists, delete it to avoid possible App ID registration conflict.
-     $skillexists= az group exists --name $(SkillBotName)
-
-     if ($skillexists -eq 'true')
-     {
-         Write-Host "Resource group $(SkillBotName) exists, there is likely an error on the previous build. Deleting."
-         az group delete --name $(SkillBotName) --yes
-     }
-     else
-     {
-         Write-Host "Resource group $(SkillBotName) does not exist."
-     }
     workingDirectory: 'templates/typescript/samples/$(BotName)'
