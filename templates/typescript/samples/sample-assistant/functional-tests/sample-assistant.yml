@@ -51,8 +51,6 @@ jobs:
       workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
       verbose: false
 
-  - template: templates/dotnetBuildSteps.yml
-
   - task: Npm@1
     displayName: 'Build: Skill - Run npm build'
     inputs:
@@ -61,26 +59,7 @@ jobs:
       verbose: false
       customCommand: 'run build'
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Build: VA - Restore dependencies'
-    inputs:
-      command: restore
-      projects: |
-       templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj
-
-  - task: DotNetCoreCLI@2
-    displayName: 'Build: VA - Build project'
-    inputs:
-      projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
-      arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
-
-  - task: DotNetCoreCLI@2
-    displayName: 'Build: VA - Execute unit tests'
-    inputs:
-      command: test
-      projects: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
-      arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
-      publishTestResults: false
+  - template: templates/dotnetBuildSteps.yml
 
   - task: DotNetCoreCLI@2
     displayName: 'Build: Skill - Restore dependencies'
