@@ -1,4 +1,4 @@
-step:
+steps:
   - task: DotNetCoreCLI@2
     displayName: 'Test: Skill - Execute functional tests'
     inputs:
