@@ -51,7 +51,7 @@ jobs:
       workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
       verbose: false
 
-  - template: template/dotnetBuildSteps.yml
+  - template: templates/dotnetBuildSteps.yml
 
   - task: Npm@1
     displayName: 'Build: Skill - Run npm build'
