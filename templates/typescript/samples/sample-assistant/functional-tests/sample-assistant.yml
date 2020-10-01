@@ -161,7 +161,6 @@ jobs:
   - template: templates/useNodeStep.yml
   - template: templates/npmInstallRequirements.yml
   - template: templates/yoCreateBotStep.yml
-  - template: templates/logVersions.yml
   - template: templates/nodeSetConfigFileSteps.yml
 
   - task: FileTransform@1
