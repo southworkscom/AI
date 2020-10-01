@@ -1,0 +1,20 @@
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: VA - Restore dependencies'
+    inputs:
+      command: restore
+      projects: $(DotNetBuildProject)
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: VA - Build project'
+    inputs:
+      projects: $(DotNetBuildProject)
+      arguments: $(DotNetBuildArguments)
+
+#  - task: DotNetCoreCLI@2
+#    displayName: 'Build: VA - Execute unit tests'
+#    inputs:
+#      command: test
+#      projects:  $(DotNetBuildProject)
+#      arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
+#      publishTestResults: false

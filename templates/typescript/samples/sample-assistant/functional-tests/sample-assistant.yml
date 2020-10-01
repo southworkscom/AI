@@ -33,21 +33,25 @@ jobs:
   variables:
     AssistantToCreate: $(VirtualAssistantBotName)
     SkillToCreate: $(SkillBotName)
-    BotToSetup: $(VirtualAssistantBotName)
+    BotToBuild: $(VirtualAssistantBotName)
+    DotNetBuildProject: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
+    DotNetBuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
   steps:
   - template: templates/cleanupResourcesStep.yml
   - template: templates/useNodeStep.yml
   - template: templates/npmInstallRequirements.yml
   - template: templates/yoCreateBotStep.yml
   - template: templates/logVersions.yml
-  - template: templates/editBotsStep.yml
-  - template: templates/setupBotStep.yml
+  - template: templates/nodeSetConfigFileSteps.yml
+  - template: templates/nodeBuildSteps.yml
 
   - task: Npm@1
     displayName: 'Build: Skill - Run npm install'
     inputs:
       workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
       verbose: false
+
+  - template: template/dotnetBuildSteps.yml
 
   - task: Npm@1
     displayName: 'Build: Skill - Run npm build'
@@ -56,6 +60,7 @@ jobs:
       workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
       verbose: false
       customCommand: 'run build'
+
   - task: DotNetCoreCLI@2
     displayName: 'Build: VA - Restore dependencies'
     inputs:
