@@ -33,74 +33,15 @@ jobs:
   variables:
     AssistantToCreate: $(VirtualAssistantBotName)
     SkillToCreate: $(SkillBotName)
+    BotToSetup: $(VirtualAssistantBotName)
   steps:
   - template: templates/cleanupResourcesStep.yml
   - template: templates/useNodeStep.yml
   - template: templates/npmInstallRequirements.yml
   - template: templates/yoCreateBotStep.yml
   - template: templates/logVersions.yml
-
-  - task: knom.regexreplace-task.regex-replace.RegexReplace@3
-    displayName: 'Prepare: Update SDK to latest preview version'
-    inputs:
-      InputSearchPattern: |
-        templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/package.json
-        templates/typescript/samples/functionalTests/$(SkillBotName)/package.json
-      FindRegex: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-      ReplaceRegex: '$1:$(PreviewVersion)'
-
-  - task: FileTransform@1
-    displayName: 'Prepare: Replace Skill manifest properties'
-    inputs:
-      folderPath: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-      fileType: json
-      targetFiles: |
-       **/src/manifest/manifest-1.1.json
-       **/src/manifest/manifest-1.0.json
-
-  - task: Npm@1
-    displayName: 'Build: VA - Run npm install'
-    inputs:
-      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      verbose: false
-
-  - task: Npm@1
-    displayName: 'Build: VA - Run npm build'
-    inputs:
-      command: custom
-      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      verbose: false
-      customCommand: 'run build'
-
-  - task: Npm@1
-    displayName: 'Build: VA - Run npm test'
-    inputs:
-      command: custom
-      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      verbose: false
-      customCommand: 'run test'
-
-  - task: Npm@1
-    displayName: 'Build: VA - Run npm test on unit tests with code coverage'
-    inputs:
-      command: custom
-      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      verbose: false
-      customCommand: 'run test-coverage-ci'
-
-  - task: PublishTestResults@2
-    displayName: 'Build: VA - Publish Test Results'
-    inputs:
-      testResultsFiles: 'test-results.xml'
-      searchFolder: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      failTaskOnFailedTests: true
-
-  - task: PublishCodeCoverageResults@1
-    displayName: 'Build: VA - Publish Code Coverage'
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/cobertura-coverage.xml'
-      reportDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/'
+  - template: templates/editBotsStep.yml
+  - template: templates/setupBotStep.yml
 
   - task: Npm@1
     displayName: 'Build: Skill - Run npm install'

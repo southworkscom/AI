@@ -1,0 +1,44 @@
+steps:
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm install'
+    inputs:
+      workingDir: 'templates/typescript/samples/functionalTests/$(BotToSetup)'
+      verbose: false
+
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm build'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(BotToSetup)'
+      verbose: false
+      customCommand: 'run build'
+
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm test'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(BotToSetup)'
+      verbose: false
+      customCommand: 'run test'
+
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm test on unit tests with code coverage'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(BotToSetup)'
+      verbose: false
+      customCommand: 'run test-coverage-ci'
+
+  - task: PublishTestResults@2
+    displayName: 'Build: VA - Publish Test Results'
+    inputs:
+      testResultsFiles: 'test-results.xml'
+      searchFolder: 'templates/typescript/samples/functionalTests/$(BotToSetup)'
+      failTaskOnFailedTests: true
+
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Build: VA - Publish Code Coverage'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'templates/typescript/samples/functionalTests/$(BotToSetup)/coverage/cobertura-coverage.xml'
+      reportDirectory: 'templates/typescript/samples/functionalTests/$(BotToSetup)/coverage/'

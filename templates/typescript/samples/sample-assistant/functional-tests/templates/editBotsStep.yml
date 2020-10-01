@@ -1,0 +1,18 @@
+steps:
+  - task: knom.regexreplace-task.regex-replace.RegexReplace@3
+    displayName: 'Prepare: Update SDK to latest preview version'
+    inputs:
+      InputSearchPattern: |
+        templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/package.json
+        templates/typescript/samples/functionalTests/$(SkillBotName)/package.json
+      FindRegex: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
+      ReplaceRegex: '$1:$(PreviewVersion)'
+
+  - task: FileTransform@1
+    displayName: 'Prepare: Replace Skill manifest properties'
+    inputs:
+      folderPath: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+      fileType: json
+      targetFiles: |
+       **/src/manifest/manifest-1.1.json
+       **/src/manifest/manifest-1.0.json
