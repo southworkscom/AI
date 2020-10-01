@@ -1,12 +1,12 @@
 steps:
   - task: Npm@1
-    displayName: 'Build: VA - Run npm install'
+    displayName: 'Build: Run npm install'
     inputs:
       workingDir: 'templates/typescript/samples/functionalTests/$(BotName)'
       verbose: false
 
   - task: Npm@1
-    displayName: 'Build: VA - Run npm build'
+    displayName: 'Build: Run npm build'
     inputs:
       command: custom
       workingDir: 'templates/typescript/samples/functionalTests/$(BotName)'
@@ -14,7 +14,7 @@ steps:
       customCommand: 'run build'
 
   - task: Npm@1
-    displayName: 'Build: VA - Run npm test'
+    displayName: 'Build: Run npm test'
     inputs:
       command: custom
       workingDir: 'templates/typescript/samples/functionalTests/$(BotName)'
@@ -22,7 +22,7 @@ steps:
       customCommand: 'run test'
 
   - task: Npm@1
-    displayName: 'Build: VA - Run npm test on unit tests with code coverage'
+    displayName: 'Build: Run npm test on unit tests with code coverage'
     inputs:
       command: custom
       workingDir: 'templates/typescript/samples/functionalTests/$(BotName)'
@@ -30,14 +30,14 @@ steps:
       customCommand: 'run test-coverage-ci'
 
   - task: PublishTestResults@2
-    displayName: 'Build: VA - Publish Test Results'
+    displayName: 'Build: Publish Test Results'
     inputs:
       testResultsFiles: 'test-results.xml'
       searchFolder: 'templates/typescript/samples/functionalTests/$(BotName)'
       failTaskOnFailedTests: true
 
   - task: PublishCodeCoverageResults@1
-    displayName: 'Build: VA - Publish Code Coverage'
+    displayName: 'Build: Publish Code Coverage'
     inputs:
       codeCoverageTool: Cobertura
       summaryFileLocation: 'templates/typescript/samples/functionalTests/$(BotName)/coverage/cobertura-coverage.xml'

@@ -1,12 +1,12 @@
 steps:
   - task: DotNetCoreCLI@2
-    displayName: 'Build: VA - Restore dependencies'
+    displayName: 'Dotnet Restore'
     inputs:
       command: restore
       projects: $(FunctionalTestProject)
 
   - task: DotNetCoreCLI@2
-    displayName: 'Build: VA - Build project'
+    displayName: 'Dotnet Build'
     inputs:
       projects: $(FunctionalTestProject)
       arguments: $(DotNetBuildArguments)
