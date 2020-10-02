@@ -129,7 +129,7 @@ jobs:
     inputs:
       projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
 
-  - template: templates/functionalTestsSteps.yml
+  - template: templates/functionalTestsStep.yml
 
   - task: AzureCLI@1
     displayName: 'Cleanup: Delete bot resources'
