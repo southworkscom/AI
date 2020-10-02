@@ -33,7 +33,7 @@ jobs:
   timeoutInMinutes: 0
   variables:
     BotName: $(VirtualAssistantBotName)
-    BotIsSkill: false
+    BotType: "Assistant"
     BotLanguages: "en-us"
     BotAppId: $(VirtualAssistantBotAppId)
     BottAppPassword: $(VirtualAssistantBotAppPassword)
@@ -155,7 +155,7 @@ jobs:
   timeoutInMinutes: 0
   variables:
     BotName: $(SkillBotName)
-    BotIsSkill: true
+    BotType: "Skill"
     BotLanguages: "en-us"
     BotAppId: $(SkillBotAppId)
     BottAppPassword: $(SkillBotAppPassword)

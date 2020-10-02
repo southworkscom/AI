@@ -1,6 +1,6 @@
 steps:
 - powershell: |
-    if ($(BotIsSkill) -eq $true)
+    if (if ("$(BotIsSkill)" -ne "") -and  $(BotIsSkill) -eq "Skill")
     {
         yo bot-virtualassistant:skill -n $(BotName) -d "" -l $(BotLanguages) -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
     }
