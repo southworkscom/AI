@@ -25,8 +25,7 @@ jobs:
 - job: Skill
   timeoutInMinutes: 0
   variables:
-    # BotName: $(BotName)
-    BotIsSkill: true
+    BotType: "Skill"
     BotLanguages: "en-us,es-es,it-it,fr-fr,de-de,zh-cn"
     BotAppId: $(AppId)
     BottAppPassword: $(AppPassword)
