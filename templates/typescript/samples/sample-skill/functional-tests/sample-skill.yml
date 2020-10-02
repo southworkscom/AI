@@ -25,7 +25,7 @@ jobs:
 - job: Skill
   timeoutInMinutes: 0
   variables:
-    BotName: $(VirtualAssistantBotName)
+    BotName: $(BotName)
     BotIsSkill: true
     BotLanguages: "en-us,es-es,it-it,fr-fr,de-de,zh-cn"
     BotAppId: $(AppId)
