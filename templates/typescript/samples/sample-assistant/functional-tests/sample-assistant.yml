@@ -156,6 +156,7 @@ jobs:
   variables:
     BotName: $(SkillBotName)
     BotIsSkill: true
+    BotLanguages: "en-us"
     BotAppId: $(SkillBotAppId)
     BottAppPassword: $(SkillBotAppPassword)
     FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
