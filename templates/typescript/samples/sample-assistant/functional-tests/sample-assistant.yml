@@ -25,6 +25,7 @@ variables:
   # ServicePrincipal: App Id of the Service Principal
   # Azure_Tenant: Tenant's value of your Azure directory
   # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
+  # AzureSubscription: Name of your Azure Subscription
 
 
 jobs:
@@ -32,6 +33,8 @@ jobs:
   timeoutInMinutes: 0
   variables:
     BotName: $(VirtualAssistantBotName)
+    BotIsSkill: false
+    BotLanguages: "en-us"
     BotAppId: $(VirtualAssistantBotAppId)
     BottAppPassword: $(VirtualAssistantBotAppPassword)
     FunctionalTestProject: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
@@ -152,6 +155,7 @@ jobs:
   timeoutInMinutes: 0
   variables:
     BotName: $(SkillBotName)
+    BotIsSkill: true
     BotAppId: $(SkillBotAppId)
     BottAppPassword: $(SkillBotAppPassword)
     FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
