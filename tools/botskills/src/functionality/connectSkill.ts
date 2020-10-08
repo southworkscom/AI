@@ -4,7 +4,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { join , parse} from 'path';
 import { get } from 'request-promise-native';
 import { ConsoleLogger, ILogger } from '../logger';
 import {
@@ -108,8 +108,7 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
                 }
 
                 if (luFile.trim.length === 0) {
-                    luFile = luFilePath.split('\\').reverse()[0];
-                    luisFile = `${ luFile.toLowerCase() }is`;
+                    luFile = parse(luFilePath).name + '.luis';
                 }
                 luisFilePath = join(luisFolderPath, luisFile);
             }
