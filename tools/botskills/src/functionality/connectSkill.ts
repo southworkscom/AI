@@ -108,7 +108,8 @@ Remember to use the argument '--dispatchFolder' for your Assistant's Dispatch fo
                 }
 
                 if (luFile.trim.length === 0) {
-                    luFile = parse(luFilePath).name + '.luis';
+                    luFile = parse(luFilePath).name;
+                    luisFile = luFile + '.luis';
                 }
                 luisFilePath = join(luisFolderPath, luisFile);
             }
