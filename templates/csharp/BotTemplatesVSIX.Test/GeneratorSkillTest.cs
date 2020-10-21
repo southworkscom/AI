@@ -1,30 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.Xml;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace BotTemplatesVSIX.Test
 {
-    [VsTestSettings(UIThread = true)]
+    [Xunit.VsTestSettings(UIThread = true)]
     public class GeneratorSkillTest
     {
-        private readonly ITestOutputHelper output;
         private readonly string _vaProjectTemplatePath = @"..\..\..\..\Skill\Skill\SkillProjectTemplate.vstemplate";
+        private readonly List<string> commonDirectories = new List<string>()
+            {
+                "Connected Services", "Deployment", "Application Insights", "Properties", "wwwroot", "Adapters",
+                "Authentication", "Bots", "Controllers", "Deployment", "Resources", "LU", "manifest",
+                "de-de", "en-us", "es-es", "fr-fr", "it-it", "zh-cn",
+                "Scripts", "Dialogs", "Models", "Pipeline", "Responses", "Services", "TokenExchange"
+            };
 
-        public GeneratorSkillTest(ITestOutputHelper output)
-        {
-            this.output = output;
-        }
-
-        [VsFact]
+        [Xunit.VsFact]
         public void Test_Generator_Skill_Template()
         {
             XmlDocument templateFile = new XmlDocument();
             templateFile.Load(_vaProjectTemplatePath);
             XmlNodeList foldersList = templateFile.GetElementsByTagName("Folder");
-            output.WriteLine("The generator Bot Skill template");
-            output.WriteLine("Should create the following folders: ");
+            Assert.AreEqual(commonDirectories.Count, foldersList.Count);
             foreach (XmlNode folder in foldersList)
+            {
+                CollectionAssert.Contains(commonDirectories, folder.Attributes["TargetFolderName"].Value);
+            }
+            //CollectionAssert.AreEquivalent(commonDirectories, foldersList.);
+            /*foreach (XmlNode folder in foldersList)
             {
                 output.WriteLine("\t {0}", folder.Attributes["TargetFolderName"].Value);
             }
@@ -56,7 +60,7 @@ namespace BotTemplatesVSIX.Test
             foreach (string file in notReplacePlaceholderFiles)
             {
                 output.WriteLine("\t \t {0}", file);
-            }
+            }*/
         }
     }
 }
