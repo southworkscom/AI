@@ -14,11 +14,11 @@ variables:
   # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu
   # endpoints.0.endpointUrl: Skill Manifest endpoint url
   # endpoints.0.msAppId: Skill Manifest Microsoft App Id
-  # iconUrl: The icon for the bot
+  # iconUrl: The icon for the bot REMOVE
   # Location: Location of the bot
-  # LuisAuthoringKey: Your authoring key for LUIS apps
+  # LuisAuthoringKey: Your authoring key for LUIS apps REMOVE
   # LuisAuthoringRegion: Location of the LUIS apps
-  # privacyUrl: Skill Manifest privacy url
+  # privacyUrl: Skill Manifest privacy url REMOVE
   # ServicePrincipal: App Id of the Service Principal
   # SkillBotAppId: Microsoft App Id of the Skill bot
   # SkillBotAppPassword: Microsoft App Password of the Skill bot
@@ -151,81 +151,81 @@ jobs:
     FunctionalTestProject: 'samples/csharp/skill/SkillSample.sln'
     WorkingDirectory: 'samples/csharp/skill/SkillSample'
   steps:
-    - template: Templates/cleanupResourcesStep.yml
-    - template: Templates/useNodeStep.yml
+  - template: Templates/cleanupResourcesStep.yml
+  - template: Templates/useNodeStep.yml
 
-    - task: NuGetToolInstaller@1
-      displayName: 'Prepare: Use NuGet 4.9.1'
+  - task: NuGetToolInstaller@1
+    displayName: 'Prepare: Use NuGet 4.9.1'
 
-    - template: Templates/npmInstallRequirements.yml
-    - template: Templates/dotnetLogVersions.yml
-    - template: Templates/setConfigFileSteps.yml
+  - template: Templates/npmInstallRequirements.yml
+  - template: Templates/dotnetLogVersions.yml
+  - template: Templates/setConfigFileSteps.yml
 
-    - task: FileTransform@1
-      displayName: 'Prepare: Replace Skill manifest properties'
-      inputs:
-        folderPath: samples/csharp/skill/
-        fileType: json
-        targetFiles: |
-         **/wwwroot/manifest/manifest-1.1.json
-         **/wwwroot/manifest/manifest-1.0.json
+  - task: FileTransform@1
+    displayName: 'Prepare: Replace Skill manifest properties'
+    inputs:
+      folderPath: samples/csharp/skill/
+      fileType: json
+      targetFiles: |
+       **/wwwroot/manifest/manifest-1.1.json
+       **/wwwroot/manifest/manifest-1.0.json
 
-    - template: Templates/dotnetBuildSteps.yml
-    - template: Templates/deploySteps.yml
+  - template: Templates/dotnetBuildSteps.yml
+  - template: Templates/deploySteps.yml
 
-    - pwsh: |
-      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
+  - pwsh: |
+     $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
 
-      Write-Host $appSettings
+     Write-Host $appSettings
 
-      $botWebAppName = $appsettings.botWebAppName
-      $resourceGroupName= $appsettings.resourceGroupName
-      $url = "$botWebAppName.azurewebsites.net"
+     $botWebAppName = $appsettings.botWebAppName
+     $resourceGroupName= $appsettings.resourceGroupName
+     $url = "$botWebAppName.azurewebsites.net"
 
-      Write-Host "Skill Web App Name"
-      Write-Host "===="
-      Write-Host $botWebAppName
-      echo "##vso[task.setvariable variable=SkillBotWebAppName;]$botWebAppName"
+     Write-Host "Skill Web App Name"
+     Write-Host "===="
+     Write-Host $botWebAppName
+     echo "##vso[task.setvariable variable=SkillBotWebAppName;]$botWebAppName"
 
-      Write-Host "URL"
-      Write-Host "===="
-      Write-Host $url
-      echo "##vso[task.setvariable variable=SkillBotWebAppUrl;]$url"
+     Write-Host "URL"
+     Write-Host "===="
+     Write-Host $url
+     echo "##vso[task.setvariable variable=SkillBotWebAppUrl;]$url"
 
-      Write-Host "Skill Resource Group"
-      Write-Host "===="
-      Write-Host $resourceGroupName
-      echo "##vso[task.setvariable variable=SkillBotResourceGroup;]$resourceGroupName"
+     Write-Host "Skill Resource Group"
+     Write-Host "===="
+     Write-Host $resourceGroupName
+     echo "##vso[task.setvariable variable=SkillBotResourceGroup;]$resourceGroupName"
+    workingDirectory: samples/csharp/skill/SkillSample
+    displayName: 'Deploy: Skill - Get variables from appsettings'
+
+  - task: AzureCLI@1
+   displayName: 'Test: Skill - Create Direct Line registration'
+   inputs:
+     azureSubscription: ''
+     scriptLocation: inlineScript
+     inlineScript: 'call az bot directline create -n "$(SkillBotWebAppName)" -g "$(SkillBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
      workingDirectory: samples/csharp/skill/SkillSample
-     displayName: 'Deploy: Skill - Get variables from appsettings'
 
-    - task: AzureCLI@1
-     displayName: 'Test: Skill - Create Direct Line registration'
-     inputs:
-       azureSubscription: ''
-       scriptLocation: inlineScript
-       inlineScript: 'call az bot directline create -n "$(SkillBotWebAppName)" -g "$(SkillBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
-       workingDirectory: samples/csharp/skill/SkillSample
+  - powershell: |
+    $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
+    $key = $json.properties.properties.sites.key
 
-    - powershell: |
-      $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
-      $key = $json.properties.properties.sites.key
+    Write-Host "Direct Line key"
+    Write-Host "===="
+    Write-Host "$key"
+    Write-Host "`r`n"
 
-      Write-Host "Direct Line key"
-      Write-Host "===="
-      Write-Host "$key"
-      Write-Host "`r`n"
+    echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
 
-      echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
+    Write-Host "Bot name"
+    Write-Host "===="
+    Write-Host "DirectLine Bot Name: $(SkillBotWebAppName)"
+    Write-Host "`r`n"
 
-      Write-Host "Bot name"
-      Write-Host "===="
-      Write-Host "DirectLine Bot Name: $(SkillBotWebAppName)"
-      Write-Host "`r`n"
+    echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
+   workingDirectory: samples/csharp/skill/SkillSample
+   displayName: 'Test: Skill - Get channel secrets'
 
-      echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
-     workingDirectory: samples/csharp/skill/SkillSample
-     displayName: 'Test: Skill - Get channel secrets'
-
-    - template: Templates/functionalTestsStep.yml
-    - template: Templates/endLogStep.yml
+  - template: Templates/functionalTestsStep.yml
+  - template: Templates/endLogStep.yml
