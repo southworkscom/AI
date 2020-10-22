@@ -129,7 +129,7 @@ jobs:
     displayName: 'Test: VA - Get channel secrets'
 
   - template: Templates/functionalTestsStep.yml
-  - template: Template/endLogStep.yml
+  - template: Templates/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'
