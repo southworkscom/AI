@@ -43,7 +43,7 @@ jobs:
     RegexSearch: '("Microsoft\.Bot\.(?!Solutions|Connector.DirectLine)\S+"\s)(Version="\S*")'
     RegexReplace: '$1$(BotBuilderPackageVersion)'
     FunctionalTestProject: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
-    workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
+    WorkingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
   steps:
   - template: Templates/cleanupResourcesStep.yml
   - template: Templates/useNodeStep.yml

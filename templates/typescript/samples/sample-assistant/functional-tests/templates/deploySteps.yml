@@ -7,6 +7,6 @@ steps:
 
      ./deployment/scripts/deploy.ps1 -name $(BotName) -location $(Location) -languages $(BotLanguages) -appId $(BotAppId) -appPassword $(BottAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "deployment"
     errorActionPreference: continue
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)'
+    workingDirectory: $(WorkingDirectory)
     displayName: 'Deploy'
     continueOnError: true
