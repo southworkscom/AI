@@ -199,7 +199,7 @@ jobs:
     workingDirectory: samples/csharp/skill/SkillSample
     displayName: 'Deploy: Skill - Get variables from appsettings'
 
-  - template: Template/setDirectLineSteps.yml
+  - template: Templates/setDirectLineSteps.yml
 
   - powershell: |
      $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
