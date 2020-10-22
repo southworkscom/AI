@@ -27,6 +27,7 @@ variables:
   # VirtualAssistantBotAppId: Microsoft App Id of the Virtual Assistant bot
   # VirtualAssistantBotAppPassword: Microsoft App Password of the Virtual Assistant bot
   # VirtualAssistantBotName: Name of the Virtual Assistant bot
+  # AzureSubscription: Name of your Azure Subscription
 
 jobs:
 - job: VirtualAssistant
