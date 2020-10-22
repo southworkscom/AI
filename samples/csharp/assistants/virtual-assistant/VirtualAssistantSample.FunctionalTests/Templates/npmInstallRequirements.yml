@@ -1,0 +1,36 @@
+steps:
+  - pwsh: |
+     # Install botdispatch and luis-apis from MyGet
+     npm install -g botdispatch luis-apis @latest --registry https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/
+    displayName: 'Prepare: Install preview dispatch, luis-apis'
+
+  - pwsh: |
+     # Create config file
+     $path = Join-Path $env:LOCALAPPDATA "@microsoft" "botframework-cli"
+
+     New-Item -Path $path -ItemType Directory
+
+     $config = @{
+         telemetry = $true
+     }
+
+     $config | ConvertTo-Json -depth 100 | Out-File $(Join-Path $path "config.json")
+
+     # Install botframework-cli from MyGet
+     npm i -g @microsoft/botframework-cli --registry https://botbuilder.myget.org/F/botframework-cli/npm/
+    displayName: 'Prepare: Install preview botframework-cli'
+
+###### TODO REMOVE YEOMAN. C# DOESN'T USE IT
+  - pwsh: |
+     # Install generator-bot-virtualassistant from MyGet
+     npm config set registry https://botbuilder.myget.org/F/aitemplates/npm/
+
+     npm install -g yo generator-bot-virtualassistant
+
+    displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
+
+  - pwsh: |
+     # Install botskills from MyGet
+     npm install -g botskills@latest --registry https://botbuilder.myget.org/F/aitemplates/npm/
+
+    displayName: 'Prepare: Install preview botskills'

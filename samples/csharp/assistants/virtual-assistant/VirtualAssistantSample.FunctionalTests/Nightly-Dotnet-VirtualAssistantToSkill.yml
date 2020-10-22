@@ -1,0 +1,231 @@
+pool:
+  vmImage: 'windows-2019'
+  name: Azure Pipelines
+  demands:
+  - msbuild
+  - visualstudio
+
+variables:
+  system.debug: false
+  # Azure_Tenant: Tenant's value of your Azure directory
+  # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
+  # BotBuilderPackageVersion: Version of the BotBuilder package
+  # BuildConfiguration: Build configuration such as Debug or Release
+  # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu
+  # endpoints.0.endpointUrl: Skill Manifest endpoint url
+  # endpoints.0.msAppId: Skill Manifest Microsoft App Id
+  # iconUrl: The icon for the bot
+  # Location: Location of the bot
+  # LuisAuthoringKey: Your authoring key for LUIS apps
+  # LuisAuthoringRegion: Location of the LUIS apps
+  # privacyUrl: Skill Manifest privacy url
+  # ServicePrincipal: App Id of the Service Principal
+  # SkillBotAppId: Microsoft App Id of the Skill bot
+  # SkillBotAppPassword: Microsoft App Password of the Skill bot
+  # SkillBotName: Name of the Skill bot
+  # system.debug: System variable that can be set by the users. Set this to true to run the release in debug mode to assist in fault-finding.
+  # VirtualAssistantBotAppId: Microsoft App Id of the Virtual Assistant bot
+  # VirtualAssistantBotAppPassword: Microsoft App Password of the Virtual Assistant bot
+  # VirtualAssistantBotName: Name of the Virtual Assistant bot
+
+jobs:
+- job: VirtualAssistant
+  timeoutInMinutes: 0
+  variables:
+    BotName: $(VirtualAssistantBotName)
+    BotLanguages: "en-us"
+    BotAppId: $(VirtualAssistantBotAppId)
+    BottAppPassword: $(VirtualAssistantBotAppPassword)
+    SolutionPath: 'samples/csharp/assistants/virtual-assistant/'
+    SolutionName: 'VirtualAssistantSample.sln'
+    DependenciesPath: 'samples/csharp/assistants/virtual-assistant/**/*.csproj'
+    RegexSearch: '("Microsoft\.Bot\.(?!Solutions|Connector.DirectLine)\S+"\s)(Version="\S*")'
+    RegexReplace: '$1$(BotBuilderPackageVersion)'
+    FunctionalTestProject: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
+    workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
+  steps:
+  - template: Templates/cleanupResourcesStep.yml
+  - template: Templates/useNodeStep.yml
+
+  - task: NuGetToolInstaller@1
+    displayName: 'Prepare: Use NuGet 4.9.1'
+
+  - template: Templates/npmInstallRequirements.yml
+  - template: Templates/dotnetLogVersions.yml
+  - template: Templates/setConfigFileSteps.yml
+  - template: Templates/dotnetBuildSteps.yml
+  - template: Templates/deploySteps.yml
+
+  - pwsh: |
+     $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
+
+     Write-Host $appSettings
+
+     $botWebAppName = $appsettings.botWebAppName
+     $resourceGroupName= $appsettings.resourceGroupName
+
+     Write-Host "VA Web App Name"
+     Write-Host "===="
+     Write-Host $botWebAppName
+     Write-Host "`r`n"
+     echo "##vso[task.setvariable variable=VirtualAssistantBotWebAppName;]$botWebAppName"
+
+     Write-Host "VA Resource Group"
+     Write-Host "===="
+     Write-Host $resourceGroupName
+     echo "##vso[task.setvariable variable=VirtualAssistantBotResourceGroup;]$resourceGroupName"
+    workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
+    displayName: 'Deploy: VA - Get variables from appsettings'
+
+  - pwsh: |
+     $skillManifestUrl = "https://$(SkillBotWebAppUrl)/manifest/manifest-1.1.json"
+
+     Write-Host "Skill Manifest"
+     Write-Host "===="
+     Write-Host $skillManifestUrl
+     Write-Host "`r`n"
+
+     botskills connect --remoteManifest "$skillManifestUrl" --luisFolder '..\..\..\skill\SkillSample\Deployment\Resources\LU\' --cs --languages 'en-us' --noRefresh --verbose
+
+     botskills refresh --cs --verbose
+
+    workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
+    displayName: 'Test: VA - Connect SkillSample'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build: VA - Build project'
+    inputs:
+      projects: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
+      arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+      workingDirectory: 'samples/csharp/assistants/virtual-assistant/'
+
+  - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
+    errorActionPreference: continue
+    workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
+    displayName: 'Test: VA - Publish with connected Skill'
+
+  - template: Templates/setDirectLineSteps.yml
+
+  - powershell: |
+     $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
+     $key = $json.properties.properties.sites.key
+
+     Write-Host "Direct Line key"
+     Write-Host "===="
+     Write-Host "$key"
+     Write-Host "`r`n"
+
+     echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
+
+
+     Write-Host "Bot name"
+     Write-Host "===="
+     Write-Host "DirectLine Bot Name: $(VirtualAssistantBotWebAppName)"
+     Write-Host "`r`n"
+
+     echo "##vso[task.setvariable variable=BOTID;]$(VirtualAssistantBotWebAppName)"
+
+    workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
+    displayName: 'Test: VA - Get channel secrets'
+
+  - template: Templates/functionalTestsStep.yml
+  - template: Template/endLogStep.yml
+
+  - script: 'dir ..\*.* /s'
+    displayName: 'Debug: dir workspace'
+    continueOnError: true
+    condition: always()
+
+- job: Skill
+  timeoutInMinutes: 0
+  variables:
+    BotName: $(SkillBotName)
+    BotLanguages: "en-us"
+    BotAppId: $(SkillBotAppId)
+    BottAppPassword: $(SkillBotAppPassword)
+    SolutionPath: 'samples/csharp/skill/'
+    SolutionName: 'SkillSample.sln'
+    DependenciesPath: 'samples/csharp/skill/**/*.csproj'
+    RegexSearch: '("Microsoft\.Bot\.(?!Solutions|Connector.DirectLine)\S+"\s)(Version="\S*")'
+    RegexReplace: '$1$(BotBuilderPackageVersion)'
+    FunctionalTestProject: 'samples/csharp/skill/SkillSample.sln'
+    WorkingDirectory: 'samples/csharp/skill/SkillSample'
+  steps:
+    - template: Templates/cleanupResourcesStep.yml
+    - template: Templates/useNodeStep.yml
+
+    - task: NuGetToolInstaller@1
+      displayName: 'Prepare: Use NuGet 4.9.1'
+
+    - template: Templates/npmInstallRequirements.yml
+    - template: Templates/dotnetLogVersions.yml
+    - template: Templates/setConfigFileSteps.yml
+
+    - task: FileTransform@1
+      displayName: 'Prepare: Replace Skill manifest properties'
+      inputs:
+        folderPath: samples/csharp/skill/
+        fileType: json
+        targetFiles: |
+         **/wwwroot/manifest/manifest-1.1.json
+         **/wwwroot/manifest/manifest-1.0.json
+
+    - template: Templates/dotnetBuildSteps.yml
+    - template: Templates/deploySteps.yml
+
+    - pwsh: |
+      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
+
+      Write-Host $appSettings
+
+      $botWebAppName = $appsettings.botWebAppName
+      $resourceGroupName= $appsettings.resourceGroupName
+      $url = "$botWebAppName.azurewebsites.net"
+
+      Write-Host "Skill Web App Name"
+      Write-Host "===="
+      Write-Host $botWebAppName
+      echo "##vso[task.setvariable variable=SkillBotWebAppName;]$botWebAppName"
+
+      Write-Host "URL"
+      Write-Host "===="
+      Write-Host $url
+      echo "##vso[task.setvariable variable=SkillBotWebAppUrl;]$url"
+
+      Write-Host "Skill Resource Group"
+      Write-Host "===="
+      Write-Host $resourceGroupName
+      echo "##vso[task.setvariable variable=SkillBotResourceGroup;]$resourceGroupName"
+     workingDirectory: samples/csharp/skill/SkillSample
+     displayName: 'Deploy: Skill - Get variables from appsettings'
+
+    - task: AzureCLI@1
+     displayName: 'Test: Skill - Create Direct Line registration'
+     inputs:
+       azureSubscription: ''
+       scriptLocation: inlineScript
+       inlineScript: 'call az bot directline create -n "$(SkillBotWebAppName)" -g "$(SkillBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
+       workingDirectory: samples/csharp/skill/SkillSample
+
+    - powershell: |
+      $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
+      $key = $json.properties.properties.sites.key
+
+      Write-Host "Direct Line key"
+      Write-Host "===="
+      Write-Host "$key"
+      Write-Host "`r`n"
+
+      echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
+
+      Write-Host "Bot name"
+      Write-Host "===="
+      Write-Host "DirectLine Bot Name: $(SkillBotWebAppName)"
+      Write-Host "`r`n"
+
+      echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
+     workingDirectory: samples/csharp/skill/SkillSample
+     displayName: 'Test: Skill - Get channel secrets'
+
+    - template: Templates/functionalTestsStep.yml
+    - template: Templates/endLogStep.yml
