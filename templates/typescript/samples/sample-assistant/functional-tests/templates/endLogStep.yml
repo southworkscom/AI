@@ -20,7 +20,7 @@ steps:
 #    Get-Content -Path $(Join-Path "Deployment" "publish_log_after_skill.txt")
 #    Write-Host "`r`n"
 
-   errorActionPreference: continue
-   workingDirectory: $(WorkingDirectory)
-   displayName: 'Debug: Show log contents'
-   condition: always()
+    errorActionPreference: continue
+    workingDirectory: $(WorkingDirectory)
+    displayName: 'Debug: Show log contents'
+    condition: always()
