@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,7 +8,6 @@ namespace VSIX.Tests
     [TestClass]
     public class GeneratorVirtualAssistantTests
     {
-        private readonly string _vaProjectTemplatePath = @"..\..\..\..\VA\VA\VAProjectTemplate.vstemplate";
         private readonly List<string> commonDirectories = new List<string>()
             {
                 "Adapters", "Authentication", "Bots", "Connected Services", "Application Insights", "Controllers",
@@ -32,6 +32,9 @@ namespace VSIX.Tests
             "TokenExchangeSkillHandler.cs", ".filenesting.json", "appsettings.json", "cognitivemodels.json", "Program.cs",
             "readme.md", "Startup.cs"
         };
+
+        private readonly string _vaProjectTemplatePath = @"..\..\..\..\VA\VA\VAProjectTemplate.vstemplate";
+        private HashSet<string> filesPlaceholders;
 
         [TestMethod]
         public void Test_Count_Folder()
@@ -72,6 +75,86 @@ namespace VSIX.Tests
             foreach (XmlNode file in filesList)
             {
                 CollectionAssert.Contains(commonFiles, file.Attributes["TargetFileName"].Value);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Replace_Placeholder()
+        {
+            XmlDocument templateFile = new XmlDocument();
+            templateFile.Load(_vaProjectTemplatePath);
+            XmlNodeList foldersList = templateFile.GetElementsByTagName("Folder");
+            filesPlaceholders = new HashSet<string>();
+            foreach (XmlNode folder in foldersList)
+            {
+                string path = Path.Combine("..\\..\\..\\..\\VA\\VA\\", folder.Attributes["TargetFolderName"].Value);
+                SubFolders(folder.ChildNodes, path);
+            }
+
+            XmlNodeList filesList = templateFile.GetElementsByTagName("ProjectItem");
+            foreach (XmlNode file in filesList)
+            {
+                if (filesPlaceholders.Contains(file.InnerText))
+                {
+                    bool replaceParameters = bool.Parse(file.Attributes["ReplaceParameters"].Value);
+                    Assert.IsTrue(replaceParameters && true);
+                }
+            }
+        }
+
+        public void SubFolders(XmlNodeList foldersList, string path)
+        {
+            foreach (XmlNode subFolder in foldersList)
+            {
+                bool hasAttribue = subFolder.Attributes["TargetFolderName"] != null;
+                if (hasAttribue)
+                {
+                    string pathFile = Path.Combine(path, subFolder.Attributes["TargetFolderName"].Value);
+                    if (subFolder.FirstChild.Name.Equals("Folder"))
+                    {
+                        SubFolders(subFolder.ChildNodes, pathFile);
+                    }
+
+                    for (int j = 0; j < subFolder.ChildNodes.Count; j++)
+                    {
+                        bool hasAttribueChild = subFolder.ChildNodes[j].Attributes["TargetFileName"] != null;
+                        if (hasAttribueChild)
+                        {
+                            var curretPathFile = Path.Combine(pathFile, subFolder.ChildNodes[j].InnerText);
+                            if (File.Exists(curretPathFile))
+                            {
+                                VerifyPlaceholder(curretPathFile, subFolder.ChildNodes[j].Attributes["TargetFileName"].Value);
+                            }
+
+                            curretPathFile = Path.Combine(curretPathFile, subFolder.Attributes["TargetFolderName"].Value);
+                        }
+                    }
+                }
+                else
+                {
+                    bool hasAttribueTargetFileName = subFolder.Attributes["TargetFileName"] != null;
+                    if (hasAttribueTargetFileName)
+                    {
+                        string targetFileName = subFolder.InnerText;
+                        string pathFile = Path.Combine(path, targetFileName);
+                        if (File.Exists(pathFile))
+                        {
+                            VerifyPlaceholder(pathFile, targetFileName);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void VerifyPlaceholder(string pathFile, string file)
+        {
+            using (StreamReader sr = new StreamReader(pathFile))
+            {
+                string contents = sr.ReadToEnd();
+                if (contents.Contains("$safeprojectname$"))
+                {
+                    filesPlaceholders.Add(file);
+                }
             }
         }
     }
