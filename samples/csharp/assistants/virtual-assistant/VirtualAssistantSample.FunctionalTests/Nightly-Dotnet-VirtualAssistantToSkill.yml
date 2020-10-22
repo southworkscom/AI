@@ -202,24 +202,24 @@ jobs:
   - template: Template/setDirectLineSteps.yml
 
   - powershell: |
-    $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
-    $key = $json.properties.properties.sites.key
+     $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
+     $key = $json.properties.properties.sites.key
 
-    Write-Host "Direct Line key"
-    Write-Host "===="
-    Write-Host "$key"
-    Write-Host "`r`n"
+     Write-Host "Direct Line key"
+     Write-Host "===="
+     Write-Host "$key"
+     Write-Host "`r`n"
 
-    echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
+     echo "##vso[task.setvariable variable=DIRECTLINE;]$key"
 
-    Write-Host "Bot name"
-    Write-Host "===="
-    Write-Host "DirectLine Bot Name: $(SkillBotWebAppName)"
-    Write-Host "`r`n"
+     Write-Host "Bot name"
+     Write-Host "===="
+     Write-Host "DirectLine Bot Name: $(SkillBotWebAppName)"
+     Write-Host "`r`n"
 
-    echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
-   workingDirectory: samples/csharp/skill/SkillSample
-   displayName: 'Test: Skill - Get channel secrets'
+     echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
+    workingDirectory: samples/csharp/skill/SkillSample
+    displayName: 'Test: Skill - Get channel secrets'
 
   - template: Templates/functionalTestsStep.yml
   - template: Templates/endLogStep.yml
