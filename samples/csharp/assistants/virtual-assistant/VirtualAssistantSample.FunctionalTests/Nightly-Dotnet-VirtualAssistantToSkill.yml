@@ -32,6 +32,7 @@ variables:
 jobs:
 - job: VirtualAssistant
   timeoutInMinutes: 0
+  dependsOn: Skill
   variables:
     BotName: $(VirtualAssistantBotName)
     BotLanguages: "en-us"
