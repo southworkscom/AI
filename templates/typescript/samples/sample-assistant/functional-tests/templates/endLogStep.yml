@@ -1,19 +1,19 @@
 steps:
   - pwsh: |
-    Write-Host "Deploy log"
-    Write-Host "===="
-    Get-Content -Path $(Join-Path "Deployment" "deploy_log.txt")
-    Write-Host "`r`n"
+     Write-Host "Deploy log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "deploy_log.txt")
+     Write-Host "`r`n"
 
-    Write-Host "Deploy cognitive models log"
-    Write-Host "===="
-    Get-Content -Path $(Join-Path "Deployment" "deploy_cognitive_models_log.txt")
-    Write-Host "`r`n"
+     Write-Host "Deploy cognitive models log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "deploy_cognitive_models_log.txt")
+     Write-Host "`r`n"
 
-    Write-Host "Publish log"
-    Write-Host "===="
-    Get-Content -Path $(Join-Path "Deployment" "publish_log.txt")
-    Write-Host "`r`n"
+     Write-Host "Publish log"
+     Write-Host "===="
+     Get-Content -Path $(Join-Path "Deployment" "publish_log.txt")
+     Write-Host "`r`n"
 
 #    Write-Host "Publish log"
 #    Write-Host "===="
