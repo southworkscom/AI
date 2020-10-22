@@ -40,8 +40,8 @@ jobs:
     DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
     RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
     RegexReplace: '$1:$(PreviewVersion)'
-    FunctionalTestProject: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
-    DotNetBuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+    SolutionPath: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/'
+    SolutionName: 'VirtualAssistantSample.FunctionalTests.csproj'
     WorkingDirectory: ''
   steps:
   - template: templates/cleanupResourcesStep.yml
@@ -146,8 +146,8 @@ jobs:
     DependenciesPath: templates/typescript/samples/functionalTests/$(BotName)/package.json
     RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
     RegexReplace: '$1:$(PreviewVersion)'
-    FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
-    DotNetBuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+    SolutionPath: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/'
+    SolutionName: 'SkillSample.FunctionalTests.csproj'
     WorkingDirectory: ''
   steps:
   - template: templates/cleanupResourcesStep.yml

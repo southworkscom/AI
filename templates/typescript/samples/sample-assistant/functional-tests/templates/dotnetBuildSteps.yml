@@ -3,18 +3,20 @@ steps:
     displayName: 'Dotnet Restore'
     inputs:
       command: restore
-      projects: $(FunctionalTestProject)
+      projects: $(SolutionPath)$(SolutionName)
+      restoreDirectory: $(SolutionPath)
 
   - task: DotNetCoreCLI@2
     displayName: 'Dotnet Build'
     inputs:
-      projects: $(FunctionalTestProject)
-      arguments: $(DotNetBuildArguments)
+      projects: $(SolutionPath)$(SolutionName)
+      arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+      workingDirectory: $(SolutionPath)
 
-#  - task: DotNetCoreCLI@2
-#    displayName: 'Build: VA - Execute unit tests'
-#    inputs:
-#      command: test
-#      projects:  $(FunctionalTestProject)
-#      arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
-#      publishTestResults: false
+  - task: DotNetCoreCLI@2
+    displayName: 'Dotnet Test'
+    inputs:
+      command: test
+      projects: $(SolutionPath)$(SolutionName)
+      arguments: '/p:CollectCoverage=true --filter TestCategory=UnitTests'
+      workingDirectory: $(SolutionPath)

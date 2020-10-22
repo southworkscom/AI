@@ -1,20 +1,20 @@
 steps:
   - task: DotNetCoreCLI@2
-    displayName: 'Build: Restore dependencies'
+    displayName: 'Dotnet Restore'
     inputs:
       command: restore
       projects: $(SolutionPath)$(SolutionName)
       restoreDirectory: $(SolutionPath)
 
   - task: DotNetCoreCLI@2
-    displayName: 'Build: Build project'
+    displayName: 'Dotnet Build'
     inputs:
       projects: $(SolutionPath)$(SolutionName)
       arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
       workingDirectory: $(SolutionPath)
 
   - task: DotNetCoreCLI@2
-    displayName: 'Build: Execute unit tests'
+    displayName: 'Dotnet Test'
     inputs:
       command: test
       projects: $(SolutionPath)$(SolutionName)
