@@ -29,7 +29,11 @@ jobs:
     BotLanguages: "en-us,es-es,it-it,fr-fr,de-de,zh-cn"
     BotAppId: $(AppId)
     BottAppPassword: $(AppPassword)
+    DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
+    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
+    RegexReplace: '$1:$(PreviewVersion)'
     FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
+    WorkingDirectory: ''
   steps:
   - template: templates/cleanupResourcesStep.yml
   - template: templates/useNodeStep.yml
@@ -68,8 +72,8 @@ jobs:
     displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
 
   - template: templates/yoCreateBotStep.yml
-  - template: templates/nodeSetConfigFileSteps.yml
-  - template: templates/logVersions.yml
+  - template: templates/setConfigFileSteps.yml
+  - template: templates/nodeLogVersions.yml
   - template: templates/nodeBuildSteps.yml
   - template: templates/deploySteps.yml
 
@@ -126,17 +130,7 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: 'az group delete -g $(BotName) --no-wait --yes'
 
-  - pwsh: |
-     Write-Host "Deploy log"
-     Get-Content -Path $(Join-Path "deployment" "deploy_log.txt")
-     Write-Host "Deploy cognitive models log"
-     Get-Content -Path $(Join-Path "deployment" "deploy_cognitive_models_log.txt")
-     Write-Host "Deploy cognitive models log"
-     Get-Content -Path $(Join-Path "deployment" "publish_log.txt")
-    errorActionPreference: continue
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)'
-    displayName: 'Debug: Show log contents'
-    condition: always()
+  - template: templates/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'

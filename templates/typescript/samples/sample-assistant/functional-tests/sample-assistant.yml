@@ -37,15 +37,19 @@ jobs:
     BotLanguages: "en-us"
     BotAppId: $(VirtualAssistantBotAppId)
     BottAppPassword: $(VirtualAssistantBotAppPassword)
+    DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
+    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
+    RegexReplace: '$1:$(PreviewVersion)'
     FunctionalTestProject: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/VirtualAssistantSample.FunctionalTests.csproj'
     DotNetBuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+    WorkingDirectory: ''
   steps:
   - template: templates/cleanupResourcesStep.yml
   - template: templates/useNodeStep.yml
   - template: templates/npmInstallRequirements.yml
   - template: templates/yoCreateBotStep.yml
-  - template: templates/logVersions.yml
-  - template: templates/nodeSetConfigFileSteps.yml
+  - template: templates/nodeLogVersions.yml
+  - template: templates/setConfigFileSteps.yml
   - template: templates/nodeBuildSteps.yml
   - template: templates/dotnetBuildSteps.yml
   - template: templates/deploySteps.yml
@@ -124,27 +128,7 @@ jobs:
     displayName: 'Test: Test: VA - Get channel secrets'
 
   - template: templates/functionalTestsStep.yml
-
-  - pwsh: |
-     Write-Host "Deploy log"
-     Write-Host "===="
-     Get-Content -Path $(Join-Path "Deployment" "deploy_log.txt")
-     Write-Host "`r`n"
-
-     Write-Host "Deploy cognitive models log"
-     Write-Host "===="
-     Get-Content -Path $(Join-Path "Deployment" "deploy_cognitive_models_log.txt")
-     Write-Host "`r`n"
-
-     Write-Host "Publish log"
-     Write-Host "===="
-     Get-Content -Path $(Join-Path "Deployment" "publish_log.txt")
-     Write-Host "`r`n"
-
-    errorActionPreference: continue
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-    displayName: 'Debug: VA - Show log contents'
-    condition: always()
+  - template: templates/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'
@@ -159,14 +143,18 @@ jobs:
     BotLanguages: "en-us"
     BotAppId: $(SkillBotAppId)
     BottAppPassword: $(SkillBotAppPassword)
+    DependenciesPath: templates/typescript/samples/functionalTests/$(BotName)/package.json
+    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
+    RegexReplace: '$1:$(PreviewVersion)'
     FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
     DotNetBuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
+    WorkingDirectory: ''
   steps:
   - template: templates/cleanupResourcesStep.yml
   - template: templates/useNodeStep.yml
   - template: templates/npmInstallRequirements.yml
   - template: templates/yoCreateBotStep.yml
-  - template: templates/nodeSetConfigFileSteps.yml
+  - template: templates/setConfigFileSteps.yml
 
   - task: FileTransform@1
     displayName: 'Prepare: Replace Skill manifest properties'
@@ -231,24 +219,4 @@ jobs:
     displayName: 'Test: Skill - Get channel secrets'
 
   - template: templates/functionalTestsStep.yml
-
-  - pwsh: |
-     Write-Host "Deploy log"
-     Write-Host "===="
-     Get-Content -Path $(Join-Path "Deployment" "deploy_log.txt")
-     Write-Host "`r`n"
-
-     Write-Host "Deploy cognitive models log"
-     Write-Host "===="
-     Get-Content -Path $(Join-Path "Deployment" "deploy_cognitive_models_log.txt")
-     Write-Host "`r`n"
-
-     Write-Host "Publish log"
-     Write-Host "===="
-     Get-Content -Path $(Join-Path "Deployment" "publish_log.txt")
-     Write-Host "`r`n"
-
-    errorActionPreference: continue
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-    displayName: 'Debug: Skill - Show log contents'
-    condition: always()
+  - template: templates/endLogStep.yml

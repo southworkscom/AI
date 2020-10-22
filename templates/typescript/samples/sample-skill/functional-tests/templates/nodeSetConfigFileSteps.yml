@@ -1,8 +1,0 @@
-steps:
-  - task: knom.regexreplace-task.regex-replace.RegexReplace@3
-    displayName: 'Prepare: Update SDK to latest preview version'
-    inputs:
-      InputSearchPattern: |
-        templates/typescript/samples/functionalTests/$(BotName)/package.json
-      FindRegex: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-      ReplaceRegex: '$1:$(PreviewVersion)'

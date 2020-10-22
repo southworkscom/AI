@@ -19,4 +19,4 @@ steps:
          Write-Host "Resource group $(BotName) does not exist."
      }
 
-    workingDirectory: 'templates/typescript/samples/$(BotName)'
+    workingDirectory: $(WorkingDirectory)

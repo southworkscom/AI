@@ -4,5 +4,5 @@ steps:
     inputs:
       command: test
       projects: $(FunctionalTestProject)
-      arguments: '--configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
+      arguments: '-v n --configuration $(BuildConfiguration) --filter TestCategory=FunctionalTests'
       continueOnError: true
