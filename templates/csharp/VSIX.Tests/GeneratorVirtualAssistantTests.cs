@@ -20,7 +20,7 @@ namespace VSIX.Tests
         {
             "VA.csproj", "ConnectedService.json", "launchSettings.json", "default.htm", "DefaultAdapter.cs", "AllowedCallersClaimsValidator.cs",
             "DefaultActivityHandler.cs", "BotController.cs", "SkillController.cs", "General.lu", "General.lu", "General.lu",
-            "General.lu", "General.lu", "Chitchat.qna", "Faq.qna", "Chitchat.qna", "Faq.qna", "Chitchat.qna", "Faq.qna", "Chitchat.qna", "Faq.qna",
+            "General.lu", "General.lu", "General.lu", "Chitchat.qna", "Faq.qna", "Chitchat.qna", "Faq.qna", "Chitchat.qna", "Faq.qna", "Chitchat.qna", "Faq.qna",
             "Chitchat.qna", "Faq.qna", "Chitchat.qna", "Faq.qna", "parameters.template.json", "template.json", "deploy.ps1",
             "deploy_cognitive_models.ps1", "luis_functions.ps1", "publish.ps1", "qna_functions.ps1", "update_cognitive_models.ps1",
             "MainDialog.cs", "OnboardingDialog.cs", "StateProperties.cs", "UserProfileState.cs", "$safeprojectname$.yml", "AllResponses.lg",
@@ -63,7 +63,10 @@ namespace VSIX.Tests
             XmlDocument templateFile = new XmlDocument();
             templateFile.Load(_vaProjectTemplatePath);
             XmlNodeList filesList = templateFile.GetElementsByTagName("ProjectItem");
-            Assert.AreEqual(commonFiles.Count, filesList.Count);
+
+            // Adding + 1, in order to take in account the .csproj file
+            int filesCount = filesList.Count + 1;
+            Assert.AreEqual(commonFiles.Count, filesCount);
         }
 
         [TestMethod]

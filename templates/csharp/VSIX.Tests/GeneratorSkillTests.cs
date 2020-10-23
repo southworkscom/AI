@@ -18,7 +18,7 @@ namespace VSIX.Tests
 
         private readonly List<string> commonFiles = new List<string>()
         {
-            "ConnectedService.json", "launchSettings.json", "default.htm", "DefaultAdapter.cs", "AllowedCallersClaimsValidator.cs",
+            "Skill.csproj", "ConnectedService.json", "launchSettings.json", "default.htm", "DefaultAdapter.cs", "AllowedCallersClaimsValidator.cs",
             "DefaultActivityHandler.cs", "BotController.cs", "General.lu", "General.lu", "General.lu", "manifest-1.0.json", "manifest-1.1.json",
             "General.lu", "General.lu", "General.lu", "$safeprojectname$.lu", "$safeprojectname$.lu", "$safeprojectname$.lu",
             "$safeprojectname$.lu", "$safeprojectname$.lu", "$safeprojectname$.lu", "parameters.template.json", "template.json", "deploy.ps1",
@@ -66,7 +66,10 @@ namespace VSIX.Tests
         public void Test_Count_Files()
         {
             XmlNodeList filesList = templateFile.GetElementsByTagName("ProjectItem");
-            Assert.AreEqual(commonFiles.Count, filesList.Count);
+
+            // Adding + 1, in order to take in account the .csproj file
+            int filesCount = filesList.Count + 1;
+            Assert.AreEqual(commonFiles.Count, filesCount);
         }
 
         [TestMethod]
