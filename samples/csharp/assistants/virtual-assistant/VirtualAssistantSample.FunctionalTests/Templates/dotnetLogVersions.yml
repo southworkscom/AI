@@ -8,6 +8,11 @@ steps:
      bf -v
      Write-Host "`r`n"
 
+     Write-Host "LUIS CLI"
+     Write-Host "===="
+     luis -v
+     Write-Host "`r`n"
+
      Write-Host "Dispatch CLI"
      Write-Host "===="
      dispatch -v
