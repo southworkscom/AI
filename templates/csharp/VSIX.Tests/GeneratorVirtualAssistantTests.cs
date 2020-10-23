@@ -38,25 +38,28 @@ namespace VSIX.Tests
         private readonly string _vaProjectTemplatePath = @"..\..\..\..\VA\VA\VAProjectTemplate.vstemplate";
         private HashSet<string> filesPlaceholders;
         private XmlDocument templateFile;
+        private XmlNodeList foldersList;
+        private XmlNodeList filesList;
+
 
         [TestInitialize]
         public virtual void Initialize()
         {
             templateFile = new XmlDocument();
             templateFile.Load(_vaProjectTemplatePath);
+            foldersList = templateFile.GetElementsByTagName("Folder");
+            filesList = templateFile.GetElementsByTagName("ProjectItem");
         }
 
         [TestMethod]
         public void Test_Count_Folder()
         {
-            XmlNodeList foldersList = templateFile.GetElementsByTagName("Folder");
             Assert.AreEqual(commonDirectories.Count, foldersList.Count);
         }
 
         [TestMethod]
         public void Test_Folders_Names()
         {
-            XmlNodeList foldersList = templateFile.GetElementsByTagName("Folder");
             foreach (XmlNode folder in foldersList)
             {
                 CollectionAssert.Contains(commonDirectories, folder.Attributes["TargetFolderName"].Value);
@@ -66,8 +69,6 @@ namespace VSIX.Tests
         [TestMethod]
         public void Test_Count_Files()
         {
-            XmlNodeList filesList = templateFile.GetElementsByTagName("ProjectItem");
-
             // Adding + 1, in order to take in account the .csproj file
             int filesCount = filesList.Count + 1;
             Assert.AreEqual(commonFiles.Count, filesCount);
@@ -76,7 +77,6 @@ namespace VSIX.Tests
         [TestMethod]
         public void Test_Files_Names()
         {
-            XmlNodeList filesList = templateFile.GetElementsByTagName("ProjectItem");
             foreach (XmlNode file in filesList)
             {
                 CollectionAssert.Contains(commonFiles, file.Attributes["TargetFileName"].Value);
@@ -86,7 +86,6 @@ namespace VSIX.Tests
         [TestMethod]
         public void Test_Replace_Placeholder()
         {
-            XmlNodeList foldersList = templateFile.GetElementsByTagName("Folder");
             filesPlaceholders = new HashSet<string>();
             foreach (XmlNode folder in foldersList)
             {
@@ -94,7 +93,6 @@ namespace VSIX.Tests
                 SubFolders(folder.ChildNodes, path);
             }
 
-            XmlNodeList filesList = templateFile.GetElementsByTagName("ProjectItem");
             foreach (XmlNode file in filesList)
             {
                 if (filesPlaceholders.Contains(file.InnerText))
