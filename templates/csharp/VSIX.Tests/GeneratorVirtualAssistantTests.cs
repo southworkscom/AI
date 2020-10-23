@@ -33,14 +33,22 @@ namespace VSIX.Tests
             "readme.md", "Startup.cs"
         };
 
+        private readonly string rootDirectory = "..\\..\\..\\..\\VA\\VA\\";
+
         private readonly string _vaProjectTemplatePath = @"..\..\..\..\VA\VA\VAProjectTemplate.vstemplate";
         private HashSet<string> filesPlaceholders;
+        private XmlDocument templateFile;
+
+        [TestInitialize]
+        public virtual void Initialize()
+        {
+            templateFile = new XmlDocument();
+            templateFile.Load(_vaProjectTemplatePath);
+        }
 
         [TestMethod]
         public void Test_Count_Folder()
         {
-            XmlDocument templateFile = new XmlDocument();
-            templateFile.Load(_vaProjectTemplatePath);
             XmlNodeList foldersList = templateFile.GetElementsByTagName("Folder");
             Assert.AreEqual(commonDirectories.Count, foldersList.Count);
         }
@@ -48,8 +56,6 @@ namespace VSIX.Tests
         [TestMethod]
         public void Test_Folders_Names()
         {
-            XmlDocument templateFile = new XmlDocument();
-            templateFile.Load(_vaProjectTemplatePath);
             XmlNodeList foldersList = templateFile.GetElementsByTagName("Folder");
             foreach (XmlNode folder in foldersList)
             {
@@ -60,8 +66,6 @@ namespace VSIX.Tests
         [TestMethod]
         public void Test_Count_Files()
         {
-            XmlDocument templateFile = new XmlDocument();
-            templateFile.Load(_vaProjectTemplatePath);
             XmlNodeList filesList = templateFile.GetElementsByTagName("ProjectItem");
 
             // Adding + 1, in order to take in account the .csproj file
@@ -72,8 +76,6 @@ namespace VSIX.Tests
         [TestMethod]
         public void Test_Files_Names()
         {
-            XmlDocument templateFile = new XmlDocument();
-            templateFile.Load(_vaProjectTemplatePath);
             XmlNodeList filesList = templateFile.GetElementsByTagName("ProjectItem");
             foreach (XmlNode file in filesList)
             {
@@ -84,13 +86,11 @@ namespace VSIX.Tests
         [TestMethod]
         public void Test_Replace_Placeholder()
         {
-            XmlDocument templateFile = new XmlDocument();
-            templateFile.Load(_vaProjectTemplatePath);
             XmlNodeList foldersList = templateFile.GetElementsByTagName("Folder");
             filesPlaceholders = new HashSet<string>();
             foreach (XmlNode folder in foldersList)
             {
-                string path = Path.Combine("..\\..\\..\\..\\VA\\VA\\", folder.Attributes["TargetFolderName"].Value);
+                string path = Path.Combine(rootDirectory, folder.Attributes["TargetFolderName"].Value);
                 SubFolders(folder.ChildNodes, path);
             }
 
