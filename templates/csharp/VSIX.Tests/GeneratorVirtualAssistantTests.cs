@@ -9,12 +9,12 @@ namespace VSIX.Tests
     public class GeneratorVirtualAssistantTests
     {
         private readonly List<string> commonDirectories = new List<string>()
-            {
-                "Adapters", "Authentication", "Bots", "Connected Services", "Application Insights", "Controllers",
-                "Deployment", "Resources", "Scripts", "LU", "QnA", "de-de", "en-us", "es-es",
-                "fr-fr", "it-it", "zh-cn", "Dialogs", "Models", "Pipeline", "Responses", "Services", "TokenExchange",
-                "Properties", "de-de", "en-us", "es-es", "fr-fr", "it-it", "zh-cn", "wwwroot"
-            };
+        {
+            "Adapters", "Authentication", "Bots", "Connected Services", "Application Insights", "Controllers",
+            "Deployment", "Resources", "Scripts", "LU", "QnA", "de-de", "en-us", "es-es",
+            "fr-fr", "it-it", "zh-cn", "Dialogs", "Models", "Pipeline", "Responses", "Services", "TokenExchange",
+            "Properties", "de-de", "en-us", "es-es", "fr-fr", "it-it", "zh-cn", "wwwroot"
+        };
 
         private readonly List<string> commonFiles = new List<string>()
         {

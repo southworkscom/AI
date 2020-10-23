@@ -9,12 +9,12 @@ namespace VSIX.Tests
     public class GeneratorSkillTests
     {
         private readonly List<string> commonDirectories = new List<string>()
-            {
-                "Connected Services", "Application Insights", "Properties", "wwwroot", "manifest", "Adapters",
-                "Authentication", "Bots", "Controllers", "Deployment", "Resources", "de-de", "en-us", "es-es",
-                "fr-fr", "it-it", "zh-cn", "LU", "Scripts", "Dialogs", "Extensions", "Models", "Pipeline",
-                "Responses", "Services"
-            };
+        {
+            "Connected Services", "Application Insights", "Properties", "wwwroot", "manifest", "Adapters",
+            "Authentication", "Bots", "Controllers", "Deployment", "Resources", "de-de", "en-us", "es-es",
+            "fr-fr", "it-it", "zh-cn", "LU", "Scripts", "Dialogs", "Extensions", "Models", "Pipeline",
+            "Responses", "Services"
+        };
 
         private readonly List<string> commonFiles = new List<string>()
         {
