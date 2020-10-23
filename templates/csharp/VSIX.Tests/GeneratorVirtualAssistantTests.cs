@@ -34,12 +34,16 @@ namespace VSIX.Tests
         };
 
         private readonly string rootDirectory = "..\\..\\..\\..\\VA\\VA\\";
+        private readonly string csProjFileName = "VA.csproj";
 
         private readonly string _vaProjectTemplatePath = @"..\..\..\..\VA\VA\VAProjectTemplate.vstemplate";
         private HashSet<string> filesPlaceholders;
         private XmlDocument templateFile;
         private XmlNodeList foldersList;
         private XmlNodeList filesList;
+
+        // List which store the .csproj file, retrieve it based on the "Project" tag
+        private XmlNodeList csprojFile;
 
 
         [TestInitialize]
@@ -49,6 +53,7 @@ namespace VSIX.Tests
             templateFile.Load(_vaProjectTemplatePath);
             foldersList = templateFile.GetElementsByTagName("Folder");
             filesList = templateFile.GetElementsByTagName("ProjectItem");
+            csprojFile = templateFile.GetElementsByTagName("Project");
         }
 
         [TestMethod]
@@ -100,6 +105,13 @@ namespace VSIX.Tests
                     bool replaceParameters = bool.Parse(file.Attributes["ReplaceParameters"].Value);
                     Assert.IsTrue(replaceParameters && true);
                 }
+            }
+
+            filesPlaceholders.Add(csProjFileName);
+            if (filesPlaceholders.Contains(csProjFileName))
+            {
+                bool replaceParameters = bool.Parse(csprojFile.Item(0).Attributes["ReplaceParameters"].Value);
+                Assert.IsTrue(replaceParameters && true);
             }
         }
 
