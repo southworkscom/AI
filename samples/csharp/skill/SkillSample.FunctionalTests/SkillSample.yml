@@ -14,20 +14,20 @@ variables:
   # AppPassword: Microsoft App Password of the bot
   # BotName: Name of the bot
   # Location: Location of the bot
-  # LuisAuthoringRegion: Location of the LUIS apps
-  # PreviewVersion: Version of the SDK's packages that the bot will use
+  # LuisAuthoringRegion: Location of the LUIS apps REMOVE
+  # PreviewVersion: Version of the SDK's packages that the bot will use REMOVE?
   # ServicePrincipal: App Id of the Service Principal
   # Azure_Tenant: Tenant's value of your Azure directory
   # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
+  # AzureSubscription: Name of your Azure Subscription
 
 jobs:
 - job: Main
   timeoutInMinutes: 0
   variables:
-    BotName: $(BotName)
     BotLanguages: "en-us"
-    BotAppId: $(BotAppId)
-    BottAppPassword: $(BotAppPassword)
+    BotAppId: $(AppId)
+    BottAppPassword: $(AppPassword)
     SolutionPath: 'samples/csharp/skill/'
     SolutionName: 'SkillSample.sln'
     DependenciesPath: 'samples/csharp/skill/**/*.csproj'
