@@ -2,7 +2,7 @@
 The Botskills Tool is a command line tool to manage the skills connected to your assistant solution.
 
 ## Prerequisite
-- [Node.js](https://nodejs.org/) version 10.8 or higher
+- [Node.js](https://nodejs.org/) version 10.14.1 or higher
 - Install [@microsoft/botframework-cli](https://www.npmjs.com/package/@microsoft/botframework-cli)
 
 

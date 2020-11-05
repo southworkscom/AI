@@ -13,6 +13,7 @@ order: 2
 
 ## Download and install
 1. Download and install the [Node Package Manager (NPM)](https://nodejs.org/en/).
+   > Note that Node version 10.14.1 or higher is required for the Bot Framework CLI
 1. Download and install [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-6).
 1. Download and install the Bot Framework CLI tools:
 

@@ -13,7 +13,7 @@ toc: true
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) version 10.8 or higher
+- [Node.js](https://nodejs.org/) version 10.14.1 or higher
 - Install the Dispatch and botframework-cli
 
     ```shell

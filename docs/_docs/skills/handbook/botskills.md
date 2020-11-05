@@ -20,7 +20,7 @@ The CLI performs the following operations on your behalf:
 > Your Virtual Assistant must have been deployed using the [deployment tutorial]({{site.baseurl}}/virtual-assistant/tutorials/create-assistant/csharp/4-provision-your-azure-resources) before using the `botskills` CLI as it relies on the Dispatch models being available and a deployed Bot for authentication connection information.
 
 ## Prerequisites
-- [Node.js](https://nodejs.org/) version 10.8 or higher
+- [Node.js](https://nodejs.org/) version 10.14.1 or higher
 - Install the Dispatch and botframework-cli
 
     ```shell
