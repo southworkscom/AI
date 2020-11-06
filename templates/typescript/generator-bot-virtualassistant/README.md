@@ -2,8 +2,8 @@
 > Project template for virtual assistants using the Bot Builder SDK V4..
 ## Prerequisites
 
-- Ensure the [Node Package manager](https://nodejs.org/en/) is installed.
-   > Note that Node version 10.14.1 or higher is required for the Bot Framework CLI
+- Download and install [Node Package manager](https://nodejs.org/en/).
+   > Node version 10.14.1 or higher is required for the Bot Framework CLI
 
 - Install [Yeoman](http://yeoman.io) using npm:
 

@@ -13,7 +13,8 @@ toc: true
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) version 10.14.1 or higher
+- Download and install [Node Package manager](https://nodejs.org/en/).
+   > Node version 10.14.1 or higher is required for the Bot Framework CLI
 - Install the Dispatch and botframework-cli
 
     ```shell
