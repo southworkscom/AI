@@ -1,3 +1,5 @@
+# Restores, builds and runs unit tests
+
 steps:
   - task: DotNetCoreCLI@2
     displayName: 'Dotnet Restore'

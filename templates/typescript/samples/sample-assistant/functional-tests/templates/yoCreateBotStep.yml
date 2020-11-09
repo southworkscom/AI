@@ -1,3 +1,5 @@
+# Creates an Assistant or a Skill, depending on the parameter BotType, using yeoman.
+
 steps:
 - powershell: |
     if (("$(BotType)" -ne "") -and  ("$(BotType)" -eq "Skill"))

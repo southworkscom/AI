@@ -1,3 +1,5 @@
+# Executes functional test in a csproj file
+
 steps:
   - task: DotNetCoreCLI@2
     displayName: 'Test: Execute functional tests'
