@@ -18,10 +18,10 @@ pool:
   # SkillBotName: Name of the Skill bot
   # endpoints.0.endpointUrl: Skill Manifest endpoint url
   # endpoints.0.msAppId: Skill Manifest Microsoft App Id
-  # privacyUrl: Skill Manifest privacy url
+  # privacyUrl: Skill Manifest privacy url REMOVE
   # Location: Location of the bot
   # LuisAuthoringRegion: Location of the LUIS apps
-  # PreviewVersion: Version of the SDK's packages that the bot will use
+  # PreviewVersion: Version of the SDK's packages that the bot will use REMOVE
   # ServicePrincipal: App Id of the Service Principal
   # Azure_Tenant: Tenant's value of your Azure directory
   # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
@@ -31,6 +31,7 @@ jobs:
 - job: Main
   timeoutInMinutes: 0
   variables:
+    BotName: $(VirtualAssistantBotName)
   steps:
   - template: ../../yaml/cleanupResourcesStep.yml
   - template: ../../yaml/useNodeStep.yml
