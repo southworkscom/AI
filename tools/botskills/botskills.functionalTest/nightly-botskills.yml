@@ -30,11 +30,10 @@ pool:
 jobs:
 - job: Main
   timeoutInMinutes: 0
+  variables:
   steps:
-  - task: NodeTool@0
-    displayName: 'Prepare: Use Node 10.16.3'
-    inputs:
-      versionSpec: 10.16.3
+  - template: ../../yaml/cleanupResourcesStep.yml
+  - template: ../../yaml/useNodeStep.yml
 
   - task: NuGetToolInstaller@1
     displayName: 'Prepare: Use NuGet 4.9.1'

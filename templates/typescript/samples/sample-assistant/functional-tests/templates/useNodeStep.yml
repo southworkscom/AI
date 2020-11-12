@@ -1,5 +1,0 @@
-steps:
-- task: NodeTool@0
-  displayName: 'Use Node 10.16.3'
-  inputs:
-    versionSpec: 10.16.3
