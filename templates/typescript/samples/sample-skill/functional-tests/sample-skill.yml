@@ -44,6 +44,7 @@ jobs:
 
      npm i -g botdispatch luis-apis botskills
     displayName: 'Prepare: Install preview dispatch, luis-apis, botskills'
+    failOnStderr: true
 
   - pwsh: |
      # Create config file
@@ -62,6 +63,7 @@ jobs:
 
      npm i -g @microsoft/botframework-cli
     displayName: 'Prepare: Install preview botframework-cli'
+    failOnStderr: true
 
   - pwsh: |
      # Install generator-bot-virtualassistant from MyGet
@@ -70,6 +72,7 @@ jobs:
      npm install -g yo generator-bot-virtualassistant
 
     displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
+    failOnStderr: true
 
   - template: templates/yoCreateBotStep.yml
   - template: templates/setConfigFileSteps.yml
@@ -92,6 +95,7 @@ jobs:
      echo "##vso[task.setvariable variable=BOTRESOURCEGROUP;]$resourceGroupName"
     workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)/src'
     displayName: 'Deploy: Get bot variables from appsettings'
+    failOnStderr: true
 
   - template: templates/setDirectLineSteps.yml
 
@@ -108,6 +112,7 @@ jobs:
      Write-Host "DirectLine Key: $key"
     workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)'
     displayName: 'Deploy: Get channel secrets'
+    failOnStderr: true
 
   - task: DotNetCoreCLI@2
     displayName: 'Test: Run dotnet restore'

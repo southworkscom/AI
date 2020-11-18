@@ -73,6 +73,7 @@ jobs:
      echo "##vso[task.setvariable variable=VirtualAssistantBotResourceGroup;]$resourceGroupName"
     workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)/src'
     displayName: 'Deploy: VA - Get variables from appsettings'
+    failOnStderr: true
 
   - pwsh: |
      $skillManifestUrl = "https://$(SkillBotWebAppName).scm.azurewebsites.net/api/vfs/site/wwwroot/src/manifest/manifest-1.1.json"
@@ -88,6 +89,7 @@ jobs:
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
     displayName: 'Test: VA - Connect SkillSample'
     enabled: false
+    failOnStderr: true
 
   - task: Npm@1
     displayName: 'Test: Build: VA - Run npm build'
@@ -103,6 +105,7 @@ jobs:
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
     displayName: 'Test: VA - Publish with connected Skill'
     enabled: false
+    failOnStderr: true
 
   - template: templates/setDirectLineSteps.yml
 
@@ -126,6 +129,7 @@ jobs:
 
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
     displayName: 'Test: Test: VA - Get channel secrets'
+    failOnStderr: true
 
   - template: templates/functionalTestsStep.yml
   - template: templates/endLogStep.yml
@@ -194,6 +198,7 @@ jobs:
      echo "##vso[task.setvariable variable=SkillBotResourceGroup;]$resourceGroupName"
     workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)/src'
     displayName: 'Deploy: Get variables from appsettings'
+    failOnStderr: true
 
   - template: templates/setDirectLineSteps.yml
 
@@ -217,6 +222,7 @@ jobs:
 
     workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
     displayName: 'Test: Skill - Get channel secrets'
+    failOnStderr: true
 
   - template: templates/functionalTestsStep.yml
   - template: templates/endLogStep.yml

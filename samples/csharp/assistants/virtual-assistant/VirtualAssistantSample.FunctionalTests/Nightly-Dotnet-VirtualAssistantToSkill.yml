@@ -78,6 +78,7 @@ jobs:
      echo "##vso[task.setvariable variable=VirtualAssistantBotResourceGroup;]$resourceGroupName"
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Deploy: VA - Get variables from appsettings'
+    failOnStderr: true
 
   - pwsh: |
      $skillManifestUrl = "https://$(SkillBotWebAppUrl)/manifest/manifest-1.1.json"
@@ -93,6 +94,7 @@ jobs:
 
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: VA - Connect SkillSample'
+    failOnStderr: true
 
   - task: DotNetCoreCLI@2
     displayName: 'Build: VA - Build project'
@@ -105,6 +107,7 @@ jobs:
     errorActionPreference: continue
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: VA - Publish with connected Skill'
+    failOnStderr: true
 
   - template: Templates/setDirectLineSteps.yml
 
@@ -129,6 +132,7 @@ jobs:
 
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: VA - Get channel secrets'
+    failOnStderr: true
 
   - template: Templates/functionalTestsStep.yml
   - template: Templates/endLogStep.yml
@@ -200,6 +204,7 @@ jobs:
      echo "##vso[task.setvariable variable=SkillBotResourceGroup;]$resourceGroupName"
     workingDirectory: samples/csharp/skill/SkillSample
     displayName: 'Deploy: Skill - Get variables from appsettings'
+    failOnStderr: true
 
   - template: Templates/setDirectLineSteps.yml
 
@@ -222,6 +227,7 @@ jobs:
      echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
     workingDirectory: samples/csharp/skill/SkillSample
     displayName: 'Test: Skill - Get channel secrets'
+    failOnStderr: true
 
   - template: Templates/functionalTestsStep.yml
   - template: Templates/endLogStep.yml

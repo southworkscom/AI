@@ -11,3 +11,4 @@ steps:
         yo bot-virtualassistant -n $(BotName) -d "" -l $(BotLanguages) -p "$(System.DefaultWorkingDirectory)/templates/typescript/samples/functionalTests" --noPrompt
     }
   displayName: 'Prepare: Create bots using the generator'
+  failOnStderr: true

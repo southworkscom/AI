@@ -78,6 +78,7 @@ jobs:
      # Install botdispatch from MyGet
      npm install -g botdispatch @latest --registry https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/
     displayName: 'Prepare: Install preview dispatch'
+    failOnStderr: true
 
   - pwsh: |
      # Create config file
@@ -94,6 +95,7 @@ jobs:
      # Install botframework-cli from MyGet
      npm i -g @microsoft/botframework-cli --registry https://botbuilder.myget.org/F/botframework-cli/npm/
     displayName: 'Prepare: Install preview botframework-cli'
+    failOnStderr: true
 
   - pwsh: |
      Write-Host "CLI versions in use for this Nightly Build"
@@ -109,6 +111,7 @@ jobs:
      dispatch -v
      Write-Host "`r`n"
     displayName: 'Prepare: Get CLI versions'
+    failOnStderr: true
 
   - task: FileTransform@1
     displayName: 'Prepare: Replace Skill manifest properties'
@@ -157,6 +160,7 @@ jobs:
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Prepare: VA - Deploy'
     continueOnError: true
+    failOnStderr: true
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -178,12 +182,14 @@ jobs:
      echo "##vso[task.setvariable variable=VirtualAssistantBotResourceGroup;]$resourceGroupName"
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Prepare: VA - Get variables from appsettings'
+    failOnStderr: true
 
   - pwsh: './Deployment/Scripts/deploy.ps1 -name $(SkillBotName) -location $(Location) -languages "en-us" -appId $(SkillBotAppId) -appPassword $(SkillBotAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "Deployment"'
     errorActionPreference: continue
     workingDirectory: samples/csharp/skill/SkillSample
     displayName: 'Prepare: Skill - Deploy'
     continueOnError: true
+    failOnStderr: true
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -211,6 +217,7 @@ jobs:
      echo "##vso[task.setvariable variable=SkillBotResourceGroup;]$resourceGroupName"
     workingDirectory: samples/csharp/skill/SkillSample
     displayName: 'Prepare: Skill - Get variables from appsettings'
+    failOnStderr: true
 
   - task: Npm@1
     displayName: 'Build: Botskills - Install Dependencies'
@@ -264,11 +271,13 @@ jobs:
     failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute connect command without refresh'
+    failOnStderr: true
 
   - pwsh: 'botskills list'
     failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute list command'
+    failOnStderr: true
 
   - pwsh: |
      # Execute botskills update command without refresh
@@ -276,6 +285,7 @@ jobs:
     failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute update command without refresh'
+    failOnStderr: true
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -290,6 +300,7 @@ jobs:
     errorActionPreference: continue
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Debug: Botskills - Get connected Skills to the VA'
+    failOnStderr: true
 
   - pwsh: |
      # Execute botskills refresh
@@ -297,6 +308,7 @@ jobs:
     errorActionPreference: continue
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute refresh command'
+    failOnStderr: true
 
   - pwsh: |
      # Execute botskills disconnect command without refresh
@@ -304,11 +316,13 @@ jobs:
     failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute disconnect command without refresh'
+    failOnStderr: true
 
   - pwsh: 'botskills list'
     failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute list command'
+    failOnStderr: true
 
   - task: AzureCLI@2
     displayName: 'Cleanup: Delete resources'

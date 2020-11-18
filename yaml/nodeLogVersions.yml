@@ -99,3 +99,4 @@ steps:
      Write-Host "===="
      npm view generator-bot-virtualassistant version --silent
     displayName: 'Prepare: Get CLI and SDK versions'
+    failOnStderr: true

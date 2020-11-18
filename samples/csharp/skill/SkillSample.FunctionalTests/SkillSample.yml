@@ -66,6 +66,7 @@ jobs:
 
     workingDirectory: samples/csharp/skill/SkillSample
     displayName: 'Deploy: Get bot variables from appsettings'
+    failOnStderr: true
 
   - template: Templates/setDirectLineSteps.yml
 
@@ -82,6 +83,7 @@ jobs:
      Write-Host "DirectLine Key: $key"
     workingDirectory: samples/csharp/skill/SkillSample/
     displayName: 'Deploy: Get channel secrets'
+    failOnStderr: true
 
   - template: Templates/functionalTestsStep.yml
 

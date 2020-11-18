@@ -3,6 +3,7 @@ steps:
      # Install botdispatch and luis-apis from MyGet
      npm install -g botdispatch luis-apis @latest --registry https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/
     displayName: 'Prepare: Install preview dispatch, luis-apis'
+    failOnStderr: true
 
   - pwsh: |
      # Create config file
@@ -19,6 +20,7 @@ steps:
      # Install botframework-cli from MyGet
      npm i -g @microsoft/botframework-cli --registry https://botbuilder.myget.org/F/botframework-cli/npm/
     displayName: 'Prepare: Install preview botframework-cli'
+    failOnStderr: true
 
   - pwsh: |
      # Install generator-bot-virtualassistant from MyGet
@@ -27,9 +29,11 @@ steps:
      npm install -g yo generator-bot-virtualassistant
 
     displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
+    failOnStderr: true
 
   - pwsh: |
      # Install botskills from MyGet
      npm install -g botskills@latest --registry https://botbuilder.myget.org/F/aitemplates/npm/
 
     displayName: 'Prepare: Install preview botskills'
+    failOnStderr: true
