@@ -29,7 +29,7 @@ namespace SkillSample.FunctionalTests
             get
             {
                 var currentCulture = CultureInfo.CurrentUICulture.Name.ToLower();
-                var path = string.Equals(currentCulture, "en-us") ?
+                var path = string.Equals(currentCulture, "en-us", StringComparison.OrdinalIgnoreCase) ?
                     Path.Combine(".", "Responses", $"AllResponses.lg") :
                     Path.Combine(".", "Responses", $"AllResponses.{currentCulture}.lg");
                 return Templates.ParseFile(path);
@@ -43,13 +43,13 @@ namespace SkillSample.FunctionalTests
             _directLineSecret = Environment.GetEnvironmentVariable("DIRECTLINE");
             if (string.IsNullOrWhiteSpace(_directLineSecret))
             {
-                throw new ArgumentNullException("DIRECTLINE");
+                throw new ArgumentNullException(nameof(_directLineSecret));
             }
 
             _botId = Environment.GetEnvironmentVariable("BOTID");
             if (string.IsNullOrWhiteSpace(_botId))
             {
-                throw new ArgumentNullException("BOTID");
+                throw new ArgumentNullException(nameof(_botId));
             }
         }
 
@@ -80,7 +80,7 @@ namespace SkillSample.FunctionalTests
 
             var conversation = await _client.Conversations.StartConversationAsync();
 
-            var responses = await SendActivityAsync(conversation, CreateStartConversationEvent(fromUser), introText, allFirstPromptTextVariations);
+            var responses = await SendActivityAsync(conversation, CreateStartConversationEvent(fromUser));
 
             Assert.AreEqual(introText[0], responses[0].Text);
             CollectionAssert.Contains(allFirstPromptTextVariations as ICollection, responses[1].Text);          
@@ -106,7 +106,7 @@ namespace SkillSample.FunctionalTests
         /// Sends an activity and waits for the response.
         /// </summary>
         /// <returns>Returns the bots answer.</returns>
-        private async Task<List<Activity>> SendActivityAsync(Conversation conversation, Activity activity, IList<object> introText, IList<object> allFirstPromptTextVariations)
+        private async Task<List<Activity>> SendActivityAsync(Conversation conversation, Activity activity)
         {
             List<Activity> responses;
 
@@ -116,11 +116,7 @@ namespace SkillSample.FunctionalTests
             // Read the bot's message.
             responses = await ReadBotMessagesAsync(_client, conversation.ConversationId);
 
-            List<Activity> sanitizedResponses = new List<Activity>();
-            sanitizedResponses.Add(responses.Where(n => string.Equals(n.Text, introText[0])).FirstOrDefault());
-            sanitizedResponses.Add(responses.Where(n => allFirstPromptTextVariations.Contains(n.Text)).FirstOrDefault() );
-
-            return sanitizedResponses;
+            return responses;
         }
 
         /// <summary>
