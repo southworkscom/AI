@@ -13,7 +13,8 @@ order: 8
 
 In order to confirm that the skill connection with the Virtual Assistant was correctly made, you can test the communication using the **Bot Framework Emulator**, sending an utterance from the Virtual Assistant that should be recognized by the Skill (e.g., "Run sample dialog"). You will see how the Skill starts the workflow, and when the skill is finished it will send the control back to the Virtual Assistant.
 
-1. Press **F5** within Visual Studio to run your Virtual Assistant.
+1. Open your Virtual Assistant in your desired IDE (e.g: Visual Studio Code)
+1. Run `npm run start`
 1. Open the **Bot Framework Emulator**.
 1. Select **Open Bot**.
 
