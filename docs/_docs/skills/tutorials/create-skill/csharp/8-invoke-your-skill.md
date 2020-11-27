@@ -19,7 +19,7 @@ In order to confirm that the skill connection with the Virtual Assistant was cor
 
     ![]({{site.baseurl}}/assets/images/quickstart-virtualassistant-openbot.png)
 
-1. Provide the messaging endpoint of your running Virtual Assistant (e.g: http://localhost:3978/api/messages), and the Microsoft App ID and Microsoft App Password values from its `appsettings.json` file.
+1. Provide the messaging endpoint of your running Virtual Assistant (e.g: http://localhost:3978/api/messages), the Microsoft App ID and Microsoft App Password values from its `appsettings.json` file.
 
     ![]({{site.baseurl}}/assets/images/quickstart-virtualassistant-openbotmodal.png)
 
