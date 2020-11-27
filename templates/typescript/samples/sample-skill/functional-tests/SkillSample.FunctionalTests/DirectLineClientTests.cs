@@ -19,10 +19,7 @@ namespace SkillSample.FunctionalTests
     public class DirectLineClientTests
     {
         private const string TestName = "Jane Doe";
-
-        private static string _directLineSecret = string.Empty;
-        private static string _botId = string.Empty;
-        private DirectLineClient _client;
+        private static DirectLineClient _client;
 
         protected Templates AllResponsesTemplates
         {
@@ -40,22 +37,12 @@ namespace SkillSample.FunctionalTests
         public static void Class_Initialize(TestContext testContext)
         {
             // Get the values for the environment variables.
-            _directLineSecret = Environment.GetEnvironmentVariable("DIRECTLINE");
+            var _directLineSecret = Environment.GetEnvironmentVariable("DIRECTLINE");
             if (string.IsNullOrWhiteSpace(_directLineSecret))
             {
                 throw new ArgumentNullException(nameof(_directLineSecret));
             }
 
-            _botId = Environment.GetEnvironmentVariable("BOTID");
-            if (string.IsNullOrWhiteSpace(_botId))
-            {
-                throw new ArgumentNullException(nameof(_botId));
-            }
-        }
-
-        [TestInitialize]
-        public void Test_Initialize()
-        {
             // Create a new Direct Line client.
             _client = new DirectLineClient(_directLineSecret);
         }
@@ -108,8 +95,6 @@ namespace SkillSample.FunctionalTests
         /// <returns>Returns the bots answer.</returns>
         private async Task<List<Activity>> SendActivityAsync(Conversation conversation, Activity activity)
         {
-            List<Activity> responses;
-
             // Send the message activity to the bot.
             await _client.Conversations.PostActivityAsync(conversation.ConversationId, activity);
 
