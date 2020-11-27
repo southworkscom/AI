@@ -114,9 +114,7 @@ namespace SkillSample.FunctionalTests
             await _client.Conversations.PostActivityAsync(conversation.ConversationId, activity);
 
             // Read the bot's message.
-            responses = await ReadBotMessagesAsync(_client, conversation.ConversationId);
-
-            return responses;
+            return await ReadBotMessagesAsync(_client, conversation.ConversationId);
         }
 
         /// <summary>
