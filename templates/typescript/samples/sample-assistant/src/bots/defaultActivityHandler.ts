@@ -6,7 +6,8 @@
 import {
     Activity,
     ActivityTypes,
-    BotState, 
+    BotState,
+    ChannelAccount,
     Channels,
     ConversationState,
     StatePropertyAccessor,
@@ -60,17 +61,23 @@ export class DefaultActivityHandler<T extends Dialog> extends TeamsActivityHandl
     }
 
     protected async membersAdded(turnContext: TurnContext): Promise<void> {
-        const userProfile: IUserProfileState = await this.userProfileState.get(turnContext, () => { name: ''; });
+        const membersAdded: ChannelAccount[] = turnContext.activity.membersAdded;
+        for (const member of membersAdded) {
+            if (member.id !== turnContext.activity.recipient.id) {
+                const userProfile: IUserProfileState = await this.userProfileState.get(turnContext, () => {
+                    name: '';
+                });
+                if (userProfile.name === undefined || userProfile.name.trim().length === 0) {
+                    // Send new user intro card.
+                    await turnContext.sendActivity(this.templateManager.generateActivityForLocale('NewUserIntroCard', userProfile));
+                } else {
+                    // Send returning user intro card.
+                    await turnContext.sendActivity(this.templateManager.generateActivityForLocale('ReturningUserIntroCard', userProfile));
+                }
 
-        if (userProfile.name === undefined || userProfile.name.trim().length === 0) {
-            // Send new user intro card.
-            await turnContext.sendActivity(this.templateManager.generateActivityForLocale('NewUserIntroCard', userProfile));
-        } else {
-            // Send returning user intro card.
-            await turnContext.sendActivity(this.templateManager.generateActivityForLocale('ReturningUserIntroCard', userProfile));
+                await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
+            }
         }
-        
-        await DialogEx.run(this.dialog, turnContext, this.dialogStateAccessor);
     }
 
     protected async onMessageActivity(turnContext: TurnContext): Promise<void> {
