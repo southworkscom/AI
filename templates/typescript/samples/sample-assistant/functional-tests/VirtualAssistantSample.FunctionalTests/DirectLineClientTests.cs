@@ -29,7 +29,7 @@ namespace VirtualAssistantSample.FunctionalTests
                 var currentCulture = CultureInfo.CurrentUICulture.Name.ToLower();
                 var path = string.Equals(currentCulture == "en-us", StringComparison.OrdinalIgnoreCase) ?
                     Path.Combine(".", "Responses", $"AllResponses.lg") :
-                    Path.Combine(".", "Responses", $"AllResponses.{CultureInfo.CurrentUICulture.Name.ToLower()}.lg");
+                    Path.Combine(".", "Responses", $"AllResponses.{currentCulture}.lg");
                 return Templates.ParseFile(path);
             }
         }
