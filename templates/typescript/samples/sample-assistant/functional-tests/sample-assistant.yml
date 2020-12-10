@@ -25,6 +25,7 @@ variables:
   # ServicePrincipal: App Id of the Service Principal
   # Azure_Tenant: Tenant's value of your Azure directory
   # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
+  # AzureSubscription: Your Azure subscription
 
 jobs:
 - job: Main
@@ -287,8 +288,23 @@ jobs:
   - task: Npm@1
     displayName: 'Build: Skill - Run npm install'
     inputs:
-      workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
-      verbose: false
+      azureSubscription: $(AzureSubscription)
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+       # If RG exists, delete it to avoid possible App ID registration conflict.
+       $exists = az group exists --name $(BotName)
+      
+       if ($exists -eq 'true')
+       {
+           Write-Host "Resource group $(BotName) exists, there is likely an error on the previous build. Deleting."
+            az group delete --name $(BotName) --yes
+       }
+       else
+       {
+           Write-Host "Resource group $(BotName) does not exist."
+       }
+      workingDirectory: 'templates/typescript/samples/$(BotName)'
 
   - task: Npm@1
     displayName: 'Build: Skill - Run npm build'
@@ -407,7 +423,7 @@ jobs:
   - task: AzureCLI@1
     displayName: 'Test: Skill - Create Direct Line registration'
     inputs:
-      azureSubscription: ''
+      azureSubscription: $(AzureSubscription)
       scriptLocation: inlineScript
       inlineScript: 'call az bot directline create -n "$(SkillBotWebAppName)" -g "$(SkillBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
       workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
@@ -455,14 +471,6 @@ jobs:
      botskills refresh --ts --verbose
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
     displayName: 'Test: VA - Connect SkillSample'
-    
-  - task: Npm@1
-    displayName: 'Build: VA - Run npm build'
-    inputs:
-      command: custom
-      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      verbose: false
-      customCommand: 'run build'
 
   - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
     errorActionPreference: continue
@@ -472,7 +480,7 @@ jobs:
   - task: AzureCLI@1
     displayName: 'Test: VA - Create Direct Line registration'
     inputs:
-      azureSubscription: ''
+      azureSubscription: $(AzureSubscription)
       scriptLocation: inlineScript
       inlineScript: 'call az bot directline create -n "$(VirtualAssistantBotWebAppName)" -g "$(VirtualAssistantBotResourceGroup)" --verbose --debug --output json > "DirectLineCreate.json"'
       workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
