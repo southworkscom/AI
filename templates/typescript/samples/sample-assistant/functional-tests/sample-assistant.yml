@@ -285,26 +285,11 @@ jobs:
       summaryFileLocation: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/cobertura-coverage.xml'
       reportDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/'
 
-  - task: Npm@1
+  task: Npm@1
     displayName: 'Build: Skill - Run npm install'
     inputs:
-      azureSubscription: $(AzureSubscription)
-      scriptType: pscore
-      scriptLocation: inlineScript
-      inlineScript: |
-       # If RG exists, delete it to avoid possible App ID registration conflict.
-       $exists = az group exists --name $(BotName)
-      
-       if ($exists -eq 'true')
-       {
-           Write-Host "Resource group $(BotName) exists, there is likely an error on the previous build. Deleting."
-            az group delete --name $(BotName) --yes
-       }
-       else
-       {
-           Write-Host "Resource group $(BotName) does not exist."
-       }
-      workingDirectory: 'templates/typescript/samples/$(BotName)'
+      workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+      verbose: false
 
   - task: Npm@1
     displayName: 'Build: Skill - Run npm build'
