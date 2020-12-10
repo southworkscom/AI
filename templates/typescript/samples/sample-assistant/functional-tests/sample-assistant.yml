@@ -39,7 +39,7 @@ jobs:
   - task: AzureCLI@2
     displayName: 'Prepare: Delete preexisting resources'
     inputs:
-      azureSubscription: ''
+      azureSubscription: $(AzureSubscription)
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
