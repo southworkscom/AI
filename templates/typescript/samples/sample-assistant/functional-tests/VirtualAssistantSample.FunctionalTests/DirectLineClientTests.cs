@@ -27,7 +27,7 @@ namespace VirtualAssistantSample.FunctionalTests
             get
             {
                 var currentCulture = CultureInfo.CurrentUICulture.Name.ToLower();
-                var path = string.Equals(currentCulture == "en-us", StringComparison.OrdinalIgnoreCase) ?
+                var path = string.Equals(currentCulture, "en-us", StringComparison.OrdinalIgnoreCase) ?
                     Path.Combine(".", "Responses", $"AllResponses.lg") :
                     Path.Combine(".", "Responses", $"AllResponses.{currentCulture}.lg");
                 return Templates.ParseFile(path);
