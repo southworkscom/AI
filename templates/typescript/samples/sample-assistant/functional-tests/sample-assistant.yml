@@ -285,7 +285,7 @@ jobs:
       summaryFileLocation: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/cobertura-coverage.xml'
       reportDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)/coverage/'
 
-  task: Npm@1
+  - task: Npm@1
     displayName: 'Build: Skill - Run npm install'
     inputs:
       workingDir: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
