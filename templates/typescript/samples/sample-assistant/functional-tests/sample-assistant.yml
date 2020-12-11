@@ -457,6 +457,14 @@ jobs:
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
     displayName: 'Test: VA - Connect SkillSample'
 
+  - task: Npm@1
+    displayName: 'Build: VA - Run npm build'
+    inputs:
+      command: custom
+      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+      verbose: false
+      customCommand: 'run build'
+
   - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
     errorActionPreference: continue
     workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
