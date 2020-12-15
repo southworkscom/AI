@@ -115,13 +115,6 @@ jobs:
     failOnStderr: true
 
   - task: DotNetCoreCLI@2
-    displayName: 'Test: Run dotnet restore'
-    inputs:
-      command: restore
-      projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
-
-
-  - task: DotNetCoreCLI@2
     displayName: 'Test: Run dotnet build'
     inputs:
       projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'

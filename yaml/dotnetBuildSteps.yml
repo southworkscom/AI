@@ -1,13 +1,5 @@
 # Restores, builds and runs unit tests
 
-steps:
-  - task: DotNetCoreCLI@2
-    displayName: 'Dotnet Restore'
-    inputs:
-      command: restore
-      projects: $(SolutionPath)$(SolutionName)
-      restoreDirectory: $(SolutionPath)
-
   - task: DotNetCoreCLI@2
     displayName: 'Dotnet Build'
     inputs:
