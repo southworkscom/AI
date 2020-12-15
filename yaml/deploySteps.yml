@@ -8,3 +8,5 @@
         ./deployment/scripts/deploy.ps1 -name $(BotName) -location $(Location) -languages $(BotLanguages) -appId $(BotAppId) -appPassword $(BottAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "deployment"
 
       workingDirectory: $(WorkingDirectory)
+      powerShellErrorActionPreference: continue
+      failOnStandardError: true

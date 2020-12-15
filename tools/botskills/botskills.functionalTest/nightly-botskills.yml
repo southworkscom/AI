@@ -160,6 +160,8 @@ jobs:
         ./Deployment/Scripts/deploy.ps1 -name $(VirtualAssistantBotName) -location $(Location) -languages "en-us" -appId $(VirtualAssistantBotAppId) -appPassword $(VirtualAssistantBotAppPassword) -createLuisAuthoring -luisAuthoringRegion $(LuisAuthoringRegion) -logFolder "Deployment"
 
       workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
+      powerShellErrorActionPreference: continue
+      failOnStandardError: true
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
