@@ -19,7 +19,7 @@ variables:
   # ServicePrincipal: App Id of the Service Principal
   # Azure_Tenant: Tenant's value of your Azure directory
   # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
-  # AzureSubscription: Name of your Azure Subscription
+  # AzureSubscription: Your Azure subscription
 
 jobs:
 - job: Skill
