@@ -123,25 +123,11 @@ jobs:
        **/wwwroot/manifest/manifest-1.1.json
 
   - task: DotNetCoreCLI@2
-    displayName: 'Prepare: VA - Restore dependencies'
-    inputs:
-      command: restore
-      projects: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
-      restoreDirectory: 'samples/csharp/assistants/virtual-assistant/'
-
-  - task: DotNetCoreCLI@2
     displayName: 'Prepare: VA - Build project'
     inputs:
       projects: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
       arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
       workingDirectory: 'samples/csharp/assistants/virtual-assistant/'
-
-  - task: DotNetCoreCLI@2
-    displayName: 'Prepare: Skill - Restore dependencies'
-    inputs:
-      command: restore
-      projects: samples/csharp/skill/SkillSample.sln
-      restoreDirectory: samples/csharp/skill/
 
   - task: DotNetCoreCLI@2
     displayName: 'Prepare: Skill - Build project'
