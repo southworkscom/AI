@@ -135,6 +135,7 @@ jobs:
     failOnStderr: true
 
   - template: Templates/functionalTestsStep.yml
+  - template: Templates/cleanupResourcesStep.yml
   - template: Templates/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
@@ -230,4 +231,5 @@ jobs:
     failOnStderr: true
 
   - template: Templates/functionalTestsStep.yml
+  - template: Templates/cleanupResourcesStep.yml
   - template: Templates/endLogStep.yml
