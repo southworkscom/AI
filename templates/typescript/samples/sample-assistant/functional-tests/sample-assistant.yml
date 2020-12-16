@@ -74,38 +74,6 @@ jobs:
     displayName: 'Deploy: VA - Get variables from appsettings'
     failOnStderr: true
 
-  - pwsh: |
-     $skillManifestUrl = "https://$(SkillBotWebAppName).scm.azurewebsites.net/api/vfs/site/wwwroot/src/manifest/manifest-1.1.json"
-
-     Write-Host "Skill Manifest"
-     Write-Host "===="
-     Write-Host $skillManifestUrl
-     Write-Host "`r`n"
-
-     botskills connect --localManifest "..\$(SkillBotName)\src\manifest\manifest-1.1.json" --luisFolder '..\$(SkillBotName)\deployment\resources\LU\' --ts --languages 'en-us' --noRefresh --verbose
-
-     botskills refresh --ts --verbose
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-    displayName: 'Test: VA - Connect SkillSample'
-    enabled: false
-    failOnStderr: true
-
-  - task: Npm@1
-    displayName: 'Test: Build: VA - Run npm build'
-    inputs:
-      command: custom
-      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-      verbose: false
-      customCommand: 'run build'
-    enabled: false
-
-  - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
-    errorActionPreference: continue
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
-    displayName: 'Test: VA - Publish with connected Skill'
-    enabled: false
-    failOnStderr: true
-
   - template: ../../../../../yaml/setDirectLineSteps.yml
 
   - powershell: |
@@ -247,6 +215,13 @@ jobs:
       workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
       verbose: false
       customCommand: 'run build'
+
+  - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
+    errorActionPreference: continue
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+    displayName: 'Test: VA - Publish with connected Skill'
+    enabled: false
+    failOnStderr: true
 
   - task: AzureCLI@1
     displayName: 'Test: VA - Create Direct Line registration'
