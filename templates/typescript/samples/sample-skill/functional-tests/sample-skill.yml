@@ -35,8 +35,8 @@ jobs:
     FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
     WorkingDirectory: ''
   steps:
-  - template: templates/cleanupResourcesStep.yml
-  - template: templates/useNodeStep.yml
+  - template: ../../../../../yaml/cleanupResourcesStep.yml
+  - template: ../../../../../yaml/useNodeStep.yml
 
   - pwsh: |
      # Install botbuilder tools off MyGet
@@ -55,11 +55,11 @@ jobs:
     displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
     failOnStderr: true
 
-  - template: templates/yoCreateBotStep.yml
-  - template: templates/setConfigFileSteps.yml
-  - template: templates/nodeLogVersions.yml
-  - template: templates/nodeBuildSteps.yml
-  - template: templates/deploySteps.yml
+  - template: ../../../../../yaml/yoCreateBotStep.yml
+  - template: ../../../../../yaml/setConfigFileSteps.yml
+  - template: ../../../../../yaml/nodeLogVersions.yml
+  - template: ../../../../../yaml/nodeBuildSteps.yml
+  - template: ../../../../../yaml/deploySteps.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -78,7 +78,7 @@ jobs:
     displayName: 'Deploy: Get bot variables from appsettings'
     failOnStderr: true
 
-  - template: templates/setDirectLineSteps.yml
+  - template: ../../../../../yaml/setDirectLineSteps.yml
 
   - powershell: |
      $botName = "$(BOTWEBAPPNAME)"
@@ -95,11 +95,11 @@ jobs:
     displayName: 'Deploy: Get channel secrets'
     failOnStderr: true
 
-  - template: templates/functionalTestsStep.yml
+  - template: ../../../../../yaml/functionalTestsStep.yml
 
-  - template: templates/cleanupResourcesStep.yml
+  - template: ../../../../../yaml/cleanupResourcesStep.yml
 
-  - template: templates/endLogStep.yml
+  - template: ../../../../../yaml/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'
