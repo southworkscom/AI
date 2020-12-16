@@ -33,7 +33,6 @@ jobs:
   variables:
     BotName: $(VirtualAssistantBotName)
   steps:
-  - template: ../../../yaml/cleanupResourcesStep.yml
   - template: ../../../yaml/useNodeStep.yml
 
   - task: NuGetToolInstaller@1

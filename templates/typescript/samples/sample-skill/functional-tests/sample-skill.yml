@@ -47,25 +47,6 @@ jobs:
     failOnStderr: true
 
   - pwsh: |
-     # Create config file
-     $path = Join-Path $env:LOCALAPPDATA "@microsoft" "botframework-cli"
-
-     New-Item -Path $path -ItemType Directory
-
-     $config = @{
-         telemetry = $true
-     }
-
-     $config | ConvertTo-Json -depth 100 | Out-File $(Join-Path $path "config.json")
-
-     # Install botframework-cli off MyGet
-     npm config set registry https://botbuilder.myget.org/F/botframework-cli/npm/
-
-     npm i -g @microsoft/botframework-cli
-    displayName: 'Prepare: Install preview botframework-cli'
-    failOnStderr: true
-
-  - pwsh: |
      # Install generator-bot-virtualassistant from MyGet
      npm config set registry https://botbuilder.myget.org/F/aitemplates/npm/
 
