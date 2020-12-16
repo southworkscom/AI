@@ -97,12 +97,7 @@ jobs:
 
   - template: templates/functionalTestsStep.yml
 
-  - task: AzureCLI@1
-    displayName: 'Cleanup: Delete bot resources'
-    inputs:
-      azureSubscription: $(AzureSubscription)
-      scriptLocation: inlineScript
-      inlineScript: 'az group delete -g $(BotName) --no-wait --yes'
+  - template: templates/cleanupResourcesStep.yml
 
   - template: templates/endLogStep.yml
 
