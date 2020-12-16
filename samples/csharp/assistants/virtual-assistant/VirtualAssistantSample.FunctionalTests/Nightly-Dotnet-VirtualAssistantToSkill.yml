@@ -46,17 +46,17 @@ jobs:
     FunctionalTestProject: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
     WorkingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
   steps:
-  - template: Templates/cleanupResourcesStep.yml
-  - template: Templates/useNodeStep.yml
+  - template: ../../../../../yaml/cleanupResourcesStep.yml
+  - template: ../../../../../yaml/useNodeStep.yml
 
   - task: NuGetToolInstaller@1
     displayName: 'Prepare: Use NuGet 4.9.1'
 
-  - template: Templates/npmInstallRequirements.yml
-  - template: Templates/dotnetLogVersions.yml
-  - template: Templates/setConfigFileSteps.yml
-  - template: Templates/dotnetBuildSteps.yml
-  - template: Templates/deploySteps.yml
+  - template: ../../../../../yaml/npmInstallRequirements.yml
+  - template: ../../../../../yaml/dotnetLogVersions.yml
+  - template: ../../../../../yaml/setConfigFileSteps.yml
+  - template: ../../../../../yaml/dotnetBuildSteps.yml
+  - template: ../../../../../yaml/deploySteps.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -109,7 +109,7 @@ jobs:
     displayName: 'Test: VA - Publish with connected Skill'
     failOnStderr: true
 
-  - template: Templates/setDirectLineSteps.yml
+  - template: ../../../../../yaml/setDirectLineSteps.yml
 
   - powershell: |
      $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
@@ -134,8 +134,9 @@ jobs:
     displayName: 'Test: VA - Get channel secrets'
     failOnStderr: true
 
-  - template: Templates/functionalTestsStep.yml
-  - template: Templates/endLogStep.yml
+  - template: ../../../../../yaml/functionalTestsStep.yml
+  - template: ../../../../../yaml/cleanupResourcesStep.yml
+  - template: ../../../../../yaml/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'
@@ -157,15 +158,15 @@ jobs:
     FunctionalTestProject: 'samples/csharp/skill/SkillSample.sln'
     WorkingDirectory: 'samples/csharp/skill/SkillSample'
   steps:
-  - template: Templates/cleanupResourcesStep.yml
-  - template: Templates/useNodeStep.yml
+  - template: ../../../../../yaml/cleanupResourcesStep.yml
+  - template: ../../../../../yaml/useNodeStep.yml
 
   - task: NuGetToolInstaller@1
     displayName: 'Prepare: Use NuGet 4.9.1'
 
-  - template: Templates/npmInstallRequirements.yml
-  - template: Templates/dotnetLogVersions.yml
-  - template: Templates/setConfigFileSteps.yml
+  - template: ../../../../../yaml/npmInstallRequirements.yml
+  - template: ../../../../../yaml/dotnetLogVersions.yml
+  - template: ../../../../../yaml/setConfigFileSteps.yml
 
   - task: FileTransform@1
     displayName: 'Prepare: Replace Skill manifest properties'
@@ -176,8 +177,8 @@ jobs:
        **/wwwroot/manifest/manifest-1.1.json
        **/wwwroot/manifest/manifest-1.0.json
 
-  - template: Templates/dotnetBuildSteps.yml
-  - template: Templates/deploySteps.yml
+  - template: ../../../../../yaml/dotnetBuildSteps.yml
+  - template: ../../../../../yaml/deploySteps.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -206,7 +207,7 @@ jobs:
     displayName: 'Deploy: Skill - Get variables from appsettings'
     failOnStderr: true
 
-  - template: Templates/setDirectLineSteps.yml
+  - template: ../../../../../yaml/setDirectLineSteps.yml
 
   - powershell: |
      $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
@@ -229,5 +230,6 @@ jobs:
     displayName: 'Test: Skill - Get channel secrets'
     failOnStderr: true
 
-  - template: Templates/functionalTestsStep.yml
-  - template: Templates/endLogStep.yml
+  - template: ../../../../../yaml/functionalTestsStep.yml
+  - template: ../../../../../yaml/cleanupResourcesStep.yml
+  - template: ../../../../../yaml/endLogStep.yml

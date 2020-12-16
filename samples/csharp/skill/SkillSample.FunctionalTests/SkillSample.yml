@@ -37,18 +37,18 @@ jobs:
     FunctionalTestProject: 'samples/csharp/skill/SkillSample.sln'
     WorkingDirectory: 'samples/csharp/skill/SkillSample/'
   steps:
-  - template: Templates/cleanupResourcesStep.yml
+  - template: ../../../../yaml/cleanupResourcesStep.yml
       #workingDirectory: samples/csharp/skill
-  - template: Templates/useNodeStep.yml
+  - template: ../../../../yaml/useNodeStep.yml
 
   - task: NuGetToolInstaller@1
     displayName: 'Prepare: Use NuGet 4.9.1'
 
-  - template: Templates/npmInstallRequirements.yml
-  - template: Templates/dotnetLogVersions.yml
-  - template: Templates/setConfigFileSteps.yml
-  - template: Templates/dotnetBuildSteps.yml
-  - template: Templates/deploySteps.yml
+  - template: ../../../../yaml/npmInstallRequirements.yml
+  - template: ../../../../yaml/dotnetLogVersions.yml
+  - template: ../../../../yaml/setConfigFileSteps.yml
+  - template: ../../../../yaml/dotnetBuildSteps.yml
+  - template: ../../../../yaml/deploySteps.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -68,7 +68,7 @@ jobs:
     displayName: 'Deploy: Get bot variables from appsettings'
     failOnStderr: true
 
-  - template: Templates/setDirectLineSteps.yml
+  - template: ../../../../yaml/setDirectLineSteps.yml
 
   - powershell: |
      $botName = "$(BOTWEBAPPNAME)"
@@ -85,7 +85,7 @@ jobs:
     displayName: 'Deploy: Get channel secrets'
     failOnStderr: true
 
-  - template: Templates/functionalTestsStep.yml
+  - template: ../../../../yaml/functionalTestsStep.yml
 
   - task: AzureCLI@1
     displayName: 'Cleanup: Delete bot resources'
@@ -94,7 +94,7 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: 'az group delete -g $(BotName) --no-wait --yes'
 
-  - template: Templates/endLogStep.yml
+  - template: ../../../../yaml/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'

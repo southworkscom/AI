@@ -35,8 +35,8 @@ jobs:
     FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
     WorkingDirectory: ''
   steps:
-  - template: templates/cleanupResourcesStep.yml
-  - template: templates/useNodeStep.yml
+  - template: ../../../../../yaml/cleanupResourcesStep.yml
+  - template: ../../../../../yaml/useNodeStep.yml
 
   - pwsh: |
      # Install botbuilder tools off MyGet
@@ -44,25 +44,6 @@ jobs:
 
      npm i -g botdispatch luis-apis botskills
     displayName: 'Prepare: Install preview dispatch, luis-apis, botskills'
-    failOnStderr: true
-
-  - pwsh: |
-     # Create config file
-     $path = Join-Path $env:LOCALAPPDATA "@microsoft" "botframework-cli"
-
-     New-Item -Path $path -ItemType Directory
-
-     $config = @{
-         telemetry = $true
-     }
-
-     $config | ConvertTo-Json -depth 100 | Out-File $(Join-Path $path "config.json")
-
-     # Install botframework-cli off MyGet
-     npm config set registry https://botbuilder.myget.org/F/botframework-cli/npm/
-
-     npm i -g @microsoft/botframework-cli
-    displayName: 'Prepare: Install preview botframework-cli'
     failOnStderr: true
 
   - pwsh: |
@@ -74,11 +55,11 @@ jobs:
     displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
     failOnStderr: true
 
-  - template: templates/yoCreateBotStep.yml
-  - template: templates/setConfigFileSteps.yml
-  - template: templates/nodeLogVersions.yml
-  - template: templates/nodeBuildSteps.yml
-  - template: templates/deploySteps.yml
+  - template: ../../../../../yaml/yoCreateBotStep.yml
+  - template: ../../../../../yaml/setConfigFileSteps.yml
+  - template: ../../../../../yaml/nodeLogVersions.yml
+  - template: ../../../../../yaml/nodeBuildSteps.yml
+  - template: ../../../../../yaml/deploySteps.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -97,7 +78,7 @@ jobs:
     displayName: 'Deploy: Get bot variables from appsettings'
     failOnStderr: true
 
-  - template: templates/setDirectLineSteps.yml
+  - template: ../../../../../yaml/setDirectLineSteps.yml
 
   - powershell: |
      $botName = "$(BOTWEBAPPNAME)"
@@ -114,21 +95,11 @@ jobs:
     displayName: 'Deploy: Get channel secrets'
     failOnStderr: true
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Test: Run dotnet build'
-    inputs:
-      projects: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
+  - template: ../../../../../yaml/functionalTestsStep.yml
 
-  - template: templates/functionalTestsStep.yml
+  - template: ../../../../../yaml/cleanupResourcesStep.yml
 
-  - task: AzureCLI@1
-    displayName: 'Cleanup: Delete bot resources'
-    inputs:
-      azureSubscription: $(AzureSubscription)
-      scriptLocation: inlineScript
-      inlineScript: 'az group delete -g $(BotName) --no-wait --yes'
-
-  - template: templates/endLogStep.yml
+  - template: ../../../../../yaml/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'

@@ -33,7 +33,6 @@ jobs:
   variables:
     BotName: $(VirtualAssistantBotName)
   steps:
-  - template: ../../../yaml/cleanupResourcesStep.yml
   - template: ../../../yaml/useNodeStep.yml
 
   - task: NuGetToolInstaller@1
@@ -255,13 +254,11 @@ jobs:
   - pwsh: |
      # Execute botskills connect command without refresh
      botskills connect --localManifest '..\..\..\skill\SkillSample\wwwroot\manifest\manifest-1.1.json' --luisFolder '..\..\..\skill\SkillSample\Deployment\Resources\LU\' --cs --languages 'en-us' --noRefresh
-    failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute connect command without refresh'
     failOnStderr: true
 
   - pwsh: 'botskills list'
-    failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute list command'
     failOnStderr: true
@@ -269,7 +266,6 @@ jobs:
   - pwsh: |
      # Execute botskills update command without refresh
      botskills update --localManifest '..\..\..\skill\SkillSample\wwwroot\manifest\manifest-1.1.json' --luisFolder '..\..\..\skill\SkillSample\Deployment\Resources\LU\' --cs --languages 'en-us' --noRefresh
-    failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute update command without refresh'
     failOnStderr: true
@@ -300,13 +296,11 @@ jobs:
   - pwsh: |
      # Execute botskills disconnect command without refresh
      botskills disconnect -i "SampleSkill" --cs --noRefresh
-    failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute disconnect command without refresh'
     failOnStderr: true
 
   - pwsh: 'botskills list'
-    failOnStderr: true
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: Botskills - Execute list command'
     failOnStderr: true
