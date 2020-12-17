@@ -9,52 +9,35 @@ variables:
   system.debug: false
   # system.debug: System variable that can be set by the users. Set this to true to run the release in debug mode to assist in fault-finding.
   # BuildConfiguration: Build configuration such as Debug or Release.
+  # BotBuilderPackageVersion: Version of the BotBuilder package
   # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu.
   # AppId: Microsoft App Id of the bot
   # AppPassword: Microsoft App Password of the bot
   # BotName: Name of the bot
   # Location: Location of the bot
   # LuisAuthoringRegion: Location of the LUIS apps
-  # PreviewVersion: Version of the SDK's packages that the bot will use
-  # ServicePrincipal: App Id of the Service Principal
-  # Azure_Tenant: Tenant's value of your Azure directory
-  # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
-  # AzureSubscription: Your Azure subscription
+  # AzureSubscription: Name of your Azure Subscription
+  # BotLanguage: The supported language of your bot
 
 jobs:
-- job: Skill
+- job: Main
   timeoutInMinutes: 0
   variables:
-    BotType: "Skill"
-    BotLanguages: "en-us,es-es,it-it,fr-fr,de-de,zh-cn"
+    BotLanguages: $(BotLanguage)
     BotAppId: $(AppId)
     BottAppPassword: $(AppPassword)
+    SolutionPath: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/'
+    SolutionName: 'SkillSample.FunctionalTests.csproj'
     DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
     RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-    RegexReplace: '$1:$(PreviewVersion)'
-    FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
-    WorkingDirectory: ''
+    RegexReplace: '$1:$(BotBuilderPackageVersion)'
+    FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests.sln'
+    WorkingDirectory: 'templates\typescript\samples\sample-skill/'
+    BotType: "Skill"
   steps:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml
-
-  - pwsh: |
-     # Install botbuilder tools off MyGet
-     npm config set registry https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/
-
-     npm i -g botdispatch luis-apis botskills
-    displayName: 'Prepare: Install preview dispatch, luis-apis, botskills'
-    failOnStderr: true
-
-  - pwsh: |
-     # Install generator-bot-virtualassistant from MyGet
-     npm config set registry https://botbuilder.myget.org/F/aitemplates/npm/
-
-     npm install -g yo generator-bot-virtualassistant
-
-    displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
-    failOnStderr: true
-
+  - template: ../../../../../yaml/npmInstallRequirements.yml
   - template: ../../../../../yaml/yoCreateBotStep.yml
   - template: ../../../../../yaml/setConfigFileSteps.yml
   - template: ../../../../../yaml/nodeLogVersions.yml
@@ -74,11 +57,12 @@ jobs:
 
      Write-Host $resourceGroupName
      echo "##vso[task.setvariable variable=BOTRESOURCEGROUP;]$resourceGroupName"
+
     workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)/src'
     displayName: 'Deploy: Get bot variables from appsettings'
     failOnStderr: true
 
-  - template: ../../../../../yaml/setDirectLineSteps.yml
+  - template: ../../../../yaml/setDirectLineSteps.yml
 
   - powershell: |
      $botName = "$(BOTWEBAPPNAME)"
@@ -95,11 +79,9 @@ jobs:
     displayName: 'Deploy: Get channel secrets'
     failOnStderr: true
 
-  - template: ../../../../../yaml/functionalTestsStep.yml
-
-  - template: ../../../../../yaml/cleanupResourcesStep.yml
-
-  - template: ../../../../../yaml/endLogStep.yml
+  - template: ../../../../yaml/functionalTestsStep.yml
+  - template: ../../../../yaml/cleanupResourcesStep.yml
+  - template: ../../../../yaml/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'
