@@ -99,6 +99,8 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Prepare: Delete preexisting resources
 1. Debug: Show log contents
 
+> **NOTE:** The Virtual Assistant job depends of the Skill job.
+
 ## Further Reading
 - [What is Azure Pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/what-is-azure-pipelines?view=azure-devops)
 - [Define variables - Azure Pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch)
