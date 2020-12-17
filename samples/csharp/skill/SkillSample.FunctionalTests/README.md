@@ -19,20 +19,24 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 |------|----------|-------------|
 | Azure Variable | system.debug | System variable that can be set by the user. Set this to true to run the release in [debug](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/variables?view=azure-devops&tabs=batch#debug-mode) mode to assist in fault-finding |
 |      | BuildConfiguration | Build configuration such as Debug or Release |
+|      | BotBuilderPackageVersion | Version of the BotBuilder package|
 |      | BuildPlatform | Build platform such as Win32, x86, x64 or any cpu |
+|      | ServicePrincipal | App Id of the Service Principal |
+|      | Azure_Tenant | Tenant's value of your Azure directory |
+|      | AzureDevOps-ServicePrincipal-Secret | Secret of the Service Principal |
 | Bot Variable | AppId | Microsoft App Id of the bot |
 |      | AppPassword | Microsoft App Password of the bot |
 |      | BotName | Name of the bot |
 |      | Location | Location of the bot |
 |      | LuisAuthoringRegion | Location of the LUIS apps |
-|      | BotBuilderPackageVersion | Version of the SDK's packages that the bot will use |
-|      | ServicePrincipal | App Id of the Service Principal |
-|      | Azure_Tenant | Tenant's value of your Azure directory |
-|      | AzureDevOps-ServicePrincipal-Secret | Secret of the Service Principal |
+|      | AzureSubscription | The name of your Azure Subscription |
+|      | BotLanguage | The supported language of your bot |
+
 
 Last but not least, as the `Azure Subscription` is related to the container where the resources are created, it should be replaced with your Agent pool.
 
 ## Steps contained in the YAML
+1. Prepare: Clean up resources
 1. Prepare: Use Node 10.16.3
 1. Prepare: Use NuGet 4.9.1
 1. Prepare: Delete test resource group if it exists
