@@ -7,9 +7,9 @@ pool:
 
 variables:
   system.debug: false
-  # system.debug: System variable that can be set by the users. Set this to true to run the release in debug mode to assist in fault-finding.
-  # BuildConfiguration: Build configuration such as Debug or Release.
-  # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu.
+  # BotBuilderPackageVersion: Version of the BotBuilder package
+  # BuildConfiguration: Build configuration such as Debug or Release
+  # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu
   # VirtualAssistantBotAppId: Microsoft App Id of the Virtual Assistant bot
   # VirtualAssistantBotAppPassword: Microsoft App Password of the Virtual Assistant bot
   # VirtualAssistantBotName: Name of the Virtual Assistant bot
@@ -18,30 +18,28 @@ variables:
   # SkillBotName: Name of the Skill bot
   # endpoints.0.endpointUrl: Skill Manifest endpoint url
   # endpoints.0.msAppId: Skill Manifest Microsoft App Id
-  # privacyUrl: Skill Manifest privacy url
   # Location: Location of the bot
   # LuisAuthoringRegion: Location of the LUIS apps
-  # PreviewVersion: Version of the SDK's packages that the bot will use
-  # ServicePrincipal: App Id of the Service Principal
-  # Azure_Tenant: Tenant's value of your Azure directory
-  # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
-  # AzureSubscription: Your Azure subscription
+  # AzureSubscription: Name of your Azure Subscription
+  # BotLanguage: The supported language of your bot
 
 jobs:
 - job: VirtualAssistant
   timeoutInMinutes: 0
+  dependsOn: Skill
   variables:
     BotName: $(VirtualAssistantBotName)
     BotType: "Assistant"
-    BotLanguages: "en-us"
+    BotLanguages: $(BotLanguage)
     BotAppId: $(VirtualAssistantBotAppId)
     BottAppPassword: $(VirtualAssistantBotAppPassword)
-    DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
-    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-    RegexReplace: '$1:$(PreviewVersion)'
     SolutionPath: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/'
     SolutionName: 'VirtualAssistantSample.FunctionalTests.csproj'
-    WorkingDirectory: ''
+    DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
+    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
+    RegexReplace: '$1:$(BotBuilderPackageVersion)'
+    WorkingDirectory: 'templates\typescript\samples\sample-assistant'
+    FunctionalTestProject: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests.sln'
   steps:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml
@@ -64,9 +62,10 @@ jobs:
      Write-Host "VA Web App Name"
      Write-Host "===="
      Write-Host $botWebAppName
+     Write-Host "`r`n"
      echo "##vso[task.setvariable variable=VirtualAssistantBotWebAppName;]$botWebAppName"
 
-     Write-Host "Resource Group"
+     Write-Host "VA Resource Group"
      Write-Host "===="
      Write-Host $resourceGroupName
      echo "##vso[task.setvariable variable=VirtualAssistantBotResourceGroup;]$resourceGroupName"
@@ -82,10 +81,11 @@ jobs:
      Write-Host $skillManifestUrl
      Write-Host "`r`n"
     
-     botskills connect --remoteManifest "$skillManifestUrl" --luisFolder '..\..\..\skill\SkillSample\Deployment\Resources\LU\' --cs --languages 'en-us' --noRefresh --verbose
+     botskills connect --remoteManifest "$skillManifestUrl" --luisFolder '..\..\..\skill\SkillSample\Deployment\Resources\LU\' --ts --languages 'en-us' --noRefresh --verbose
     
      botskills refresh --ts --verbose
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)'
     displayName: 'Test: VA - Connect SkillSample'
     failOnStderr: true
 
@@ -93,20 +93,20 @@ jobs:
     displayName: 'Build: VA - Build project'
     inputs:
       command: custom
-      workingDir: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+      workingDir: 'templates/typescript/samples/functionalTests/$(BotName)'
       verbose: false
       customCommand: 'run build'
     
-  - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
+  - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(BotName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
     errorActionPreference: continue
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)'
     displayName: 'Test: VA - Publish with connected Skill'
     enabled: false
     failOnStderr: true
 
   - template: ../../../../../yaml/setDirectLineSteps.yml
 
-	- powershell: |
+  - powershell: |
      $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
      $key = $json.properties.properties.sites.key
     
@@ -120,12 +120,12 @@ jobs:
     
      Write-Host "Bot name"
      Write-Host "===="
-     Write-Host "DirectLine Bot Name: $(VirtualAssistantBotWebAppName)"
+     Write-Host "DirectLine Bot Name: $(BotName)"
      Write-Host "`r`n"
     
-     echo "##vso[task.setvariable variable=BOTID;]$(VirtualAssistantBotWebAppName)"
+     echo "##vso[task.setvariable variable=BOTID;]$(BotName)"
     
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(VirtualAssistantBotName)'
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)'
     displayName: 'Test: VA - Get channel secrets'
 
   - template: ../../../../../yaml/functionalTestsStep.yml
@@ -142,15 +142,16 @@ jobs:
   variables:
     BotName: $(SkillBotName)
     BotType: "Skill"
-    BotLanguages: "en-us"
+    BotLanguages: $(BotLanguage)
     BotAppId: $(SkillBotAppId)
     BottAppPassword: $(SkillBotAppPassword)
     DependenciesPath: templates/typescript/samples/functionalTests/$(BotName)/package.json
     RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-    RegexReplace: '$1:$(PreviewVersion)'
+    RegexReplace: '$1:$(BotBuilderPackageVersion)'
     SolutionPath: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/'
     SolutionName: 'SkillSample.FunctionalTests.csproj'
-    WorkingDirectory: ''
+    WorkingDirectory: 'templates\typescript\samples\sample-skill'
+    FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests.sln'
   steps:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml
@@ -161,7 +162,7 @@ jobs:
   - task: FileTransform@1
     displayName: 'Prepare: Replace Skill manifest properties'
     inputs:
-      folderPath: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+      folderPath: 'templates/typescript/samples/functionalTests/$(BotName)'
       fileType: json
       targetFiles: |
        **/src/manifest/manifest-1.1.json
@@ -217,8 +218,7 @@ jobs:
      Write-Host "`r`n"
 
      echo "##vso[task.setvariable variable=BOTID;]$(SkillBotWebAppName)"
-
-    workingDirectory: 'templates/typescript/samples/functionalTests/$(SkillBotName)'
+    workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)'
     displayName: 'Test: Skill - Get channel secrets'
     failOnStderr: true
 

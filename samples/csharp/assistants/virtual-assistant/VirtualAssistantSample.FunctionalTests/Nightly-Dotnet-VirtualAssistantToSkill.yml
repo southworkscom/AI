@@ -7,27 +7,21 @@ pool:
 
 variables:
   system.debug: false
-  # Azure_Tenant: Tenant's value of your Azure directory
-  # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
   # BotBuilderPackageVersion: Version of the BotBuilder package
   # BuildConfiguration: Build configuration such as Debug or Release
   # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu
-  # endpoints.0.endpointUrl: Skill Manifest endpoint url
-  # endpoints.0.msAppId: Skill Manifest Microsoft App Id
-  # iconUrl: The icon for the bot REMOVE
-  # Location: Location of the bot
-  # LuisAuthoringKey: Your authoring key for LUIS apps REMOVE
-  # LuisAuthoringRegion: Location of the LUIS apps
-  # privacyUrl: Skill Manifest privacy url REMOVE
-  # ServicePrincipal: App Id of the Service Principal
-  # SkillBotAppId: Microsoft App Id of the Skill bot
-  # SkillBotAppPassword: Microsoft App Password of the Skill bot
-  # SkillBotName: Name of the Skill bot
-  # system.debug: System variable that can be set by the users. Set this to true to run the release in debug mode to assist in fault-finding.
   # VirtualAssistantBotAppId: Microsoft App Id of the Virtual Assistant bot
   # VirtualAssistantBotAppPassword: Microsoft App Password of the Virtual Assistant bot
   # VirtualAssistantBotName: Name of the Virtual Assistant bot
+  # SkillBotAppId: Microsoft App Id of the Skill bot
+  # SkillBotAppPassword: Microsoft App Password of the Skill bot
+  # SkillBotName: Name of the Skill bot
+  # endpoints.0.endpointUrl: Skill Manifest endpoint url
+  # endpoints.0.msAppId: Skill Manifest Microsoft App Id
+  # Location: Location of the bot
+  # LuisAuthoringRegion: Location of the LUIS apps
   # AzureSubscription: Name of your Azure Subscription
+  # BotLanguage: The supported language of your bot
 
 jobs:
 - job: VirtualAssistant
@@ -35,10 +29,10 @@ jobs:
   dependsOn: Skill
   variables:
     BotName: $(VirtualAssistantBotName)
-    BotLanguages: "en-us"
+    BotLanguages: $(BotLanguage)
     BotAppId: $(VirtualAssistantBotAppId)
     BottAppPassword: $(VirtualAssistantBotAppPassword)
-    SolutionPath: 'samples/csharp/assistants/virtual-assistant/'
+    SolutionPath: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.FunctionalTests/'
     SolutionName: 'VirtualAssistantSample.sln'
     DependenciesPath: 'samples/csharp/assistants/virtual-assistant/**/*.csproj'
     RegexSearch: '("Microsoft\.Bot\.(?!Solutions|Connector.DirectLine)\S+"\s)(Version="\S*")'
@@ -81,7 +75,7 @@ jobs:
     failOnStderr: true
 
   - pwsh: |
-     $skillManifestUrl = "https://$(SkillBotWebAppUrl)/manifest/manifest-1.1.json"
+     $skillManifestUrl = "https://$(SkillBotWebAppName)/manifest/manifest-1.1.json"
 
      Write-Host "Skill Manifest"
      Write-Host "===="
@@ -103,7 +97,7 @@ jobs:
       arguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site" /property:langversion=latest'
       workingDirectory: 'samples/csharp/assistants/virtual-assistant/'
 
-  - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(VirtualAssistantBotWebAppName)" -resourceGroup "$(VirtualAssistantBotResourceGroup)"'
+  - pwsh: '.\Deployment\Scripts\publish.ps1 -name "$(BotName)" -resourceGroup "$(BotName)"'
     errorActionPreference: continue
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: VA - Publish with connected Skill'
@@ -125,10 +119,10 @@ jobs:
 
      Write-Host "Bot name"
      Write-Host "===="
-     Write-Host "DirectLine Bot Name: $(VirtualAssistantBotWebAppName)"
+     Write-Host "DirectLine Bot Name: $(BotName)"
      Write-Host "`r`n"
 
-     echo "##vso[task.setvariable variable=BOTID;]$(VirtualAssistantBotWebAppName)"
+     echo "##vso[task.setvariable variable=BOTID;]$(BotName)"
 
     workingDirectory: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample/'
     displayName: 'Test: VA - Get channel secrets'
@@ -147,7 +141,7 @@ jobs:
   timeoutInMinutes: 0
   variables:
     BotName: $(SkillBotName)
-    BotLanguages: "en-us"
+    BotLanguages: $(BotLanguage)
     BotAppId: $(SkillBotAppId)
     BottAppPassword: $(SkillBotAppPassword)
     SolutionPath: 'samples/csharp/skill/'
