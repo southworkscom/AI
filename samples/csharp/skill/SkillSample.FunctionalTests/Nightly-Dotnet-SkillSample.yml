@@ -36,12 +36,12 @@ jobs:
   steps:
   - template: ../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../yaml/useNodeStep.yml
-  - template: ../../../../../yaml/useNugetStep.yml
-  - template: ../../../../yaml/npmInstallRequirements.yml
-  - template: ../../../../yaml/dotnetLogVersions.yml
-  - template: ../../../../yaml/setConfigFileSteps.yml
-  - template: ../../../../yaml/dotnetBuildSteps.yml
-  - template: ../../../../yaml/deploySteps.yml
+  - template: ../../../../yaml/useNugetStep.yml
+  - template: ../../../../yaml/npmInstallRequirementsStep.yml
+  - template: ../../../../yaml/dotnetLogVersionsStep.yml
+  - template: ../../../../yaml/setConfigFileStep.yml
+  - template: ../../../../yaml/dotnetBuildStep.yml
+  - template: ../../../../yaml/deployStep.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -61,7 +61,7 @@ jobs:
     displayName: 'Deploy: Get bot variables from appsettings'
     failOnStderr: true
 
-  - template: ../../../../yaml/setDirectLineSteps.yml
+  - template: ../../../../yaml/setDirectLineStep.yml
 
   - powershell: |
      $botName = "$(BOTWEBAPPNAME)"

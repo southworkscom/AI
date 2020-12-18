@@ -43,11 +43,11 @@ jobs:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml
   - template: ../../../../../yaml/useNugetStep.yml
-  - template: ../../../../../yaml/npmInstallRequirements.yml
-  - template: ../../../../../yaml/dotnetLogVersions.yml
-  - template: ../../../../../yaml/setConfigFileSteps.yml
-  - template: ../../../../../yaml/dotnetBuildSteps.yml
-  - template: ../../../../../yaml/deploySteps.yml
+  - template: ../../../../../yaml/npmInstallRequirementsStep.yml
+  - template: ../../../../../yaml/dotnetLogVersionsStep.yml
+  - template: ../../../../../yaml/setConfigFileStep.yml
+  - template: ../../../../../yaml/dotnetBuildStep.yml
+  - template: ../../../../../yaml/deployStep.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -100,7 +100,7 @@ jobs:
     displayName: 'Test: VA - Publish with connected Skill'
     failOnStderr: true
 
-  - template: ../../../../../yaml/setDirectLineSteps.yml
+  - template: ../../../../../yaml/setDirectLineStep.yml
 
   - powershell: |
      $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
@@ -152,9 +152,9 @@ jobs:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml
   - template: ../../../../../yaml/useNugetStep.yml
-  - template: ../../../../../yaml/npmInstallRequirements.yml
-  - template: ../../../../../yaml/dotnetLogVersions.yml
-  - template: ../../../../../yaml/setConfigFileSteps.yml
+  - template: ../../../../../yaml/npmInstallRequirementsStep.yml
+  - template: ../../../../../yaml/dotnetLogVersionsStep.yml
+  - template: ../../../../../yaml/setConfigFileStep.yml
 
   - task: FileTransform@1
     displayName: 'Prepare: Replace Skill manifest properties'
@@ -165,8 +165,8 @@ jobs:
        **/wwwroot/manifest/manifest-1.1.json
        **/wwwroot/manifest/manifest-1.0.json
 
-  - template: ../../../../../yaml/dotnetBuildSteps.yml
-  - template: ../../../../../yaml/deploySteps.yml
+  - template: ../../../../../yaml/dotnetBuildStep.yml
+  - template: ../../../../../yaml/deployStep.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -195,7 +195,7 @@ jobs:
     displayName: 'Deploy: Skill - Get variables from appsettings'
     failOnStderr: true
 
-  - template: ../../../../../yaml/setDirectLineSteps.yml
+  - template: ../../../../../yaml/setDirectLineStep.yml
 
   - powershell: |
      $json = Get-Content "DirectLineCreate.json" | Out-String | ConvertFrom-Json
