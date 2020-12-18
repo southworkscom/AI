@@ -14,7 +14,7 @@ variables:
   # AppId: Microsoft App Id of the bot
   # AppPassword: Microsoft App Password of the bot
   # AzureSubscription: Name of your Azure Subscription
-  # BotLanguage: The supported language of your bot
+  # BotLanguages: The supported languages of your bot
   # BotName: Name of the bot
   # Location: Location of the bot
   # LuisAuthoringRegion: Location of the LUIS apps
@@ -25,7 +25,7 @@ jobs:
   variables:
     BotAppId: $(AppId)
     BottAppPassword: $(AppPassword)
-    BotLanguages: $(BotLanguage)
+    BotLanguages: $(BotLanguages)
     DependenciesPath: 'samples/csharp/skill/**/*.csproj'
     FunctionalTestProject: 'samples/csharp/skill/SkillSample.sln'
     RegexReplace: '$1$(BotBuilderPackageVersion)'

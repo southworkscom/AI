@@ -11,7 +11,7 @@ variables:
   # BuildConfiguration: Build configuration such as Debug or Release
   # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu
   # AzureSubscription: Name of your Azure Subscription
-  # BotLanguage: The supported language of your bot
+  # BotLanguages: The supported languages of your bot
   # endpoints.0.endpointUrl: Skill Manifest endpoint url
   # endpoints.0.msAppId: Skill Manifest Microsoft App Id
   # Location: Location of the bot
@@ -30,7 +30,7 @@ jobs:
   variables:
     BotAppId: $(VirtualAssistantBotAppId)
     BottAppPassword: $(VirtualAssistantBotAppPassword)
-    BotLanguages: $(BotLanguage)
+    BotLanguages: $(BotLanguages)
     BotName: $(VirtualAssistantBotName)
     DependenciesPath: 'samples/csharp/assistants/virtual-assistant/**/*.csproj'
     FunctionalTestProject: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
@@ -139,7 +139,7 @@ jobs:
   variables:
     BotAppId: $(SkillBotAppId)
     BottAppPassword: $(SkillBotAppPassword)
-    BotLanguages: $(BotLanguage)
+    BotLanguages: $(BotLanguages)
     BotName: $(SkillBotName)
     DependenciesPath: 'samples/csharp/skill/**/*.csproj'
     FunctionalTestProject: 'samples/csharp/skill/SkillSample.sln'

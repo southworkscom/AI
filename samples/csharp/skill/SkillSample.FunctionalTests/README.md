@@ -27,7 +27,7 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 |      | Location | Location of the bot |
 |      | LuisAuthoringRegion | Location of the LUIS apps |
 |      | AzureSubscription | The name of your Azure Subscription |
-|      | BotLanguage | The supported language of your bot |
+|      | BotLanguages | The supported languages of your bot |
 
 
 Last but not least, as the `Azure Subscription` is related to the container where the resources are created, it should be replaced with your Agent pool.

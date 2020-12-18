@@ -25,7 +25,7 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 | Bot Variable | AppId | Microsoft App Id of the bot |
 |      | AppPassword | Microsoft App Password of the bot |
 |      | AzureSubscription | The name of your Azure Subscription |
-|      | BotLanguage | The supported language of your bot |
+|      | BotLanguages | The supported languages of your bot |
 |      | BotName | Name of the bot |
 |      | Location | Location of the bot |
 |      | LuisAuthoringRegion | Location of the LUIS apps |

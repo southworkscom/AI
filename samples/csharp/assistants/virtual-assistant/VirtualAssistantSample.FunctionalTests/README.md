@@ -23,7 +23,7 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 |      | BuildPlatform | Build platform such as Win32, x86, x64 or any cpu |
 |      | system.debug | System variable that can be set by the user. Set this to true to run the release in [debug](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/variables?view=azure-devops&tabs=batch#debug-mode) mode to assist in fault-finding |
 | Bot Variable | AzureSubscription | The name of your Azure Subscription |
-|      | BotLanguage | The supported language of your bot |
+|      | BotLanguages | The supported languages of your bot |
 |      | endpoints.0.endpointUrl | Skill Manifest endpoint url |
 |      | endpoints.0.msAppId | Skill Manifest Microsoft App Id |
 |      | Location | Location of the bot |
