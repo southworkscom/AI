@@ -38,6 +38,7 @@ jobs:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml
   - template: ../../../../../yaml/npmInstallRequirementsStep.yml
+  - template: ../../../../../yaml/yeomanInstallationStep.yml
   - template: ../../../../../yaml/yoCreateBotStep.yml
   - template: ../../../../../yaml/setConfigFileStep.yml
   - template: ../../../../../yaml/nodeLogVersionsStep.yml
