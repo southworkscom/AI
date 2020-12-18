@@ -44,7 +44,7 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Build: Restore dependencies
 1. Prepare: Build project
 1. Test: Execute unit tests
-1. Deploy: Skill
+1. Deploy: Run deploy script
 1. Deploy: Get bot variables from appsettings
 1. Deploy: Create Direct Line channel registration
 1. Deploy: Get channel secrets

@@ -57,7 +57,7 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Build: Publish Code Coverage
 1. Prepare: Build project
 1. Test: Execute unit tests
-1. Deploy
+1. Deploy: Run deploy script
 1. Deploy: VA - Get variables from appsettings
 1. Test: VA - Connect SkillSample
 1. Build: VA - Build project
@@ -87,7 +87,7 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Build: Publish Code Coverage
 1. Prepare: Build project
 1. Test: Execute unit tests
-1. Deploy
+1. Deploy: Run deploy script
 1. Deploy: Skill - Get variables from appsettings
 1. Test: Create Direct Line registration
 1. Test: Skill - Get channel secrets
