@@ -1,5 +1,5 @@
 ﻿# Functional Tests for C# Skill
-Follow these [steps](https://microsoft.github.io/botframework-solutions/solution-accelerators/tutorials/enable-continuous-integration/csharp/4-configure-build-steps/) to configure the functional tests using the `SkillSample.yml`.
+Follow these [steps](https://microsoft.github.io/botframework-solutions/solution-accelerators/tutorials/enable-continuous-integration/csharp/4-configure-build-steps/) to configure the functional tests using the `Nightly-Dotnet-SkillSample.yml`.
 
 Currently, adding this YAML in your Azure DevOps organization enables you to **validate** the following scenarios using the last preview version of the packages from the daily builds:
 - Use of [dispatch](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/botdispatch) and [botskills](https://botbuilder.myget.org/feed/aitemplates/package/npm/botskills)
@@ -31,6 +31,8 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 
 
 Last but not least, as the `Azure Subscription` is related to the container where the resources are created, it should be replaced with your Agent pool.
+
+> **Note**: system.debug, BuildPlatform and BuildConfiguration variables should be configured checking the "Let users override this value when running this pipeline" option.
 
 ## Steps contained in the YAML
 1. Prepare: Clean up resources

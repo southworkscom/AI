@@ -46,7 +46,6 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Prepare: Use NuGet 4.9.1
 1. Prepare: Install preview dispatch
 1. Prepare: Install preview botframework-cli
-1. Prepare: Install yeoman, generator-bot-virtualassistant
 1. Prepare: Install preview botskills
 1. Prepare: Get CLI and SDK versions
 1. Prepare: Update SDK to latest preview version
@@ -64,6 +63,7 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Debug: Show log contents
 1. Debug: dir workspace
 
+> **Note:** The Virtual Assistant job depends of the Skill job.
 
 **Skill Job:**
 1. Prepare: Delete preexisting resources
@@ -71,7 +71,6 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Prepare: Use NuGet 4.9.1
 1. Prepare: Install preview dispatch
 1. Prepare: Install preview botframework-cli
-1. Prepare: Install yeoman, generator-bot-virtualassistant
 1. Prepare: Install preview botskills
 1. Prepare: Get CLI and SDK versions
 1. Prepare: Update SDK to latest preview version
@@ -85,8 +84,6 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Test: Execute functional tests
 1. Prepare: Delete preexisting resources
 1. Debug: Show log contents
-
-> **NOTE:** The Virtual Assistant job depends of the Skill job.
 
 ## Further Reading
 - [What is Azure Pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/what-is-azure-pipelines?view=azure-devops)

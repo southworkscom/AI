@@ -1,5 +1,5 @@
 ﻿# Functional Tests for TypeScript Skill
-Follow these [steps](https://microsoft.github.io/botframework-solutions/solution-accelerators/tutorials/enable-continuous-integration/typescript/3-configure-build-steps/) to configure the functional tests using the `sample-skill.yml`.
+Follow these [steps](https://microsoft.github.io/botframework-solutions/solution-accelerators/tutorials/enable-continuous-integration/typescript/3-configure-build-steps/) to configure the functional tests using the `Nightly-TypeScript-SkillSample.yml`.
 
 Currently, adding this YAML in your Azure DevOps organization enables you to **validate** the following scenarios using the last preview version of the packages from the daily builds:
 - Use of [dispatch](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/botdispatch) and [botskills](https://botbuilder.myget.org/feed/aitemplates/package/npm/botskills)
@@ -32,29 +32,32 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 
 Last but not least, as the `Azure Subscription` is related to the container where the resources are created, it should be replaced with your Agent pool.
 
+> **Note**: system.debug, BuildPlatform and BuildConfiguration variables should be configured checking the "Let users override this value when running this pipeline" option.
+
 ## Steps contained in the YAML
-1. Prepare: Clean up resources
+1. Prepare: Delete preexisting resources
 1. Prepare: Use Node 10.16.3
-1. Prepare: Install preview dispatch and botskills
+1. Prepare: Install preview dispatch
 1. Prepare: Install preview botframework-cli
+1. Prepare: Install preview botskills
 1. Prepare: Install yeoman, generator-bot-virtualassistant
-1. Prepare: Create a Skill using the generator
+1. Prepare: Create bots using the generator
 1. Prepare: Update SDK to latest preview version
-1. Prepare: Log CLI and BF SDK Versions to highlight what is being used copy
+1. Prepare: Get CLI and SDK versions
 1. Build: Run npm install
 1. Build: Run npm build
 1. Build: Run npm test
 1. Build: Run npm test on unit tests with code coverage
 1. Build: Publish Test Results
 1. Build: Publish Code Coverage
-1. Prepare: Build project
-1. Test: Execute unit tests
 1. Deploy: Run deploy script
 1. Deploy: Get bot variables from appsettings
-1. Deploy: Create Direct Line channel registration
+1. Test: Create Direct Line registration
+1. Deploy: Get channel secrets
+1. Test: Execute functional tests
 1. Deploy: Get channel secrets
 1. Test: Run dotnet test on functional tests
-1. Cleanup: Delete bot resources
+1. Prepare: Delete preexisting resources
 1. Debug: Show log contents
 1. Debug: dir workspace
 

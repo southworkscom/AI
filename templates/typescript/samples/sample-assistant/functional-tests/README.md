@@ -5,7 +5,7 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 - Use of [dispatch](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/botdispatch) and [botskills](https://botbuilder.myget.org/feed/aitemplates/package/npm/botskills)
 - Use of [@microsoft/botframework-cli](https://botbuilder.myget.org/feed/botframework-cli/package/npm/@microsoft/botframework-cli)
 - Use of [SDK](https://botbuilder.myget.org/gallery/botbuilder-v4-js-daily) incorporated in the TypeScript Virtual Assistant
-- Use of [generator-bot-virtualassistant & generator-bot-virtualassistant:skill](https://botbuilder.myget.org/feed/aitemplates/package/npm/generator-bot-virtualassistant)
+- Use of [generator-bot-virtualassistant](https://botbuilder.myget.org/feed/aitemplates/package/npm/generator-bot-virtualassistant)
 - Deployment of the TypeScript Virtual Assistant and TypeScript Skill
 - Communication with the TypeScript Virtual Assistant and TypeScript Skill
 - Connect Virtual Assistant with a Skill, both in TypeScript
@@ -38,6 +38,8 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 
 Last but not least, as the `Azure Subscription` is related to the container where the resources are created, it should be replaced with your Agent pool.
 
+> **Note**: system.debug, BuildPlatform and BuildConfiguration variables should be configured checking the "Let users override this value when running this pipeline" option.
+
 ## Steps contained in the YAML
 **Virtual Assistant Job:**
 1. Prepare: Delete preexisting resources
@@ -69,6 +71,8 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Debug: Show log contents
 1. Debug: dir workspace
 
+> **Note:** The Virtual Assistant job depends of the Skill job.
+
 **Skill Job:**
 1. Prepare: Delete preexisting resources
 1. Prepare: Use Node 10.16.3
@@ -94,8 +98,6 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Test: Execute functional tests
 1. Prepare: Delete preexisting resources
 1. Debug: Show log contents
-
-> **NOTE:** The Virtual Assistant job depends of the Skill job.
 
 ## Further Reading
 - [What is Azure Pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/what-is-azure-pipelines?view=azure-devops)
