@@ -36,10 +36,7 @@ jobs:
   steps:
   - template: ../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../yaml/useNodeStep.yml
-
-  - task: NuGetToolInstaller@1
-    displayName: 'Prepare: Use NuGet 4.9.1'
-
+  - template: ../../../../../yaml/useNugetStep.yml
   - template: ../../../../yaml/npmInstallRequirements.yml
   - template: ../../../../yaml/dotnetLogVersions.yml
   - template: ../../../../yaml/setConfigFileSteps.yml
