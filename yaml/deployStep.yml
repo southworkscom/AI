@@ -1,5 +1,5 @@
   - task: AzureCLI@2
-    displayName: 'Deploy'
+    displayName: 'Deploy: Run deploy script'
     inputs:
       azureSubscription: $(AzureSubscription)
       scriptType: pscore

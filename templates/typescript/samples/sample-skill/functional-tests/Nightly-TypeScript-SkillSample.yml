@@ -7,59 +7,43 @@ pool:
 
 variables:
   system.debug: false
-  # system.debug: System variable that can be set by the users. Set this to true to run the release in debug mode to assist in fault-finding.
+  # BotBuilderPackageVersion: Version of the BotBuilder package
   # BuildConfiguration: Build configuration such as Debug or Release.
   # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu.
+  # system.debug: System variable that can be set by the users. Set this to true to run the release in debug mode to assist in fault-finding.
   # AppId: Microsoft App Id of the bot
   # AppPassword: Microsoft App Password of the bot
+  # AzureSubscription: Name of your Azure Subscription
+  # BotLanguages: The supported languages of your bot
   # BotName: Name of the bot
   # Location: Location of the bot
   # LuisAuthoringRegion: Location of the LUIS apps
-  # PreviewVersion: Version of the SDK's packages that the bot will use
-  # ServicePrincipal: App Id of the Service Principal
-  # Azure_Tenant: Tenant's value of your Azure directory
-  # AzureDevOps-ServicePrincipal-Secret: Secret of the Service Principal
-  # AzureSubscription: Name of your Azure Subscription
 
 jobs:
-- job: Skill
+- job: Main
   timeoutInMinutes: 0
   variables:
-    BotType: "Skill"
-    BotLanguages: "en-us,es-es,it-it,fr-fr,de-de,zh-cn"
     BotAppId: $(AppId)
-    BottAppPassword: $(AppPassword)
+    BotAppPassword: $(AppPassword)
+    BotLanguages: $(BotLanguages)
+    BotType: "Skill"
     DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
+    FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests.sln'
+    RegexReplace: '$1:$(BotBuilderPackageVersion)'
     RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-    RegexReplace: '$1:$(PreviewVersion)'
-    FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/SkillSample.FunctionalTests.csproj'
-    WorkingDirectory: ''
+    SolutionName: 'SkillSample.FunctionalTests.csproj'
+    SolutionPath: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/'
+    WorkingDirectory: 'templates\typescript\samples\sample-skill/'
   steps:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml
-
-  - pwsh: |
-     # Install botbuilder tools off MyGet
-     npm config set registry https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/
-
-     npm i -g botdispatch luis-apis botskills
-    displayName: 'Prepare: Install preview dispatch, luis-apis, botskills'
-    failOnStderr: true
-
-  - pwsh: |
-     # Install generator-bot-virtualassistant from MyGet
-     npm config set registry https://botbuilder.myget.org/F/aitemplates/npm/
-
-     npm install -g yo generator-bot-virtualassistant
-
-    displayName: 'Prepare: Install yeoman, generator-bot-virtualassistant'
-    failOnStderr: true
-
+  - template: ../../../../../yaml/npmInstallRequirementsStep.yml
+  - template: ../../../../../yaml/yeomanInstallationStep.yml
   - template: ../../../../../yaml/yoCreateBotStep.yml
-  - template: ../../../../../yaml/setConfigFileSteps.yml
-  - template: ../../../../../yaml/nodeLogVersions.yml
-  - template: ../../../../../yaml/nodeBuildSteps.yml
-  - template: ../../../../../yaml/deploySteps.yml
+  - template: ../../../../../yaml/setConfigFileStep.yml
+  - template: ../../../../../yaml/nodeLogVersionsStep.yml
+  - template: ../../../../../yaml/nodeBuildStep.yml
+  - template: ../../../../../yaml/deployStep.yml
 
   - pwsh: |
      $appsettings = Get-Content -Path "appsettings.json" | Out-String | ConvertFrom-Json
@@ -74,11 +58,12 @@ jobs:
 
      Write-Host $resourceGroupName
      echo "##vso[task.setvariable variable=BOTRESOURCEGROUP;]$resourceGroupName"
+
     workingDirectory: 'templates/typescript/samples/functionalTests/$(BotName)/src'
     displayName: 'Deploy: Get bot variables from appsettings'
     failOnStderr: true
 
-  - template: ../../../../../yaml/setDirectLineSteps.yml
+  - template: ../../../../yaml/setDirectLineStep.yml
 
   - powershell: |
      $botName = "$(BOTWEBAPPNAME)"
@@ -95,11 +80,9 @@ jobs:
     displayName: 'Deploy: Get channel secrets'
     failOnStderr: true
 
-  - template: ../../../../../yaml/functionalTestsStep.yml
-
-  - template: ../../../../../yaml/cleanupResourcesStep.yml
-
-  - template: ../../../../../yaml/endLogStep.yml
+  - template: ../../../../yaml/functionalTestsStep.yml
+  - template: ../../../../yaml/cleanupResourcesStep.yml
+  - template: ../../../../yaml/endLogStep.yml
 
   - script: 'dir ..\*.* /s'
     displayName: 'Debug: dir workspace'
