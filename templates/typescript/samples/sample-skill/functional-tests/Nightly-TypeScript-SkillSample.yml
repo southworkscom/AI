@@ -7,33 +7,33 @@ pool:
 
 variables:
   system.debug: false
-  # system.debug: System variable that can be set by the users. Set this to true to run the release in debug mode to assist in fault-finding.
-  # BuildConfiguration: Build configuration such as Debug or Release.
   # BotBuilderPackageVersion: Version of the BotBuilder package
+  # BuildConfiguration: Build configuration such as Debug or Release.
   # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu.
+  # system.debug: System variable that can be set by the users. Set this to true to run the release in debug mode to assist in fault-finding.
   # AppId: Microsoft App Id of the bot
   # AppPassword: Microsoft App Password of the bot
+  # AzureSubscription: Name of your Azure Subscription
+  # BotLanguage: The supported language of your bot
   # BotName: Name of the bot
   # Location: Location of the bot
   # LuisAuthoringRegion: Location of the LUIS apps
-  # AzureSubscription: Name of your Azure Subscription
-  # BotLanguage: The supported language of your bot
 
 jobs:
 - job: Main
   timeoutInMinutes: 0
   variables:
-    BotLanguages: $(BotLanguage)
     BotAppId: $(AppId)
-    BottAppPassword: $(AppPassword)
-    SolutionPath: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/'
-    SolutionName: 'SkillSample.FunctionalTests.csproj'
-    DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
-    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-    RegexReplace: '$1:$(BotBuilderPackageVersion)'
-    FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests.sln'
-    WorkingDirectory: 'templates\typescript\samples\sample-skill/'
+    BotAppPassword: $(AppPassword)
+    BotLanguages: $(BotLanguage)
     BotType: "Skill"
+    DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
+    FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests.sln'
+    RegexReplace: '$1:$(BotBuilderPackageVersion)'
+    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
+    SolutionName: 'SkillSample.FunctionalTests.csproj'
+    SolutionPath: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/'
+    WorkingDirectory: 'templates\typescript\samples\sample-skill/'
   steps:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml

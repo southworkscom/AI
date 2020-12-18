@@ -18,17 +18,17 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 
 | Type | Variable | Description |
 |------|----------|-------------|
-| Azure Variable | system.debug | System variable that can be set by the user. Set this to true to run the release in [debug](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/variables?view=azure-devops&tabs=batch#debug-mode) mode to assist in fault-finding |
+| Azure Variable | BotBuilderPackageVersion | Version of the BotBuilder package|
 |      | BuildConfiguration | Build configuration such as Debug or Release |
-|      | BotBuilderPackageVersion | Version of the BotBuilder package|
 |      | BuildPlatform | Build platform such as Win32, x86, x64 or any cpu |
+|      | system.debug | System variable that can be set by the user. Set this to true to run the release in [debug](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/variables?view=azure-devops&tabs=batch#debug-mode) mode to assist in fault-finding |
 | Bot Variable | AppId | Microsoft App Id of the bot |
 |      | AppPassword | Microsoft App Password of the bot |
+|      | AzureSubscription | The name of your Azure Subscription |
+|      | BotLanguage | The supported language of your bot |
 |      | BotName | Name of the bot |
 |      | Location | Location of the bot |
 |      | LuisAuthoringRegion | Location of the LUIS apps |
-|      | AzureSubscription | The name of your Azure Subscription |
-|      | BotLanguage | The supported language of your bot |
 
 Last but not least, as the `Azure Subscription` is related to the container where the resources are created, it should be replaced with your Agent pool.
 
