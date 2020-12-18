@@ -2,7 +2,7 @@
 Follow these [steps](https://microsoft.github.io/botframework-solutions/solution-accelerators/tutorials/enable-continuous-integration/typescript/3-configure-build-steps/) to configure the functional tests using the `Nightly-TypeScript-VirtualAssistantToSkill.yml`.
 
 Currently, adding this YAML in your Azure DevOps organization enables you to **validate** the following scenarios using the last preview version of the packages from the daily builds:
-- Use of [dispatch](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/botdispatch), [luis-apis](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/luis-apis) and [botskills](https://botbuilder.myget.org/feed/aitemplates/package/npm/botskills)
+- Use of [dispatch](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/botdispatch) and [botskills](https://botbuilder.myget.org/feed/aitemplates/package/npm/botskills)
 - Use of [@microsoft/botframework-cli](https://botbuilder.myget.org/feed/botframework-cli/package/npm/@microsoft/botframework-cli)
 - Use of [SDK](https://botbuilder.myget.org/gallery/botbuilder-v4-js-daily) incorporated in the TypeScript Virtual Assistant
 - Use of [generator-bot-virtualassistant & generator-bot-virtualassistant:skill](https://botbuilder.myget.org/feed/aitemplates/package/npm/generator-bot-virtualassistant)
@@ -46,7 +46,7 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 **Virtual Assistant Job:**
 1. Prepare: Delete preexisting resources
 1. Prepare: Use Node 10.16.3
-1. Prepare: Install preview dispatch, luis-apis
+1. Prepare: Install preview dispatch
 1. Prepare: Install preview botframework-cli
 1. Prepare: Prepare: Install yeoman, generator-bot-virtualassistant
 1. Prepare: Install preview botskills
@@ -76,7 +76,7 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 **Skill Job:**
 1. Prepare: Delete preexisting resources
 1. Prepare: Use Node 10.16.3
-1. Prepare: Install preview dispatch, luis-apis
+1. Prepare: Install preview dispatch
 1. Prepare: Install preview botframework-cli
 1. Prepare: Install yeoman, generator-bot-virtualassistant
 1. Prepare: Install preview botskills

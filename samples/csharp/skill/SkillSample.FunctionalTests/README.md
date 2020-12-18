@@ -2,7 +2,7 @@
 Follow these [steps](https://microsoft.github.io/botframework-solutions/solution-accelerators/tutorials/enable-continuous-integration/csharp/4-configure-build-steps/) to configure the functional tests using the `SkillSample.yml`.
 
 Currently, adding this YAML in your Azure DevOps organization enables you to **validate** the following scenarios using the last preview version of the packages from the daily builds:
-- Use of [dispatch](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/botdispatch), [luis-apis](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/luis-apis) and [botskills](https://botbuilder.myget.org/feed/aitemplates/package/npm/botskills)
+- Use of [dispatch](https://botbuilder.myget.org/feed/botbuilder-tools-daily/package/npm/botdispatch) and [botskills](https://botbuilder.myget.org/feed/aitemplates/package/npm/botskills)
 - Use of [@microsoft/botframework-cli](https://botbuilder.myget.org/feed/botframework-cli/package/npm/@microsoft/botframework-cli)
 - Use of [SDK](https://botbuilder.myget.org/gallery/botbuilder-v4-dotnet-daily) incorporated in the C# Skill
 - Deployment of the C# Skill
@@ -40,7 +40,7 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Prepare: Use Node 10.16.3
 1. Prepare: Use NuGet 4.9.1
 1. Prepare: Delete test resource group if it exists
-1. Prepare: Install preview dispatch, luis-apis, botskills
+1. Prepare: Install preview dispatch and botskills
 1. Prepare: Install preview botframework-cli
 1. Prepare: Get CLI and SDK versions
 1. Prepare: Replace BotBuilder version in .csproj file
