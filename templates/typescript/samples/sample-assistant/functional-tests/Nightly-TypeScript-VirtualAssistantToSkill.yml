@@ -10,36 +10,36 @@ variables:
   # BotBuilderPackageVersion: Version of the BotBuilder package
   # BuildConfiguration: Build configuration such as Debug or Release
   # BuildPlatform: Build platform such as Win32, x86, x64 or any cpu
-  # VirtualAssistantBotAppId: Microsoft App Id of the Virtual Assistant bot
-  # VirtualAssistantBotAppPassword: Microsoft App Password of the Virtual Assistant bot
-  # VirtualAssistantBotName: Name of the Virtual Assistant bot
-  # SkillBotAppId: Microsoft App Id of the Skill bot
-  # SkillBotAppPassword: Microsoft App Password of the Skill bot
-  # SkillBotName: Name of the Skill bot
+  # AzureSubscription: Name of your Azure Subscription
+  # BotLanguage: The supported language of your bot
   # endpoints.0.endpointUrl: Skill Manifest endpoint url
   # endpoints.0.msAppId: Skill Manifest Microsoft App Id
   # Location: Location of the bot
   # LuisAuthoringRegion: Location of the LUIS apps
-  # AzureSubscription: Name of your Azure Subscription
-  # BotLanguage: The supported language of your bot
+  # SkillBotAppId: Microsoft App Id of the Skill bot
+  # SkillBotAppPassword: Microsoft App Password of the Skill bot
+  # SkillBotName: Name of the Skill bot
+  # VirtualAssistantBotAppId: Microsoft App Id of the Virtual Assistant bot
+  # VirtualAssistantBotAppPassword: Microsoft App Password of the Virtual Assistant bot
+  # VirtualAssistantBotName: Name of the Virtual Assistant bot
 
 jobs:
 - job: VirtualAssistant
   timeoutInMinutes: 0
   dependsOn: Skill
   variables:
+    BotAppId: $(VirtualAssistantBotAppId)
+    BotLanguages: $(BotLanguage)
     BotName: $(VirtualAssistantBotName)
     BotType: "Assistant"
-    BotLanguages: $(BotLanguage)
-    BotAppId: $(VirtualAssistantBotAppId)
     BottAppPassword: $(VirtualAssistantBotAppPassword)
+    DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
+    FunctionalTestProject: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests.sln'
+    RegexReplace: '$1:$(BotBuilderPackageVersion)'
+    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
     SolutionPath: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests/'
     SolutionName: 'VirtualAssistantSample.FunctionalTests.csproj'
-    DependenciesPath: 'templates/typescript/samples/functionalTests/$(BotName)/package.json'
-    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-    RegexReplace: '$1:$(BotBuilderPackageVersion)'
-    WorkingDirectory: 'templates\typescript\samples\sample-assistant'
-    FunctionalTestProject: 'templates/typescript/samples/sample-assistant/functional-tests/VirtualAssistantSample.FunctionalTests.sln'
+    WorkingDirectory: 'templates\typescript\samples\sample-assistant'    
   steps:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml
@@ -141,18 +141,18 @@ jobs:
 - job: Skill
   timeoutInMinutes: 0
   variables:
-    BotName: $(SkillBotName)
-    BotType: "Skill"
-    BotLanguages: $(BotLanguage)
     BotAppId: $(SkillBotAppId)
     BottAppPassword: $(SkillBotAppPassword)
+    BotLanguages: $(BotLanguage)
+    BotName: $(SkillBotName)
+    BotType: "Skill"
     DependenciesPath: templates/typescript/samples/functionalTests/$(BotName)/package.json
-    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
-    RegexReplace: '$1:$(BotBuilderPackageVersion)'
-    SolutionPath: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/'
-    SolutionName: 'SkillSample.FunctionalTests.csproj'
-    WorkingDirectory: 'templates\typescript\samples\sample-skill'
     FunctionalTestProject: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests.sln'
+    RegexReplace: '$1:$(BotBuilderPackageVersion)'
+    RegexSearch: '("(\bbotbuilder[^:]*(?:-[^:]*)?)|"(\bbotframework(?:-[^:]*))):\s(".*")'
+    SolutionName: 'SkillSample.FunctionalTests.csproj'
+    SolutionPath: 'templates/typescript/samples/sample-skill/functional-tests/SkillSample.FunctionalTests/'
+    WorkingDirectory: 'templates\typescript\samples\sample-skill'
   steps:
   - template: ../../../../../yaml/cleanupResourcesStep.yml
   - template: ../../../../../yaml/useNodeStep.yml

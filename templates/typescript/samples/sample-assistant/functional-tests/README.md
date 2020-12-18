@@ -19,22 +19,22 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 
 | Type | Variable | Description |
 |------|----------|-------------|
-| Azure Variable | system.debug | System variable that can be set by the user. Set this to true to run the release in [debug](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/variables?view=azure-devops&tabs=batch#debug-mode) mode to assist in fault-finding |
-|      | BotBuilderPackageVersion | Version of the BotBuilder package |
+| Azure Variable | BotBuilderPackageVersion | Version of the BotBuilder package |
 |      | BuildConfiguration | Build configuration such as Debug or Release |
 |      | BuildPlatform | Build platform such as Win32, x86, x64 or any cpu |
-| Bot Variable | VirtualAssistantBotAppId | Microsoft App Id of the Virtual Assistant bot |
-|      | VirtualAssistantBotAppPassword | Microsoft App Password of the Virtual Assistant bot |
-|      | VirtualAssistantBotName | Name of the Virtual Assistant bot |
-|      | SkillBotAppId | Microsoft App Id of the Skill bot |
-|      | SkillBotAppPassword | Microsoft App Password of the Skill bot |
-|      | SkillBotName | Name of the Skill bot |
+|      | system.debug | System variable that can be set by the user. Set this to true to run the release in [debug](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/variables?view=azure-devops&tabs=batch#debug-mode) mode to assist in fault-finding |
+| Bot Variable | AzureSubscription | The name of your Azure Subscription |
+|      | BotLanguage | The supported language of your bot |
 |      | endpoints.0.endpointUrl | Skill Manifest endpoint url |
 |      | endpoints.0.msAppId | Skill Manifest Microsoft App Id |
 |      | Location | Location of the bot |
 |      | LuisAuthoringRegion | Location of the LUIS apps |
-|      | AzureSubscription | The name of your Azure Subscription |
-|      | BotLanguage | The supported language of your bot |
+|      | SkillBotAppId | Microsoft App Id of the Skill bot |
+|      | SkillBotAppPassword | Microsoft App Password of the Skill bot |
+|      | SkillBotName | Name of the Skill bot |
+|      | VirtualAssistantBotAppId | Microsoft App Id of the Virtual Assistant bot |
+|      | VirtualAssistantBotAppPassword | Microsoft App Password of the Virtual Assistant bot |
+|      | VirtualAssistantBotName | Name of the Virtual Assistant bot |
 
 Last but not least, as the `Azure Subscription` is related to the container where the resources are created, it should be replaced with your Agent pool.
 
