@@ -42,8 +42,8 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Prepare: Get CLI and SDK versions
 1. Prepare: Replace BotBuilder version in .csproj file
 1. Build: Restore dependencies
-1. Build: Build project
-1. Build: Execute unit tests
+1. Prepare: Build project
+1. Test: Execute unit tests
 1. Deploy: Skill
 1. Deploy: Get bot variables from appsettings
 1. Deploy: Create Direct Line channel registration

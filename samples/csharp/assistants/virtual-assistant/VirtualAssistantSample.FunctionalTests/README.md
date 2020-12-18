@@ -50,8 +50,8 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Prepare: Install preview botskills
 1. Prepare: Get CLI and SDK versions
 1. Prepare: Update SDK to latest preview version
-1. Dotnet Build
-1. Dotnet Test
+1. Prepare: Build project
+1. Test: Execute unit tests
 1. Deploy
 1. Deploy: VA - Get variables from appsettings
 1. Test: VA - Connect SkillSample
@@ -76,8 +76,8 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Prepare: Get CLI and SDK versions
 1. Prepare: Update SDK to latest preview version
 1. Prepare: Replace Skill manifest properties
-1. Dotnet Build
-1. Dotnet Test
+1. Prepare: Build project
+1. Test: Execute unit tests
 1. Deploy
 1. Deploy: Skill - Get variables from appsettings
 1. Test: Create Direct Line registration

@@ -47,13 +47,12 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Build: Run npm test on unit tests with code coverage
 1. Build: Publish Test Results
 1. Build: Publish Code Coverage
-1. Deploy: Delete test resource group if it exists
+1. Prepare: Build project
+1. Test: Execute unit tests
 1. Deploy: Run deploy script
 1. Deploy: Get bot variables from appsettings
 1. Deploy: Create Direct Line channel registration
 1. Deploy: Get channel secrets
-1. Test: Run dotnet restore
-1. Test: Run dotnet build
 1. Test: Run dotnet test on functional tests
 1. Cleanup: Delete bot resources
 1. Debug: Show log contents

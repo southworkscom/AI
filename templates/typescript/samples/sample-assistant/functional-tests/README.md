@@ -55,8 +55,8 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Build: Run npm test on unit tests with code coverage
 1. Build: Publish Test Results
 1. Build: Publish Code Coverage
-1. Dotnet Build
-1. Dotnet Test
+1. Prepare: Build project
+1. Test: Execute unit tests
 1. Deploy
 1. Deploy: VA - Get variables from appsettings
 1. Test: VA - Connect SkillSample
@@ -85,8 +85,8 @@ Last but not least, as the `Azure Subscription` is related to the container wher
 1. Build: Run npm test on unit tests with code coverage
 1. Build: Publish Test Results
 1. Build: Publish Code Coverage
-1. Dotnet Build
-1. Dotnet Test
+1. Prepare: Build project
+1. Test: Execute unit tests
 1. Deploy
 1. Deploy: Skill - Get variables from appsettings
 1. Test: Create Direct Line registration
