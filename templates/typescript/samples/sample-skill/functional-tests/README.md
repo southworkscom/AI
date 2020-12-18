@@ -22,9 +22,6 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 |      | BuildConfiguration | Build configuration such as Debug or Release |
 |      | BotBuilderPackageVersion | Version of the BotBuilder package|
 |      | BuildPlatform | Build platform such as Win32, x86, x64 or any cpu |
-|      | ServicePrincipal | App Id of the Service Principal |
-|      | Azure_Tenant | Tenant's value of your Azure directory |
-|      | AzureDevOps-ServicePrincipal-Secret | Secret of the Service Principal |
 | Bot Variable | AppId | Microsoft App Id of the bot |
 |      | AppPassword | Microsoft App Password of the bot |
 |      | BotName | Name of the bot |

@@ -23,9 +23,6 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 |      | BotBuilderPackageVersion | Version of the BotBuilder package |
 |      | BuildConfiguration | Build configuration such as Debug or Release |
 |      | BuildPlatform | Build platform such as Win32, x86, x64 or any cpu |
-|      | ServicePrincipal | App Id of the Service Principal |
-|      | Azure_Tenant | Tenant's value of your Azure directory |
-|      | AzureDevOps-ServicePrincipal-Secret | Secret of the Service Principal |
 | Bot Variable | VirtualAssistantBotAppId | Microsoft App Id of the Virtual Assistant bot |
 |      | VirtualAssistantBotAppPassword | Microsoft App Password of the Virtual Assistant bot |
 |      | VirtualAssistantBotName | Name of the Virtual Assistant bot |
@@ -38,7 +35,6 @@ Currently, adding this YAML in your Azure DevOps organization enables you to **v
 |      | LuisAuthoringRegion | Location of the LUIS apps |
 |      | AzureSubscription | The name of your Azure Subscription |
 |      | BotLanguage | The supported language of your bot |
-|      | privacyUrl | Skill Manifest privacy url |
 
 Last but not least, as the `Azure Subscription` is related to the container where the resources are created, it should be replaced with your Agent pool.
 
