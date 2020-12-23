@@ -25,7 +25,7 @@ To support these goals, the testing infrastructure used to validate the function
 
 ## Scenarios
 
-This sections described the testing scenarios for Virtual Assistants, for each one of them we provide a high level goal description of the primary test case.
+This section describes the testing scenarios for Virtual Assistants, for each one of them we provide a high level goal description of the primary test case.
 
 The variables section lists the set of [variables](#variables) that apply to the test cases and need to be configured.
 
