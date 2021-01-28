@@ -23,7 +23,7 @@ namespace Microsoft.Bot.Solutions.Authentication
     /// </summary>
     public class MultiProviderAuthDialog : ComponentDialog
     {
-        private static readonly string[] _acceptedLocales = new string[] { "en", "de", "es", "fr", "it", "zh" };
+        private static readonly string[] acceptedLocales = new string[] { "en", "de", "es", "fr", "it", "zh" };
         private string _selectedAuthType = string.Empty;
         private List<OAuthConnection> _authenticationConnections;
         private ResponseManager _responseManager;
