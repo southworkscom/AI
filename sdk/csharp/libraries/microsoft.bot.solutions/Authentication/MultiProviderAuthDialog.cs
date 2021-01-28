@@ -38,7 +38,7 @@ namespace Microsoft.Bot.Solutions.Authentication
             _authenticationConnections = authenticationConnections ?? throw new ArgumentNullException(nameof(authenticationConnections));
             _oauthCredentials = oauthCredentials;
             _responseManager = new ResponseManager(
-                _acceptedLocales,
+                acceptedLocales,
                 new AuthenticationResponses());
 
             var firstStep = new WaterfallStep[]
