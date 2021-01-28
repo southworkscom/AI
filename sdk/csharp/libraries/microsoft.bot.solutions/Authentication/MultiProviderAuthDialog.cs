@@ -63,7 +63,7 @@ namespace Microsoft.Bot.Solutions.Authentication
                 {
                     var connection = _authenticationConnections[i];
 
-                    foreach (var locale in _acceptedLocales)
+                    foreach (var locale in acceptedLocales)
                     {
                         // We ignore placeholder connections in config that don't have a Name
                         if (!string.IsNullOrWhiteSpace(connection.Name))
