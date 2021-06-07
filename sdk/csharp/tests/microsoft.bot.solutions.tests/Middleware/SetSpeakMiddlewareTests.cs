@@ -9,6 +9,7 @@ using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Solutions.Middleware;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SetSpeakMiddleware = Microsoft.Bot.Solutions.Middleware.SetSpeakMiddleware;
 
 namespace Microsoft.Bot.Solutions.Tests.Middleware
 {

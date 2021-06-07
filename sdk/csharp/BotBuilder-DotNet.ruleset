@@ -6,6 +6,7 @@
   </Rules>
 
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">    
+    <Rule Id="CS0612" Action="None" />
     <Rule Id="CS1573" Action="None" />
     <Rule Id="CS1591" Action="None" />  
     <Rule Id="CS1712" Action="None" />

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Schema;
-using Microsoft.Bot.Solutions.Skills;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SkillConversationIdFactory = Microsoft.Bot.Solutions.Skills.SkillConversationIdFactory;
 
 namespace Microsoft.Bot.Solutions.Tests.Skills
 {
