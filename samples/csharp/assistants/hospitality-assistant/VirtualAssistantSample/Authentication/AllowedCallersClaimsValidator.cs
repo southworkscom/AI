@@ -15,6 +15,7 @@ namespace VirtualAssistantSample.Authentication
     /// Sample claims validator that loads an allowed list from configuration if present
     /// and checks that responses are coming from configured skills.
     /// </summary>
+    [Obsolete("This class is deprecated, use BotBuilder's instead.")]
     public class AllowedCallersClaimsValidator : ClaimsValidator
     {
         private readonly List<string> _allowedSkills;
