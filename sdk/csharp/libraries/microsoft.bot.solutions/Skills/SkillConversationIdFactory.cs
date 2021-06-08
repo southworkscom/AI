@@ -16,7 +16,7 @@ namespace Microsoft.Bot.Solutions.Skills
     /// <summary>
     /// A <see cref="SkillConversationIdFactory"/> that uses <see cref="IStorage"/> to store and retrieve <see cref="ConversationReference"/> instances.
     /// </summary>
-    [Obsolete]
+    [Obsolete("This class is deprecated, use BotBuilder's instead.")]
     public class SkillConversationIdFactory : SkillConversationIdFactoryBase
     {
         private readonly IStorage _storage;

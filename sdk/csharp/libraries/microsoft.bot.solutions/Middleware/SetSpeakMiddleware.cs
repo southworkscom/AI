@@ -17,7 +17,7 @@ namespace Microsoft.Bot.Solutions.Middleware
     /// <summary>
     /// Set Speech Synthesis Markup Language (SSML) on an Activity's Speak property with locale and voice input.
     /// </summary>
-    [Obsolete]
+    [Obsolete("This class is deprecated, use BotBuilder's instead.")]
     public class SetSpeakMiddleware : IMiddleware
     {
         private const string DefaultLocale = "en-US";
