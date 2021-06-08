@@ -15,6 +15,7 @@ namespace $safeprojectname$.Authentication
     /// Sample claims validator that loads an allowed list from configuration if present
     /// and checks that responses are coming from configured skills.
     /// </summary>
+    [Obsolete]
     public class AllowedCallersClaimsValidator : ClaimsValidator
     {
         private readonly List<string> _allowedSkills;
