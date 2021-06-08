@@ -53,7 +53,7 @@ namespace SkillSample.Adapters
             Use(new ShowTypingMiddleware());
             Use(new SetLocaleMiddleware(settings.DefaultLocale ?? "en-us"));
             Use(new EventDebuggerMiddleware());
-            Use(new SetSpeakMiddleware());
+            Use(new Microsoft.Bot.Builder.SetSpeakMiddleware("Microsoft Server Speech Text to Speech Voice (en-US, Jessa24kRUS)", true));
         }
 
         private async Task HandleTurnErrorAsync(ITurnContext turnContext, Exception exception)
