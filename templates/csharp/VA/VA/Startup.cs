@@ -75,7 +75,7 @@ namespace $safeprojectname$
 
             // Register AuthConfiguration to enable custom claim validation.
             var allowedCallers = (from skill in skillsConfig.Skills.Values select skill.AppId).ToList();
-            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new Microsoft.Bot.Connector.Authentication.AllowedCallersClaimsValidator(allowedCallers) });
+            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(allowedCallers) });
 
             // Configure telemetry
             services.AddApplicationInsightsTelemetry();

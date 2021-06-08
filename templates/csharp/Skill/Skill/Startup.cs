@@ -73,7 +73,7 @@ namespace $safeprojectname$
             // Register AuthConfiguration to enable custom claim validation.
             services.AddSingleton(sp => new AuthenticationConfiguration
             {
-                ClaimsValidator = new Microsoft.Bot.Connector.Authentication.AllowedCallersClaimsValidator(sp.GetService<IConfiguration>().GetSection("allowedCallers").Get<List<string>>())
+                ClaimsValidator = new AllowedCallersClaimsValidator(sp.GetService<IConfiguration>().GetSection("allowedCallers").Get<List<string>>())
             });
 
             // Configure configuration provider

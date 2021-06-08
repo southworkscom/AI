@@ -75,7 +75,7 @@ namespace VirtualAssistantSample
 
             // Register AuthConfiguration to enable custom claim validation.
             var allowedCallers = (from skill in skillsConfig.Skills.Values select skill.AppId).ToList();
-            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new Microsoft.Bot.Connector.Authentication.AllowedCallersClaimsValidator(allowedCallers) });
+            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(allowedCallers) });
 
             // Configure telemetry
             services.AddApplicationInsightsTelemetry();
@@ -118,7 +118,7 @@ namespace VirtualAssistantSample
             services.AddSingleton<BotAdapter>(sp => sp.GetService<BotFrameworkHttpAdapter>());
 
             // Register the skills conversation ID factory, the client and the request handler.
-            services.AddSingleton<SkillConversationIdFactoryBase, Microsoft.Bot.Builder.Skills.SkillConversationIdFactory>();
+            services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
             services.AddHttpClient<SkillHttpClient>();
             services.AddSingleton<ChannelServiceHandler, TokenExchangeSkillHandler>();
 

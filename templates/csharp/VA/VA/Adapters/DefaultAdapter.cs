@@ -64,7 +64,7 @@ namespace $safeprojectname$.Adapters
             Use(new ShowTypingMiddleware());
             Use(new SetLocaleMiddleware(settings.DefaultLocale ?? "en-us"));
             Use(new EventDebuggerMiddleware());
-            Use(new Microsoft.Bot.Builder.SetSpeakMiddleware("en-US-JennyNeural", true));
+            Use(new SetSpeakMiddleware("en-US-JennyNeural", true));
         }
 
         private async Task HandleTurnErrorAsync(ITurnContext turnContext, Exception exception)
