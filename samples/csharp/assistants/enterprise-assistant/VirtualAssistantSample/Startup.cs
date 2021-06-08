@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -75,7 +76,8 @@ namespace VirtualAssistantSample
             services.AddSingleton(skillsConfig);
 
             // Register AuthConfiguration to enable custom claim validation.
-            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedCallersClaimsValidator(skillsConfig) });
+            var allowedCallers = (from skill in skillsConfig.Skills.Values select skill.AppId).ToList();
+            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new Microsoft.Bot.Connector.Authentication.AllowedCallersClaimsValidator(allowedCallers) });
 
             // Configure telemetry
             services.AddApplicationInsightsTelemetry();
@@ -119,7 +121,7 @@ namespace VirtualAssistantSample
             services.AddSingleton<BotAdapter>(sp => sp.GetService<BotFrameworkHttpAdapter>());
 
             // Register the skills conversation ID factory, the client and the request handler.
-            services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
+            services.AddSingleton<SkillConversationIdFactoryBase, Microsoft.Bot.Builder.Skills.SkillConversationIdFactory>();
             services.AddHttpClient<SkillHttpClient>();
             services.AddSingleton<ChannelServiceHandler, TokenExchangeSkillHandler>();
 
