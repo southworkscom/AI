@@ -19,7 +19,7 @@ steps:
 - task: DotNetCoreInstaller@0
   displayName: 'Use .NET Core sdk'
   inputs:
-    version: 3.x
+    version: 3.0.x
   continueOnError: true
 
 - task: NuGetToolInstaller@0
