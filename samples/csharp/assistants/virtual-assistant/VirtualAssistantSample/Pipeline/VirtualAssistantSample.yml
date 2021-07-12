@@ -31,7 +31,7 @@ steps:
   displayName: 'NuGet restore'
   inputs:
     # if your working directory is not root, you may change the following path
-    restoreSolution: 'VirtualAssistantSample.sln'
+    restoreSolution: '..\..\VirtualAssistantSample.sln'
 
 - task: VSBuild@1
   displayName: 'Build solution VirtualAssistantSample.sln'
