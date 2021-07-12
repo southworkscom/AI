@@ -31,13 +31,13 @@ steps:
   displayName: 'NuGet restore'
   inputs:
     # if your working directory is not root, you may change the following path
-    restoreSolution: '..\..\VirtualAssistantSample.sln'
+    restoreSolution: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
 
 - task: VSBuild@1
   displayName: 'Build solution VirtualAssistantSample.sln'
   inputs:
     # if your working directory is not root, you may change the following path
-    solution: '..\..\VirtualAssistantSample.sln'
+    solution: 'samples/csharp/assistants/virtual-assistant/VirtualAssistantSample.sln'
     vsVersion: '16.0'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
