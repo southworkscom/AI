@@ -6,7 +6,7 @@ trigger:
     - feature/*
 
 pool:
-   name: Hosted VS2017
+   name: Hosted VS2019
    demands:
     - msbuild
     - visualstudio
