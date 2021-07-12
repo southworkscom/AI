@@ -17,9 +17,9 @@ variables:
 
 steps:
 - task: DotNetCoreInstaller@0
-  displayName: 'Use .NET Core sdk 2.2.100'
+  displayName: 'Use .NET Core sdk'
   inputs:
-    version: 3.1.x
+    version: 3.1
   continueOnError: true
 
 - task: NuGetToolInstaller@0
