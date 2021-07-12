@@ -19,8 +19,8 @@ steps:
 - task: DotNetCoreInstaller@0
   displayName: 'Use .NET Core sdk'
   inputs:
-    version: 3.0.x
-  continueOnError: true
+    version: 3.1.402
+  continueOnError: false
 
 - task: NuGetToolInstaller@0
   displayName: 'Use NuGet 4.9.1'
