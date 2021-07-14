@@ -14,16 +14,16 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreInstaller@0
+- task: DotNetCoreInstaller@2
   displayName: 'Use .NET Core sdk'
   inputs:
-    version: 2.2.100
+    version: 2.2.x
   continueOnError: false
 
-- task: DotNetCoreInstaller@0
+- task: DotNetCoreInstaller@2
   displayName: 'Use .NET Core sdk'
   inputs:
-    version: 3.1.402
+    version: 3.1.x
   continueOnError: false
 
 - task: NuGetToolInstaller@0
