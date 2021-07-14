@@ -25,10 +25,11 @@ steps:
     version: 3.1.107
   continueOnError: false
 
-- task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.9.1'
+- task: NuGetToolInstaller@1
+  displayName: 'Use NuGet 5.3.0'
   inputs:
-    versionSpec: 4.9.1
+    versionSpec: 5.3.0
+    checkLatest: true
 
 - task: NuGetCommand@2
   displayName: 'NuGet restore'
