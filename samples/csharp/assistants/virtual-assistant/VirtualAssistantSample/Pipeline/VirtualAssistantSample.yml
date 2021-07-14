@@ -17,13 +17,13 @@ steps:
 - task: DotNetCoreInstaller@0
   displayName: 'Use .NET Core sdk'
   inputs:
-    version: 2.1.x
+    version: 2.2.100
   continueOnError: false
 
 - task: DotNetCoreInstaller@0
   displayName: 'Use .NET Core sdk'
   inputs:
-    version: 3.0.x
+    version: 3.1.402
   continueOnError: false
 
 - task: NuGetToolInstaller@0
