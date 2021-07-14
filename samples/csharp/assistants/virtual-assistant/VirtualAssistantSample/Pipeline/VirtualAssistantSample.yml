@@ -6,7 +6,7 @@ trigger:
     - feature/*
 
 pool:
-   name: 'windows-2019'
+   vmimage: 'windows-2019'
 
 variables:
   buildPlatform: 'Any CPU'
